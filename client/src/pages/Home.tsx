@@ -44,7 +44,7 @@ export default function Home() {
   const [fontSize, setFontSize] = useState<number>(() => {
     const saved = typeof window !== "undefined" ? localStorage.getItem("abc-font-size") : null;
     const n = saved ? parseInt(saved, 10) : NaN;
-    return Number.isFinite(n) && n >= 12 && n <= 32 ? n : 16;
+    return Number.isFinite(n) && n >= 12 && n <= 32 ? n : 20;
   });
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const fileInputRef = useFileRef<HTMLInputElement>(null);

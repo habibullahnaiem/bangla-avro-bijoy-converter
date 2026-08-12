@@ -14,7 +14,7 @@
   src: url("/manus-storage/SutonnyMJ_danDi_0e300e15.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -181,16 +181,17 @@
   }
 
   /* ইনপুট বক্স — হিন্দ সিলিগুড়ি (সলাইমান লিপি/কালপুরুষের মতো) */
-  .font-input-bn {
+    .font-input-bn {
     font-family: "Hind Siliguri", "SolaimanLipi", "Kalpurush", sans-serif;
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     line-height: 1.9;
   }
-
-  /* আউটপুট বক্স — সুতন্নী এমজে (বিজয়) ও ইংরেজির জন্য Times New Roman */
+  /* আউটপুট বক্স — সুতন্নী এমজে (বিজয়) ও ইংরেজির জন্য Times New Roman
+     সাইজ বড় রাখা হয়েছে কারণ সুতন্নীর এ-কার (†/‡) চিহ্ন ছোট গ্লিফ —
+     ডিফল্ট সাইজে প্রায় অদৃশ্য লাগে। */
   .font-output-bijoy {
     font-family: "SutonnyMJ", "Times New Roman", "Times", serif;
-    font-size: 1.15rem;
+    font-size: 1.35rem;
     line-height: 1.7;
   }
 }
