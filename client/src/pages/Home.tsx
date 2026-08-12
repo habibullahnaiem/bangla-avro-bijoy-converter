@@ -198,7 +198,9 @@ export default function Home() {
   // বাংলা fontSize(px) SutonnyMJ-তে, ইংরেজি/সংখ্যা 12/14 অনুপাতে ছোটে TNR-তে।
   const basePx = fontSize;
   const bnPx = basePx;
-  const latPx = Math.round(basePx * (12 / 14));
+  // ইংরেজি/সংখ্যা ঠিক এক ধাপ ছোট: ১৪px হয়ে ১২px, ২০px হয়ে ১৮px —
+  // ratio-এর বদলে স্পষ্ট পদক্ষেপ (step), কমপক্ষে ১০px।
+  const latPx = Math.max(basePx - 2, 10);
   // বিউটপুট-কোড সব লাতিন-রেঞ্জ — সেগমেন্ট করা হয় ইউনিকোড ইনপুটের
   // ভাষা অনুযায়ী, যাতে বাংলা ও ইংরেজি আলাদা-আলাদা সাইজ পায়।
   const outSegments: { text: string; bangla: boolean }[] = useMemo(
