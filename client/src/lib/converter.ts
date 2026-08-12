@@ -91,6 +91,34 @@ export type FileConvertResult =
   | { kind: "txt"; blob: Blob; name: string }
   | { kind: "docx"; blob: Blob; name: string };
 
+/** ফাইল (DOCX/TXT) থেকে ইউনিকোড টেক্সট তোলা — প্রিভিউর জন্য */
+export async function extractTextFrom(file: File): Promise<string> {
+  if (file.name.toLowerCase().endsWith(".docx")) {
+    const buf = await file.arrayBuffer();
+    const zip = await JSZip.loadAsync(buf);
+    const xml = await zip.file("word/document.xml")?.async("string");
+    if (!xml) return "";
+    const doc = new DOMParser().parseFromString(xml, "text/xml");
+    const texts = doc.getElementsByTagName("w:t");
+    let out = "";
+    for (let i = 0; i < texts.length; i++) {
+      const t = texts[i] as Element;
+      out += t.textContent ?? "";
+      // প্যারাগ্রাফ/সেল-সীমান্তে নতুন লাইন
+      const r = t.parentElement;
+      const p = r?.parentElement;
+      const afterP = p?.parentElement;
+      if (afterP?.tagName === "w:tbl" || afterP?.tagName === "w:sectPr") {
+        out += "\n";
+      } else if (r?.nextElementSibling) {
+        out += " ";
+      }
+    }
+    return out;
+  }
+  return await file.text();
+}
+
 export async function convertFile(
   file: File,
   direction: ConvertDirection,
@@ -278,6 +306,53 @@ const PUNCT_RE =
 
 function hasBanglaOrPunct(text: string): boolean {
   return BANGLA_RE.test(text) || PUNCT_RE.test(text);
+}
+
+/**
+ * কনভার্টেড বিজয় টেক্সটকে প্রিভিউর জন্য ফন্ট-সেগমেন্টে ভাগ করে।
+ * DOCX পাইপলাইনের splitMixedRun-এর একই সন্দর্ভ-নিয়ম:
+ *   বাংলা অক্ষর → বাংলা; ল্যাটিন/সংখ্যা → নন-বাংলা;
+ *   বাংলা-বিরামচিহ্ন/বাকি সব → আগের সন্দর্ভ অনুসরণ (ফলো-থ্রু)।
+ */
+/** ইউনিকোড ইনপুট-পাশের পর্যালোচনাযয় রান ভাগ করে — প্রিভিউতে বাংলা/লাতিন
+ * নির্ধারণের জন্য। ইনপুট চরিত্রের ওপর ভিত্তি করে প্রতিটি চরিত্রের বিজয় রূপের
+ * স্ট্রিংটি বর্তমান সেগমেন্টে জোড়া হয়, ফলে আউটপুট-সাইজিং ইনপুটের ভাষার সাথে
+ * মিলে যায় (বিজয়-কোড সব লাতিন-রেঞ্জ, তাই আউটপুট পাশে ভাগ করা যায় না)। */
+export function segmentBijoyText(text: string): { text: string; bangla: boolean }[] {
+  const segments: { text: string; bangla: boolean }[] = [];
+  let curText = "";
+  let curBangla = false;
+  for (const ch of text) {
+    const banglaPunct = /[\u0980-\u09FF।॥\u2014\u2013\u201C\u201D\u2018\u2019,’;\u0022\u0027]/.test(ch);
+    const newBangla: boolean = BANGLA_RE.test(ch)
+      ? true
+      : banglaPunct
+        ? true
+        : /[A-Za-z0-9]/.test(ch)
+          ? false
+          : curBangla;
+    if (curText === "" || newBangla === curBangla) {
+      curText += ch;
+      curBangla = newBangla;
+    } else {
+      segments.push({ text: curText, bangla: curBangla });
+      curText = ch;
+      curBangla = newBangla;
+    }
+  }
+  if (curText) segments.push({ text: curText, bangla: curBangla });
+  return segments;
+}
+
+/** ইউনিকোড ইনপুটকে বিজয় আউটপুট-সেগমেন্টে ম্যাপ করে (প্রিভিউর জন্য):
+ * ইনপুটের প্রতিটি চরিত্রের বিজয় রূপ সেই চরিত্রের ভাষা-সেগমেন্টে পড়ে। */
+export function mapSegmentsToBijoy(
+  text: string,
+  direction: ConvertDirection,
+): { text: string; bangla: boolean }[] {
+  const inputSegs = segmentBijoyText(text);
+  if (direction === "b2u") return inputSegs;
+  return inputSegs.map((s) => ({ text: convert(s.text, direction), bangla: s.bangla }));
 }
 
 // কনভার্টের পরের টেক্সটে বিজয়-পাঙ্কচুয়েশন (যেমন একক দাঁড়ি ') থাকলেও

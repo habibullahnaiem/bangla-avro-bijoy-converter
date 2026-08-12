@@ -194,6 +194,26 @@
     font-size: 1.35rem;
     line-height: 1.7;
   }
+
+  /* দুই-সাইজ রিচ প্রিভিউ — বাংলা বড় (SutonnyMJ), ইংরেজি/সংখ্যা ছোট (TNR)।
+     বেস-সাইজ প্যারেন্টে ইনলাইন style দিয়ে সেট করা হয়; জেমন base 14px হবার
+     সময় বাংলা 14px, ইংরেজি 12px (12/14 অনুপাত বজায়)। */
+  .bijoy-rich {
+    font-family: "SutonnyMJ", "Times New Roman", "Times", serif;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-word;
+    text-align: left;
+    tab-size: 4;
+  }
+  .bijoy-rich .seg-bn {
+    font-family: "SutonnyMJ", "Times New Roman", "Times", serif;
+    line-height: 1.7;
+  }
+  .bijoy-rich .seg-lat {
+    font-family: "Times New Roman", "Times", serif;
+    line-height: 1.05;
+  }
 }
 
 /* স্ন্যাপ ট্রান্সিশন (১৮০ms) */

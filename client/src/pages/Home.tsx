@@ -5,7 +5,7 @@
  * - ইনপুট: Hind Siliguri; আউটপুট: SutonnyMJ + Times New Roman
  * - দিক টগল, দিক পরিবর্তন (সুয়াপ), মুছুন, কপি, পেস্ট
  */
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -21,7 +21,14 @@ import {
   Plus,
 } from "lucide-react";
 import { toast } from "sonner";
-import { convert, convertFile, type ConvertDirection } from "@/lib/converter";
+import {
+  convert,
+  convertFile,
+  type ConvertDirection,
+  segmentBijoyText,
+  mapSegmentsToBijoy,
+  extractTextFrom,
+} from "@/lib/converter";
 import { Download, FileText, Upload, Loader2 } from "lucide-react";
 import { useRef as useFileRef } from "react";
 import {
@@ -50,6 +57,8 @@ export default function Home() {
   const fileInputRef = useFileRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [converting, setConverting] = useState(false);
+  const [filePreviewText, setFilePreviewText] = useState<string>("");
+  const [filePreviewInput, setFilePreviewInput] = useState<string>("");
   const [fileResult, setFileResult] = useState<{
     name: string;
     url: string;
@@ -158,6 +167,17 @@ export default function Home() {
       if (fileResult) URL.revokeObjectURL(fileResult.url);
       const url = URL.createObjectURL(result.blob);
       setFileResult({ name: result.name, url });
+      // ডুয়াল-সাইজ প্রিভিউর জন্য কনভার্টেড টেক্সটের নমুনা —
+      // ফাইলের এক্সট্র্যাক্টেড টেক্সটকে সোজা convert() দিয়ে বিজয়ে নিয়ে আসা হয়
+      // (যে নিয়মে রান-ফন্ট সিদ্ধান্ত হয়, সেই একই নিয়মে প্রিভিউ দেখে)।
+      try {
+        const t = await extractTextFrom(selectedFile);
+        const head = t ? t.slice(0, 700) : "";
+        setFilePreviewInput(head);
+        setFilePreviewText(head ? convert(head, direction) : "");
+      } catch {
+        setFilePreviewText("");
+      }
       toast.success(
         result.kind === "docx"
           ? "ডকুমেন্ট রূপান্তর সম্পন্ন — ফরম্যাটিং অক্ষুণ্ণ"
@@ -172,6 +192,27 @@ export default function Home() {
 
   const charCount = input.length;
 
+  const outCharCount = output.length;
+
+  // ── দুই-সাইজ রিচ প্রিভিউ ──
+  // বাংলা fontSize(px) SutonnyMJ-তে, ইংরেজি/সংখ্যা 12/14 অনুপাতে ছোটে TNR-তে।
+  const basePx = fontSize;
+  const bnPx = basePx;
+  const latPx = Math.round(basePx * (12 / 14));
+  // বিউটপুট-কোড সব লাতিন-রেঞ্জ — সেগমেন্ট করা হয় ইউনিকোড ইনপুটের
+  // ভাষা অনুযায়ী, যাতে বাংলা ও ইংরেজি আলাদা-আলাদা সাইজ পায়।
+  const outSegments: { text: string; bangla: boolean }[] = useMemo(
+    () => (direction === "u2b" && input ? mapSegmentsToBijoy(input, direction) : []),
+    [direction, input],
+  );
+  const outPreviewRef = useRef<HTMLDivElement>(null);
+  const outAreaRef = useRef<HTMLTextAreaElement>(null);
+  const syncScroll = (from: HTMLElement, to: HTMLElement | null) => {
+    if (!to) return;
+    to.scrollTop = from.scrollTop;
+    to.scrollLeft = from.scrollLeft;
+  };
+
   function adjustFontSize(delta: number) {
     setFontSize((s) => {
       const next = Math.min(32, Math.max(12, s + delta));
@@ -179,7 +220,6 @@ export default function Home() {
       return next;
     });
   }
-  const outCharCount = output.length;
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -415,21 +455,45 @@ export default function Home() {
               </div>
               <div className="relative">
                 <Textarea
+                  ref={outAreaRef}
                   value={output}
                   readOnly={isLive}
                   onChange={(e) => {
                     setIsLive(false);
                     setOutput(e.target.value);
                   }}
+                  onScroll={(e) => syncScroll(e.currentTarget, outPreviewRef.current)}
                   placeholder="রূপান্তরিত টেক্সট এখানে দেখাবে..."
                   className={
-                    "min-h-[320px] resize-none rounded-none border-0 bg-accent/30 shadow-none focus-visible:ring-0 " +
+                    "min-h-[320px] resize-none rounded-none border-0 shadow-none focus-visible:ring-0 " +
                     (direction === "u2b"
                       ? "font-output-bijoy"
-                      : "font-input-bn")
+                      : "font-input-bn") +
+                    (direction === "u2b" ? " absolute inset-0 text-transparent caret-foreground selection:bg-primary/20" : "")
                   }
                   style={{ fontSize: `${fontSize}px` }}
+                  aria-hidden={direction === "u2b"}
+                  tabIndex={direction === "u2b" ? -1 : 0}
                 />
+                {direction === "u2b" && (
+                  <div
+                    ref={outPreviewRef}
+                    className="bijoy-rich min-h-[320px] px-3 py-2"
+                    style={{ fontSize: `${bnPx}px` }}
+                    onScroll={(e) => syncScroll(e.currentTarget, outAreaRef.current)}>
+                    {outSegments.map((
+                      seg: { text: string; bangla: boolean },
+                      i: number,
+                    ) => (
+                      <span
+                        key={i}
+                        className={seg.bangla ? "seg-bn" : "seg-lat"}
+                        style={{ fontSize: seg.bangla ? `${bnPx}px` : `${latPx}px` }}>
+                        {seg.text}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
               <div className="flex items-center gap-2 border-t bg-muted/50 px-4 py-2.5">
                 <Button
@@ -695,6 +759,41 @@ export default function Home() {
                   </a>
                 )}
               </div>
+
+              {/* ফাইলের কনভার্টেড টেক্সট নমুনা — ডুয়াল-সাইজ: বাংলা বড্ড,
+                  ইংরেজি এক ধাপ ছোট (12/14 নিয়ম) */}
+              {direction === "u2b" && filePreviewText && (
+                <div className="mt-5 rounded-xl border bg-card p-4 shadow-sm">
+                  <div className="mb-2 flex items-center gap-2">
+                    <span className="h-px flex-1 bg-border" />
+                    <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                      নমুনা প্রিভিউ — বাংলা বড়, ইংরেজি এক ধাপ ছোট
+                    </span>
+                    <span className="h-px flex-1 bg-border" />
+                  </div>
+                  <div
+                    className="bijoy-rich max-h-48 overflow-y-auto rounded-lg border bg-accent/30 px-3 py-2"
+                    style={{ fontSize: `${bnPx}px` }}>
+                    {mapSegmentsToBijoy(filePreviewInput, direction).map(
+                      (
+                        seg: { text: string; bangla: boolean },
+                        i: number,
+                      ) => (
+                        <span
+                          key={i}
+                          className={seg.bangla ? "seg-bn" : "seg-lat"}
+                          style={{
+                            fontSize: seg.bangla
+                              ? `${bnPx}px`
+                              : `${latPx}px`,
+                          }}>
+                          {seg.text}
+                        </span>
+                      ),
+                    )}
+                  </div>
+                </div>
+              )}
 
               <p className="mt-4 text-center text-xs text-muted-foreground">
                 রূপান্তর করা হয় — প্রতিটি টেক্সট-রানের ফন্ট SutonnyMJ (বাংলা)
