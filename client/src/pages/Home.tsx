@@ -2,7 +2,7 @@
  * ডিজাইন দিক: টিল ডেস্ক (Teal Desk)
  * - গভীর টিল হেডার, কাগজের মতো ব্যাকগ্রাউন্ড, সাদা কার্ড
  * - দুই কলাম টেক্সটবক্স: অভ্র (ইনপুট) ⇄ সুতন্নী এমজে (আউটপুট)
- * - ইনপুট: Hind Siliguri; আউটপুট: SutonniMJ + Times New Roman
+ * - ইনপুট: Hind Siliguri; আউটপুট: SutonnyMJ + Times New Roman
  * - দিক টগল, দিক পরিবর্তন (সুয়াপ), মুছুন, কপি, পেস্ট
  */
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -407,7 +407,7 @@ export default function Home() {
                   কপি
                 </Button>
                 <span className="text-xs text-muted-foreground">
-                  কপি করে Word-এ SutonniMJ ফন্টে পেস্ট করুন
+                  কপি করে Word-এ SutonnyMJ ফন্টে পেস্ট করুন
                 </span>
               </div>
             </div>
@@ -438,7 +438,7 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-4 px-4 py-3">
               <span className="rounded-md bg-muted px-2.5 py-1 font-output-bijoy text-sm font-semibold text-foreground">
-                SutonniMJ
+                SutonnyMJ
               </span>
               <span className="text-sm text-muted-foreground">
                 বিজয় আউটপুট — ইংরেজি ও সংখ্যা Times New Roman-এ
@@ -532,11 +532,11 @@ export default function Home() {
               ডান বক্সে বিজয় (সুতন্নী এমজে) রূপান্তর লাইভ দেখা যাবে।
             </li>
             <li>
-              &quot;কপি&quot; বাটনে ক্লিক করুন এবং Word/Publisher-এ SutonniMJ
+              &quot;কপি&quot; বাটনে ক্লিক করুন এবং Word/Publisher-এ SutonnyMJ
               ফন্ট সিলেক্ট করে পেস্ট করুন।
             </li>
             <li>
-              কম্পিউটারে SutonniMJ ফন্ট ইনস্টল না থাকলে আউটপুট বাংলা
+              কম্পিউটারে SutonnyMJ ফন্ট ইনস্টল না থাকলে আউটপুট বাংলা
               দেখাবে না — এটি স্বাভাবিক, কপি করা টেক্সট সঠিকই থাকবে।
             </li>
           </ol>
@@ -551,7 +551,7 @@ export default function Home() {
             </h3>
             <p className="mt-0.5 text-sm text-muted-foreground">
               বোল্ড, ইটালিক, ফুটনোট, এন্ডনোট ও ফন্ট-স্টাইল অক্ষুণ্ণ
-              রাখা হয়; বাংলা SutonniMJ-তে ও ইংরেজি Times New Roman-এ
+              রাখা হয়; বাংলা SutonnyMJ-তে ও ইংরেজি Times New Roman-এ
               রূপান্তর হয়।
             </p>
           </div>
@@ -659,7 +659,7 @@ export default function Home() {
               </div>
 
               <p className="mt-4 text-center text-xs text-muted-foreground">
-                রূপান্তর করা হয় — প্রতিটি টেক্সট-রানের ফন্ট SutonniMJ (বাংলা)
+                রূপান্তর করা হয় — প্রতিটি টেক্সট-রানের ফন্ট SutonnyMJ (বাংলা)
                 / Times New Roman (ইংরেজি) হয়ে যায়; বোল্ড, ইটালিক ও
                 ফুটনোট-রেফারেন্স অপরিবর্তিত থাকে।
               </p>

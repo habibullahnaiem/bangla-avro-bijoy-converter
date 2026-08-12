@@ -3,24 +3,15 @@
  * - ব্র্যান্ড রঙ: গভীর টিল oklch(0.42 0.09 200) — হেডার/প্রাইমারি
  * - অ্যাকসেন্ট: সায়ান-টিল oklch(0.72 0.14 195)
  * - ব্যাকগ্রাউন্ড: কাগজের মতো হালকা নীল-ধূসর
- * - ইন্টারফেস ফন্ট: Hind Siliguri; আউটপুট: SutonniMJ + Times New Roman
+ * - ইন্টারফেস ফন্ট: Hind Siliguri; আউটপুট: SutonnyMJ + Times New Roman
  */
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* ডিজাইন দিক: টিল ডেস্ক — ইম্বেডেড SutonniMJ ফন্ট (প্রিভিউ সঠিক গ্লিফের জন্ে) */
-@font-face {
-  font-family: "SutonniMJ";
-  src: url("/manus-storage/SutonniMJ_patched_aa289e08.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-/* ফন্ট-ফাইলের আসল পরিবারের নাম SutonnyMJ — ব্রাউজার-প্রিভিউতে ওদের্দের বিপরীত
-   ড্রপডাউনে যেই নামই দেখা যাক, একই ফন্ট ব্যবহৃত হবে */
+/* ডিজাইন দিক: টিল ডেস্ক — ইম্বেডেড SutonnyMJ ফন্ট (প্রিভিউ সঠিক গ্লিফের জন্ে) */
 @font-face {
   font-family: "SutonnyMJ";
-  src: url("/manus-storage/SutonniMJ_patched_aa289e08.ttf") format("truetype");
+  src: url("/manus-storage/SutonnyMJ_original_ad6a2e64.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -198,7 +189,7 @@
 
   /* আউটপুট বক্স — সুতন্নী এমজে (বিজয়) ও ইংরেজির জন্য Times New Roman */
   .font-output-bijoy {
-    font-family: "SutonniMJ", "SutonnyMJ", "Times New Roman", "Times", serif;
+    font-family: "SutonnyMJ", "Times New Roman", "Times", serif;
     font-size: 1.15rem;
     line-height: 1.7;
   }

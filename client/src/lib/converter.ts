@@ -2,7 +2,7 @@
  * ডিজাইন দিক: টিল ডেস্ক — কনভার্টার ইঞ্জিন
  * অভ্র/ইউনিকোড ⇄ বিজয় (সুতন্নী এমজে) রূপান্তর পরিষেবা।
  * ইনপুট ফন্ট: সোলাইমান লিপি / কালপুরুষ (হিন্দ সিলিগুড়ি দিয়ে প্রিভিউ)
- * আউটপুট ফন্ট: SutonniMJ (@font-face দিয়ে সাইটে এম্বেড করা হয়েছে);
+ * আউটপুট ফন্ট: SutonnyMJ (@font-face দিয়ে সাইটে এম্বেড করা হয়েছে);
  * ইংরেজি অংশে Times New Roman ফলব্যাক।
  *
  * যুক্তবর্ণ নিয়ম: ন্ত, ল্ল, য়, ড়, ঢ়, র-ফলা, রেফ, জ্ঞ, ক্ষ, শ্র — কোনো ভাঙন নেই।
@@ -196,10 +196,10 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
   // কারণ: পূর্ববর্তী ডকে প্রত্যেক রানে w:rFonts="Kalpurush" লেখা থাকত — যেসব
   // রান স্পর্শ করা হত না (যেমন ফাঁকা-স্থানের রান, ইংরেজি-শুধু রান) Word-এ
   // কালপুরুষেই দেখাত। এখন প্রতিটি রানে ফন্ট বাধ্যতামূলক:
-  //   বাংলা (বা যুক্তবর্ণ-ধারী) রান → SutonniMJ
+  //   বাংলা (বা যুক্তবর্ণ-ধারী) রান → SutonnyMJ
   //   ল্যাটিন/ইংরেজি রান  → Times New Roman
   //   ফাঁকা-স্থান/বিরামচিহ্ন-শুধু রান → সন্দর্ভ অনুযায়ী পরের ধাপে (মিশ্র
-  //     সেগমেন্ট-ভাগ বা ইংরেজি-রানের সাথে না থাকলে SutonniMJ — কারণ পুরো
+  //     সেগমেন্ট-ভাগ বা ইংরেজি-রানের সাথে না থাকলে SutonnyMJ — কারণ পুরো
   //     ডকুমেন্ট বাংলা)
   for (const plan of runPlans) {
     if (plan.mixed) {
@@ -207,13 +207,13 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
       // বিজয়-কনভার্টার প্রতি-টেক্সট রূপান্তর করে বলে সেগমেন্ট-আলাদা করাই সঠিক
       splitMixedRun(plan.run, ns, plan.text, convertFn);
     } else {
-      rFontsAttr(plan.run, ns, plan.origHasBangla ? "SutonniMJ" : "Times New Roman");
+      rFontsAttr(plan.run, ns, plan.origHasBangla ? "SutonnyMJ" : "Times New Roman");
     }
   }
 
   // তৃতীয় পাস: বাকি সব রান (যেসব স্পর্শ হয়নি) — ফাঁকা-স্থান, ইংরেজি-শুধু বা
   // শুধু-বিরামচিহ্ন রানেও স্পষ্ট ফন্ট দেওয়া। প্রতিটি রানের নিজস্ব টেক্সট অনুযায়ী:
-  // ল্যাটিন অক্ষর/সংখ্যা থাকলে Times New Roman, নয়তো SutonniMJ।
+  // ল্যাটিন অক্ষর/সংখ্যা থাকলে Times New Roman, নয়তো SutonnyMJ।
   const allRuns = Array.from(doc.getElementsByTagNameNS(ns, "r"));
   const planned = new Set(runPlans.map((p) => p.run));
   for (const run of allRuns) {
@@ -222,7 +222,7 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
       (n) => n.textContent ?? "",
     );
     const joined = texts.join("");
-    const want = LATIN_RE.test(joined) ? "Times New Roman" : "SutonniMJ";
+    const want = LATIN_RE.test(joined) ? "Times New Roman" : "SutonnyMJ";
     rFontsAttr(run, ns, want);
   }
   return new XMLSerializer().serializeToString(doc);
@@ -256,7 +256,7 @@ function hasBanglaOrPunct(text: string): boolean {
 /** মিশ্র টেক্সটকে বাংলা/অ-বাংলা সেগমেন্টে ভাগ করার শর্ত */
 function hasMixedSegments(text: string): boolean {
   // বাংলা থাকবে এবং ইংরেজি অক্ষর/সংখ্যা থাকবে — দুই-ই হলে মিশ্র।
-  // কলন, টিউ, পরেন্থেসিস, সাধারণন বিরামচিহ্ন বাংলার সাথে SutonniMJ-ই ব্যবহার করে,
+  // কলন, টিউ, পরেন্থেসিস, সাধারণন বিরামচিহ্ন বাংলার সাথে SutonnyMJ-ই ব্যবহার করে,
   // সেগুলোর জন্য আলাদা রান দরকার নেই।
   return BANGLA_RE.test(text) && /[A-Za-z0-9]/.test(text);
 }
@@ -278,7 +278,7 @@ function splitMixedRun(
 
   // চার্টার-বাই-চার্টার সেগমেন্ট (মূল টেক্সটে): একই ফন্টের অক্ষর পরপর গ্রুপ করা।
   // সাধারণন বিরামচিহ্ন/ফাঁক (ল্যাটিন অক্ষর/সংখ্যা নেই) আগের বাংলা সন্দর্ভে রাখা হয় —
-  // এতে ": Bangla and English 2026" পুরোটাই Times, "সঠিক রূপান্তর।" SutonniMJ।
+  // এতে ": Bangla and English 2026" পুরোটাই Times, "সঠিক রূপান্তর।" SutonnyMJ।
   const segments: { text: string; bangla: boolean }[] = [];
   let curText = "";
   let curBangla = false;
@@ -308,7 +308,7 @@ function splitMixedRun(
     t.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve");
     t.textContent = sanitizeXml(convertFn(seg.text));
     nr.appendChild(t);
-    rFontsAttr(nr, ns, seg.bangla ? "SutonniMJ" : "Times New Roman");
+    rFontsAttr(nr, ns, seg.bangla ? "SutonnyMJ" : "Times New Roman");
     frag.appendChild(nr);
   }
   parent.insertBefore(frag, anchor);
@@ -336,7 +336,7 @@ function rFontsAttr(run: Element, ns: string, want: string): void {
   // ওয়ার্ড স্কিমা-ভ্যালিডেশনে এই চাইল্ড রিজেক্ট করে আর ডকুমেন্টই খুলত না। তাই সরিয়ে দেওয়া হয়েছে।
 }
 
-/** রান-এ rPr/rFonts না থাকলে SutonniMJ হিন্ট দাও; থাকলে নাম বদলাও */
+/** রান-এ rPr/rFonts না থাকলে SutonnyMJ হিন্ট দাও; থাকলে নাম বদলাও */
 function ensureRFonts(run: Element, ns: string, hasBangla: boolean): void {
-  rFontsAttr(run, ns, hasBangla ? "SutonniMJ" : "Times New Roman");
+  rFontsAttr(run, ns, hasBangla ? "SutonnyMJ" : "Times New Roman");
 }
