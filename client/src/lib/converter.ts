@@ -255,23 +255,39 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
       // বিজয়-কনভার্টার প্রতি-টেক্সট রূপান্তর করে বলে সেগমেন্ট-আলাদা করাই সঠিক
       splitMixedRun(plan.run, ns, plan.text, convertFn);
     } else {
-      // সিন্ধান্ত: উৎসে বাংলা থাকলে, অথবা রূপান্তর-পরবর্তী টেক্সটে বিজয়-
-      // পাঙ্কচুয়েশন (দাঁড়ি ', কোট ইত্যাদি) থাকলে → SutonnyMJ; বাকি সব →
-      // Times New Roman। এতে দাঁড়ি-শুধু রানও সঠিক ফন্টে থাকে।
-      rFontsAttr(
-        plan.run,
-        ns,
-        needsSutonnyMJ(plan.text, plan.convText) ? "SutonnyMJ" : "Times New Roman",
-      );
+      // সিন্ধান্ত (ফলো-থ্রু নিয়ম): রানের ভাষা-সন্ধার্ট প্রথমে নির্ধারণ করা হয়
+      // উৎসের টেক্সট থেকে — বাংলা অক্ষর থাকলে SutonnyMJ; ল্যাটিন/সংখ্যা
+      // থাকলে Times New Roman।
+      //   - বাংলা-শুধু / বাংলা+পাঙ্কচুয়েশন রান → SutonnyMJ
+      //   - ইংরেজি-শুধু / ইংরেজি+পাঙ্কচুয়েশন রান → Times New Roman
+      //     (কোট ” ’, এম-ড্যাশ ইত্যাদি বিজয়-গ্লিফে বসে, তবে গ্লিফগুলো
+      //     TNR-এই সঠিকভাবে রেন্ডার হয় — এগুলো ল্যাটিন-কোডেই)
+      //   - দাঁড়ি-শুধু / পাঙ্কচুয়েশন-শুধু রান → আগের-পরের সন্ধার্ট ফলো
+      //     করবে: পরের রান বাংলা হয়ে থাকলে SutonnyMJ (বিজয় পাঙ্কচুয়েশন
+      //     গ্লিফ SutonnyMJ-তেই সঠিক), তা নয়ে হয়ে থাকলে তাই রাখা হয়
+      //     (তৃতীয় পাসে স্পেস-রানের ল্যাঙ্ক করা হয়েছে)।
+      const hasLat = LATIN_RE.test(plan.text);
+      const font = plan.origHasBangla
+        ? "SutonnyMJ"
+        : hasLat
+          ? "Times New Roman"
+          : runLooksBanglaContext(plan, runPlans) ? "SutonnyMJ" : "Times New Roman";
+      rFontsAttr(plan.run, ns, font);
     }
   }
 
   // তৃতীয় পাস: বাকি সব রান (যেসব স্পর্শ হয়নি) — ফাঁকা-স্থান, ইংরেজি-শুধু বা
   // শুধু-বিরামচিহ্ন রানেও স্পষ্ট ফন্ট দেওয়া। প্রতিটি রানের নিজস্ব টেক্সট অনুযায়ী:
   // ল্যাটিন অক্ষর/সংখ্যা থাকলে Times New Roman, নয়তো SutonnyMJ।
+  // স্প্লিট-সেগমেন্ট রান স্কিপ (এগুলো দ্বিতীয় পাসে ইতোমধ্যে সঠিক ফন্ট পেয়েছে);
+  // সারিয়ালাইজেশনের আগে মার্কার সরানো হয়।
   const allRuns = Array.from(doc.getElementsByTagNameNS(ns, "r"));
   const planned = new Set(runPlans.map((p) => p.run));
   for (const run of allRuns) {
+    if (run.hasAttribute("data-bijoy-split")) {
+      run.removeAttribute("data-bijoy-split");
+      continue;
+    }
     if (planned.has(run)) continue;
     const texts = Array.from(run.getElementsByTagNameNS(ns, "t")).map(
       (n) => n.textContent ?? "",
@@ -355,12 +371,24 @@ export function mapSegmentsToBijoy(
   return inputSegs.map((s) => ({ text: convert(s.text, direction), bangla: s.bangla }));
 }
 
-// কনভার্টের পরের টেক্সটে বিজয়-পাঙ্কচুয়েশন (যেমন একক দাঁড়ি ') থাকলেও
-// রানটি SutonnyMJ হওয়া দরকার — নইলে দাঁড়ি Times New Roman-এ
-// মতো দেখায়। সুতরাং ফন্ট-সিদ্ধান্তে "উৎসে বাংলা" নয়, "উৎসে বাংলা বা
-// ফলাফলে বিজয়-পাঙ্কচুয়েশন" দেখা হয়।
-function needsSutonnyMJ(origText: string, convText: string): boolean {
-  return BANGLA_RE.test(origText) || PUNCT_RE.test(convText);
+// রানের সন্ধার্ট-নির্ধারণ — পাঙ্কচুয়েশন-শুধু রান (দাঁড়ি, কোট) কোন ভাষার
+// সন্ধার্টে পড়ছে তা পরের রান দেখে বোঝা যায়। ডকে পরপর রানে "নম্বর। এটা"
+// ধরনে দাঁড়ি-রানের পরেই বাংলা থাকে — তাই পরের রানে বাংলা থাকলে SutonnyMJ।
+function runLooksBanglaContext(
+  plan: { run: Element },
+  runPlans: { run: Element; origHasBangla: boolean; text: string }[],
+): boolean {
+  const pos = runPlans.findIndex((p) => p.run === plan.run);
+  if (pos >= 0) {
+    const after = runPlans.slice(pos + 1).find((p) => p.origHasBangla || LATIN_RE.test(p.text));
+    if (after) return after.origHasBangla;
+  }
+  // পরের স্পষ্ট রান না পেলে আগের রান দেখা হয়
+  const before = [...runPlans]
+    .slice(0, pos >= 0 ? pos : undefined)
+    .reverse()
+    .find((p) => p.origHasBangla || LATIN_RE.test(p.text));
+  return before ? before.origHasBangla : true; // ডিফল্ট: ডক বাংলা ধরে SutonnyMJ
 }
 
 /** মিশ্র টেক্সটকে বাংলা/অ-বাংলা সেগমেন্টে ভাগ করার শর্ত */
@@ -425,6 +453,9 @@ function splitMixedRun(
     t.textContent = sanitizeXml(convertFn(seg.text));
     nr.appendChild(t);
     rFontsAttr(nr, ns, seg.bangla ? "SutonnyMJ" : "Times New Roman");
+    // মার্কার: তৃতীয় পাস যেন স্প্লিট-সেগমেন্ট রানে আবার ফন্ট চাপায় না —
+    // সিরিয়ালাইজেশনের আগে সামনে সব মার্কার সরানো হয়।
+    nr.setAttribute("data-bijoy-split", "1");
     frag.appendChild(nr);
   }
   parent.insertBefore(frag, anchor);
