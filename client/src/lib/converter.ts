@@ -281,6 +281,7 @@ function splitMixedRun(
 
 /** রানের rPr/rFonts হিন্ট দেওয়া বা বদলানো (রান-এর নাম ও বৈশিষ্ট্য অক্ষুণ্ণ) */
 function rFontsAttr(run: Element, ns: string, want: string): void {
+  const doc = run.ownerDocument!;
   let rPr = run.querySelector(":scope > rPr");
   if (!rPr) {
     rPr = run.ownerDocument!.createElementNS(ns, "w:rPr");
@@ -295,6 +296,13 @@ function rFontsAttr(run: Element, ns: string, want: string): void {
   rFonts.setAttributeNS(ns, "w:hAnsi", want);
   rFonts.setAttributeNS(ns, "w:eastAsia", want);
   rFonts.setAttributeNS(ns, "w:cs", want);
+  // ফন্টের নামের বিকল্প রূপ — অনেকে "SutonniMJ" বা "SutonnyMJ" দুই নামেই
+  // ইনস্টল করেন; alias-এ দুটোই রাখলে ওয়ার্ড সঠিক ফন্ট খুঁজে পায়
+  if (want !== "Times New Roman" && !rFonts.querySelector(":scope > alias")) {
+    const alias = doc.createElementNS(ns, "w:alias");
+    alias.setAttributeNS(ns, "w:name", "SutonnyMJ");
+    rFonts.appendChild(alias);
+  }
 }
 
 /** রান-এ rPr/rFonts না থাকলে SutonniMJ হিন্ট দাও; থাকলে নাম বদলাও */
