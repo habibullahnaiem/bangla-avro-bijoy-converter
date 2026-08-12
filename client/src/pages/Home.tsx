@@ -19,7 +19,9 @@ import {
   ArrowDownUp,
 } from "lucide-react";
 import { toast } from "sonner";
-import { convert, type ConvertDirection } from "@/lib/converter";
+import { convert, convertFile, type ConvertDirection } from "@/lib/converter";
+import { Download, FileText, Upload, Loader2 } from "lucide-react";
+import { useRef as useFileRef } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -31,12 +33,20 @@ const EXAMPLE_TEXT = `সম্পাদক মহোদয়,
 The Times newspaper — 2026।`;
 
 export default function Home() {
+  const [activeTab, setActiveTab] = useState<"text" | "file">("text");
   const [direction, setDirection] = useState<ConvertDirection>("u2b");
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [isLive, setIsLive] = useState(true);
   const [copied, setCopied] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const fileInputRef = useFileRef<HTMLInputElement>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [converting, setConverting] = useState(false);
+  const [fileResult, setFileResult] = useState<{
+    name: string;
+    url: string;
+  } | null>(null);
 
   const doConvert = useCallback(
     (text: string, dir: ConvertDirection) => {
@@ -114,6 +124,43 @@ export default function Home() {
 
   const loadExample = () => {
     setInput(EXAMPLE_TEXT);
+    setActiveTab("text");
+  };
+
+  /* ── ফাইল কনভার্টার ─────────────────────────────── */
+  const onFileSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const ok = /\.(docx|txt)$/i.test(file.name);
+    if (!ok) {
+      toast.error("শুধুমাত্র .docx বা .txt ফাইল দিন");
+      return;
+    }
+    setSelectedFile(file);
+    setFileResult(null);
+  };
+
+  const runFileConvert = async () => {
+    if (!selectedFile) {
+      toast.info("প্রথমে একটি ফাইল নির্বাচন করুন");
+      return;
+    }
+    setConverting(true);
+    try {
+      const result = await convertFile(selectedFile, direction);
+      if (fileResult) URL.revokeObjectURL(fileResult.url);
+      const url = URL.createObjectURL(result.blob);
+      setFileResult({ name: result.name, url });
+      toast.success(
+        result.kind === "docx"
+          ? "ডকুমেন্ট রূপান্তর সম্পন্ন — ফরম্যাটিং অক্ষুণ্ণ"
+          : "টেক্সট ফাইল রূপান্তর সম্পন্ন",
+      );
+    } catch {
+      toast.error("ফাইল রূপান্তরে ত্রুটি — ফাইলটি ঠিকমতো .docx/.txt কিনা যাচাই করুন");
+    } finally {
+      setConverting(false);
+    }
   };
 
   const charCount = input.length;
@@ -191,6 +238,36 @@ export default function Home() {
           </Button>
         </div>
 
+        {/* ট্যাব সুইচার */}
+        <div className="mb-5 flex items-center gap-1.5 rounded-full border bg-card p-1.5 shadow-sm w-fit">
+          <Button
+            variant={activeTab === "text" ? "default" : "ghost"}
+            size="sm"
+            className={
+              activeTab === "text"
+                ? "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90"
+                : "text-muted-foreground hover:bg-muted"
+            }
+            onClick={() => setActiveTab("text")}>
+            <FileText className="mr-1.5 h-4 w-4" />
+            টেক্সট কনভার্টার
+          </Button>
+          <Button
+            variant={activeTab === "file" ? "default" : "ghost"}
+            size="sm"
+            className={
+              activeTab === "file"
+                ? "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90"
+                : "text-muted-foreground hover:bg-muted"
+            }
+            onClick={() => setActiveTab("file")}>
+            <Upload className="mr-1.5 h-4 w-4" />
+            ফাইল কনভার্টার
+          </Button>
+        </div>
+
+        {activeTab === "text" ? (
+        <>
         {/* কনভার্টার কার্ড */}
         <div className="overflow-hidden rounded-2xl border bg-card shadow-lg">
           {/* দিক টগল বার */}
@@ -405,7 +482,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* টিপস কার্ড — শান্ত, এডিটরিয়াল */}
+          {/* টিপস কার্ড — শান্ত, এডিটরিয়াল */}
         <div className="mt-4 grid gap-4 md:grid-cols-3">
           <div className="rounded-xl border bg-card p-5">
             <div className="mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
@@ -464,6 +541,132 @@ export default function Home() {
             </li>
           </ol>
         </div>
+        </>
+        ) : (
+        /* ফাইল কনভার্টার প্যানেল */
+        <div className="overflow-hidden rounded-2xl border bg-card shadow-lg">
+          <div className="border-b bg-secondary/60 px-4 py-3">
+            <h3 className="text-base font-bold text-foreground">
+              ডকুমেন্ট রূপান্তর — .docx / .txt
+            </h3>
+            <p className="mt-0.5 text-sm text-muted-foreground">
+              বোল্ড, ইটালিক, ফুটনোট, এন্ডনোট ও ফন্ট-স্টাইল অক্ষুণ্ণ
+              রাখা হয়; বাংলা SutonniMJ-তে ও ইংরেজি Times New Roman-এ
+              রূপান্তর হয়।
+            </p>
+          </div>
+          <div className="px-4 py-6">
+            <div className="mx-auto max-w-xl">
+              {/* দিক সিলেকশন */}
+              <div className="mb-4 flex items-center justify-center gap-1.5 rounded-full border bg-secondary/50 p-1">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className={
+                    direction === "u2b"
+                      ? "border-primary bg-primary text-primary-foreground shadow-sm hover:bg-primary/90"
+                      : "border-transparent bg-transparent text-muted-foreground shadow-none hover:bg-muted"
+                  }
+                  onClick={() => setDirection("u2b")}>
+                  অভ্র → বিজয়
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className={
+                    direction === "b2u"
+                      ? "border-primary bg-primary text-primary-foreground shadow-sm hover:bg-primary/90"
+                      : "border-transparent bg-transparent text-muted-foreground shadow-none hover:bg-muted"
+                  }
+                  onClick={() => setDirection("b2u")}>
+                  বিজয় → অভ্র
+                </Button>
+              </div>
+
+              {/* ফাইল সিলেকশন এরিয়া */}
+              <label
+                htmlFor="file-upload"
+                className={
+                  "flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed px-6 py-10 text-center transition-colors " +
+                  (selectedFile
+                    ? "border-primary/60 bg-primary/5"
+                    : "border-border bg-muted/40 hover:border-primary/40 hover:bg-muted/70")
+                }>
+                <Upload
+                  className={
+                    "mb-3 h-8 w-8 " +
+                    (selectedFile ? "text-primary" : "text-muted-foreground")
+                  }
+                />
+                {selectedFile ? (
+                  <>
+                    <p className="font-semibold text-foreground break-all">
+                      {selectedFile.name}
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {(selectedFile.size / 1024).toFixed(1)} KB — পরিবর্তন
+                      করতে হলে আবার ক্লিক করুন
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="font-semibold text-foreground">
+                      এখানে ক্লিক করে ফাইল নির্বাচন করুন
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      .docx (Word) বা .txt — সর্বোচ্চ 20 MB
+                    </p>
+                  </>
+                )}
+              </label>
+              <input
+                id="file-upload"
+                ref={fileInputRef}
+                type="file"
+                accept=".docx,.txt,text/plain,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                className="sr-only"
+                onChange={onFileSelected}
+              />
+
+              {/* রূপান্তর + ডাউনলোড */}
+              <div className="mt-5 flex flex-col items-center gap-3">
+                <Button
+                  size="lg"
+                  disabled={!selectedFile || converting}
+                  className="h-12 min-w-56 text-base font-semibold shadow-md disabled:opacity-50"
+                  onClick={runFileConvert}>
+                  {converting ? (
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      রূপান্তর হচ্ছে...
+                    </>
+                  ) : (
+                    <>
+                      <ArrowRightLeft className="mr-2 h-5 w-5" />
+                      ফাইল রূপান্তর করুন
+                    </>
+                  )}
+                </Button>
+                {fileResult && (
+                  <a
+                    href={fileResult.url}
+                    download={fileResult.name}
+                    className="inline-flex h-11 items-center gap-2 rounded-lg bg-emerald-600 px-6 text-sm font-semibold text-white shadow-md transition-transform hover:bg-emerald-700 active:scale-[0.97]">
+                    <Download className="h-4 w-4" />
+                    ডাউনলোড করুন — {fileResult.name}
+                  </a>
+                )}
+              </div>
+
+              <p className="mt-4 text-center text-xs text-muted-foreground">
+                রূপান্তর করা হয় — প্রতিটি টেক্সট-রানের ফন্ট SutonniMJ (বাংলা)
+                / Times New Roman (ইংরেজি) হয়ে যায়; বোল্ড, ইটালিক ও
+                ফুটনোট-রেফারেন্স অপরিবর্তিত থাকে।
+              </p>
+            </div>
+          </div>
+        </div>
+        )}
       </main>
 
       {/* ফুটার */}
