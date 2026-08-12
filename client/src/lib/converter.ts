@@ -319,13 +319,9 @@ function rFontsAttr(run: Element, ns: string, want: string): void {
   rFonts.setAttributeNS(ns, "w:hAnsi", want);
   rFonts.setAttributeNS(ns, "w:eastAsia", want);
   rFonts.setAttributeNS(ns, "w:cs", want);
-  // ফন্টের নামের বিকল্প রূপ — অনেকে "SutonniMJ" বা "SutonnyMJ" দুই নামেই
-  // ইনস্টল করেন; alias-এ দুটোই রাখলে ওয়ার্ড সঠিক ফন্ট খুঁজে পায়
-  if (want !== "Times New Roman" && !rFonts.querySelector(":scope > alias")) {
-    const alias = doc.createElementNS(ns, "w:alias");
-    alias.setAttributeNS(ns, "w:name", "SutonnyMJ");
-    rFonts.appendChild(alias);
-  }
+  // নোট: w:rFonts ECMA-376 অনুযায়ী লিফ-এলিমেন্ট (শুধু অ্যাট্রিবিউট, চাইল্ড নোড নেই)।
+  // আগে এখানে w:alias চাইল্ড যোগ করা হত (SutonnyMJ বানান-বিকল্পের জন্য) — কিন্তু
+  // ওয়ার্ড স্কিমা-ভ্যালিডেশনে এই চাইল্ড রিজেক্ট করে আর ডকুমেন্টই খুলত না। তাই সরিয়ে দেওয়া হয়েছে।
 }
 
 /** রান-এ rPr/rFonts না থাকলে SutonniMJ হিন্ট দাও; থাকলে নাম বদলাও */
