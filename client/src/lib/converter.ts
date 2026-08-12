@@ -146,7 +146,12 @@ async function convertDocx(
     const entry = zip.file(partPath);
     if (!entry) continue;
     const xml = await entry.async("string");
-    const convertedXml = processDocXml(xml, convertFn);
+    // Word কখনও কখনও ডকে অবৈধ XML কন্ট্রোল ক্যারেক্টার রাখে (0x03, 0x1F ইত্যাদি)।
+    // DOMParser এতে থ্রো করে আর ওয়ার্ডও সেরকম ডক খুলতে পারে না — তাই পার্সের
+    // আগেই পুরো XML স্ট্রিং থেকে অবৈধ ক্যারেক্টার সরানো হয়। ট্যাব (0x09), ক্যারেজ
+    // রিটার্ন (0x0D) ও লাইনফিড (0x0A) বৈধ XML ক্যারেক্টার, রাখা হয়।
+    const cleanXml = stripIllegalXmlChars(xml);
+    const convertedXml = processDocXml(cleanXml, convertFn);
     zip.file(partPath, convertedXml);
   }
 
@@ -181,7 +186,7 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
   for (const node of textNodes) {
     const text = node.textContent ?? "";
     if (!text || !hasBanglaOrPunct(text)) continue;
-    node.textContent = convertFn(text);
+    node.textContent = sanitizeXml(convertFn(text));
 
     const run = node.parentElement; // w:r
     if (run && run.localName === "r" && !runPlans.some((p) => p.run === run)) {
@@ -210,6 +215,22 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
     }
   }
   return new XMLSerializer().serializeToString(doc);
+}
+
+// XML 1.0-এ অবৈধ কন্ট্রোল ক্যারেক্টার (0x00–0x08, 0x0B, 0x0C, 0x0E–0x1F, সারোগেট)
+// পুরো XML-এ এলে DOMParser থ্রো করে ও Word ডকুমেন্ট খুলতে পারে না —
+// পার্সের আগে পুরো স্ট্রিং থেকে সরাতে হয় (ট্যাব/রিটার্ন/লাইনফিড বৈধ, রাখা হয়)
+function stripIllegalXmlChars(xml: string): string {
+  return xml.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F-\u009F]/g, "");
+}
+
+// XML 1.0-এ অবৈধ কন্ট্রোল ক্যারেক্টার (0x00–0x08, 0x0B, 0x0C, 0x0E–0x1F, সারোগেট)
+// টেক্সটে এলে Word পুরো ডকুমেন্ট খুলতে পারে না — রূপান্তরের পর সরিয়ে দিতে হয়
+function sanitizeXml(text: string): string {
+  return text.replace(
+    /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F-\u009F\uD800-\uDFFF]/g,
+    "",
+  );
 }
 
 const BANGLA_RE = /[\u0980-\u09FF]/;
@@ -270,8 +291,10 @@ function splitMixedRun(
     const np = rPr ? doc.importNode(rPr, true) : null;
     if (np) nr.appendChild(np);
     const t = doc.createElementNS(ns, "w:t");
-    t.setAttribute("xml:space", "preserve");
-    t.textContent = convertFn(seg.text);
+    // xml namespace হিসেবে সেট করতে হয় — Word অ-নেমস্পেসড xml:space অ্যাট্রিবিউট
+    // থাকলে ডকুমেন্ট আর খুলতে পারে না ("Word experienced an error" দেখায়)
+    t.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve");
+    t.textContent = sanitizeXml(convertFn(seg.text));
     nr.appendChild(t);
     rFontsAttr(nr, ns, seg.bangla ? "SutonniMJ" : "Times New Roman");
     frag.appendChild(nr);
