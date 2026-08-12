@@ -504,8 +504,8 @@ export default function Home() {
               দাঁড়ি সঠিক থাকে
             </h3>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              বাংলা দাঁড়ি (।) বিজয়ে সঠিক দাঁড়ি-গ্লিফে রূপান্তর হয় —
-              হ-এর মতো দেখায় না।
+              বাংলা দাঁড়ি (।) বিজয়ে টিয়ারড্রপ দাঁড়ি-স্ট্রোক গ্লিফে
+              রূপান্তর হয় — ম-ফলা বা ক্র-এর মতো দেখায় না।
             </p>
           </div>
           <div className="rounded-xl border bg-card p-5">
