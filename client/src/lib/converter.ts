@@ -7,7 +7,7 @@
  *
  * যুক্তবর্ণ নিয়ম: ন্ত, ল্ল, য়, ড়, ঢ়, র-ফলা, রেফ, জ্ঞ, ক্ষ, শ্র — কোনো ভাঙন নেই।
  * বিরামচিহ্ন নিয়ম (যাচাইকৃত):
- *   । → ¥ (U+00A5)  — দাঁড়ি হ-এর মতো লাগবে না, সঠিক দাঁড়ি গ্লিফ দেখাবে
+ *   । → ¥ (U+00A5)  — সুতন্নীতে প্রকৃত danDi গ্লিফ (U+00A5 কনটুর পরীক্ষা করা হয়েছে)
  *   , ; ! ?        → আপনা আপনা স্থানেই থাকে
  *   “ ” → Ò Ó      — ইনভার্টেড কোয়াট সঠিক "66"/"99" গ্লিফে
  *   ‘ ’ → Ô Õ      — সিংগেল ইনভার্টেড কোয়াট
@@ -21,14 +21,14 @@ import {
 export type ConvertDirection = "u2b" | "b2u";
 
 /* ── বিরামচিহ্ন প্রি-প্রসেস (u2b) ─────────────────────────────
- * বিরামচিহ্নগুলো বিজয়-লাইব্রেরিয়ার আগেই বিজয়-কোডে (Ò Ó Ô Õ Ñ ¥) নেওয়া হয়।
+ * বিরামচিহ্নগুলো বিজয়-লাইব্রেরিয়ার আগেই বিজয়-কোডে (Ò Ó Ô Õ Ñ ¡) নেওয়া হয়।
  * কারণ: লাইব্রেরি ' বা " সোজা পাস-থ্রু করে (যেগুলো সুতন্নীতে হ/অন্যর মতো
- * গ্লিফ), আর । কে পাইপ '|'-তে বদলায়। লাইব্রেরি Ò Ó Ô Õ Ñ ¥ পাস-থ্রু রাখে
- * (per-chars পরীক্ষাকৃত) — তাই প্রি-ম্যাপ নিরাপদ।
+ * গ্লিফ), আর । কে পাইপ '|'-তে বদলায়। লাইব্রেরি Ò Ó Ô Õ Ñ ¡ পাস-থ্রু রাখে
+ * (per-chars পরীক্ষাকৃত) — তাই প্রি-ম্যাপ নিরাপদ। দাঁড়ি-কোড U+00A5 সুতন্নীর প্রকৃত দাঁড়ি।
  */
 function preMapPunctuation(s: string): string {
   const map: Record<string, string> = {
-    "।": "\u00A5", // দাঁড়ি — ¥ গ্লিফ সুতন্নীতে সঠিক দাঁড়ি
+    "।": "\u00A5", // দাঁড়ি — U+00A5 'dandadeva' = সুতন্নীতে প্রকৃত দাঁড়ি স্ট্রোক
     "॥": "\u00A5\u00A5",
     "\u2014": "\u00D1", // em-dash
     "\u2013": "\u00D1", // en-dash — একই ড্যাশ গ্লিফ
@@ -64,7 +64,7 @@ export function convertToBijoy(text: string): string {
 export function convertToUnicode(text: string): string {
   let r = libBijoyToUnicode(text);
   // বিপরীত দিকেও সাংকেতিক কোডপয়েন্টগুলো নর্মালাইজ করা।
-  // লাইব্রেরি ইতোমধ্যে Ò→“ Õ→’ Ñ→— রাউন্ড-ট্রিপ করে; দাঁড়ি-কোড ¥ লাইব্রেরি
+  // লাইব্রেরি ইতোমধ্যে Ò→“ Õ→’ Ñ→— রাউন্ড-ট্রিপ করে; দাঁড়ি-কোড ¡ লাইব্রেরি
   // অপরিবর্তিত রাখে — তাই শুধু সেটা হাতে বদলাও।
   r = r.split("\u00A5").join("।");
   // ॥ (দুই দাঁড়ি) রাউন্ড-ট্রিপ ঠিক করা
@@ -174,12 +174,14 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
     text: string;
     origHasBangla: boolean;
     mixed: boolean;
-  }[] = [];
+    convText: string; // রূপান্তর-পরবর্তী টেক্সট — পাঙ্কচুয়েশন-শুধু রান (যেমন দাঁড়ি)
+  }[] = []; // SutonnyMJ পেতে পারে কিনা সেটার জন্য দরকার।
 
   for (const node of textNodes) {
     const text = node.textContent ?? "";
     if (!text || !hasBanglaOrPunct(text)) continue;
-    node.textContent = sanitizeXml(convertFn(text));
+    const converted = sanitizeXml(convertFn(text));
+    node.textContent = converted;
 
     const run = node.parentElement; // w:r
     if (run && run.localName === "r" && !runPlans.some((p) => p.run === run)) {
@@ -188,6 +190,7 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
         text,
         origHasBangla: BANGLA_RE.test(text),
         mixed: hasMixedSegments(text),
+        convText: converted,
       });
     }
   }
@@ -207,7 +210,14 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
       // বিজয়-কনভার্টার প্রতি-টেক্সট রূপান্তর করে বলে সেগমেন্ট-আলাদা করাই সঠিক
       splitMixedRun(plan.run, ns, plan.text, convertFn);
     } else {
-      rFontsAttr(plan.run, ns, plan.origHasBangla ? "SutonnyMJ" : "Times New Roman");
+      // সিন্ধান্ত: উৎসে বাংলা থাকলে, অথবা রূপান্তর-পরবর্তী টেক্সটে বিজয়-
+      // পাঙ্কচুয়েশন (দাঁড়ি ¥, কোট ইত্যাদি) থাকলে → SutonnyMJ; বাকি সব →
+      // Times New Roman। এতে দাঁড়ি-শুধু রানও সঠিক ফন্টে থাকে।
+      rFontsAttr(
+        plan.run,
+        ns,
+        needsSutonnyMJ(plan.text, plan.convText) ? "SutonnyMJ" : "Times New Roman",
+      );
     }
   }
 
@@ -253,6 +263,14 @@ function hasBanglaOrPunct(text: string): boolean {
   return BANGLA_RE.test(text) || PUNCT_RE.test(text);
 }
 
+// কনভার্টের পরের টেক্সটে বিজয়-পাঙ্কচুয়েশন (যেমন একক দাঁড়ি ¥) থাকলেও
+// রানটি SutonnyMJ হওয়া দরকার — নইলে দাঁড়ি Times New Roman-এ ওয়েন (¥)-এর
+// মতো দেখায়। সুতরাং ফন্ট-সিদ্ধান্তে "উৎসে বাংলা" নয়, "উৎসে বাংলা বা
+// ফলাফলে বিজয়-পাঙ্কচুয়েশন" দেখা হয়।
+function needsSutonnyMJ(origText: string, convText: string): boolean {
+  return BANGLA_RE.test(origText) || PUNCT_RE.test(convText);
+}
+
 /** মিশ্র টেক্সটকে বাংলা/অ-বাংলা সেগমেন্টে ভাগ করার শর্ত */
 function hasMixedSegments(text: string): boolean {
   // বাংলা থাকবে এবং ইংরেজি অক্ষর/সংখ্যা থাকবে — দুই-ই হলে মিশ্র।
@@ -284,8 +302,14 @@ function splitMixedRun(
   let curBangla = false;
   for (const ch of text) {
     const b = BANGLA_RE.test(ch);
+    // দাঁড়ি (U+0964), কোট ইত্যাদি বাংলা রেঞ্জের বাইরে, তাই তাদের জন্য
+    // কনটেক্সট উত্তরাধিকার সূত্রে ফেলে: বর্তমান সন্দর্ভের অনুসরণ করে।
+    const isPunct = PUNCT_RE.test(ch);
     const isLatinChar = /[A-Za-z0-9]/.test(ch);
-    const newBangla: boolean = b || (!isLatinChar && curBangla);
+    // নতুন সন্ধার্টার-টাইপ সেগমেন্টের বাংলা-ফ্ল্যাগ:
+    //   বাংলা অক্ষর → বাংলা;  ল্যাটিন অক্ষর/সংখ্যা → নন-বাংলা;
+    //   বাংলা-পাঙ্কচুয়েশন/বাকি সব → আগের সন্দর্ভ বজায় রাখে (ফলো-থ্রু)।
+    const newBangla: boolean = b ? true : isLatinChar ? false : curBangla;
     if (curText === "" || newBangla === curBangla) {
       curText += ch;
       curBangla = newBangla;
