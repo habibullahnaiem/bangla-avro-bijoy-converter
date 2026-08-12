@@ -172,14 +172,12 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
   const doc = new DOMParser().parseFromString(xml, "text/xml");
   const ns = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
 
-  // প্রথমে প্রত্যেক <w:t>-এর রূপান্তর এক পাসে করে ফেলি — পরবর্তী সেগমেন্ট-
-  // ভাগ করা নোডয়ালিস্ট সালনোর আগেই তথ্য সংগ্রহ করা হয়, ডাবল-প্রসেসিং এড়ায়
+  // প্রথম পাস: টেক্সট রূপান্তর — যেসব <w:t>-তে বাংলা বা বিরামচিহ্ন আছে
   const textNodes = Array.from(doc.getElementsByTagNameNS(ns, "t"));
   const runPlans: {
     run: Element;
     text: string;
     origHasBangla: boolean;
-    origPunctOnly: boolean;
     mixed: boolean;
   }[] = [];
 
@@ -194,25 +192,43 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
         run,
         text,
         origHasBangla: BANGLA_RE.test(text),
-        origPunctOnly: !BANGLA_RE.test(text) && PUNCT_RE.test(text),
         mixed: hasMixedSegments(text),
       });
     }
   }
 
-  // ফন্ট-হিন্ট ও মিশ্র রান-ভাগ — মূল টেক্সটের তথ্য অনুযায়ী
+  // দ্বিতীয় পাস: ফন্ট অ্যাসাইনমেন্ট — প্রত্যেক w:r-এ স্পষ্ট rFonts দেওয়া হয়।
+  // কারণ: পূর্ববর্তী ডকে প্রত্যেক রানে w:rFonts="Kalpurush" লেখা থাকত — যেসব
+  // রান স্পর্শ করা হত না (যেমন ফাঁকা-স্থানের রান, ইংরেজি-শুধু রান) Word-এ
+  // কালপুরুষেই দেখাত। এখন প্রতিটি রানে ফন্ট বাধ্যতামূলক:
+  //   বাংলা (বা যুক্তবর্ণ-ধারী) রান → SutonniMJ
+  //   ল্যাটিন/ইংরেজি রান  → Times New Roman
+  //   ফাঁকা-স্থান/বিরামচিহ্ন-শুধু রান → সন্দর্ভ অনুযায়ী পরের ধাপে (মিশ্র
+  //     সেগমেন্ট-ভাগ বা ইংরেজি-রানের সাথে না থাকলে SutonniMJ — কারণ পুরো
+  //     ডকুমেন্ট বাংলা)
   for (const plan of runPlans) {
     if (plan.mixed) {
       // মূল টেক্সটেই সেগমেন্ট ভাগ করি, প্রত্যেক সেগমেন্ট আলাদা রূপান্তরিত হয় —
       // বিজয়-কনভার্টার প্রতি-টেক্সট রূপান্তর করে বলে সেগমেন্ট-আলাদা করাই সঠিক
       splitMixedRun(plan.run, ns, plan.text, convertFn);
-    } else if (plan.origPunctOnly) {
-      // বিরামচিহ্ন-শুধু রান — বিজয়ে SutonniMJ-এর ইংলিশ গ্লিফ অংশেই কোডপয়েন্ট,
-      // সুতরাং Times New Roman হিন্ট সংগতি রাখে
-      rFontsAttr(plan.run, ns, "Times New Roman");
     } else {
-      ensureRFonts(plan.run, ns, plan.origHasBangla);
+      rFontsAttr(plan.run, ns, plan.origHasBangla ? "SutonniMJ" : "Times New Roman");
     }
+  }
+
+  // তৃতীয় পাস: বাকি সব রান (যেসব স্পর্শ হয়নি) — ফাঁকা-স্থান, ইংরেজি-শুধু বা
+  // শুধু-বিরামচিহ্ন রানেও স্পষ্ট ফন্ট দেওয়া। প্রতিটি রানের নিজস্ব টেক্সট অনুযায়ী:
+  // ল্যাটিন অক্ষর/সংখ্যা থাকলে Times New Roman, নয়তো SutonniMJ।
+  const allRuns = Array.from(doc.getElementsByTagNameNS(ns, "r"));
+  const planned = new Set(runPlans.map((p) => p.run));
+  for (const run of allRuns) {
+    if (planned.has(run)) continue;
+    const texts = Array.from(run.getElementsByTagNameNS(ns, "t")).map(
+      (n) => n.textContent ?? "",
+    );
+    const joined = texts.join("");
+    const want = LATIN_RE.test(joined) ? "Times New Roman" : "SutonniMJ";
+    rFontsAttr(run, ns, want);
   }
   return new XMLSerializer().serializeToString(doc);
 }
@@ -234,6 +250,7 @@ function sanitizeXml(text: string): string {
 }
 
 const BANGLA_RE = /[\u0980-\u09FF]/;
+const LATIN_RE = /[A-Za-z0-9]/;
 const PUNCT_RE =
   /[।॥“”‘’—–¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ]/;
 
