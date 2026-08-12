@@ -29,30 +29,44 @@ export type ConvertDirection = "u2b" | "b2u";
  * বদলায় এবং [ ] ( ) সঠিক কোডেই রাখে — তাই প্রি-ম্যাপে দাঁড়ি/ব্র্যাকেট টাচ না
  * করে শুধু উদ্ধৃতি ও ড্যাশ ফিক্স করা হয়।
  */
-function preMapPunctuation(s: string): string {
-  const map: Record<string, string> = {
-    // দাঁড়ি ও ব্র্যাকেট লাইব্রেরি সঠিকভাবেই | (U+007C), [ ] (U+005B/U+005D)
-    // কোডে রাখে — এখানে পরিবর্তন করা হয় না।
-    "\u2014": "\u00D1", // em-dash
-    "\u0965": "\uE001", // ॥ ডাবল-দারি — প্লেসহোল্ডার (লাইব্রেরি \\ কে ॥ বদলায় — পরে বসানো হবে)
-    "\u2013": "\u00D1", // en-dash — একই ড্যাশ গ্লিফ
-    "\u201C": "\u00D2", // “ open double
-    "\u201D": "\u00D3", // ” close double
-    "\u2018": "\u00D4", // ‘ open single
-    "\u2019": "\u00D5", // ’ close single / apostrophe
-  };
+/**
+ * উদ্ধৃতি/অ্যাপোস্ট্রফ/ড্যাশ ম্যাপ — কনটেক্সট-অনুযায়ী:
+ *   inBangla=true  → SutonnyMJ গ্লিফ-কোডে (ÒÓÔÕÑ) — বাংলা-প্রসঙ্গে।
+ *   inBangla=false → সরাসরি ASCII ("'—) রাখা হয় — ইংরেজি-প্রসঙ্গে এগুলো
+ *     Times New Roman-এ নরমাল গ্লিফ দেখায়; SutonnyMJ-কোডে বদলালে TNR-রানে
+ *     ভেঙে-যাওয়া গ্লিফ (Õ, Ñ ইত্যাদি) দেখায়।
+ */
+function preMapPunctuation(s: string, inBangla: boolean): string {
   let out = "";
   let open = true;
   for (const ch of s) {
     if (ch === '"') {
-      // সোজা দুই উদ্ধৃতি — প্রসঙ্গ অনুযায়ী “/” গ্লিফে
-      out += open ? "\u00D2" : "\u00D3";
-      open = !open;
+      if (inBangla) {
+        // সোজা দুই উদ্ধৃতি — প্রসঙ্গ অনুযায়ী SutonnyMJ “/” গ্লিফ-কোডে
+        out += open ? "\u00D2" : "\u00D3";
+        open = !open;
+      } else {
+        // ইংরেজি-প্রসঙ্গ: নরমাল সরাসরি উদ্ধৃতি — TNR-এ সঠিক দেখায়
+        out += ch;
+      }
     } else if (ch === "'") {
-      // সোজা এক উদ্ধৃতি/অ্যাপোস্ট্রফি — হ-এর মতো গ্লিফ না, বেঁকে-যাওয়া টিক Õ
-      out += "\u00D5";
-    } else if (map[ch]) {
-      out += map[ch];
+      if (inBangla) {
+        // সোজা এক উদ্ধৃতি/অ্যাপোস্ট্রফি — SutonnyMJ টিক Õ
+        out += "\u00D5";
+      } else {
+        // ইংরেজি-প্রসঙ্গ: সরাসরি রাখা হয়
+        out += ch;
+      }
+    } else if (inBangla && ch === "\u2014") {
+      out += "\u00D1"; // em-dash — বাংলা-প্রসঙ্গে SutonnyMJ ড্যাশ
+    } else if (inBangla && ch === "\u2013") {
+      out += "\u00D1"; // en-dash — বাংলা-প্রসঙ্গে একই ড্যাশ গ্লিফ
+    } else if (inBangla && ch === "\u0965") {
+      out += "\uE001"; // ॥ ডাবল-দারি — প্লেসহোল্ডার (পরে \\\\ বসানো হবে)
+    } else if (inBangla && (ch === "\u201C" || ch === "\u201D")) {
+      out += ch === "\u201C" ? "\u00D2" : "\u00D3"; // curly double
+    } else if (inBangla && (ch === "\u2018" || ch === "\u2019")) {
+      out += ch === "\u2018" ? "\u00D4" : "\u00D5"; // curly single / apostrophe
     } else {
       out += ch;
     }
@@ -60,10 +74,27 @@ function preMapPunctuation(s: string): string {
   return out;
 }
 
-export function convertToBijoy(text: string): string {
-  // বিরামচিহ্ন প্রথমে বিজয়-কোডে → তারপর বাংলা অক্ষর লাইব্রেরি দিয়ে
-  // প্লেসহোল্ডার U+E001 → \\ \\ (ডাবল-দারি) বসানো হয় লাইব্রেরির পরে
-  return libUnicodeToBijoy(preMapPunctuation(text)).replace(/\uE001/g, "\u005C\u005C");
+export function convertToBijoy(text: string, inBangla?: boolean): string {
+  // বিরামচিহ্ন প্রথমে বিজয়-কোডে → তারপর বাংলা অক্ষর লাইব্রেরি দিয়ে।
+  // inBangla: সুনির্দিষ্ট করা থাকলে সেই অনুযায়ী ম্যাপ হয়; না থাকলে
+  // টেক্সটে বাংলা অক্ষর থাকলে বাংলা-প্রসঙ্গ, নয়তো ইংরেজি-প্রসঙ্গ।
+  // নোট: লাইব্রেরি নিজেও “”'— কে \xD2\xD3\xD4\xD5\xD1-এ বদলায় —
+  // ইংরেজি-প্রসঙ্গে তাই পোস্ট-ম্যাপে আবার ASCII-তে ফেরত আনা হয়,
+  // যাতে TNR-রানে সঠিক গ্লিফ (", ', —) দেখায়।
+  const bangla = inBangla ?? BANGLA_RE.test(text);
+  let out = libUnicodeToBijoy(preMapPunctuation(text, bangla)).replace(
+    /\uE001/g,
+    "\u005C\u005C",
+  );
+  if (!bangla) {
+    out = out
+      .replace(/\u00D2/g, "\u201C")
+      .replace(/\u00D3/g, "\u201D")
+      .replace(/\u00D4/g, "\u2018")
+      .replace(/\u00D5/g, "\u2019")
+      .replace(/\u00D1/g, "\u2014");
+  }
+  return out;
 }
 
 export function convertToUnicode(text: string): string {
@@ -80,7 +111,14 @@ export function convertToUnicode(text: string): string {
 }
 
 export function convert(text: string, direction: ConvertDirection): string {
-  if (direction === "u2b") return convertToBijoy(text);
+  if (direction === "u2b") {
+    // ইউনিকোড → বিজয়: মিশ্র টেক্সটে সেগমেন্ট-অনুযায়ী আলাদা ম্যাপ —
+    // ইংরেজি-সেগমেন্টের উদ্ধৃতি/অ্যাপোস্ট্রফ/ড্যাশ ASCII-ই থাকে।
+    const segs = segmentBijoyText(text);
+    return segs
+      .map((s) => convertToBijoy(s.text, s.bangla))
+      .join("");
+  }
   return convertToUnicode(text);
 }
 
@@ -181,7 +219,7 @@ async function convertDocx(
     // আগেই পুরো XML স্ট্রিং থেকে অবৈধ ক্যারেক্টার সরানো হয়। ট্যাব (0x09), ক্যারেজ
     // রিটার্ন (0x0D) ও লাইনফিড (0x0A) বৈধ XML ক্যারেক্টার, রাখা হয়।
     const cleanXml = stripIllegalXmlChars(xml);
-    const convertedXml = processDocXml(cleanXml, convertFn);
+    const convertedXml = processDocXml(cleanXml, direction);
     zip.file(partPath, convertedXml);
   }
 
@@ -198,7 +236,8 @@ async function convertDocx(
  * কনটেন্ট রূপান্তর করে এবং ফন্ট-হিন্ট সেট করে। <w:b>, <w:i>, স্টাইল,
  * ফুটনোট রেফারেন্স — সব অক্ষুণ্ণ থাকে।
  */
-function processDocXml(xml: string, convertFn: (t: string) => string): string {
+function processDocXml(xml: string, direction: ConvertDirection): string {
+  const convertFn = (t: string) => convert(t, direction);
   const doc = new DOMParser().parseFromString(xml, "text/xml");
   const ns = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
 
@@ -225,7 +264,13 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
   for (const node of textNodes) {
     const text = node.textContent ?? "";
     if (!text || !hasBanglaOrPunct(text)) continue;
-    const converted = sanitizeXml(convertFn(text));
+    const origHasBangla = BANGLA_RE.test(text);
+    // প্রতি-রান কনটেক্সট: রানেই উৎসে বাংলা অক্ষর থাকলে বাংলা-প্রসঙ্গ
+    // (কোট/ড্যাশ SutonnyMJ গ্লিফে), নইতো ইংরেজি-প্রসঙ্গ — তখন উদ্ধৃতি/অ্যাপোস্ট্রফ/
+    // ড্যাশ সোজা ASCII-ই রাখা হয় যাতে TNR-রানে সঠিক দেখায়।
+    const converted = sanitizeXml(
+      direction === "u2b" ? convertToBijoy(text, origHasBangla) : convertToUnicode(text),
+    );
     node.textContent = converted;
 
     const run = node.parentElement; // w:r
@@ -233,7 +278,7 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
       runPlans.push({
         run,
         text,
-        origHasBangla: BANGLA_RE.test(text),
+        origHasBangla,
         mixed: hasMixedSegments(text),
         convText: converted,
       });
@@ -252,8 +297,9 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
   for (const plan of runPlans) {
     if (plan.mixed) {
       // মূল টেক্সটেই সেগমেন্ট ভাগ করি, প্রত্যেক সেগমেন্ট আলাদা রূপান্তরিত হয় —
-      // বিজয়-কনভার্টার প্রতি-টেক্সট রূপান্তর করে বলে সেগমেন্ট-আলাদা করাই সঠিক
-      splitMixedRun(plan.run, ns, plan.text, convertFn);
+      // সেগমেন্টের ভাষা-ফ্ল্যাগ অনুযায়ী কোট/ড্যাশ ম্যাপ হয় (বাংলা-সেগমেন্টে
+      // SutonnyMJ গ্লিফ, ইংরেজি-সেগমেন্টে ASCII)
+      splitMixedRun(plan.run, ns, plan.text, direction);
     } else {
       // সিন্ধান্ত (ফলো-থ্রু নিয়ম): রানের ভাষা-সন্ধার্ট প্রথমে নির্ধারণ করা হয়
       // উৎসের টেক্সট থেকে — বাংলা অক্ষর থাকলে SutonnyMJ; ল্যাটিন/সংখ্যা
@@ -338,15 +384,42 @@ export function segmentBijoyText(text: string): { text: string; bangla: boolean 
   const segments: { text: string; bangla: boolean }[] = [];
   let curText = "";
   let curBangla = false;
-  for (const ch of text) {
-    const banglaPunct = /[\u0980-\u09FF।॥\u2014\u2013\u201C\u201D\u2018\u2019,’;\u0022\u0027]/.test(ch);
+  const chars = Array.from(text);
+  for (let i = 0; i < chars.length; i++) {
+    const ch = chars[i];
     const newBangla: boolean = BANGLA_RE.test(ch)
       ? true
-      : banglaPunct
-        ? true
-        : /[A-Za-z0-9]/.test(ch)
+      : /[A-Za-z0-9]/.test(ch)
+        ? false
+        : (/[A-Za-z0-9]/.test(chars[i - 1] ?? "") || /[A-Za-z0-9]/.test(chars[i + 1] ?? ""))
           ? false
           : curBangla;
+    if (curText === "" || newBangla === curBangla) {
+      curText += ch;
+      curBangla = newBangla;
+    } else {
+      segments.push({ text: curText, bangla: curBangla });
+      curText = ch;
+      curBangla = newBangla;
+    }
+  }
+  if (curText) segments.push({ text: curText, bangla: curBangla });
+  return segments;
+}
+
+/** মূল ইউনিকোড টেক্সটের সেগমেন্ট নিয়মের একটি আশপাশ-সাধারণ সংস্করণ (ডিওসিএক্স পাইপলাইনের জন্য) */
+function segmentMixedText(text: string): { text: string; bangla: boolean }[] {
+  const segments: { text: string; bangla: boolean }[] = [];
+  let curText = "";
+  let curBangla = false;
+  const chars = Array.from(text);
+  for (let i = 0; i < chars.length; i++) {
+    const ch = chars[i];
+    const b = BANGLA_RE.test(ch);
+    const isLatinChar = /[A-Za-z0-9]/.test(ch);
+    const nearLatin =
+      /[A-Za-z0-9]/.test(chars[i - 1] ?? "") || /[A-Za-z0-9]/.test(chars[i + 1] ?? "");
+    const newBangla: boolean = b ? true : isLatinChar ? false : nearLatin ? false : curBangla;
     if (curText === "" || newBangla === curBangla) {
       curText += ch;
       curBangla = newBangla;
@@ -368,7 +441,10 @@ export function mapSegmentsToBijoy(
 ): { text: string; bangla: boolean }[] {
   const inputSegs = segmentBijoyText(text);
   if (direction === "b2u") return inputSegs;
-  return inputSegs.map((s) => ({ text: convert(s.text, direction), bangla: s.bangla }));
+  return inputSegs.map((s) => ({
+    text: convertToBijoy(s.text, s.bangla),
+    bangla: s.bangla,
+  }));
 }
 
 // রানের সন্ধার্ট-নির্ধারণ — পাঙ্কচুয়েশন-শুধু রান (দাঁড়ি, কোট) কোন ভাষার
@@ -404,7 +480,7 @@ function splitMixedRun(
   run: Element,
   ns: string,
   text: string,
-  convertFn: (t: string) => string,
+  direction: ConvertDirection,
 ): void {
   const doc = run.ownerDocument!;
   // রানের অন্যান্য বৈশিষ্ট্য (<w:b>, <w:i> ইত্যাদি) প্রথম সেগমেন্টে রাখি
@@ -415,21 +491,29 @@ function splitMixedRun(
   run.parentNode!.removeChild(run);
 
   // চার্টার-বাই-চার্টার সেগমেন্ট (মূল টেক্সটে): একই ফন্টের অক্ষর পরপর গ্রুপ করা।
-  // সাধারণন বিরামচিহ্ন/ফাঁক (ল্যাটিন অক্ষর/সংখ্যা নেই) আগের বাংলা সন্দর্ভে রাখা হয় —
-  // এতে ": Bangla and English 2026" পুরোটাই Times, "সঠিক রূপান্তর।" SutonnyMJ।
+  //   বাংলা অক্ষর → বাংলা; ল্যাটিন অক্ষর/সংখ্যা → নন-বাংলা;
+  //   কোট/ড্যাশ/পাঙ্কচুয়েশন → কাছের ল্যাটিন অক্ষর থাকলে ল্যাটিন-সেগমেন্ট
+  //     (যেমন 'fast' — কোট দুটো সোজা ASCII রাখা হয়, TNR-এ সঠিক);
+  //     ল্যাটিন-সন্ধার্ট না থাকলে আগের সন্ধার্ট অনুসরণ (ফলো-থ্রু)।
   const segments: { text: string; bangla: boolean }[] = [];
   let curText = "";
   let curBangla = false;
-  for (const ch of text) {
+  const chars = Array.from(text);
+  for (let i = 0; i < chars.length; i++) {
+    const ch = chars[i];
     const b = BANGLA_RE.test(ch);
-    // দাঁড়ি (U+0964), কোট ইত্যাদি বাংলা রেঞ্জের বাইরে, তাই তাদের জন্য
-    // কনটেক্সট উত্তরাধিকার সূত্রে ফেলে: বর্তমান সন্দর্ভের অনুসরণ করে।
-    const isPunct = PUNCT_RE.test(ch);
     const isLatinChar = /[A-Za-z0-9]/.test(ch);
-    // নতুন সন্ধার্টার-টাইপ সেগমেন্টের বাংলা-ফ্ল্যাগ:
-    //   বাংলা অক্ষর → বাংলা;  ল্যাটিন অক্ষর/সংখ্যা → নন-বাংলা;
-    //   বাংলা-পাঙ্কচুয়েশন/বাকি সব → আগের সন্দর্ভ বজায় রাখে (ফলো-থ্রু)।
-    const newBangla: boolean = b ? true : isLatinChar ? false : curBangla;
+    // কোট/ড্যাশ/পাঙ্কচুয়েশন ল্যাটিন অক্ষরের পাশে থাকলে ল্যাটিন-সন্ধার্ট —
+    // এতে ইংরেজি-শব্দের চারপাশের ' " — গুলো SutonnyMJ-কোডে যায় না।
+    const nearLatin =
+      /[A-Za-z0-9]/.test(chars[i - 1] ?? "") || /[A-Za-z0-9]/.test(chars[i + 1] ?? "");
+    const newBangla: boolean = b
+      ? true
+      : isLatinChar
+        ? false
+        : nearLatin
+          ? false
+          : curBangla;
     if (curText === "" || newBangla === curBangla) {
       curText += ch;
       curBangla = newBangla;
@@ -450,7 +534,9 @@ function splitMixedRun(
     // xml namespace হিসেবে সেট করতে হয় — Word অ-নেমস্পেসড xml:space অ্যাট্রিবিউট
     // থাকলে ডকুমেন্ট আর খুলতে পারে না ("Word experienced an error" দেখায়)
     t.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve");
-    t.textContent = sanitizeXml(convertFn(seg.text));
+    t.textContent = sanitizeXml(
+      direction === "u2b" ? convertToBijoy(seg.text, seg.bangla) : convertToUnicode(seg.text),
+    );
     nr.appendChild(t);
     rFontsAttr(nr, ns, seg.bangla ? "SutonnyMJ" : "Times New Roman");
     // মার্কার: তৃতীয় পাস যেন স্প্লিট-সেগমেন্ট রানে আবার ফন্ট চাপায় না —
