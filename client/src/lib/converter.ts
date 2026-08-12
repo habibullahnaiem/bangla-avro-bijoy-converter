@@ -363,6 +363,8 @@ function sanitizeXml(text: string): string {
 
 const BANGLA_RE = /[\u0980-\u09FF]/;
 const LATIN_RE = /[A-Za-z0-9]/;
+/** যেকোনো লেখা-চরিত্র (বাংলা/লাটিন) — পাংক/স্পেস স্কিপ করে নিকটতম লেখা খোঁজার জন্য */
+const LETTER_RE = /[\u0980-\u09FFA-Za-z0-9]/;
 const PUNCT_RE =
   /[।॥“”‘’—–¢£¤¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ\u007C\u005C]/;
 
@@ -374,8 +376,42 @@ function hasBanglaOrPunct(text: string): boolean {
  * কনভার্টেড বিজয় টেক্সটকে প্রিভিউর জন্য ফন্ট-সেগমেন্টে ভাগ করে।
  * DOCX পাইপলাইনের splitMixedRun-এর একই সন্দর্ভ-নিয়ম:
  *   বাংলা অক্ষর → বাংলা; ল্যাটিন/সংখ্যা → নন-বাংলা;
- *   বাংলা-বিরামচিহ্ন/বাকি সব → আগের সন্দর্ভ অনুসরণ (ফলো-থ্রু)।
+ *   নতুন নিয়ম: সমন্য-পাংক/স্পেস চরিত্রের ভাষা নিকটতম লেখা-চরিত্র দেখে; দুই পাশেই
+ *   লেখা থাকলে ল্যাটিন পাশেরটি প্রাধান্য (এম-ড্যাশ র/ড় গ্লিফ এড়াতে)।
  */
+function nearestLetterLang(
+  chars: string[],
+  i: number,
+  curBangla: boolean,
+): boolean {
+  // প্রথমে সাথে সাথে যুক্ত লেখা দেখি — দাঁড়ি/কোট সরাসরি বাংলা অক্ষরের পাশে থাকলে
+  // বাংলা ("সত্য। It" — দাঁড়ি বাংলার অংশ), ল্যাটিন পাশে থাকলে ল্যাটিন ("fast'")।
+  const prev = chars[i - 1];
+  const next = chars[i + 1];
+  const prevLatin = prev && /[A-Za-z0-9]/.test(prev);
+  const prevBangla = prev && BANGLA_RE.test(prev);
+  const nextLatin = next && /[A-Za-z0-9]/.test(next);
+  const nextBangla = next && BANGLA_RE.test(next);
+  if (prevLatin || nextLatin) return false;
+  if (prevBangla || nextBangla) return true;
+  // উপরের চেক মানে: সরাসরি পাশে নেই লেখা। কিন্তু পাশাপাশি পাশের (স্পেস/কোট স্কিপ)
+  // ভিন্ন ভাষা হলে: কোট/ড্যাশ লাতিন-পাশের, দাঁড়ি/ডাবল-দারি বাংলা-পাশের।
+  // সরাসরি যুক্ত না হলে (এক পাশে পাশে লেখা-নেই, দুই পাশে ভিন্ন-ভাষা যেকন পাশে লেখা):
+  // স্পেস/কোট-ঘেরা এম-ড্যাশ "…বাংলা' — 'English" ধরনে —
+  //   প্রথম শব্দে যাচাই (প্রতিবেশী স্পেস/পাংক স্কিপ) করে লাতিন পাশের প্রাধান্য।
+  // সরাসরি পাশে লেখা না থাকলে (স্পেস/কোট-ঘেরা এম-ড্যাশ) স্কিপ করে নিকটতম লেখা:
+  let back = i - 1;
+  while (back >= 0 && !LETTER_RE.test(chars[back])) back--;
+  let fwd = i + 1;
+  while (fwd < chars.length && !LETTER_RE.test(chars[fwd])) fwd++;
+  if (back >= 0 && fwd < chars.length && BANGLA_RE.test(chars[back]) && /[A-Za-z0-9]/.test(chars[fwd])) {
+    // বাংলা ও লাতিন দুই-ই পাশে; দাঁড়ি/ডাবল-দারি বাংলা-পাশের, বাকি কোট/ড্যাশ লাতিন।
+    return !(chars[i] === "।" || chars[i] === "॥");
+  }
+  if ((back >= 0 && /[A-Za-z0-9]/.test(chars[back])) || (fwd < chars.length && /[A-Za-z0-9]/.test(chars[fwd]))) return false;
+  if ((back >= 0 && BANGLA_RE.test(chars[back])) || (fwd < chars.length && BANGLA_RE.test(chars[fwd]))) return true;
+  return curBangla;
+}
 /** ইউনিকোড ইনপুট-পাশের পর্যালোচনাযয় রান ভাগ করে — প্রিভিউতে বাংলা/লাতিন
  * নির্ধারণের জন্য। ইনপুট চরিত্রের ওপর ভিত্তি করে প্রতিটি চরিত্রের বিজয় রূপের
  * স্ট্রিংটি বর্তমান সেগমেন্টে জোড়া হয়, ফলে আউটপুট-সাইজিং ইনপুটের ভাষার সাথে
@@ -391,9 +427,7 @@ export function segmentBijoyText(text: string): { text: string; bangla: boolean 
       ? true
       : /[A-Za-z0-9]/.test(ch)
         ? false
-        : (/[A-Za-z0-9]/.test(chars[i - 1] ?? "") || /[A-Za-z0-9]/.test(chars[i + 1] ?? ""))
-          ? false
-          : curBangla;
+        : nearestLetterLang(chars, i, curBangla);
     if (curText === "" || newBangla === curBangla) {
       curText += ch;
       curBangla = newBangla;
@@ -505,15 +539,13 @@ function splitMixedRun(
     const isLatinChar = /[A-Za-z0-9]/.test(ch);
     // কোট/ড্যাশ/পাঙ্কচুয়েশন ল্যাটিন অক্ষরের পাশে থাকলে ল্যাটিন-সন্ধার্ট —
     // এতে ইংরেজি-শব্দের চারপাশের ' " — গুলো SutonnyMJ-কোডে যায় না।
-    const nearLatin =
-      /[A-Za-z0-9]/.test(chars[i - 1] ?? "") || /[A-Za-z0-9]/.test(chars[i + 1] ?? "");
+    // নিকটতম লেখা-চরিত্র (পাঙ্ক/স্পেস স্কিপ) দেখে ভাষা — এম-ড্যাশ "…বাংলা' — 'English"
+    // ধরনে ল্যাটিন-পাশের পেয়ে SutonnyMJ-এ র/হ-আকৃতি গ্লিফে যায় না।
     const newBangla: boolean = b
       ? true
       : isLatinChar
         ? false
-        : nearLatin
-          ? false
-          : curBangla;
+        : nearestLetterLang(chars, i, curBangla);
     if (curText === "" || newBangla === curBangla) {
       curText += ch;
       curBangla = newBangla;
