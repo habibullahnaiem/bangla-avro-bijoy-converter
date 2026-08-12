@@ -20,29 +20,35 @@ import {
 
 export type ConvertDirection = "u2b" | "b2u";
 
-/* ── বিরামচিহ্ন পোস্ট-প্রসেস (u2b) ───────────────────────────── */
-const U2B_PUNCT: Record<string, string> = {
-  "।": "\u00A5", // দাঁড়ি — ¥ গ্লিফ সুতন্নীতে সঠিক দাঁড়ি
-  "॥": "\u00A5\u00A5",
-  "\u2014": "\u00D1", // em-dash —
-  "\u2013": "\u00D1", // en-dash — একই ড্যাশ গ্লিফ
-  "\u201C": "\u00D2", // “ open double
-  "\u201D": "\u00D3", // ” close double
-  "\u2018": "\u00D4", // ‘ open single
-  "\u2019": "\u00D5", // ’ close single / apostrophe
-};
-
-/** স্ট্রেইট দুই উদ্ধৃতি " কে প্রসঙ্গ অনুযায়ী Ò/Ó-তে নেওয়া */
-function fixStraightQuotes(s: string): string {
+/* ── বিরামচিহ্ন প্রি-প্রসেস (u2b) ─────────────────────────────
+ * বিরামচিহ্নগুলো বিজয়-লাইব্রেরিয়ার আগেই বিজয়-কোডে (Ò Ó Ô Õ Ñ ¥) নেওয়া হয়।
+ * কারণ: লাইব্রেরি ' বা " সোজা পাস-থ্রু করে (যেগুলো সুতন্নীতে হ/অন্যর মতো
+ * গ্লিফ), আর । কে পাইপ '|'-তে বদলায়। লাইব্রেরি Ò Ó Ô Õ Ñ ¥ পাস-থ্রু রাখে
+ * (per-chars পরীক্ষাকৃত) — তাই প্রি-ম্যাপ নিরাপদ।
+ */
+function preMapPunctuation(s: string): string {
+  const map: Record<string, string> = {
+    "।": "\u00A5", // দাঁড়ি — ¥ গ্লিফ সুতন্নীতে সঠিক দাঁড়ি
+    "॥": "\u00A5\u00A5",
+    "\u2014": "\u00D1", // em-dash
+    "\u2013": "\u00D1", // en-dash — একই ড্যাশ গ্লিফ
+    "\u201C": "\u00D2", // “ open double
+    "\u201D": "\u00D3", // ” close double
+    "\u2018": "\u00D4", // ‘ open single
+    "\u2019": "\u00D5", // ’ close single / apostrophe
+  };
   let out = "";
   let open = true;
   for (const ch of s) {
     if (ch === '"') {
+      // সোজা দুই উদ্ধৃতি — প্রসঙ্গ অনুযায়ী “/” গ্লিফে
       out += open ? "\u00D2" : "\u00D3";
       open = !open;
     } else if (ch === "'") {
-      // ' বাংলা বা উদ্ধৃতির মধ্যে ক্ষুদ্র টিক → বেঁকে যাওয়া গ্লিফ Õ
+      // সোজা এক উদ্ধৃতি/অ্যাপোস্ট্রফি — হ-এর মতো গ্লিফ না, বেঁকে-যাওয়া টিক Õ
       out += "\u00D5";
+    } else if (map[ch]) {
+      out += map[ch];
     } else {
       out += ch;
     }
@@ -51,29 +57,18 @@ function fixStraightQuotes(s: string): string {
 }
 
 export function convertToBijoy(text: string): string {
-  let r = libUnicodeToBijoy(text);
-  // লাইব্রেরির ম্যাপিং-এর পরে প্রতিটি ইউনিকোড বিরামচিহ্ন কাঠামোগতভাবে বদলাও
-  for (const [src, dst] of Object.entries(U2B_PUNCT)) {
-    r = r.split(src).join(dst);
-  }
-  r = fixStraightQuotes(r);
-  return r;
+  // বিরামচিহ্ন প্রথমে বিজয়-কোডে → তারপর বাংলা অক্ষর লাইব্রেরি দিয়ে
+  return libUnicodeToBijoy(preMapPunctuation(text));
 }
 
 export function convertToUnicode(text: string): string {
   let r = libBijoyToUnicode(text);
-  // বিপরীত দিকেও সাংকেতিক কোডপয়েন্টগুলো নর্মালাইজ করা
-  const B2U_PUNCT: Record<string, string> = {
-    "\u00A5": "।",
-    "\u00D1": "—",
-    "\u00D2": "\u201C",
-    "\u00D3": "\u201D",
-    "\u00D4": "\u2018",
-    "\u00D5": "\u2019",
-  };
-  for (const [src, dst] of Object.entries(B2U_PUNCT)) {
-    r = r.split(src).join(dst);
-  }
+  // বিপরীত দিকেও সাংকেতিক কোডপয়েন্টগুলো নর্মালাইজ করা।
+  // লাইব্রেরি ইতোমধ্যে Ò→“ Õ→’ Ñ→— রাউন্ড-ট্রিপ করে; দাঁড়ি-কোড ¥ লাইব্রেরি
+  // অপরিবর্তিত রাখে — তাই শুধু সেটা হাতে বদলাও।
+  r = r.split("\u00A5").join("।");
+  // ॥ (দুই দাঁড়ি) রাউন্ড-ট্রিপ ঠিক করা
+  r = r.split("।।").join("॥");
   return r;
 }
 
