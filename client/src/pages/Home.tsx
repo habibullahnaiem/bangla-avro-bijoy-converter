@@ -17,6 +17,8 @@ import {
   Sun,
   Check,
   ArrowDownUp,
+  Minus,
+  Plus,
 } from "lucide-react";
 import { toast } from "sonner";
 import { convert, convertFile, type ConvertDirection } from "@/lib/converter";
@@ -39,6 +41,11 @@ export default function Home() {
   const [output, setOutput] = useState("");
   const [isLive, setIsLive] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [fontSize, setFontSize] = useState<number>(() => {
+    const saved = typeof window !== "undefined" ? localStorage.getItem("abc-font-size") : null;
+    const n = saved ? parseInt(saved, 10) : NaN;
+    return Number.isFinite(n) && n >= 12 && n <= 32 ? n : 16;
+  });
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const fileInputRef = useFileRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -164,6 +171,14 @@ export default function Home() {
   };
 
   const charCount = input.length;
+
+  function adjustFontSize(delta: number) {
+    setFontSize((s) => {
+      const next = Math.min(32, Math.max(12, s + delta));
+      localStorage.setItem("abc-font-size", String(next));
+      return next;
+    });
+  }
   const outCharCount = output.length;
 
   return (
@@ -334,6 +349,27 @@ export default function Home() {
                 <span className="text-xs text-muted-foreground">
                   {charCount} অক্ষর
                 </span>
+                <div className="flex items-center gap-1">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 w-7 p-0 text-muted-foreground hover:bg-accent"
+                    aria-label="ফন্ট ছোট করুন"
+                    onClick={() => adjustFontSize(-2)}>
+                    <Minus className="h-3.5 w-3.5" />
+                  </Button>
+                  <span className="w-7 text-center text-xs tabular-nums text-muted-foreground">
+                    {fontSize}
+                  </span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 w-7 p-0 text-muted-foreground hover:bg-accent"
+                    aria-label="ফন্ট বড় করুন"
+                    onClick={() => adjustFontSize(2)}>
+                    <Plus className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
               </div>
               <div className="relative">
                 <Textarea
@@ -348,6 +384,7 @@ export default function Home() {
                     "min-h-[320px] resize-none rounded-none border-0 shadow-none focus-visible:ring-0 " +
                     (direction === "u2b" ? "font-input-bn" : "font-output-bijoy")
                   }
+                  style={{ fontSize: `${fontSize}px` }}
                 />
               </div>
               <div className="flex items-center gap-2 border-t bg-muted/50 px-4 py-2.5">
@@ -391,6 +428,7 @@ export default function Home() {
                       ? "font-output-bijoy"
                       : "font-input-bn")
                   }
+                  style={{ fontSize: `${fontSize}px` }}
                 />
               </div>
               <div className="flex items-center gap-2 border-t bg-muted/50 px-4 py-2.5">
