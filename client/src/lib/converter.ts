@@ -174,8 +174,18 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
   const doc = new DOMParser().parseFromString(xml, "text/xml");
   const ns = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
 
-  // প্রথম পাস: টেক্সট রূপান্তর — যেসব <w:t>-তে বাংলা বা বিরামচিহ্ন আছে
-  const textNodes = Array.from(doc.getElementsByTagNameNS(ns, "t"));
+  // প্রথম পাস: টেক্সট রূপান্তর — যেসব <w:t>-তে বাংলা বা বিরামচিহ্ন আছে।
+  // <w:instrText>-এর ভেতরের <w:t> স্পর্শ করা হয় না — এগুলো Word-এর ফিল্ড-কোড
+  // (TOC, PAGE, হাইপারলিংক ইত্যাদি); এগুলো কনভার্ট করলে ফিল্ড ভেঙে যায়।
+  const allT = Array.from(doc.getElementsByTagNameNS(ns, "t"));
+  const textNodes = allT.filter((n) => {
+    let el: Element | null = n;
+    while (el) {
+      if (el.localName === "instrText") return false;
+      el = el.parentElement;
+    }
+    return true;
+  });
   const runPlans: {
     run: Element;
     text: string;
