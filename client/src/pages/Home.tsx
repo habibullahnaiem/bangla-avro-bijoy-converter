@@ -260,6 +260,97 @@ export default function Home() {
     to.scrollLeft = from.scrollLeft;
   };
 
+  /* ── প্রিভিউ সিলেকশন-স্থায়িত্ব ──
+     আউটপুট প্যানেলে HTML রিচ-প্রিভিউয়ের নিচে একটি সম্পূর্ণ অদৃশ্য (কিন্তু
+     সিলেক্টযোগ্য) টেক্সট-এরিয়া রাখা হয়েছে। রিচ-প্রিভিউর ওপর ক্লিক/ড্র্যাগ করলে
+     তার কার্সার-অবস্থান তৈরি করে এবং অনুরূপ অ্যাংকার-পজিশনে অদৃশ্য টেক্সট-এরিয়ার
+     সিলেকশন তৈরি হয় — ফলে সিলেকশন আর উপর-নিচ ঝাঁপিয়ে পড়ে না। */
+  // প্রিভিউর ভেতরে কার্সার: (x, y) → অদৃশ্য টেক্সট-এরিয়ার চরিত্র-ইনডেক্স।
+  // বিভিন্ন-সাইজ সেগমেন্ট মিলিয়ে ইনডেক্স বের করতে হয়: প্রতিটি সেগমেন্টের
+  // <span> নোডের দৈর্ঘ্য/স্থানানুযায়ী অফসেট জমা করে টার্গেট পয়েন্টের সেগমেন্ট
+  // ও তার ভেতরে অফসেট নির্ণয় করা হয়।
+  const previewPointToIndex = (x: number, y: number): number => {
+    const el = outAreaRef.current;
+    if (!el) return 0;
+    // (১) ডকুমেন্ট কার্সার-রেঞ্জ দিয়ে টার্গেট নোড+অফসেট পাই
+    let range: Range | null = null;
+    try {
+      const r = document.caretRangeFromPoint ? document.caretRangeFromPoint(x, y) : null;
+      if (r) range = r;
+    } catch {
+      range = null;
+    }
+    if (range) {
+      let cur: Node | null = range.startContainer;
+      while (cur) {
+        if (cur === outPreviewRef.current) break;
+        cur = cur.parentNode;
+      }
+      if (cur === outPreviewRef.current) {
+        // (২) টার্গেট <span> সেগমেন্টটি খুঁজে জমা-দৈর্ঘ্যে ইনডেক্স বানাই
+        const off = range.startOffset;
+        let acc = 0;
+        for (const seg of outSegments) {
+          if (acc + seg.text.length >= off) {
+            return Math.min(el.value.length, acc + (off - acc));
+          }
+          acc += seg.text.length;
+        }
+        return Math.min(el.value.length, acc);
+      }
+    }
+    // (৩) রেঞ্জ পাওয়া না গেলে স্ক্রিন-অবস্থান অনুযায়ী সেগমেন্ট-ভিত্তিক অনুমান
+    if (!outPreviewRef.current) return 0;
+    const rect = outPreviewRef.current.getBoundingClientRect();
+    let acc = 0;
+    let yAcc = 0;
+    const lineHeight = bnPx * 1.7;
+    const targetY = y - rect.top + outPreviewRef.current.scrollTop;
+    for (const seg of outSegments) {
+      const lines = Math.max(1, Math.ceil(seg.text.length / ((rect.width - 24) / (bnPx * 0.6))));
+      const segH = lines * lineHeight;
+      if (yAcc + segH > targetY) {
+        const yInSeg = Math.max(0, targetY - yAcc);
+        const frac = Math.min(1, yInSeg / segH);
+        return Math.min(el.value.length, acc + Math.round(frac * seg.text.length));
+      }
+      yAcc += segH;
+      acc += seg.text.length;
+    }
+    return Math.min(el.value.length, acc);
+  };
+  const previewMouseDown = (e: React.MouseEvent) => {
+    if (direction !== "u2b") return;
+    const el = outAreaRef.current;
+    if (!el) return;
+    const idx = previewPointToIndex(e.clientX, e.clientY);
+    // প্রথম ক্লিকে ফোকাস নিতে দিই (ড্র্যাগ-রানের জন্য), ক্লিকের পরে শুরু-পজিশন
+    // পুনরায় বসাই — ফলে ড্র্যাগ করলে সিলেকশন আর উপর-নিচ ঝাঁপিয়ে পড়ে না।
+    el.focus();
+    el.setSelectionRange(idx, idx);
+  };
+  const previewMouseMove = (e: React.MouseEvent) => {
+    if (direction !== "u2b") return;
+    if (e.buttons !== 1) return;
+    const el = outAreaRef.current;
+    if (!el) return;
+    const idx = previewPointToIndex(e.clientX, e.clientY);
+    // ড্র্যাগ-রান: ক্লিক-পয়েন্ট থেকে কারেন্ট-পয়েন্ট পর্যন্ত
+    el.setSelectionRange(
+      Math.min(el.selectionStart ?? idx, idx),
+      Math.max(el.selectionEnd ?? idx, idx),
+    );
+  };
+  const previewMouseUp = () => {
+    if (direction !== "u2b") return;
+    const el = outAreaRef.current;
+    if (!el) return;
+    // ক্লিক-মাত্র হলে (কোনো সিলেকশন নেই) কার্সার অবস্থানটুকুই ধরে রাখা হয়
+    if (el.selectionStart === el.selectionEnd) {
+      el.setSelectionRange(el.selectionStart, el.selectionStart);
+    }
+  };
+
   function adjustFontSize(delta: number) {
     setFontSize((s) => {
       const next = Math.min(32, Math.max(12, s + delta));
@@ -511,7 +602,7 @@ export default function Home() {
                   }}
                   onScroll={(e) => syncScroll(e.currentTarget, outPreviewRef.current)}
                   placeholder="রূপান্তরিত টেক্সট এখানে দেখাবে..."
-                  className={
+                    className={
                     "min-h-[320px] resize-none rounded-none border-0 shadow-none focus-visible:ring-0 " +
                     (direction === "u2b"
                       ? "font-output-bijoy"
@@ -520,14 +611,17 @@ export default function Home() {
                   }
                   style={{ fontSize: `${fontSize}px` }}
                   aria-hidden={direction === "u2b"}
-                  tabIndex={direction === "u2b" ? -1 : 0}
+                  tabIndex={direction === "u2b" ? 0 : 0}
                 />
                 {direction === "u2b" && (
                   <div
                     ref={outPreviewRef}
-                    className="bijoy-rich min-h-[320px] px-3 py-2"
+                    className="bijoy-rich min-h-[320px] select-text px-3 py-2"
                     style={{ fontSize: `${bnPx}px` }}
-                    onScroll={(e) => syncScroll(e.currentTarget, outAreaRef.current)}>
+                    onScroll={(e) => syncScroll(e.currentTarget, outAreaRef.current)}
+                    onMouseDown={previewMouseDown}
+                    onMouseMove={previewMouseMove}
+                    onMouseUp={previewMouseUp}>
                     {outSegments.map((
                       seg: { text: string; bangla: boolean },
                       i: number,
