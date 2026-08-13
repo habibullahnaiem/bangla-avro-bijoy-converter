@@ -24,6 +24,8 @@ import { toast } from "sonner";
 import {
   convert,
   convertFile,
+  convertToBijoy,
+  convertToUnicode,
   type ConvertDirection,
   segmentBijoyText,
   mapSegmentsToBijoy,
@@ -108,15 +110,40 @@ export default function Home() {
   };
 
   const toggleDirection = () => {
-    setDirection((d) => (d === "u2b" ? "b2u" : "u2b"));
+    const newDir = direction === "u2b" ? "b2u" : "u2b";
+    setDirection(newDir);
     setInput("");
     setOutput("");
   };
 
+  // দিক-পরিবর্তন: ইনপুট-আউটপুট অদল-বদল করার আগে টেক্সটের ধরন মিলিয়ে
+  // রূপান্তর করা হয় — তাছাড়া বিজয়-কোড অভ্র→বিজয় পাইপলাইনে গেলে হিজি-বিজি হয়।
+  // নতুন বিজয়ে: আউটপুট (পরিষ্কার রূপান্তর) ইনপুটে যায়, আগের ইনপুট আউটপুটে
+  // (তার উপযুক্ত রূপান্তর সহ)। কোনো স্থানীয় প্রি-ম্যাপ পাঙ্কচুয়েশন বিজয় ইনপুট
+  // হিসেবে পাঠানোর আগে বিজয়→অভ্র করে পরিষ্কার করা হয়।
   const swapTexts = () => {
-    setInput(output);
-    setOutput(input);
-    toast.success("টেক্সট অদল-বদল করা হয়েছে");
+    const newDir = direction === "u2b" ? "b2u" : "u2b";
+    // আগের আউটপুট ইতোমধ্যে একবার রূপান্তরিত — সেটি এখন ইনপুট হলে তা আর
+    // একবার রূপান্তর হলে দুই গুণ এনকোডিংয়ের মতো হিজি-বিজি হয়। তাই
+    // আগের ইনপুটকেই নতুন দিকে রূপান্তর করে যাচায় করি কোনটি ব্যবহার করব।
+    let swappedIn = input;
+    let swappedOut = output;
+    if (direction === "u2b") {
+      // বিজয়→অভ্র হলে: বিজয় আউটপুট ইনপুট-বক্সে যায় তার বিজয়→অভ্র রূপান্তরে,
+      // আর স্ক্রিনে আগের অভ্র ইনপুটই দেখায় (ইতিমধ্যে সঠিক অভ্রই ছিল।)
+      swappedIn = convertToUnicode(output || input);
+    } else {
+      // অভ্র→বিজয় হলে: অভ্র ইনপুটের বিজয়-রূপ ইনপুট-বক্সে (বিজয় কোড হিসেবে),
+      // আগের বিজয় আউটপুটের অভ্র-রূপ আউটপুটে।
+      swappedIn = output ? output : convertToBijoy(input);
+      swappedOut = convertToUnicode(input);
+    }
+    setDirection(newDir);
+    setInput(swappedIn);
+    setOutput(swappedOut);
+    toast.success(
+      newDir === "u2b" ? "অভ্র → বিজয় দিকে সুইচ করা হলো" : "বিজয় → অভ্র দিকে সুইচ করা হলো",
+    );
   };
 
   const clearAll = () => {
@@ -556,7 +583,7 @@ export default function Home() {
                 className="border-border bg-card text-muted-foreground hover:bg-accent"
                 onClick={swapTexts}>
                 <ArrowDownUp className="mr-1.5 h-3.5 w-3.5" />
-                দিক পরিবর্তন
+                {direction === "u2b" ? "বিজয় → অভ্র" : "অভ্র → বিজয়"}
               </Button>
               <Button
                 variant="outline"
