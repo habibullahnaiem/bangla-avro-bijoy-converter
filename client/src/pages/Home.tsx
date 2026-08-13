@@ -441,12 +441,12 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="app-shell min-h-screen flex flex-col bg-background">
       {/* হেডার — গভীর টিল */}
-      <header className="relative overflow-hidden bg-primary text-primary-foreground shadow-md">
+      <header className="site-header relative overflow-hidden bg-primary text-primary-foreground">
         {/* ⇄ মোটিফ ব্যাকগ্রাউন্ড */}
         <div
-          className="pointer-events-none absolute inset-y-0 right-0 flex items-center opacity-[0.07]"
+          className="site-header__motif pointer-events-none absolute inset-y-0 right-0 flex items-center opacity-[0.07]"
           aria-hidden>
           {Array.from({ length: 6 }).map((_, i) => (
             <span
@@ -456,8 +456,8 @@ export default function Home() {
             </span>
           ))}
         </div>
-        <div className="container relative flex items-center justify-between py-4">
-          <div className="flex items-center gap-3">
+        <div className="site-header__inner container relative flex items-center justify-between py-4">
+          <div className="site-brand flex items-center gap-3">
             <a
               href="/"
               aria-label="অভ্র ⇄ বিজয় কনভার্টারের হোম"
@@ -473,11 +473,11 @@ export default function Home() {
                 className="relative h-full w-full object-contain transition-transform duration-300 ease-out group-hover/logo:rotate-[1.5deg] group-focus-visible/logo:rotate-[1.5deg] motion-reduce:transform-none motion-reduce:transition-none"
               />
             </a>
-            <div>
-              <h1 className="text-lg font-extrabold leading-tight tracking-tight md:text-2xl">
+            <div className="site-brand__copy">
+              <h1 className="site-brand__title text-lg font-extrabold leading-tight tracking-tight md:text-2xl">
                 অভ্র ⇄ বিজয় কনভার্টার
               </h1>
-              <p className="mt-0.5 text-xs opacity-85 md:text-sm">
+              <p className="site-brand__subtitle mt-0.5 text-xs opacity-85 md:text-sm">
                 ইউনিকোড ⇄ সুতন্নী এমজে • যুক্তাক্ষর ও দাঁড়ি নির্ভুল
               </p>
             </div>
@@ -500,30 +500,37 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="container flex-1 py-8 md:py-10">
+      <main className="app-main container flex-1">
         {/* প্রোমোট শিরোনাম */}
-        <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h2 className="text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">
+        <div className="hero-panel mb-6 flex flex-wrap items-end justify-between gap-3">
+          <div className="hero-panel__copy">
+            <p className="eyebrow">Bangla typography workspace</p>
+            <h2 className="hero-title text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">
               অভ্রে লিখুন, বিজয়ে নিন
             </h2>
-            <p className="mt-2 max-w-2xl text-[0.95rem] leading-relaxed text-muted-foreground">
+            <p className="hero-summary mt-2 max-w-2xl text-[0.95rem] leading-relaxed text-muted-foreground">
               সোলাইমান লিপি / কালপুরুষ টেক্সট সঠিক যুক্তাক্ষর, য়, ড়, ঢ়,
               র-ফলা এবং দাঁড়ি (।) সহ বিজয় (সুতন্নী এমজে) ফন্টে
               রূপান্তর হয় — মিশ্র টেক্সটে ইংরেজি Times New Roman-এ রাখা হয়।
             </p>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            className="border-primary/30 text-primary hover:bg-accent"
-            onClick={loadExample}>
-            উদাহরণ দেখুন
-          </Button>
+          <div className="hero-panel__actions">
+            <div className="status-puck">
+              <span className="status-puck__dot" />
+              লাইভ কনভার্সন সক্রিয়
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              className="hero-example border-primary/30 text-primary hover:bg-accent"
+              onClick={loadExample}>
+              উদাহরণ দেখুন
+            </Button>
+          </div>
         </div>
 
         {/* ট্যাব সুইচার */}
-        <div className="mb-5 flex items-center gap-1.5 rounded-full border bg-card p-1.5 shadow-sm w-fit">
+        <div className="workspace-tabs mb-5 flex items-center gap-1.5 rounded-full border bg-card p-1.5 shadow-sm w-fit">
           <Button
             variant={activeTab === "text" ? "default" : "ghost"}
             size="sm"
@@ -553,9 +560,9 @@ export default function Home() {
         {activeTab === "text" ? (
         <>
         {/* কনভার্টার কার্ড */}
-        <div className="overflow-hidden rounded-2xl border bg-card shadow-lg">
+        <div className="workspace-card converter-card overflow-hidden rounded-2xl border bg-card shadow-lg">
           {/* দিক টগল বার */}
-          <div className="flex flex-wrap items-center justify-between gap-2 border-b bg-secondary/60 px-4 py-3">
+          <div className="converter-toolbar flex flex-wrap items-center justify-between gap-2 border-b bg-secondary/60 px-4 py-3">
             <div className="flex items-center gap-1.5 rounded-full bg-card p-1 shadow-sm">
               <Button
                 variant="outline"
@@ -608,8 +615,8 @@ export default function Home() {
 
           {/* দুই কলাম টেক্সটবক্স */}
           <div className="grid gap-0 md:grid-cols-2">
-            <div className="flex flex-col border-b md:border-b-0 md:border-r">
-              <div className="flex items-center justify-between border-b border-border/70 bg-muted/50 px-4 py-2.5">
+            <div className="editor-pane editor-pane--input flex flex-col border-b md:border-b-0 md:border-r">
+              <div className="editor-pane__header flex items-center justify-between border-b border-border/70 bg-muted/50 px-4 py-2.5">
                 <span className="text-sm font-semibold text-foreground">
                   {direction === "u2b"
                     ? "অভ্র টেক্সট (ইউনিকোড)"
@@ -671,8 +678,8 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="flex flex-col">
-              <div className="flex items-center justify-between border-b bg-muted/50 px-4 py-2.5">
+            <div className="editor-pane editor-pane--output flex flex-col">
+              <div className="editor-pane__header flex items-center justify-between border-b bg-muted/50 px-4 py-2.5">
                 <span className="text-sm font-semibold text-muted-foreground">
                   {direction === "u2b"
                     ? "বিজয় আউটপুট (সুতন্নী এমজে)"

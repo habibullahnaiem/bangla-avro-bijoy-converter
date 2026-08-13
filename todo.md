@@ -101,3 +101,11 @@
 - [x] desktop hover animation implement করা, কিন্তু logo identity অপরিবর্তিত রাখা
 - [x] prefers-reduced-motion ও touch/mobile behavior নিশ্চিত করা
 - [x] desktop/mobile preview যাচাই করে নতুন checkpoint তৈরি করা
+
+# নতুন: Professional UI redesign
+
+- [x] current layout, spacing, hierarchy এবং responsive pain points audit করা
+- [x] professional design system: surface, border, typography, accent এবং state নির্ধারণ করা
+- [x] converter workspace, controls, file converter ও help content-এর visual hierarchy উন্নত করা
+- [x] mobile, keyboard focus, hover এবং reduced-motion আচরণ refine করা
+- [x] production build, representative screenshots ও নতুন checkpoint তৈরি করা
