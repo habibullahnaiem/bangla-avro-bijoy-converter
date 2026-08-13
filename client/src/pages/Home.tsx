@@ -679,7 +679,7 @@ export default function Home() {
                       </span>
                     </TooltipTrigger>
                     <TooltipContent side="bottom" className="max-w-xs whitespace-pre-line text-xs" sideOffset={8}>
-                      শব্দের শুরুর এ-কার (ে) → SutonnyMJ-এ U+2020 (†) — ছোট লেডিঙ মাত্রা ছাড়াই; বাক্যের মাঝের শব্দে → U+2021 (‡) — মাত্রাসহ। উদাহরণ: রেল = † + i + j, কেন = † + K + b; 'এখন রেল এখন' = GLb ‡ij GLb। ওয়ার্ডে SutonnyMJ ফন্টে পেস্ট করলে নির্ভুল দেখায়।
+                      প্রতিটি নতুন শব্দের শুরুর এ-কার (ে) → SutonnyMJ-এ U+2020 (†) — ছোট লেডিঙ মাত্রা ছাড়াই; একই শব্দের মাঝে এ-কার → U+2021 (‡) — মাত্রাসহ। উদাহরণ: রেল = † + i + j, কেন = † + K + b; 'এখন রেল এখন' = GLb †ij GLb। ওয়ার্ডে SutonnyMJ ফন্টে পেস্ট করলে নির্ভুল দেখায়।
                     </TooltipContent>
                   </Tooltip>
                 )}

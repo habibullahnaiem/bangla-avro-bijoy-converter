@@ -141,6 +141,24 @@ function restoreLibArtifacts(s: string): string {
   return s.replace(new RegExp(ART_PH_D3, "g"), "\u201DQ").replace(new RegExp(ART_PH_D5, "g"), "\u0161\u2019");
 }
 
+// লাইব্রেরি পুরো বাক্য একবারে পেলে শুধু পুরো টেক্সটের শুরুতে ‡→† করে।
+// ফলে `এখন রেল এখন`-এর মাঝের `রেল` ভুল করে `‡ij` হয়, যদিও সেটি নতুন
+// শব্দের শুরু। আগে থেকেই preMap করা punctuation রেখে প্রতিটি Unicode শব্দ
+// আলাদা করে লাইব্রেরিতে পাঠালে: শব্দের শুরুতে †, শব্দের ভেতরে ‡ — দুটোই ঠিক থাকে।
+// punctuation/space আলাদা টোকেন হিসেবে থাকে, তাই quote state এবং glyph code
+// বদলে যায় না; `শ+ে+র`-এর মতো explicit-plus token-ও ভাঙা হয় না।
+const WORD_AWARE_BREAK_RE = /(\s+|[,;:!?()[\]{}"'“”‘’—–|ÑÒÓÔÕ\uE001])/;
+
+function libUnicodeToBijoyWordAware(preMapped: string): string {
+  return preMapped
+    .split(WORD_AWARE_BREAK_RE)
+    .map((part) => {
+      if (!part || WORD_AWARE_BREAK_RE.test(part)) return part;
+      return libUnicodeToBijoy(part);
+    })
+    .join("");
+}
+
 // ReArrangeUnicodeText ইউনিকোড-পজিশন থেকে শব্দ-শুরুতে সরায় — কিন্তু
 // '+' বা অন্য অ-বাংলা চরিত্রের সাথে থাকলে পজিশন ভুল থেকে যায়
 // (যেমন শ+ে+র → k‡++i হয়ে যায়, শব্দ-শুরুতে না)। তাই লাইব্রেরির পরে
@@ -157,7 +175,9 @@ export function convertToBijoy(text: string): string {
   // নোট: লাইব্রেরি-আর্টিফ্যাক্ট প্রোটেকশন — protectLibArtifacts (preMap-এর আগে)
   // দেখো; দ্বিতীয় রানেও ডাবল-ম্যাপ রোধ করা হয়।
   return restoreLibArtifacts(
-    libUnicodeToBijoy(preMapPunctuation(protectLibArtifacts(text.replace(/\u2026/g, "..."))))
+    libUnicodeToBijoyWordAware(
+      preMapPunctuation(protectLibArtifacts(text.replace(/\u2026/g, "..."))),
+    ),
   )
     .replace(/\u2026/g, "...") // লাইব্রেরি-পুনঃতৈরি U+2026 → তিন-ডট
     .replace(/\uE001/g, "\u005C\u005C")

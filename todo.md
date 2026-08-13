@@ -51,3 +51,11 @@
 - [x] রেল, এখন, এখনই, কেন, এটি, শ্রেণি এবং যুক্তবর্ণের round-trip যাচাই করা
 - [x] পূর্ণ audit suite চালিয়ে punctuation, ঋ-কার, DOCX/TXT ও formatting আচরণ নিশ্চিত করা
 - [x] UI smoke test, screenshot এবং নতুন checkpoint তৈরি করা
+
+# নতুন: শুধু শুরু/standalone এ-কারের অতিরিক্ত মাত্রা
+
+- [ ] standalone “এ” এবং word-initial “রেল/কেন/এখন” এর বর্তমান SutonnyMJ code ও rendering পুনরুৎপাদন করা
+- [ ] mid-word “করেছে/বেশি/দেখেছে” এর ‡ code অপরিবর্তিত আছে নিশ্চিত করা
+- [ ] কেবল word-initial/standalone e-kar-এর জন্য matra-less correction প্রয়োগ করা
+- [ ] শুরু, মাঝ এবং যুক্তবর্ণের focused round-trip audit চালানো
+- [ ] UI যাচাই, checkpoint এবং ব্যবহারকারীকে corrected version দেওয়া
