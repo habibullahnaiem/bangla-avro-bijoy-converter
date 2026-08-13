@@ -80,3 +80,10 @@
 - [x] অক্ষর-ইঙ্গিত ও মুখোমুখি arrow একত্রে রেখে favicon-উপযোগী mark তৈরি করা
 - [x] header, favicon এবং apple-touch icon-এ নতুন mark বসানো
 - [x] desktop/mobile preview যাচাই এবং নতুন checkpoint তৈরি করা
+
+# সংশোধন: শুধু লোগোর mark
+
+- [x] UI বা header layout না বদলে standalone logo mark পুনর্নকশা করা
+- [x] দুই মুখোমুখি arrow-এর মধ্যে A/a/অ ও B/b/ব-এর পরিষ্কার indirect cue রাখা
+- [x] কেবল logo asset ও তার references প্রতিস্থাপন করা
+- [x] mark-এর desktop/favicon readability যাচাই করে checkpoint তৈরি করা
