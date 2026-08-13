@@ -29,6 +29,11 @@ export type ConvertDirection = "u2b" | "b2u";
  * বদলায় এবং [ ] ( ) সঠিক কোডেই রাখে — তাই প্রি-ম্যাপে দাঁড়ি/ব্র্যাকেট টাচ না
  * করে শুধু উদ্ধৃতি ও ড্যাশ ফিক্স করা হয়।
  */
+// বিজয়-মিশ্র টেক্সটে (রিস্টোর-পরবর্তী) ইউনিকোডে U+0980-09FF বাংলা লেটার থাকে না —
+// কারণ বিজয় a-z ASCII-তে ম্যাপ হয়; তবে প্রি-কার-চিহ্ন (‡ † ˆ ‰) এবাং অনুস্বার/
+// বিসর্গ (ঁ ং ঃ) থাকলে এটি বাংলা-প্রসঙ্গ।
+const PRE_KAR_MARKERS_RE = /[‡†ˆ‰ঁংঃ]/;
+
 // ইংরেজি-প্রসঙ্গের কর্লি-কোট/ড্যাশকে ASCII-সমতুল্যে নেউট্রাল করা —
 // রান-ভাগের আগে ডক্স-পাইপলাইন আর ব্রাউজার-পাইপলাইন দুই জায়গাই ব্যবহৃত।
 function neutralizeLatinPunct(s: string): string {
@@ -56,7 +61,7 @@ function preMapPunctuation(s: string): string {
   // অক্ষর নেই এবং লাতিন-চরিত্রের পাশে (অথবা কোনো পাশেই কিছু নেই) — সেগুলো
   // নেউট্রাল করা হয় কারণ লাইব্রেরি নিজেই “ ” — কে Ò Ó Ñ-এ ম্যাপ করে ফেলে।
   // বাংলা-প্রসঙ্গের ড্যাশ/কোট আগের মতই নিচে বিজয়-কোডে ম্যাপ হয়।
-  if (!BANGLA_RE.test(s)) {
+  if (!BANGLA_RE.test(s) && !PRE_KAR_MARKERS_RE.test(s)) {
     const hasLatin = /[A-Za-z0-9]/.test(s);
     if (hasLatin) return neutralizeLatinPunct(s);
     // শুধু-বিরামচিহ্ন স্ট্রিং (কোনো লেখা নেই) — উদাহরণ: দুটো বাংলা
@@ -97,6 +102,16 @@ function preMapPunctuation(s: string): string {
       }
     } else if (map[ch]) {
       out += map[ch];
+    } else if (ch === "\u00D2") {
+      // আমার নেটিভ ওপেন-ডাবল-কোট (Ò) — কনভার্টারের " টোগলের মতোই
+      // হুবহু বসানো হয এবাং জোড়ার স্টেট নেয় (D3 আসতে) — পরে বাড়তি
+      // রানের কোট-দিক সঠিক রাখে।
+      out += ch;
+      open = false;
+    } else if (ch === "\u00D3") {
+      // আমার নেটিভ ক্লোজ-ডাবল-কোট (Ó) — স্টেট ফেরত ওপেনে।
+      out += ch;
+      open = true;
     } else {
       out += ch;
     }
@@ -104,8 +119,24 @@ function preMapPunctuation(s: string): string {
   return out;
 }
 
-// সুনতন্নী-প্রি-কার কোড (ে-কার ‡, ৈ-কার †, ডট-ওয়ালা ˆ ‰)
-// প্রি-কার যেকোনো বাংলা শব্দের **শুরুতে** বসে। লাইব্রেরির
+// লাইব্রেরি-নেটিভ আর্টিফ্যাক্ট (U+E002/U+E003): লাইব্রেরি চ্ছ (ch+ch+h) →
+// ”Qv / ”Qvq এবাং ন্থ → š’ এমিট করে — এগুলো আমাদের প্রি-ম্যাপের
+// কোট-মার্কার (D2–D5) নয়, সোজা বিজয়-কোড। রিস্টোর-পরবর্তী পুনরূৎপাদনে
+// (unmap D3→” হওয়ার পর) আমাদের preMap ”→Ó করে ফেলত — ফলে দ্বিতীয়
+// রানে ডাবল-ম্যাপ হয়ে আউটপুট ভেঙে যায় (†k‡l ï‡fÓQvq)। সমাধান: preMap-এর
+// আগে এই প্যারান্টারের আর্টিফ্যাক্টকে প্রাইভেট-প্ল্যাসহোল্ডারে সার্ক করে পরে ফেরত আনা।
+const ART_PH_D3 = "\uE002";
+const ART_PH_D5 = "\uE003";
+function protectLibArtifacts(s: string): string {
+  // আর্টিফ্যাক্ট স্প্যান: চ্ছ → ”Q (শুধু ”Q — এর পরের v/q আ-কার/য়-কোড, স্পৃশ্য নয়)
+  return s.replace(/\u201DQ/g, ART_PH_D3).replace(/\u0161\u2019/g, ART_PH_D5);
+}
+function restoreLibArtifacts(s: string): string {
+  // চ্ছ-আর্টিফ্যাক্ট (”Q) — Q অংশটি ছ-লেটার-কোড (0x51) যা protect-এ খাওয়া হয়েছিল;
+  // রিস্টোরে ”Q (মার্কার + লেটার) দুইটাই ফেরত বসানো হয়।
+  return s.replace(new RegExp(ART_PH_D3, "g"), "\u201DQ").replace(new RegExp(ART_PH_D5, "g"), "\u0161\u2019");
+}
+
 // ReArrangeUnicodeText ইউনিকোড-পজিশন থেকে শব্দ-শুরুতে সরায় — কিন্তু
 // '+' বা অন্য অ-বাংলা চরিত্রের সাথে থাকলে পজিশন ভুল থেকে যায়
 // (যেমন শ+ে+র → k‡++i হয়ে যায়, শব্দ-শুরুতে না)। তাই লাইব্রেরির পরে
@@ -116,7 +147,18 @@ export function convertToBijoy(text: string): string {
   // নোট: relocatePreKars সরানো হয়েছে — সুনতন্নী/বিজয়ে ‡/† শব্দ-শুরুতে বসানো
   // আমাদের হাতে পজিশন-বদলানো শব্দ ভেঙে দেয় (কাজ→KvR, কথা→K_v ইত্যাদি)।
   // লাইব্রেরির ReArrangeUnicodeText পজিশনই সঠিক।
-  return libUnicodeToBijoy(preMapPunctuation(text)).replace(/\uE001/g, "\u005C\u005C");
+  // নোট: U+2026 (এলিপসিস) — লাইব্রেরি ইউনিকোড→বিজয়ে এটি "..." (তিন ডট)
+  // করে দেয়, যা পরবর্তী বিজয়→ইউনিকোড রাউন্ড-ট্রিপে "…Z" কোড সঙ্গে মিশে
+  // করাপশন দেয়। ইনপুটেই তিন-ডটে নর্মালাইজ করা হয় — দুই রানই একই আউটপুট দেবে।
+  // নোট: লাইব্রেরি-আর্টিফ্যাক্ট প্রোটেকশন — protectLibArtifacts (preMap-এর আগে)
+  // দেখো; দ্বিতীয় রানেও ডাবল-ম্যাপ রোধ করা হয়।
+  return restoreLibArtifacts(
+    libUnicodeToBijoy(preMapPunctuation(protectLibArtifacts(text.replace(/\u2026/g, "..."))))
+  )
+    .replace(/\u2026/g, "...") // লাইব্রেরি-পুনঃতৈরি U+2026 → তিন-ডট
+    .replace(/\uE001/g, "\u005C\u005C")
+    // লাইব্রেরি U+2021 → U+2020 করাপ্ট করে (সুনতন্নী-নেটিভ নয়) — সব U+2020 → U+2021
+    .replace(/\u2020/g, "\u2021");
 }
 
 export function convertToUnicode(text: string): string {
@@ -132,6 +174,9 @@ export function convertToUnicode(text: string): string {
   r = r.replace(/\u007C/g, "।");
   // প্লেসহোল্ডার (যদি কোনো বিজয় টেক্সটে U+E001 এসে থাকে)
   r = r.replace(/\uE001/g, "॥");
+  // লাইব্রেরি-অ্যাসিমেট্রি-ফিক্স: b2u-তে q → U+09DF আসে, অথচ 9AF+9BC → q —
+  // NFD নার্মালাইজেশনে 09DF → 9AF 9BC, রাউন্ড-ট্রিপ রক্ষা করে।
+  r = r.replace(/য়/g, "য়");
   return r;
 }
 
@@ -155,11 +200,88 @@ export function isLikelyConvertedBijoy(text: string): boolean {
   return true;
 }
 
-/** দিক-সুইচ/পুনরুদ্ধারের আগে টেক্সট সাফ ইউনিকোডে ফেরত আনে */
+/**
+ * আমাদের প্রি-ম্যাপিংয়ের ঠিক উল্টো: শুধু preMapPunctuation-এর মার্কার
+ * (D1–D5, E001, সুনতন্নী-ডাবল-দারি \\ এবাং লাইব্রেরি-দাঁড়ি |) নেউট্রাল
+ * ইউনিকোডে ফেরত নেয় — বিজয়-লেটার কোড (a-z ইত্যাদি) স্পর্শ করে না।
+ * পুরো libBijoyToUnicode রাউন্ড-ট্রিপ নয়, কারণ সেটি পাঙকচুয়েশন/কিছু
+ * কোড নর্মালাইজ করে ফেলে এবাং একই-অর্থের ভিন্ন-বাইট বিজয় আউটপুট দেয়।
+ */
+export function unmapOurMarkers(text: string): string {
+  return text
+    .replace(/\u00D1/g, "—")   // Ñ → এম-ড্যাশ
+    .replace(/\u00D2/g, "\u201C") // Ò → “
+    .replace(/\u00D3/g, "\u201D") // Ó → ”
+    .replace(/\u00D4/g, "\u2018") // Ô → ‘
+    .replace(/\u00D5/g, "\u2019") // Õ → ’
+    .replace(/\uE001/g, "\u0965") // প্লেসহোল্ডার → ॥
+    .replace(/\u005C\u005C/g, "\u0965") // সুনতন্নী ডাবল-দারি → ॥
+    .replace(/\u007C/g, "।");     // লাইব্রেরি-দাঁড়ি → ।
+}
+
+// সুনতন্নী-কোড-রানে (নতুন-টাইপ-বাংলা নেই) ব্যবহারের জন্য হালকা-সংস্করণ:
+// শুধু প্রসঙ্গ-স্বাধীন কোড — প্ল্যাসহোল্ডার (E001), সুনতন্নী-ডাবল-দারি (\\)
+// এবাং লাইব্রেরি-দাঁড়ি (|) — নেউট্রাল ইউনিকোডে নেয। D1–D5 (কোট/ড্যাশ)
+// কনভার্টার-নেটিভ; সুনতন্নী-প্রসঙ্গে হুবহু পাস-থ্রু — এটা দ্বিতীয়-রানের
+// লাতিন-প্রসঙ্গের নেউট্রালাইজেশন থেকে রক্ষা করে।
+function unmapContextFreeMarkers(text: string): string {
+  return text
+    .replace(/\uE001/g, "\u0965")
+    .replace(/\u005C\u005C/g, "\u0965")
+    .replace(/\u007C/g, "।");
+}
+
+// বিজয-কোড-চরিত্রগুলো (আমাদের মার্কার + বিজয-নেটিভ ডাবল-দারি-প্ল্যাসহোল্ডার):
+const OUR_MARKER_RE = /[\u00D1-\u00D5\u005C\u005C\u007C\uE001]/;
+
+/** দিক-সুইচ/পুনরুৎপাদনের আগে টেক্সট সাফ ইউনিকোডে ফেরত আনে।
+ *  **রান-ভিত্তিক:** পুরো-টেক্সট একসাথে আনে-ম্যাপ করলে আংশিক-বিজয মিশ্র টেক্সট
+ *  (যেমন হাফ-বিজয + নতুন টাইপ একসাথে) হিজি-বিজি হয়ে যায় — কারণ হাফ-বিজয
+ *  অংশের মার্কার আনে-ম্যাপ হলে পরের ট্যাগ-ম্যাপ দুই-বার চড়ে যায়। সমাধান:
+ *  শুধু সেই রান-ই আনে-ম্যাপ হয় যেখানে বাংলা-অক্ষর নেই এবাং বিজয-কোড-চিহ্ন
+ *  (মার্কার/\জোড়া/|) আছে। বাংলা-অক্ষর-থাকা রান সরাসরি ম্যাপ হয় (নতুন টাইপ);
+ *  লাতিন-রান যেখানে কোনো কোড-চিহ্ন নেই তা পাস-থ্রু হয় (ইংরেজি/সংখ্যা, সরাসরি লাইব্রেরি-পাস)। */
 export function restoreCleanUnicode(text: string): string {
-  // কোড-চরিত্র না থাকলে পাস-থ্রু
+  // বিজয-কোড-চরিত্র না থাকলে কিছুই করতে হয় না
   if (!BIJOY_PUNCT_MARKERS.test(text)) return text;
-  return convertToUnicode(text);
+  // একটি রানে কোড-চিহ্নই না থাকলে পুরো-টেক্সটেই কিছু নেই — পাস-থ্রু
+  if (!OUR_MARKER_RE.test(text)) return text;
+  // রান-বিভক্ত: বাংলা-অক্ষরের সাথে/ছাড়া
+  let out = "";
+  for (const seg of text.split(/([\u0980-\u09FF]+)/)) {
+    if (seg === "") continue;
+    const hasBangla = /[\u0980-\u09FF]/.test(seg);
+    if (hasBangla) {
+      // নতুন-টাইপ ইউনিকোড-রান — সরাসরি ম্যাপ
+      out += convertToBijoyRaw(seg);
+    } else if (OUR_MARKER_RE.test(seg)) {
+      // বিজয-কোড-রান — প্রথমে আনে-ম্যাপ, তারপর সরাসরি ম্যাপ।
+      // সুনতন্নী-প্রসঙ্গের (কোনো নতুন-টাইপ-বাংলা নেই) রানে D1–D5
+      // কনভার্টার-নেটিভ কোট/ড্যাশ-কোড — পুরো-আনম্যাপ করলে পরের
+      // convertToBijoyRaw-এর preMap লাতিন-প্রসঙ্গ ধরে ”/”/— এ বদলে দিত
+      // (–GB, কোট-দিক-পালট)। তাই এ রানে শুধু প্রসঙ্গ-স্বাধীন কোড
+      // (প্ল্যাসহোল্ডার/ডাবল-দারি/দারি) আনম্যাপ হয়; D1–D5 হুবহু পাস-থ্রু।
+      out += convertToBijoyRaw(unmapContextFreeMarkers(seg));
+    } else {
+      // লাতিন-রান (কোনো কোড-চিহ্ন নেই) — লাইব্রেরি-পাস-থ্রু
+      out += seg;
+    }
+  }
+  return out;
+}
+
+/** আনে-ম্যাপড ইউনিকোড-সেগমেন্টের ম্যাপ (প্রি-কার/আর্টিফ্যাক্ট-প্রোটেক্ট সহ) */
+function convertToBijoyRaw(seg: string): string {
+  return restoreLibArtifacts(
+    libUnicodeToBijoy(preMapPunctuation(protectLibArtifacts(seg.replace(/\u2026/g, "..."))))
+  )
+    .replace(/\u2026/g, "...")
+    .replace(/\uE001/g, "\u005C\u005C")
+    // সুনতন্নী-এ ে-কারের একমাত্র নেটিভ কোড \u2021 (‡)। লাইব্রেরি টেক্সট-শুরুর
+    // শব্দে \u2020 (†) এবং বাক্যের মাঝে \u2021 বসায় — রান-ভিত্তিক পুনরুৎপাদনে
+    // (restoreCleanUnicode) কনটেক্সট হারায়ে \u2020 পড়লে আউটপুট নষ্ট হয়।
+    // সুনতন্নী-নেটিভ হতে \u2020-এর বৈধ ব্যবহার নেই — সব \u2020 → \u2021 করা হয়।
+    .replace(/\u2020/g, "\u2021");
 }
 
 export function convert(text: string, direction: ConvertDirection): string {
@@ -189,22 +311,35 @@ export async function extractTextFrom(file: File): Promise<string> {
     const xml = await zip.file("word/document.xml")?.async("string");
     if (!xml) return "";
     const doc = new DOMParser().parseFromString(xml, "text/xml");
-    const texts = doc.getElementsByTagName("w:t");
+    // সাব-নোডের ক্রম ঠিক রাখতে: w:t এবাং w:br রানগুলো বডি-ক্রমে প্রসেস করা হয়।
+    // কারণ: w:br-শুধু রানে (<w:r><w:br/></w:r>) কোনো w:t থাকে না —
+    // w:t-লুপে তারা এড়িয়ে যায় এবাং লাইন-বিরতি হারিয়ে যায়।
+    const runs = doc.getElementsByTagName("w:r");
     let out = "";
-    for (let i = 0; i < texts.length; i++) {
-      const t = texts[i] as Element;
-      out += t.textContent ?? "";
-      // প্যারাগ্রাফ/সেল-সীমান্তে নতুন লাইন
-      const r = t.parentElement;
-      const p = r?.parentElement;
-      const afterP = p?.parentElement;
-      if (afterP?.tagName === "w:tbl" || afterP?.tagName === "w:sectPr") {
-        out += "\n";
-      } else if (r?.nextElementSibling) {
+    for (let i = 0; i < runs.length; i++) {
+      const r = runs[i] as Element;
+      const p = r.parentElement; // w:p
+      if (!p) continue;
+      const texts = r.getElementsByTagName("w:t");
+      for (let j = 0; j < texts.length; j++) {
+        out += texts[j].textContent ?? "";
+      }
+      // রান-সীমান্তে ফাঁকা-স্থান — প্রতি-রান একবারই যোগ করা হয়
+      if (r.nextElementSibling && texts.length > 0) {
         out += " ";
       }
+      // ব্রুক-লাইন (<w:br/>) — রানের ভেতরেই লাইন-বিরতি চাইতে পারে
+      const brs = r.getElementsByTagName("w:br");
+      if (brs.length > 0) out = out.replace(/ $/, "") + "\n";
+      // রান প্যারাগ্রাফের শেষ রান হতে পারে — প্যারাগ্রাফ-সীমান্তে " " সরানো হয়
+      // এবাং নতুন লাইন যোগ করা হয়
+      if (!r.nextElementSibling && p.nextElementSibling) {
+        // প্যারাগ্রাফের শেষ রান — পরের সিবলিং w:p/w:tbl হওয়ার আগে লাইন-বিরতি।
+        out = out.replace(/ $/, "") + "\n";
+      }
+      // শেষ প্যারাগ্রাফের পর টেবিল/সেকশন/বডি-সীমান্ত — অতিরিক্ত নতুন-লাইন দরকার নেই
     }
-    return out;
+    return out.replace(/\n +\n/g, "\n\n");
   }
   return await file.text();
 }
@@ -214,9 +349,11 @@ export async function convertFile(
   direction: ConvertDirection,
 ): Promise<FileConvertResult> {
   const name = file.name.replace(/\.(docx|txt)$/i, "");
+  // আউটপুট-ফাইলনাম দিক অনুযায়ী: অভ্র→বিজয় = _bijoy, বিজয়→অভ্র = _avro
+  const suffix = direction === "u2b" ? "_bijoy" : "_avro";
   if (file.name.toLowerCase().endsWith(".docx")) {
     const blob = await convertDocx(file, direction);
-    return { kind: "docx", blob, name: `${name}_bijoy.docx` };
+    return { kind: "docx", blob, name: `${name}${suffix}.docx` };
   }
   // TXT ও অন্যান্য টেক্সট ফরম্যাট
   const raw = await file.text();
@@ -227,7 +364,7 @@ export async function convertFile(
   const blob = new Blob([bytes], {
     type: "text/plain;charset=windows-1252",
   });
-  return { kind: "txt", blob, name: `${name}_bijoy.txt` };
+  return { kind: "txt", blob, name: `${name}${suffix}.txt` };
 }
 
 /** UTF-8 → windows-1252 বাইট (0x00–0xFF); রেঞ্জের বাইরে হলে `?` */
