@@ -65,16 +65,36 @@ function preMapPunctuation(s: string): string {
     // দিয়ে পরে ফন্ট নির্ধারণ করা হয়।
     s = s.replace(/[\u2014\u2013]/g, "\u00D1");
   }
+  // ইনপুট-স্ট্রিং-এ আগের/পরের চরিত্র পাওয়ার হেল্পার
+  const isWordChar = (c: string | null) =>
+    c !== null && /[A-Za-z0-9\u0980-\u09FF]/.test(c);
+  const resPrev = () => (i > 0 ? s[i - 1] : null);
+  const resNext = () => (i + 1 < s.length ? s[i + 1] : null);
   let out = "";
   let open = true;
+  let i = 0;
   for (const ch of s) {
+    i++;
     if (ch === '"') {
       // সোজা দুই উদ্ধৃতি — প্রসঙ্গ অনুযায়ী “/” গ্লিফে
       out += open ? "\u00D2" : "\u00D3";
       open = !open;
     } else if (ch === "'") {
-      // সোজা এক উদ্ধৃতি/অ্যাপোস্ট্রফি — হ-এর মতো গ্লিফ না, বেঁকে-যাওয়া টিক Õ
-      out += "\u00D5";
+      // সোজা এক উদ্ধৃতি — জোড়ায় ওপেন/ক্লোজ হয় (D4–D5); শব্দের ভেতরে
+      // (অ্যাপোস্ট্রফি) হলে ক্লোজ Õ; অন্যথায় ওপেন D4
+      const prevIn = resPrev();
+      const nextIn = resNext();
+      const apostrophe =
+        isWordChar(prevIn) && isWordChar(nextIn);
+      if (apostrophe) {
+        out += "\u00D5"; // apostrophe → ’
+      } else if (open) {
+        out += "\u00D4"; // leading/open → ‘
+        open = false;
+      } else {
+        out += "\u00D5"; // trailing/close → ’
+        open = true;
+      }
     } else if (map[ch]) {
       out += map[ch];
     } else {
@@ -84,10 +104,45 @@ function preMapPunctuation(s: string): string {
   return out;
 }
 
+// সুনতন্নী-প্রি-কার কোড (ে-কার ‡, ৈ-কার †, ডট-ওয়ালা ˆ ‰)
+// প্রি-কার যেকোনো বাংলা শব্দের **শুরুতে** বসে। লাইব্রেরির
+// ReArrangeUnicodeText ইউনিকোড-পজিশন থেকে শব্দ-শুরুতে সরায় — কিন্তু
+// '+' বা অন্য অ-বাংলা চরিত্রের সাথে থাকলে পজিশন ভুল থেকে যায়
+// (যেমন শ+ে+র → k‡++i হয়ে যায়, শব্দ-শুরুতে না)। তাই লাইব্রেরির পরে
+// আবার সরিয়ে দেওয়া হয়।
+function relocatePreKars(s: string): string {
+  // ‡ † ˆ ‰ একটাই একটাই নিয়ে তাদের পজিশন থেকে তুলে নিয়ে ওই "শব্দের"
+  // (পরপর বাংলা/হাফন্ত/প্লাস/ড্যাশ/হাইফেন অংশ) প্রথম স্থানে বসাও
+  const PRE = "\u2021\u2020\u02C6\u2030";
+  // বিজয়-রূপান্তরের পর বাংলা অক্ষর লাতিন a–z কোডে — সেগুলো সবই শব্দের
+  // ভেতরে। শুধু বিরামচিহ্ন (OUT) আর ফাঁক শব্দের সীমান্ত:
+  const OUT = ".,;:!|\\'\"\u00D1\u00D2\u00D3\u00D4\u00D5";
+  let res = "";
+  for (const ch of s) {
+    if (PRE.includes(ch)) {
+      // শব্দ-শুরু = সের আগের যেকোনো OUT/ফাঁকের ঠিক পরে (বা স্ট্রিং-শুরু)
+      let start = 0;
+      for (let i = res.length - 1; i >= 0; i--) {
+        const prev = res[i];
+        if (OUT.includes(prev) || /\s/.test(prev)) {
+          start = i + 1;
+          break;
+        }
+      }
+      res = res.slice(0, start) + ch + res.slice(start);
+    } else {
+      res += ch;
+    }
+  }
+  return res;
+}
+
 export function convertToBijoy(text: string): string {
-  // বিরামচিহ্ন প্রথমে বিজয়-কোডে → তারপর বাংলা অক্ষর লাইব্রেরি দিয়ে
-  // প্লেসহোল্ডার U+E001 → \\ \\ (ডাবল-দারি) বসানো হয় লাইব্রেরির পরে
-  return libUnicodeToBijoy(preMapPunctuation(text)).replace(/\uE001/g, "\u005C\u005C");
+  // ১) বিরামচিহ্ন প্রথমে বিজয়-কোডে; ২) বাংলা অক্ষর লাইব্রেরি দিয়ে;
+  // ৩) প্লেসহোল্ডার U+E001 → \\\\ (ডাবল-দারি); ৪) প্রি-কার শব্দ-শুরুতে সারাও
+  return relocatePreKars(
+    libUnicodeToBijoy(preMapPunctuation(text)).replace(/\uE001/g, "\u005C\u005C"),
+  );
 }
 
 export function convertToUnicode(text: string): string {

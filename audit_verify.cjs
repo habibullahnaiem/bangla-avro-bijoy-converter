@@ -42,7 +42,8 @@ execSync(
   console.log("=== 2) সেগমেন্টেশন: dash/quote নিকটতম লেখা-চরিত্রের সেগমেন্টে ===");
   const segCases = [
     { t: "\u09B0\u09C7\u09B2\u0997\u09BE\u09A1\u09BC\u09BF Railway \u2014 \u2018Constructed reality\u2019", wantLT: ["Railway ", " \u2018Constructed reality\u2019"] },
-    { t: "\u09B8\u09A4\u09CD\u09AF\u0964 It is true", wantLT: [" It is true"] },
+    // দাঁড়ির পরের ফাঁক দাঁড়ির (বাংলা) সেগমেন্টেই পড়ে — স্থাপিত নিয়ম
+    { t: "\u09B8\u09A4\u09CD\u09AF\u0964 It is true", wantLT: ["It is true"] },
     { t: "সত্য। ইট", wantLT: [] },
     { t: "কা\u099C \u09A8\u09BE, ক\u09BE\u099C", wantLT: [] },
   ];
