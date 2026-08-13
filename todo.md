@@ -241,3 +241,10 @@
 - [x] hero heading ও “উদাহরণ দেখুন” professional sample-এ Tiro Bangla প্রয়োগ করা
 - [x] editor/input Hind Siliguri এবং বিজয় output SutonnyMJ অপরিবর্তিত রাখা
 - [x] desktop/mobile typography, build ও checkpoint যাচাই করা
+
+# নতুন: Tiro Bangla rollback
+
+- [x] Tiro Bangla font import ও display class সরিয়ে আগের typography ফিরিয়ে আনা
+- [x] hero heading এবং “উদাহরণ দেখুন” button-এর আগের styling পুনরুদ্ধার করা
+- [x] input/output font ও converter behavior অক্ষুণ্ণ রাখা
+- [x] desktop/mobile screenshot, build ও checkpoint যাচাই করা
