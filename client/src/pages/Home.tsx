@@ -37,9 +37,14 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-const EXAMPLE_TEXT = `সম্পাদক মহোদয়,
+  const EXAMPLE_TEXT = `সম্পাদক মহোদয়,
+
 ক্রীড়া বিভাগের নিকট নিয়োজনপত্র পাঠানো হলো। রেলগাড়ি নির্ধারণ সন্ধ্যা ৭টায়। পদোন্নতি ও বল্লভ মহোদয়ের নির্দেশ বাস্তবায়ন করা হলো। অ্যান্ত, ল্ল, য়, ড়, ঢ় যুক্তবর্ণ ভাঙবে না — দাঁড়িও হ-এর মতো হবে না। ধন্যবাদ।
-The Times newspaper — 2026।`;
+The Times newspaper — 2026।
+
+শেষে শুভেচ্ছায়,
+হাবিবুল্লাহ নাইম
+বাংলা বিভাগ, রাজশাহী বিশ্ববিদ্যালয়`;
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<"text" | "file">("text");
