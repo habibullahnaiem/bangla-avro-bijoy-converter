@@ -177,3 +177,10 @@
 - [x] subtle keyboard-pattern background asset তৈরি করা
 - [x] banner/background webdev storage-এ তুলে website-এ integrate করা
 - [x] contrast, desktop/mobile layout, build ও checkpoint যাচাই করা
+
+# নতুন: অভ্রজয় (AvroJoy) ব্র্যান্ডিং ও homepage copy
+
+- [x] header, document title ও visible brand copy-তে অভ্রজয় (AvroJoy) যুক্ত করা
+- [x] বাস্তব feature অনুযায়ী Bengali-first hero headline, tagline ও CTA framing আপডেট করা
+- [x] relevant feature highlights এবং footer identity যোগ/পরিমার্জন করা
+- [x] unsupported absolute claims বাদ দিয়ে typography, responsive layout, build ও checkpoint যাচাই করা

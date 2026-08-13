@@ -681,7 +681,7 @@ export default function Home() {
           <div className="site-brand flex items-center gap-3">
             <a
               href="/"
-              aria-label="অভ্র ⇄ বিজয় কনভার্টারের হোম"
+              aria-label="অভ্রজয় (AvroJoy)-এর হোম"
               className="group/logo relative flex h-12 w-[4.4rem] items-center justify-center overflow-hidden rounded-xl bg-primary-foreground/95 p-0.5 shadow-inner transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:scale-[1.04] hover:shadow-lg focus-visible:-translate-y-0.5 focus-visible:scale-[1.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 motion-reduce:transform-none motion-reduce:transition-none md:h-14 md:w-[4.7rem]"
             >
               <span
@@ -696,10 +696,10 @@ export default function Home() {
             </a>
             <div className="site-brand__copy">
               <h1 className="site-brand__title text-lg font-extrabold leading-tight tracking-tight md:text-2xl">
-                অভ্র ⇄ বিজয় কনভার্টার
+                অভ্রজয় <span className="font-semibold opacity-90">(AvroJoy)</span>
               </h1>
               <p className="site-brand__subtitle mt-0.5 text-xs opacity-85 md:text-sm">
-                ইউনিকোড ⇄ সুতন্নী এমজে • যুক্তাক্ষর ও দাঁড়ি নির্ভুল
+                অভ্র/ইউনিকোড ⇄ বিজয় • যুক্তাক্ষর ও দাঁড়ির যত্ন
               </p>
             </div>
           </div>
@@ -725,14 +725,14 @@ export default function Home() {
         {/* প্রোমোট শিরোনাম */}
         <div className="hero-panel mb-6 flex flex-wrap items-end justify-between gap-3">
           <div className="hero-panel__copy">
-            <p className="eyebrow">বাংলা টাইপোগ্রাফি ডেস্ক</p>
+            <p className="eyebrow">অভ্রজয় • বাংলা লিপির সহজ সেতু</p>
             <h2 className="hero-title text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">
-              অভ্রে লিখুন, বিজয়ে নিন
+              অভ্রজয়: নির্ভুল বাংলা রূপান্তরের নতুন মানদণ্ড
             </h2>
             <p className="hero-summary mt-2 max-w-2xl text-[0.95rem] leading-relaxed text-muted-foreground">
-              সোলাইমান লিপি / কালপুরুষ টেক্সট সঠিক যুক্তাক্ষর, য়, ড়, ঢ়,
-              র-ফলা এবং দাঁড়ি (।) সহ বিজয় (সুতন্নী এমজে) ফন্টে
-              রূপান্তর হয় — মিশ্র টেক্সটে ইংরেজি Times New Roman-এ রাখা হয়।
+              অভ্র ও বিজয়ের এক সহজ সেতুবন্ধন। DOCX/TXT ফাইল, যুক্তাক্ষর,
+              যতিচিহ্ন ও dual-size রেন্ডারিং—ফরম্যাটিং যতটা সম্ভব অক্ষুণ্ণ রেখে
+              বাংলা SutonnyMJ এবং ইংরেজি Times New Roman-এ রূপান্তর করুন।
             </p>
           </div>
           <div className="hero-panel__actions">
@@ -1079,11 +1079,11 @@ export default function Home() {
               <Check className="h-4 w-4" />
             </div>
             <h3 className="mb-1 text-base font-bold text-foreground">
-              যুক্তাক্ষর নির্ভুল
+              যুক্তাক্ষর ও যতিচিহ্নে যত্ন
             </h3>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              ন্ত, ল্ল, য়, ড়, ঢ়, র-ফলা, রেফ, জ্ঞ, ক্ষ, শ্র — কোনো
-              যুক্তবর্ণই ভাঙে না।
+              ন্ত, ল্ল, য়, ড়, ঢ়, র-ফলা, রেফ, জ্ঞ, ক্ষ, শ্র এবং দাঁড়ির মতো
+              গুরুত্বপূর্ণ বাংলা গঠনগুলোকে ভেঙে না দেওয়াই লক্ষ্য।
             </p>
           </div>
           <div className="rounded-xl border bg-card p-5">
@@ -1091,11 +1091,11 @@ export default function Home() {
               <Check className="h-4 w-4" />
             </div>
             <h3 className="mb-1 text-base font-bold text-foreground">
-              দাঁড়ি সঠিক থাকে
+              স্মার্ট ডুয়াল-সাইজ
             </h3>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              বাংলা দাঁড়ি (।) বিজয়ে সোজা দাঁড়ি-স্ট্রোক গ্লিফে
-              রূপান্তর হয় — ম-ফলা বা ক্র-এর মতো দেখায় না।
+              বাংলা SutonnyMJ-তে এবং ইংরেজি/সংখ্যা Times New Roman-এ থাকে;
+              ইংরেজি অংশ বাংলার চেয়ে ২pt ছোট হয়ে রেন্ডার হয়।
             </p>
           </div>
           <div className="rounded-xl border bg-card p-5">
@@ -1103,10 +1103,11 @@ export default function Home() {
               <Check className="h-4 w-4" />
             </div>
             <h3 className="mb-1 text-base font-bold text-foreground">
-              ইংরেজি Times New Roman
+              DOCX / TXT ফাইল রূপান্তর
             </h3>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              মিশ্র টেক্সটে ইংরেজি শব্দ ও সংখ্যা Times New Roman-এ রাখা হয়।
+              Word ও plain-text ফাইল আপলোড করে বোল্ড, ইটালিক, ফুটনোট,
+              এন্ডনোট এবং font-aware output পান।
             </p>
           </div>
         </div>
@@ -1327,7 +1328,7 @@ export default function Home() {
         </div>
         )}
 
-        {/* Recent conversion history — local-only, দ্রুত পুনর্ব্যবহারযোগ্য */}
+        {/* সাম্প্রতিক রূপান্তরের ইতিহাস — local-only, দ্রুত পুনর্ব্যবহারযোগ্য */}
         <section
           className="recent-history mt-7 pb-2"
           aria-labelledby="recent-history-title">
@@ -1370,7 +1371,7 @@ export default function Home() {
             <div className="rounded-2xl border border-dashed bg-card/70 px-5 py-8 text-center">
               <Clock3 className="mx-auto h-7 w-7 text-muted-foreground/60" aria-hidden="true" />
               <p className="mt-2 text-sm font-semibold text-foreground">
-                এখনো কোনো conversion history নেই
+                এখনো কোনো রূপান্তরের ইতিহাস নেই
               </p>
               <p className="mt-1 text-xs text-muted-foreground">
                 একটি রূপান্তর সম্পন্ন করলে সেটি এখানে দ্রুত ব্যবহারের জন্য দেখা যাবে।
@@ -1465,10 +1466,13 @@ export default function Home() {
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary-foreground/15 font-serif text-xs font-black">
               অ⇄ব
             </span>
-            অভ্র ⇄ বিজয় কনভার্টার — নির্ভুল বাংলা ফন্ট রূপান্তর
+            অভ্রজয় (AvroJoy) — বাংলা লিপির সহজ সেতু
           </p>
           <p className="text-xs opacity-80">
-            ইউনিকোড ⇄ বিজয় • সুতন্নী এমজে • Times New Roman
+            অভ্র/ইউনিকোড ⇄ বিজয় • SutonnyMJ • Times New Roman
+          </p>
+          <p className="text-xs opacity-75">
+            © ২০২৬ মো. হাবিবুল্লাহ নাঈম • সর্বস্বত্ব সংরক্ষিত
           </p>
         </div>
       </footer>
