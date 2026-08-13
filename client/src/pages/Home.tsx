@@ -724,11 +724,8 @@ export default function Home() {
       <main className="app-main container flex-1">
         {/* ডিজাইন দিক: টিল ডেস্ক — compact intro, glyph-first AvroJoy identity, converter as the first-look product desk */}
         <div className="hero-panel mb-4 flex flex-wrap items-end justify-between gap-3">
-          <div className="hero-panel__signature" aria-hidden="true">
-            <span className="hero-panel__signature-key">অ</span>
-            <ArrowRightLeft className="h-4 w-4" />
-            <span className="hero-panel__signature-key hero-panel__signature-key--bijoy">ব</span>
-            <span className="hero-panel__signature-specimen">ন্ত · শ্র · । · SutonnyMJ</span>
+          <div className="hero-panel__signature" aria-label="অভ্র ⇄ বিজয়">
+            <span className="hero-panel__signature-label">অভ্র ⇄ বিজয়</span>
           </div>
           <div className="hero-panel__copy">
             <p className="eyebrow">অভ্রজয় • বাংলা লিপির সহজ সেতু</p>
@@ -800,9 +797,6 @@ export default function Home() {
                     : "border-transparent bg-transparent text-muted-foreground shadow-none hover:bg-muted"
                 }
                 onClick={() => setDirection("u2b")}>
-                <span className="font-serif mr-1 font-bold">অ</span>
-                <ArrowRightLeft className="mx-1 h-3.5 w-3.5" />
-                <span className="font-serif mr-1 font-bold">ব</span>
                 অভ্র → বিজয়
               </Button>
               <Button
@@ -814,9 +808,6 @@ export default function Home() {
                     : "border-transparent bg-transparent text-muted-foreground shadow-none hover:bg-muted"
                 }
                 onClick={() => setDirection("b2u")}>
-                <span className="font-serif mr-1 font-bold">ব</span>
-                <ArrowRightLeft className="mx-1 h-3.5 w-3.5" />
-                <span className="font-serif mr-1 font-bold">অ</span>
                 বিজয় → অভ্র
               </Button>
             </div>
@@ -1487,9 +1478,9 @@ export default function Home() {
       {/* ফুটার */}
       <footer className="mt-6 border-t bg-primary py-6 text-primary-foreground">
         <div className="container flex flex-col items-center gap-1 text-center text-sm">
-          <p className="flex items-center gap-2 font-semibold">
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary-foreground/15 font-serif text-xs font-black">
-              অ⇄ব
+          <p className="flex flex-wrap items-center justify-center gap-2 font-semibold">
+            <span className="inline-flex h-7 items-center rounded-full bg-primary-foreground/15 px-2.5 font-serif text-[11px] font-black tracking-tight">
+              অভ্র ⇄ বিজয়
             </span>
             অভ্রজয় (AvroJoy) — বাংলা লিপির সহজ সেতু
           </p>

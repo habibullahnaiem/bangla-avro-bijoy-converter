@@ -205,3 +205,10 @@
 - [x] নীল–সবুজ conversion arrows ও AvroJoy visual language-এর সঙ্গে culturally grounded replacement banner তৈরি করা
 - [x] headline-এর জন্য পরিষ্কার negative space ও Bengali text contrast নিশ্চিত করা
 - [x] desktop/mobile banner rendering, build ও checkpoint যাচাই করা
+
+# সংশোধন: শুধু অভ্র ⇄ বিজয় branding রাখা
+
+- [x] visible অ ⇄ ব/অ ⇄ বি letter cue-এর সব UI occurrence চিহ্নিত করা
+- [x] অতিরিক্ত cue সরিয়ে শুধু অভ্র ⇄ বিজয় text branding রাখা
+- [x] exact logo image, header/hero hierarchy ও converter controls অক্ষুণ্ণ রাখা
+- [x] desktop/mobile screenshot, build, regression audit ও checkpoint যাচাই করা
