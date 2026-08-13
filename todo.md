@@ -73,3 +73,10 @@
 - [x] স্বচ্ছ background-এ header ও favicon-উপযোগী revised logo তৈরি করা
 - [x] header, favicon এবং apple-touch icon-এ revised logo বসানো
 - [x] desktop/mobile preview যাচাই এবং নতুন checkpoint তৈরি করা
+
+# নতুন: A/a/অ এবং B/b/ব পরিচয়সহ লোগো
+
+- [x] দুই পাশে A/a/অ এবং B/b/ব-এর direct বা indirect visual cue নির্ধারণ করা
+- [x] অক্ষর-ইঙ্গিত ও মুখোমুখি arrow একত্রে রেখে favicon-উপযোগী mark তৈরি করা
+- [x] header, favicon এবং apple-touch icon-এ নতুন mark বসানো
+- [x] desktop/mobile preview যাচাই এবং নতুন checkpoint তৈরি করা
