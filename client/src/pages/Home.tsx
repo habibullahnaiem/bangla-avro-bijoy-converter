@@ -722,17 +722,23 @@ export default function Home() {
       </header>
 
       <main className="app-main container flex-1">
-        {/* প্রোমোট শিরোনাম */}
-        <div className="hero-panel mb-6 flex flex-wrap items-end justify-between gap-3">
+        {/* ডিজাইন দিক: টিল ডেস্ক — compact intro, glyph-first AvroJoy identity, converter as the first-look product desk */}
+        <div className="hero-panel mb-4 flex flex-wrap items-end justify-between gap-3">
+          <div className="hero-panel__signature" aria-hidden="true">
+            <span className="hero-panel__signature-key">অ</span>
+            <ArrowRightLeft className="h-4 w-4" />
+            <span className="hero-panel__signature-key hero-panel__signature-key--bijoy">ব</span>
+            <span className="hero-panel__signature-specimen">ন্ত · শ্র · । · SutonnyMJ</span>
+          </div>
           <div className="hero-panel__copy">
             <p className="eyebrow">অভ্রজয় • বাংলা লিপির সহজ সেতু</p>
             <h2 className="hero-title text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">
-              অভ্রজয়: নির্ভুল বাংলা রূপান্তরের নতুন মানদণ্ড
+              অভ্রজয়ে লিখুন, বিজয়ে নিন।
             </h2>
             <p className="hero-summary mt-2 max-w-2xl text-[0.95rem] leading-relaxed text-muted-foreground">
-              অভ্র ও বিজয়ের এক সহজ সেতুবন্ধন। DOCX/TXT ফাইল, যুক্তাক্ষর,
-              যতিচিহ্ন ও dual-size রেন্ডারিং—ফরম্যাটিং যতটা সম্ভব অক্ষুণ্ণ রেখে
-              বাংলা SutonnyMJ এবং ইংরেজি Times New Roman-এ রূপান্তর করুন।
+              অভ্র/ইউনিকোড ⇄ বিজয় রূপান্তরের জন্য একটি পরিষ্কার বাংলা workspace।
+              যুক্তাক্ষর, যতিচিহ্ন, DOCX/TXT ফাইল এবং বাংলা–ইংরেজির font-aware
+              preview—সবকিছু এক জায়গায় সামলান।
             </p>
           </div>
           <div className="hero-panel__actions">
@@ -751,7 +757,7 @@ export default function Home() {
         </div>
 
         {/* ট্যাব সুইচার */}
-        <div className="workspace-tabs mb-5 flex items-center gap-1.5 rounded-full border bg-card p-1.5 shadow-sm w-fit">
+        <div className="workspace-tabs mb-4 flex items-center gap-1.5 rounded-full border bg-card p-1.5 shadow-sm w-fit">
           <Button
             variant={activeTab === "text" ? "default" : "ghost"}
             size="sm"
@@ -1072,11 +1078,11 @@ export default function Home() {
           </div>
         </div>
 
-          {/* টিপস কার্ড — শান্ত, এডিটরিয়াল */}
-        <div className="mt-4 grid gap-4 md:grid-cols-3">
-          <div className="rounded-xl border bg-card p-5">
-            <div className="mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
-              <Check className="h-4 w-4" />
+          {/* টিপস কার্ড — আইকন ও ব্যবহারিক উদাহরণসহ */}
+        <div className="feature-grid mt-4 grid gap-4 md:grid-cols-3">
+          <article className="feature-card rounded-xl border p-5">
+            <div className="feature-card__icon mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
+              <Check className="h-5 w-5" aria-hidden="true" />
             </div>
             <h3 className="mb-1 text-base font-bold text-foreground">
               যুক্তাক্ষর ও যতিচিহ্নে যত্ন
@@ -1085,10 +1091,16 @@ export default function Home() {
               ন্ত, ল্ল, য়, ড়, ঢ়, র-ফলা, রেফ, জ্ঞ, ক্ষ, শ্র এবং দাঁড়ির মতো
               গুরুত্বপূর্ণ বাংলা গঠনগুলোকে ভেঙে না দেওয়াই লক্ষ্য।
             </p>
-          </div>
-          <div className="rounded-xl border bg-card p-5">
-            <div className="mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
-              <Check className="h-4 w-4" />
+            <div className="feature-card__example mt-4">
+              <span className="feature-card__example-label">দ্রুত যাচাই</span>
+              <span className="font-input-bn text-sm font-semibold text-primary">
+                শান্ত · উল্লাস · শ্রেণি · দাঁড়ি
+              </span>
+            </div>
+          </article>
+          <article className="feature-card rounded-xl border p-5">
+            <div className="feature-card__icon mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
+              <ArrowDownUp className="h-5 w-5" aria-hidden="true" />
             </div>
             <h3 className="mb-1 text-base font-bold text-foreground">
               স্মার্ট ডুয়াল-সাইজ
@@ -1097,19 +1109,32 @@ export default function Home() {
               বাংলা SutonnyMJ-তে এবং ইংরেজি/সংখ্যা Times New Roman-এ থাকে;
               ইংরেজি অংশ বাংলার চেয়ে ২pt ছোট হয়ে রেন্ডার হয়।
             </p>
-          </div>
-          <div className="rounded-xl border bg-card p-5">
-            <div className="mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
-              <Check className="h-4 w-4" />
+            <div className="feature-card__example mt-4">
+              <span className="feature-card__example-label">দেখুন যেমন</span>
+              <span className="text-sm text-foreground">
+                বাংলা ১৪pt <span className="text-muted-foreground">+</span>{" "}
+                <span className="font-serif text-xs">English 12pt</span>
+              </span>
+            </div>
+          </article>
+          <article className="feature-card rounded-xl border p-5">
+            <div className="feature-card__icon mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
+              <FileText className="h-5 w-5" aria-hidden="true" />
             </div>
             <h3 className="mb-1 text-base font-bold text-foreground">
               DOCX / TXT ফাইল রূপান্তর
             </h3>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              Word ও plain-text ফাইল আপলোড করে বোল্ড, ইটালিক, ফুটনোট,
-              এন্ডনোট এবং font-aware output পান।
+              Word ও plain-text ফাইল আপলোড করে রূপান্তরিত ফল দেখুন, কপি করুন
+              বা প্রিন্ট/PDF preview থেকে সংরক্ষণ করুন।
             </p>
-          </div>
+            <div className="feature-card__example mt-4">
+              <span className="feature-card__example-label">সহজ ধাপ</span>
+              <span className="text-sm font-semibold text-primary">
+                .docx / .txt → রূপান্তর → কপি
+              </span>
+            </div>
+          </article>
         </div>
 
         {/* সহায়তা */}

@@ -62,3 +62,7 @@ Modern Productivity SaaS + Bengali calligraphic accent. রেফারেন্
 - কনভার্টারই প্রথম নজরের কেন্দ্র; status pill ও secondary action শান্ত থাকবে, যাতে দুই editor pane-ই product desk হিসেবে এগিয়ে থাকে।
 - বাংলা glyph specimen, conversion arrow এবং teal ribbon-ই signature visual motif; generic SaaS decoration বাড়ানো হবে না।
 - ব্র্যান্ডের দৃশ্যমান নাম হবে “অভ্রজয় (AvroJoy)”; supporting copy-তে অভ্র/ইউনিকোড ⇄ বিজয় কাজটি স্পষ্ট থাকবে।
+- converter desk-ই first-look hero; intro compact থাকবে এবং editor card-কে scale, border hierarchy ও whitespace দিয়ে সবচেয়ে বেশি visual weight দেওয়া হবে।
+- exact reference logo header identity হিসেবে থাকবে, কিন্তু hero visual language-এ generic illustration-এর বদলে অ⇄ব, glyph specimen, conversion arrow ও font badge-কে signature motif করা হবে।
+- material system হবে crisp teal desk: deep teal authority, clean white workspace cards, light blue-gray paper canvas; pastel/glass softness কেবল restrained supporting surface-এ থাকবে।
+- typography hierarchy-তে Bengali display headline, compact utility labels এবং deliberate specimen text প্রধান brand signal হবে।

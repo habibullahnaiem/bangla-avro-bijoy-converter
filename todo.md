@@ -184,3 +184,10 @@
 - [x] বাস্তব feature অনুযায়ী Bengali-first hero headline, tagline ও CTA framing আপডেট করা
 - [x] relevant feature highlights এবং footer identity যোগ/পরিমার্জন করা
 - [x] unsupported absolute claims বাদ দিয়ে typography, responsive layout, build ও checkpoint যাচাই করা
+
+# নতুন: feature card icon ও ব্যবহারিক উদাহরণ
+
+- [x] প্রতিটি feature card-এর বিষয় অনুযায়ী অর্থবহ icon নির্বাচন করা
+- [x] card-গুলোতে ছোট, বাস্তবসম্মত practical example যোগ করা
+- [x] icon-এর accessible label, spacing, contrast ও Bengali typography যাচাই করা
+- [x] desktop/mobile layout, build, screenshot ও checkpoint যাচাই করা
