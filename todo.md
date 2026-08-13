@@ -94,3 +94,10 @@
 - [x] ডান পাশে B/b এবং ব-এর পরিষ্কার paired visual form রাখা
 - [x] দুই arrow-কে অক্ষর-জোড়ার মাঝের conversion relationship হিসেবে রাখা
 - [x] শুধু logo asset প্রতিস্থাপন করে favicon ও header readability যাচাই করা
+
+# নতুন: লোগো hover animation
+
+- [x] logo hover-এর জন্য subtle scale, lift এবং arrow-direction motion নির্ধারণ করা
+- [x] desktop hover animation implement করা, কিন্তু logo identity অপরিবর্তিত রাখা
+- [x] prefers-reduced-motion ও touch/mobile behavior নিশ্চিত করা
+- [x] desktop/mobile preview যাচাই করে নতুন checkpoint তৈরি করা

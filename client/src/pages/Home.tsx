@@ -458,13 +458,21 @@ export default function Home() {
         </div>
         <div className="container relative flex items-center justify-between py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-foreground/95 p-1 shadow-inner md:h-14 md:w-14">
+            <a
+              href="/"
+              aria-label="অভ্র ⇄ বিজয় কনভার্টারের হোম"
+              className="group/logo relative flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-foreground/95 p-1 shadow-inner transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:scale-[1.04] hover:shadow-lg focus-visible:-translate-y-0.5 focus-visible:scale-[1.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 motion-reduce:transform-none motion-reduce:transition-none md:h-14 md:w-14"
+            >
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 rounded-2xl border border-transparent transition-colors duration-300 group-hover/logo:border-accent/70 group-focus-visible/logo:border-accent/70 motion-reduce:transition-none"
+              />
               <img
                 src="/manus-storage/avro-bijoy-letter-pairs_c859b208.png"
                 alt="A ও অ থেকে B ও ব-তে রূপান্তরের চিহ্ন"
-                className="h-full w-full object-contain"
+                className="relative h-full w-full object-contain transition-transform duration-300 ease-out group-hover/logo:rotate-[1.5deg] group-focus-visible/logo:rotate-[1.5deg] motion-reduce:transform-none motion-reduce:transition-none"
               />
-            </div>
+            </a>
             <div>
               <h1 className="text-lg font-extrabold leading-tight tracking-tight md:text-2xl">
                 অভ্র ⇄ বিজয় কনভার্টার
