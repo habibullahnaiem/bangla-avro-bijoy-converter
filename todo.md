@@ -198,3 +198,10 @@
 - [x] feature-card icon ও practical example রেখে keyboard-themed styling restore করা
 - [x] hero/converter hierarchy, contrast ও Bengali-first visual treatment যাচাই করা
 - [x] desktop/mobile screenshot, build, regression audit ও checkpoint যাচাই করা
+
+# সংশোধন: শহিদ মিনার, বর্ণমালা ও keyboard-themed banner
+
+- [x] hero banner-এ শহিদ মিনারের সরল silhouette, বাংলা বর্ণমালা ও keyboard-key motif-এর composition নির্ধারণ করা
+- [x] নীল–সবুজ conversion arrows ও AvroJoy visual language-এর সঙ্গে culturally grounded replacement banner তৈরি করা
+- [x] headline-এর জন্য পরিষ্কার negative space ও Bengali text contrast নিশ্চিত করা
+- [x] desktop/mobile banner rendering, build ও checkpoint যাচাই করা
