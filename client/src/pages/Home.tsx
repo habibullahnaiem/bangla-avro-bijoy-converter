@@ -661,7 +661,7 @@ export default function Home() {
                     (direction === "u2b"
                       ? "font-output-bijoy"
                       : "font-input-bn") +
-                    (direction === "u2b" ? " absolute inset-0 text-transparent caret-transparent" : "")
+                    (direction === "u2b" ? " absolute inset-0 text-transparent caret-transparent abc-no-native-sel" : "")
                   }
                   style={{ fontSize: `${fontSize}px` }}
                   aria-hidden={direction === "u2b"}

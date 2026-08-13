@@ -214,6 +214,30 @@
     font-family: "Times New Roman", "Times", serif;
     line-height: 1.05;
   }
+
+  /* হিডেন টেক্সট-এরিয়ার নেটিভ সিলেকশন-ছায়া বন্ধ —
+     দৃশ্যমান হাইলাইট রিচ-প্রিভিউর <mark> দিয়ে আঁকা হয়। */
+  .abc-no-native-sel {
+    -webkit-user-select: auto;
+  }
+  .abc-no-native-sel::selection,
+  .abc-no-native-sel *::selection {
+    background: transparent;
+    color: transparent;
+  }
+  .abc-no-native-sel::-moz-selection,
+  .abc-no-native-sel *::-moz-selection {
+    background: transparent;
+    color: transparent;
+  }
+
+  /* প্রিভিউ হাইলাইট মার্ক — সিলেকশন রঙ এখানেই দেখা যায় */
+  .bijoy-rich mark {
+    background: rgb(13 148 136 / 0.25);
+    border-radius: 2px;
+    padding: 0;
+    color: inherit;
+  }
 }
 
 /* স্ন্যাপ ট্রান্সিশন (১৮০ms) */
