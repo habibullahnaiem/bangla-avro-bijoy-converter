@@ -258,11 +258,13 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
       // সিন্ধান্ত: উৎসে বাংলা থাকলে, অথবা রূপান্তর-পরবর্তী টেক্সটে বিজয়-
       // পাঙ্কচুয়েশন (দাঁড়ি ', কোট ইত্যাদি) থাকলে → SutonnyMJ; বাকি সব →
       // Times New Roman। এতে দাঁড়ি-শুধু রানও সঠিক ফন্টে থাকে।
-      rFontsAttr(
-        plan.run,
-        ns,
-        needsSutonnyMJ(plan.text, plan.convText) ? "SutonnyMJ" : "Times New Roman",
-      );
+      const want = needsSutonnyMJ(plan.text, plan.convText)
+        ? "SutonnyMJ"
+        : "Times New Roman";
+      rFontsAttr(plan.run, ns, want);
+      // ইংলিশ/ল্যাটিন রানগুলো বাংলার চেয়ে এক ধাপ ছোট (−2pt) — ডকের
+      // ডিফল্ট সাইজ ধরে: বাংলা ডিফল্টে থাকে, ইংলিশে sz কমানো হয়
+      if (want === "Times New Roman") smRunSize(plan.run, ns);
     }
   }
 
@@ -279,6 +281,7 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
     const joined = texts.join("");
     const want = LATIN_RE.test(joined) ? "Times New Roman" : "SutonnyMJ";
     rFontsAttr(run, ns, want);
+    if (want === "Times New Roman") smRunSize(run, ns);
   }
   return new XMLSerializer().serializeToString(doc);
 }
@@ -424,7 +427,9 @@ function splitMixedRun(
     t.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve");
     t.textContent = sanitizeXml(convertFn(seg.text));
     nr.appendChild(t);
-    rFontsAttr(nr, ns, seg.bangla ? "SutonnyMJ" : "Times New Roman");
+    const want = seg.bangla ? "SutonnyMJ" : "Times New Roman";
+    rFontsAttr(nr, ns, want);
+    if (want === "Times New Roman") smRunSize(nr, ns);
     frag.appendChild(nr);
   }
   parent.insertBefore(frag, anchor);
@@ -450,6 +455,60 @@ function rFontsAttr(run: Element, ns: string, want: string): void {
   // নোট: w:rFonts ECMA-376 অনুযায়ী লিফ-এলিমেন্ট (শুধু অ্যাট্রিবিউট, চাইল্ড নোড নেই)।
   // আগে এখানে w:alias চাইল্ড যোগ করা হত (SutonnyMJ বানান-বিকল্পের জন্য) — কিন্তু
   // ওয়ার্ড স্কিমা-ভ্যালিডেশনে এই চাইল্ড রিজেক্ট করে আর ডকুমেন্টই খুলত না। তাই সরিয়ে দেওয়া হয়েছে।
+}
+
+/** ইংলিশ/ল্যাটিন রানের সাইজ −2pt করা (ডকের ডিফল্ট সাইজ ধরে) —
+ *  ডক/প্যারাগ্রাফ স্টাইলের rPr থেকে ডিফল্ট ডকুমেন্ট সাইজ বের করে, তার তুলনায়
+ *  হাফ-পয়েন্ট হিসেবে ৪ কম (2pt) w:sz/w:szCs দেওয়া হয়। ইতোমধ্যে রানের নিজস্ব
+ *  sz থাকলে তার তুলনায় ৪ কম করা হয়। */
+function smRunSize(run: Element, ns: string): void {
+  const doc = run.ownerDocument!;
+  let rPr = run.querySelector(":scope > rPr");
+  if (!rPr) {
+    rPr = doc.createElementNS(ns, "w:rPr");
+    run.insertBefore(rPr, run.firstChild);
+  }
+  const szElem = rPr.querySelector(":scope > sz");
+  const defaultHalf = readDefaultHalfPts(doc, ns);
+  const currentHalf = szElem
+    ? Number(szElem.getAttributeNS(ns, "w:val") ?? defaultHalf)
+    : defaultHalf;
+  const newHalf = Math.max(8, currentHalf - 4); // সর্বনিম্ন 4pt
+  if (szElem) {
+    szElem.setAttributeNS(ns, "w:val", String(newHalf));
+  } else {
+    const np = makeSzElems(doc, ns, newHalf);
+    (rPr ?? run).appendChild(np.sz);
+    (rPr ?? run).appendChild(np.cs);
+  }
+}
+
+/** ডকুমেন্টের ডিফল্ট সাইজ (ডিফল্ট স্টাইল থেকে) হাফ-পয়েন্টে */
+function readDefaultHalfPts(doc: Document, ns: string): number {
+  const normalStyle = Array.from(
+    doc.getElementsByTagNameNS(ns, "docDefaults"),
+  )
+    .map((dd) =>
+      Array.from(dd.getElementsByTagNameNS(ns, "sz")).map((s) =>
+        Number(s.getAttributeNS(ns, "w:val")),
+      ),
+    )
+    .flat()
+    .find((v) => Number.isFinite(v) && v > 0);
+  return normalStyle ?? 28; // ফলব্যাক: 14pt (28 হাফ-পয়েন্ট)
+}
+
+/** w:sz + w:szCs এলিমেন্ট জোড়া (বাংলা cs-টেক্সটেও প্রযোজ্য হয়) */
+function makeSzElems(
+  doc: Document,
+  ns: string,
+  half: number,
+): { sz: Element; cs: Element } {
+  const sz = doc.createElementNS(ns, "w:sz");
+  sz.setAttributeNS(ns, "w:val", String(half));
+  const cs = doc.createElementNS(ns, "w:szCs");
+  cs.setAttributeNS(ns, "w:val", String(half));
+  return { sz, cs };
 }
 
 /** রান-এ rPr/rFonts না থাকলে SutonnyMJ হিন্ট দাও; থাকলে নাম বদলাও */
