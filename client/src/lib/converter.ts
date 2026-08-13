@@ -29,6 +29,17 @@ export type ConvertDirection = "u2b" | "b2u";
  * বদলায় এবং [ ] ( ) সঠিক কোডেই রাখে — তাই প্রি-ম্যাপে দাঁড়ি/ব্র্যাকেট টাচ না
  * করে শুধু উদ্ধৃতি ও ড্যাশ ফিক্স করা হয়।
  */
+// ইংরেজি-প্রসঙ্গের কর্লি-কোট/ড্যাশকে ASCII-সমতুল্যে নেউট্রাল করা —
+// রান-ভাগের আগে ডক্স-পাইপলাইন আর ব্রাউজার-পাইপলাইন দুই জায়গাই ব্যবহৃত।
+function neutralizeLatinPunct(s: string): string {
+  return s
+    .replace(/\u201C/g, '"')
+    .replace(/\u201D/g, '"')
+    .replace(/\u2018/g, "'")
+    .replace(/\u2019/g, "'")
+    .replace(/[\u2014\u2013]/g, "-");
+}
+
 function preMapPunctuation(s: string): string {
   const map: Record<string, string> = {
     // দাঁড়ি ও ব্র্যাকেট লাইব্রেরি সঠিকভাবেই | (U+007C), [ ] (U+005B/U+005D)
@@ -41,6 +52,19 @@ function preMapPunctuation(s: string): string {
     "\u2018": "\u00D4", // ‘ open single
     "\u2019": "\u00D5", // ’ close single / apostrophe
   };
+  // ইংরেজি-প্রসঙ্গের কর্লি-কোট/ড্যাশ কোথায়? টেক্সটে অন্য কোনো বাংলা
+  // অক্ষর নেই এবং লাতিন-চরিত্রের পাশে (অথবা কোনো পাশেই কিছু নেই) — সেগুলো
+  // নেউট্রাল করা হয় কারণ লাইব্রেরি নিজেই “ ” — কে Ò Ó Ñ-এ ম্যাপ করে ফেলে।
+  // বাংলা-প্রসঙ্গের ড্যাশ/কোট আগের মতই নিচে বিজয়-কোডে ম্যাপ হয়।
+  if (!BANGLA_RE.test(s)) {
+    const hasLatin = /[A-Za-z0-9]/.test(s);
+    if (hasLatin) return neutralizeLatinPunct(s);
+    // শুধু-বিরামচিহ্ন স্ট্রিং (কোনো লেখা নেই) — উদাহরণ: দুটো বাংলা
+    // শব্দের মাঝে একটি এন-ড্যাশ রান। এখানে বিজয়-কোডে ম্যাপ করা হয়
+    // (এম/এন-ড্যাশ → Ñ, কোট → ঊ/ডি ওপেন/ক্লোজ ক্রমে) এবং নেবার-কনটেক্সট
+    // দিয়ে পরে ফন্ট নির্ধারণ করা হয়।
+    s = s.replace(/[\u2014\u2013]/g, "\u00D1");
+  }
   let out = "";
   let open = true;
   for (const ch of s) {
@@ -222,13 +246,57 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
     convText: string; // রূপান্তর-পরবর্তী টেক্সট — পাঙ্কচুয়েশন-শুধু রান (যেমন দাঁড়ি)
   }[] = []; // SutonnyMJ পেতে পারে কিনা সেটার জন্য দরকার।
 
+  // পাঙকচুয়েশন-শুধু রানের প্রসঙ্গ নির্ণয়ের জন্য আগে-পিছের রানের টেক্সট লাগে —
+  // সেজন্য প্রথমে সব টেক্সট নোডের কন্টেক্সট হিসাব করি।
+  const contextOf = new Map<Element, "bangla" | "latin" | "punct">();
+  for (const node of textNodes) {
+    const text = node.textContent ?? "";
+    const run = node.parentElement; // w:r
+    if (!run) continue;
+    const hasLat = LATIN_RE.test(text);
+    const hasBan = BANGLA_RE.test(text);
+    if (hasBan) {
+      contextOf.set(run, "bangla");
+    } else if (hasLat) {
+      contextOf.set(run, "latin");
+    } else {
+      contextOf.set(run, "punct"); // শুধু-বিরামচিহ্ন — পরে নেবার-কন্টেক্সট দেখে নির্ণয়
+    }
+  }
+  // দ্বিতীয় ধাপ: শুধু-বিরামচিহ্ন রানের প্রসঙ্গ — দূরত্ব-সীমিত নেবার-দেখা:
+  // দুই দিকে অনধিক ৩ রান অবধি দেখা হয়; বাংলা-প্রসঙ্গের পাশে থাকলে বাংলা।
+  for (const node of textNodes) {
+    const run = node.parentElement;
+    if (!run || contextOf.get(run) !== "punct") continue;
+    let found: "bangla" | "latin" | null = null;
+    for (let d = 1; d <= 3 && !found; d++) {
+      for (const sib of [run.previousElementSibling, run.nextElementSibling]) {
+        if (!sib || sib.localName !== "r") continue;
+        const c = contextOf.get(sib as Element);
+        if (c === "bangla") { found = "bangla"; break; }
+        if (c === "latin") { found = "latin"; break; }
+      }
+    }
+    contextOf.set(run, found ?? "bangla"); // সংদর্ভ অজানা হলে ডকুলেন্টে বাংলাই প্রাধান্য
+  }
+
   for (const node of textNodes) {
     const text = node.textContent ?? "";
     if (!text || !hasBanglaOrPunct(text)) continue;
-    const converted = sanitizeXml(convertFn(text));
+    const run = node.parentElement!;
+    const ctx = contextOf.get(run) ?? "punct";
+    // নেবার-কনটেক্সট দিয়ে রূপান্তর: পাঙকচুয়েশন-শুধু রান প্রসঙ্গ অনুযায়ী —
+    // লাতিন-প্রসঙ্গে ASCII-সমতুল্য, বাংলা-প্রসঙ্গে সুনতন্নী ড্যাশ/কোট-কোড।
+    // লাতিন-প্রসঙ্গে কর্লি-কোট/ড্যাশ-টাইপ বিরামচিহ্নকে আগেই ASCII-সমতুল্যে
+    // নেউট্রাল করা হয় (সুনতন্নী-কোডে ম্যাপ হওয়ার আগে), ফলে লাইব্রেরি আর
+    // এগুলোকে হ-/র-আকারের সুনতন্নী গ্লিফে বদলায় না।
+    const conv =
+      ctx === "latin"
+        ? convertToBijoy(neutralizeLatinPunct(text))
+        : convertToBijoy(text);
+    const converted = sanitizeXml(conv);
     node.textContent = converted;
 
-    const run = node.parentElement; // w:r
     if (run && run.localName === "r" && !runPlans.some((p) => p.run === run)) {
       runPlans.push({
         run,
@@ -325,15 +393,33 @@ export function segmentBijoyText(text: string): { text: string; bangla: boolean 
   const segments: { text: string; bangla: boolean }[] = [];
   let curText = "";
   let curBangla = false;
-  for (const ch of text) {
-    const banglaPunct = /[\u0980-\u09FF।॥\u2014\u2013\u201C\u201D\u2018\u2019,’;\u0022\u0027]/.test(ch);
-    const newBangla: boolean = BANGLA_RE.test(ch)
-      ? true
-      : banglaPunct
-        ? true
-        : /[A-Za-z0-9]/.test(ch)
-          ? false
-          : curBangla;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    const prevLetter = i > 0 && /[A-Za-z0-9\u0980-\u09FF]/.test(text[i - 1]);
+    const nextLetter =
+      i + 1 < text.length && /[A-Za-z0-9\u0980-\u09FF]/.test(text[i + 1]);
+    const banglaPunct = /[।॥\u2014\u2013\u201C\u201D\u2018\u2019,’;\u0022\u0027]/.test(ch);
+    let newBangla: boolean;
+    if (BANGLA_RE.test(ch)) {
+      newBangla = true;
+    } else if (banglaPunct) {
+      // নিকটতম-সাথি লেখা-চরিত্র: যেকোনো পাশে লেখা-চরিত্র থাকলে পাশেরই
+      // সেগমেন্টে; দাঁড়ি/ডাবল-দারি সদাই বাংলা।
+      if (ch === "।" || ch === "॥") {
+        newBangla = true;
+      } else if (prevLetter || nextLetter) {
+        const nearLatin =
+          (i > 0 && /[A-Za-z0-9]/.test(text[i - 1])) ||
+          (i + 1 < text.length && /[A-Za-z0-9]/.test(text[i + 1]));
+        newBangla = !nearLatin;
+      } else {
+        newBangla = curBangla;
+      }
+    } else if (/[A-Za-z0-9]/.test(ch)) {
+      newBangla = false;
+    } else {
+      newBangla = curBangla;
+    }
     if (curText === "" || newBangla === curBangla) {
       curText += ch;
       curBangla = newBangla;
@@ -395,16 +481,40 @@ function splitMixedRun(
   const segments: { text: string; bangla: boolean }[] = [];
   let curText = "";
   let curBangla = false;
-  for (const ch of text) {
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
     const b = BANGLA_RE.test(ch);
     // দাঁড়ি (U+0964), কোট ইত্যাদি বাংলা রেঞ্জের বাইরে, তাই তাদের জন্য
-    // কনটেক্সট উত্তরাধিকার সূত্রে ফেলে: বর্তমান সন্দর্ভের অনুসরণ করে।
+    // কনটেক্সট উত্তরাধিকার সূত্রে ফেলে: বর্তমান সন্ধার্টরের অনুসরণ করে।
     const isPunct = PUNCT_RE.test(ch);
     const isLatinChar = /[A-Za-z0-9]/.test(ch);
-    // নতুন সন্ধার্টার-টাইপ সেগমেন্টের বাংলা-ফ্ল্যাগ:
-    //   বাংলা অক্ষর → বাংলা;  ল্যাটিন অক্ষর/সংখ্যা → নন-বাংলা;
-    //   বাংলা-পাঙ্কচুয়েশন/বাকি সব → আগের সন্দর্ভ বজায় রাখে (ফলো-থ্রু)।
-    const newBangla: boolean = b ? true : isLatinChar ? false : curBangla;
+    // নতুন সেগমেন্টের বাংলা-ফ্ল্যাগ: বাংলা অক্ষর → বাংলা; ল্যাটিন অক্ষর/সংখ্যা →
+    // নন-বাংলা; পাঙ্কচুয়েশন → নিকটতম সাথি-লেখা-চরিত্র দেখে — যেকোনো পাশে লেখা
+    // অক্ষর থাকলে তারই সেগমেন্টে; দাঁড়ি/ডাবল-দারি সদাই বাংলা; নইলে ফলো-থ্রু।
+    let newBangla: boolean;
+    if (b) {
+      newBangla = true;
+    } else if (isLatinChar) {
+      newBangla = false;
+    } else if (isPunct) {
+      if (ch === "।" || ch === "॥" || ch === "।") {
+        newBangla = true;
+      } else if (i > 0 || i + 1 < text.length) {
+        const nearBangla =
+          (i > 0 && BANGLA_RE.test(text[i - 1])) ||
+          (i + 1 < text.length && BANGLA_RE.test(text[i + 1]));
+        const nearLatin =
+          (i > 0 && /[A-Za-z0-9]/.test(text[i - 1])) ||
+          (i + 1 < text.length && /[A-Za-z0-9]/.test(text[i + 1]));
+        if (nearLatin) newBangla = false;
+        else if (nearBangla) newBangla = true;
+        else newBangla = curBangla;
+      } else {
+        newBangla = curBangla;
+      }
+    } else {
+      newBangla = curBangla;
+    }
     if (curText === "" || newBangla === curBangla) {
       curText += ch;
       curBangla = newBangla;

@@ -1,7 +1,20 @@
-# TODO — DOCX dual size
+# TODO — সিস্টেমেটিক বাগ অডিট
 
-- [ ] English/TNR runs in converted DOCX must be 2pt smaller than Bangla runs (e.g. 14→12pt)
-- [ ] Apply at run level in processDocXml where rFonts is set for TNR
-- [ ] Validate on vumika.docx (run XML w:sz for TNR runs is 2pt less than document default)
-- [ ] Zip integrity + LibreOffice open check
-- [ ] Checkpoint + deliver
+## ফেজ ১: কনভার্টার লজিক অডিট
+- [ ] ম্যাপিং টেবিল বনাম কাল্পনিক রেফারেন্স ipaedia ক্রস-চেক: ন্ধ, ন্ত, ল্ল, য়, ড়, ঢ়, র-ফলা, শ-ফলা, হ-ফলা, ঁ
+- [ ] পাঙ্কচুয়েশন: দারি (।), ডাবল-দারি, ব্র্যাকেট, কোট — SutonnyMJ ক্যানোনিকাল চেক
+- [ ] এ-কার-মার্ক (†/‡) শব্দ-শুরুতে ছোট থাকা চেক
+- [ ] রাউন্ড-ট্রিপ: Bijoy→Avro করে আবার Avro→Bijoy — সমতুল্যতা
+- [ ] এজ-কেস: খালি, পিওর-ইংলিশ, পরপর-দারি, নেস্টেড কোট, ইনস্ট্র-টেক্সট
+
+## ফেজ ২: পাইপলাইন/ইউআই অডিট
+- [ ] DOCX: ফন্ট-অ্যাসাইনমেন্ট (TNR −2pt, সুনতন্নী ডিফল্ট) রি-ভ্যালিডেট vumika-তে
+- [ ] ফাইল প্রিভিউ: ডুয়াল-সাইজ সেগমেন্টেশন চেক
+- [ ] কপি বোটাম: রিচ-HTML ক্লিপবোর্ড + ফলব্যাক
+- [ ] টেক্সট প্যানেল: ফন্ট-সাইজ +/− লোকালস্টোরেজ, বিজয়→অভ্র দিক
+- [ ] বিপরীত দিক (b2u): ইনভার্টেড ম্যাপ পরীক্ষা
+
+## ফেজ ৩: ফিক্স + ভ্যালিডেশন
+- [ ] পাওয়া বাগগুলো ফিক্স
+- [ ] vumika.docx + সিন্থেটিক কেস রি-ভ্যালিডেশন (LibreOffice)
+- [ ] চেকপয়েন্ট + রিপোর্ট
