@@ -87,3 +87,10 @@
 - [x] দুই মুখোমুখি arrow-এর মধ্যে A/a/অ ও B/b/ব-এর পরিষ্কার indirect cue রাখা
 - [x] কেবল logo asset ও তার references প্রতিস্থাপন করা
 - [x] mark-এর desktop/favicon readability যাচাই করে checkpoint তৈরি করা
+
+# সংশোধন: অক্ষর-ধারণা আরও স্পষ্ট
+
+- [x] বাম পাশে A/a এবং অ-এর পরিষ্কার paired visual form রাখা
+- [x] ডান পাশে B/b এবং ব-এর পরিষ্কার paired visual form রাখা
+- [x] দুই arrow-কে অক্ষর-জোড়ার মাঝের conversion relationship হিসেবে রাখা
+- [x] শুধু logo asset প্রতিস্থাপন করে favicon ও header readability যাচাই করা

@@ -460,7 +460,7 @@ export default function Home() {
           <div className="flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-foreground/95 p-1 shadow-inner md:h-14 md:w-14">
               <img
-                src="/manus-storage/avro-bijoy-logo-final_9a718995.png"
+                src="/manus-storage/avro-bijoy-letter-pairs_c859b208.png"
                 alt="A ও অ থেকে B ও ব-তে রূপান্তরের চিহ্ন"
                 className="h-full w-full object-contain"
               />
