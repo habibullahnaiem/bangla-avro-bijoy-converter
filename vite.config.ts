@@ -224,6 +224,14 @@ export default defineConfig({
     port: 3000,
     strictPort: false, // Will find next available port if 3000 is busy
     host: true,
+    hmr: {
+      // When the dev server is reached through an HTTPS reverse proxy
+      // (e.g. 3000-*.manus.computer), the browser must open the WebSocket
+      // on the same proxied host/port instead of localhost:3000.
+      protocol: "wss",
+      clientPort: 443,
+      host: true,
+    },
     allowedHosts: [
       ".manuspre.computer",
       ".manus.computer",
