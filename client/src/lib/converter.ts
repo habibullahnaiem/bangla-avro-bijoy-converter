@@ -161,10 +161,9 @@ export function convertToBijoy(text: string): string {
   )
     .replace(/\u2026/g, "...") // লাইব্রেরি-পুনঃতৈরি U+2026 → তিন-ডট
     .replace(/\uE001/g, "\u005C\u005C")
-    // সুনতন্নী-এ ে-কারের শব্দ-শুরুর নেটিভ কোড \u2020 (†) — বযবহারকারী-নিশ্চিত।
-    // লাইব্রেরি মাঝে-মাঝে \u2021 (‡) এমিট করে যার সুনতন্নী-গ্লিফে আগে-থাকা ছোট-মাত্রা আসে।
-    // সব \u2021 → \u2020 নর্মালাইজ করা হয — দুই কোডই একই বিচারের প্রতিনিধিত্ব করে।
-    .replace(/\u2021/g, "\u2020");
+    // লাইব্রেরির native e-kar placement অক্ষুণ্ণ রাখা হয়:
+    // শব্দের শুরুতে † (U+2020), আর শব্দের মাঝখানে ‡ (U+2021)।
+    // ‡-কে † করলে mid-word e-kar-এর মাত্রা ভেঙে যায়।
 }
 
 export function convertToUnicode(text: string): string {
@@ -283,10 +282,8 @@ function convertToBijoyRaw(seg: string): string {
   )
     .replace(/\u2026/g, "...")
     .replace(/\uE001/g, "\u005C\u005C")
-    // সুনতন্নী-এ ে-কারের শব্দ-শুরুর নেটিভ কোড \u2020 (†) — বযবহারকারী-নিশ্চিত।
-    // রান-ভিত্তিক পুনরূৎপাদনে (restoreCleanUnicode) কনটেক্সট হারিয়ে \u2021 পড়লে
-    // দোতারা-কোড মিশে যায় — তাই সব \u2021 → \u2020 একই নেটিভ কোডে সমন্বয় করা হয়।
-    .replace(/\u2021/g, "\u2020");
+    // restoreCleanUnicode-এও native e-kar placement অক্ষুণ্ণ রাখা হয়:
+    // শুরুতে †, শব্দের মাঝে ‡। mid-word মাত্রা রক্ষার জন্য কোনো collapse নয়।
 }
 
 export function convert(text: string, direction: ConvertDirection): string {
