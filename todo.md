@@ -234,3 +234,10 @@
 - [x] preview content-এ internal scroll এবং স্থির/দৃশ্যমান action bar নিশ্চিত করা
 - [x] desktop ও mobile viewport-এ Print/PDF এবং Close buttons দেখা যাচ্ছে যাচাই করা
 - [x] build, converter audit, screenshot ও checkpoint যাচাই করা
+
+# নতুন: Tiro Bangla display typography
+
+- [x] Tiro Bangla font resource লোড করা
+- [x] hero heading ও “উদাহরণ দেখুন” professional sample-এ Tiro Bangla প্রয়োগ করা
+- [x] editor/input Hind Siliguri এবং বিজয় output SutonnyMJ অপরিবর্তিত রাখা
+- [x] desktop/mobile typography, build ও checkpoint যাচাই করা

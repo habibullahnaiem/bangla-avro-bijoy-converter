@@ -733,7 +733,7 @@ export default function Home() {
           </div>
           <div className="hero-panel__copy">
             <p className="eyebrow">অভ্রজয় • বাংলা লিপির সহজ সেতু</p>
-            <h2 className="hero-title text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">
+            <h2 className="hero-title font-display-bn text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">
               অভ্রজয়ে লিখুন, বিজয়ে নিন।
             </h2>
             <p className="hero-summary mt-2 max-w-2xl text-[0.95rem] leading-relaxed text-muted-foreground">
@@ -750,7 +750,7 @@ export default function Home() {
             <Button
               variant="outline"
               size="sm"
-              className="hero-example border-primary/30 text-primary hover:bg-accent"
+              className="hero-example font-display-bn border-primary/30 text-primary hover:bg-accent"
               onClick={loadExample}>
               উদাহরণ দেখুন
             </Button>

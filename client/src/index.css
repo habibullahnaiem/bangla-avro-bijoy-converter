@@ -181,11 +181,19 @@
   }
 
   /* ইনপুট বক্স — হিন্দ সিলিগুড়ি (সলাইমান লিপি/কালপুরুষের মতো) */
-    .font-input-bn {
+  .font-input-bn {
     font-family: "Hind Siliguri", "SolaimanLipi", "Kalpurush", sans-serif;
     font-size: 1.1rem;
     line-height: 1.9;
   }
+
+  /* Display typography: Tiro Bangla for cultural headings and professional sample cues. */
+  .font-display-bn {
+    font-family: "Tiro Bangla", "Noto Serif Bengali", serif;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
   /* আউটপুট বক্স — সুতন্নী এমজে (বিজয়) ও ইংরেজির জন্য Times New Roman
      সাইজ বড় রাখা হয়েছে কারণ সুতন্নীর এ-কার (†/‡) চিহ্ন ছোট গ্লিফ —
      ডিফল্ট সাইজে প্রায় অদৃশ্য লাগে। */
