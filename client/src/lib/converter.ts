@@ -362,10 +362,16 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
       // ইংলিশ/ল্যাটিন রানগুলো বাংলার চেয়ে এক ধাপ ছোট (−2pt) — ডকের
       // ডিফল্ট সাইজ ধরে: বাংলা ডিফল্টে থাকে, ইংলিশে sz কমানো হয়।
       // বয়তিক্রম: সুপারস্ক্রিপ্ট রান (ফুটনোট/ইন্ডনোট রেফারেন্স মার্ক) —
-      // এতে sz কমালে Word-এর নেটিভ মার্কের চেয়ে বহুত ছোট দেখায়,
-      // তাই বেস সাইজেই রাখা হয়।
-      if (want === "Times New Roman" && !isSuperscriptRun(plan.run, ns))
+      // sz কমানোও হয় না, বাড়ানোও হয় না; বেস সাইজই থাকে।
+      // ওয়ার্ড নিজেই এগুলো ইনহেরিটেড সাইজ + vertAlign super দিয়ে আঁকে —
+      // তাই এখানেও হুবহু সেই আচরণ অনুকরণ করা হয় (ম্যানুয়াল মার্কের সমান)।
+      if (want === "Times New Roman") {
+        // সুপারস্ক্রিপ্ট রান (ফুটনোট/ইন্ডনোট মার্ক) — sz কমানোও নয়,
+        // বাড়ানোও নয়; বেস সাইজই রাখা হয়। এটাই Word-এর ম্যানুয়াল
+        // সুপারস্ক্রিপ্ট মার্কের আচরণের সাথে সমান (ইনহেরিটেড সাইজ + super)।
+        if (isSuperscriptRun(plan.run, ns)) continue;
         smRunSize(plan.run, ns);
+      }
     }
   }
 
@@ -382,9 +388,12 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
     const joined = texts.join("");
     const want = LATIN_RE.test(joined) ? "Times New Roman" : "SutonnyMJ";
     rFontsAttr(run, ns, want);
-    // সুপারস্ক্রিপ্ট মার্ক (ফুটনোট/ইন্ডনোট) ছোট না করা — দেখুন উপরের মন্তব্য
-    if (want === "Times New Roman" && !isSuperscriptRun(run, ns))
+    // সুপারস্ক্রিপ্ট মার্ক (ফুটনোট/ইন্ডনোট) — ছোট না করে ৩pt বড় করা
+    if (want === "Times New Roman") {
+      // সুপারস্ক্রিপ্ট মার্ক — বেস সাইজেই রাখা (নেটিভ মার্কের সমান)
+      if (isSuperscriptRun(run, ns)) continue;
       smRunSize(run, ns);
+    }
   }
   return new XMLSerializer().serializeToString(doc);
 }
@@ -628,16 +637,42 @@ function smRunSize(run: Element, ns: string): void {
   }
 }
 
+/** সুপারস্ক্রিপ্ট রানকে বেস সাইজের তুলনায় ৩pt (৬ হাফ-পয়েন্ট) বড় করা —
+ *  Word-এর নেটিভ/ম্যানুয়াল ফুটনোট মার্কের ভিজ্যুয়াল সাইজের সমান হতে।
+ *  sz ইতোমধ্যে থাকলে তার তুলনায় ৬ বেশি, না থাকলে ডিফল্ট তুলনায় ৬ বেশি। */
 /** রান কি সুপারস্ক্রিপ্ট? — ফুটনোট/ইন্ডনোট রেফারেন্স মার্কগুলো Word-এ
  *  w:vertAlign="super" দিয়ে আঁকা হয়। এদের sz কমালে Word-এর নেটিভ মার্কের
  *  তুলনায় বহুত ছোট দেখায়, তাই সাইজ-সংকোচন থেকে বাদ দেওয়া হয়। */
 function isSuperscriptRun(run: Element, ns: string): boolean {
   const rPr = run.querySelector(":scope > rPr");
-  if (!rPr) return false;
-  const va = rPr.querySelector(":scope > vertAlign");
-  if (!va) return false;
-  const v = (va.getAttributeNS(ns, "w:val") ?? "").toLowerCase();
-  return v === "super" || v === "superscript";
+  if (rPr) {
+    const va = rPr.querySelector(":scope > vertAlign");
+    if (va) {
+      const v = ((va.getAttributeNS(ns, "w:val") ??
+        va.getAttribute("w:val") ??
+        "") as string)
+        .toLowerCase();
+      if (v === "super" || v === "superscript") return true;
+    }
+    // ওয়ার্ড-নেটিভ ফুটনোট/ইন্ডনোট রেফারেন্স রান (<w:footnoteReference> / <w:endnoteReference>)
+    // সরাসরি রান-এর অংশ — এগুলোও সুপারস্ক্রিপ্ট মার্ক — এদের ধরা
+    const refs = rPr.querySelectorAll(
+      ":scope > footnoteReference, :scope > endnoteReference",
+    );
+    if (refs.length > 0) return true;
+    // rStyle দিয়ে "Footnote Reference" / "Endnote Reference" স্টাইল-চালিত সুপারও ধরা
+    const rs = rPr.querySelector(":scope > rStyle");
+    if (rs) {
+      const id = (rs.getAttributeNS(ns, "w:val") ?? "").toLowerCase();
+      if (id.includes("footnoteref") || id.includes("endnoteref")) return true;
+    }
+  }
+  // রানের নিচেই সরাসরি note-reference এলিমেন্ট থাকলেও সুপার মার্ক
+  if (
+    run.querySelector(":scope > footnoteReference, :scope > endnoteReference")
+  )
+    return true;
+  return false;
 }
 
 /** ডকুমেন্টের ডিফল্ট সাইজ (ডিফল্ট স্টাইল থেকে) হাফ-পয়েন্টে */
