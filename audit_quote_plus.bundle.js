@@ -911,7 +911,7 @@ var CV = (() => {
         }
         n = replaceFirstLetter(n, "\u2021", "\u2020");
         n = replaceFirstLetter(n, "\u2030", "\u02C6");
-        n = n.replace(/\(‡/g, "(\u2020").replace(/\[‡/g, "[\u2020").replace(/Ô‡/g, "\xD4\u2020").replace(/Ò‡/g, "\xD2\u2020");
+        n = n.replace(/\(†/g, "(\u2020").replace(/\[†/g, "[\u2020").replace(/Ô†/g, "\xD4\u2020").replace(/Ò†/g, "\xD2\u2020");
         n = n.replace(/\(‰/g, "(\u02C6").replace(/\[‰/g, "[\u02C6").replace(/Ô‰/g, "\xD4\u02C6").replace(/Ò‰/g, "\xD2\u02C6");
         n = replaceMultiple(n, data_1.bijoyKarReplacements, true);
         n = replaceMultiple(n, data_1.bijoyRoFolaReplacements, true);
@@ -931,7 +931,7 @@ var CV = (() => {
           if (isUnicode(word)) {
             return word;
           }
-          const looksLikeBijoy = /[A-Za-z|†|‡|¶|¡]/.test(word);
+          const looksLikeBijoy = /[A-Za-z|†|†|¶|¡]/.test(word);
           if (looksLikeBijoy) {
             return bijoyToUnicode(word);
           }

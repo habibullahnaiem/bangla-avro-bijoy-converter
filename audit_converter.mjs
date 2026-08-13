@@ -49,8 +49,8 @@ check("ল্ল", convert("ল্ল"), "jÑ");
 check("য়", convert("য়"), "q");
 check("ড়", convert("ড়"), "W");
 check("ঢ়", convert("ঢ়"), "¯");
-check("্র (র-ফলা)", convert("ক্র"), "‡³");
-check("্শ (শ-ফলা)", convert("কশ্চ"), "‡±");
+check("্র (র-ফলা)", convert("ক্র"), "†³");
+check("্শ (শ-ফলা)", convert("কশ্চ"), "†±");
 check("্ঞ (জ্ঞ)", convert("জ্ঞ"), "Z");
 check("ঁ (অনুনাসিক)", convert("হাঁ"), "NÕ");
 

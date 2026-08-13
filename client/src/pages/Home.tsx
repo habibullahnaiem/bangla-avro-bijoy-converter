@@ -679,7 +679,7 @@ export default function Home() {
                       </span>
                     </TooltipTrigger>
                     <TooltipContent side="bottom" className="max-w-xs whitespace-pre-line text-xs" sideOffset={8}>
-                      শুরুতে এ-কার (ে) → SutonnyMJ-এ U+2021 (‡) কোড — ছোট লেডিং মাত্রা ছাড়াই। উদাহরণ: রেল = ‡ + i + j, কেন = ‡ + K + b। ওয়ার্ডে SutonnyMJ ফন্টে পেস্ট করলে নির্ভুল দেখায়।
+                      শুরুতে এ-কার (ে) → SutonnyMJ-এ U+2020 (†) কোড — ছোট লেডিং মাত্রা ছাড়াই। উদাহরণ: রেল = † + i + j, কেন = † + K + b। ওয়ার্ডে SutonnyMJ ফন্টে পেস্ট করলে নির্ভুল দেখায়।
                     </TooltipContent>
                   </Tooltip>
                 )}
