@@ -110,39 +110,13 @@ function preMapPunctuation(s: string): string {
 // '+' বা অন্য অ-বাংলা চরিত্রের সাথে থাকলে পজিশন ভুল থেকে যায়
 // (যেমন শ+ে+র → k‡++i হয়ে যায়, শব্দ-শুরুতে না)। তাই লাইব্রেরির পরে
 // আবার সরিয়ে দেওয়া হয়।
-function relocatePreKars(s: string): string {
-  // ‡ † ˆ ‰ একটাই একটাই নিয়ে তাদের পজিশন থেকে তুলে নিয়ে ওই "শব্দের"
-  // (পরপর বাংলা/হাফন্ত/প্লাস/ড্যাশ/হাইফেন অংশ) প্রথম স্থানে বসাও
-  const PRE = "\u2021\u2020\u02C6\u2030";
-  // বিজয়-রূপান্তরের পর বাংলা অক্ষর লাতিন a–z কোডে — সেগুলো সবই শব্দের
-  // ভেতরে। শুধু বিরামচিহ্ন (OUT) আর ফাঁক শব্দের সীমান্ত:
-  const OUT = ".,;:!|\\'\"\u00D1\u00D2\u00D3\u00D4\u00D5";
-  let res = "";
-  for (const ch of s) {
-    if (PRE.includes(ch)) {
-      // শব্দ-শুরু = সের আগের যেকোনো OUT/ফাঁকের ঠিক পরে (বা স্ট্রিং-শুরু)
-      let start = 0;
-      for (let i = res.length - 1; i >= 0; i--) {
-        const prev = res[i];
-        if (OUT.includes(prev) || /\s/.test(prev)) {
-          start = i + 1;
-          break;
-        }
-      }
-      res = res.slice(0, start) + ch + res.slice(start);
-    } else {
-      res += ch;
-    }
-  }
-  return res;
-}
-
 export function convertToBijoy(text: string): string {
   // ১) বিরামচিহ্ন প্রথমে বিজয়-কোডে; ২) বাংলা অক্ষর লাইব্রেরি দিয়ে;
-  // ৩) প্লেসহোল্ডার U+E001 → \\\\ (ডাবল-দারি); ৪) প্রি-কার শব্দ-শুরুতে সারাও
-  return relocatePreKars(
-    libUnicodeToBijoy(preMapPunctuation(text)).replace(/\uE001/g, "\u005C\u005C"),
-  );
+  // ৩) প্লেসহোল্ডার U+E001 → \\ (ডাবল-দারি)
+  // নোট: relocatePreKars সরানো হয়েছে — সুনতন্নী/বিজয়ে ‡/† শব্দ-শুরুতে বসানো
+  // আমাদের হাতে পজিশন-বদলানো শব্দ ভেঙে দেয় (কাজ→KvR, কথা→K_v ইত্যাদি)।
+  // লাইব্রেরির ReArrangeUnicodeText পজিশনই সঠিক।
+  return libUnicodeToBijoy(preMapPunctuation(text)).replace(/\uE001/g, "\u005C\u005C");
 }
 
 export function convertToUnicode(text: string): string {
