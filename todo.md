@@ -212,3 +212,11 @@
 - [x] অতিরিক্ত cue সরিয়ে শুধু অভ্র ⇄ বিজয় text branding রাখা
 - [x] exact logo image, header/hero hierarchy ও converter controls অক্ষুণ্ণ রাখা
 - [x] desktop/mobile screenshot, build, regression audit ও checkpoint যাচাই করা
+
+# নতুন: shared Bengali visual language ও logo synchronization
+
+- [x] header ও footer-এ banner-এর মতো low-opacity keyboard texture এবং ছড়ানো বাংলা অক্ষরের motif নির্ধারণ করা
+- [x] header/footer-এ ডানদিকে তুলনামূলক ঘন decorative glyph cluster রেখে readable brand/content space অক্ষুণ্ণ রাখা
+- [x] footer logo-কে header-এর exact supplied logo asset/reference-এর সঙ্গে synchronize করা
+- [x] mobile hero overlap fix-এর সঙ্গে header/footer decorative layers-এর responsive behavior যাচাই করা
+- [x] desktop/mobile screenshot, build, converter audit ও checkpoint যাচাই করা

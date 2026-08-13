@@ -62,6 +62,11 @@ const EXAMPLE_TEXT = `আমাদের তৈরিকৃত অভ্র/ই�
 
 const HISTORY_STORAGE_KEY = "abc-recent-conversions";
 const MAX_HISTORY_ITEMS = 6;
+const BRAND_LOGO_SRC = "/manus-storage/bangla-converter-exact-reference-logo_2f0bb0ec.png";
+const DECORATIVE_GLYPHS = [
+  "অ", "আ", "ই", "ঈ", "উ", "ক", "খ", "গ", "ঘ", "চ", "ছ", "ত",
+  "থ", "ন", "প", "ফ", "ব", "ম", "র", "ল", "শ", "স", "হ",
+] as const;
 
 type ConversionHistoryItem = {
   id: string;
@@ -663,17 +668,17 @@ export default function Home() {
 
   return (
     <div className="app-shell min-h-screen flex flex-col bg-background">
-      {/* হেডার — গভীর টিল */}
+      {/* হেডার — গভীর টিল, low-opacity keyboard ও ডানদিকে ঘন Bengali glyph cluster */}
       <header className="site-header relative overflow-hidden bg-primary text-primary-foreground">
-        {/* ⇄ মোটিফ ব্যাকগ্রাউন্ড */}
+        {/* ডিজাইন দিক: টিল ডেস্ক — banner-এর alphabet/keyboard visual language header-এও চলবে */}
         <div
-          className="site-header__motif pointer-events-none absolute inset-y-0 right-0 flex items-center opacity-[0.07]"
+          className="site-header__motif pointer-events-none absolute inset-y-0 right-0 flex items-center"
           aria-hidden>
-          {Array.from({ length: 6 }).map((_, i) => (
+          {DECORATIVE_GLYPHS.map((glyph, i) => (
             <span
-              key={i}
-              className="select-none text-5xl font-black tracking-tight md:text-7xl">
-              ⇄
+              key={`${glyph}-${i}`}
+              className="site-header__glyph select-none font-black tracking-tight">
+              {glyph}
             </span>
           ))}
         </div>
@@ -689,7 +694,7 @@ export default function Home() {
                 className="pointer-events-none absolute inset-0 rounded-2xl border border-transparent transition-colors duration-300 group-hover/logo:border-accent/70 group-focus-visible/logo:border-accent/70 motion-reduce:transition-none"
               />
               <img
-                src="/manus-storage/bangla-converter-exact-reference-logo_2f0bb0ec.png"
+                src={BRAND_LOGO_SRC}
                 alt="অভ্র ও বিজয় রূপান্তরের চিহ্ন"
                 className="relative h-full w-full object-contain transition-transform duration-300 ease-out group-hover/logo:rotate-[1.5deg] group-focus-visible/logo:rotate-[1.5deg] motion-reduce:transform-none motion-reduce:transition-none"
               />
@@ -733,9 +738,9 @@ export default function Home() {
               অভ্রজয়ে লিখুন, বিজয়ে নিন।
             </h2>
             <p className="hero-summary mt-2 max-w-2xl text-[0.95rem] leading-relaxed text-muted-foreground">
-              অভ্র/ইউনিকোড ⇄ বিজয় রূপান্তরের জন্য একটি পরিষ্কার বাংলা workspace।
-              যুক্তাক্ষর, যতিচিহ্ন, DOCX/TXT ফাইল এবং বাংলা–ইংরেজির font-aware
-              preview—সবকিছু এক জায়গায় সামলান।
+              অভ্র/ইউনিকোড ⇄ বিজয় রূপান্তরের নির্ভরযোগ্য বাংলা publishing desk।
+              যুক্তাক্ষর, যতিচিহ্ন, DOCX/TXT ফাইল এবং font-aware বাংলা–ইংরেজি
+              preview—লেখক ও প্রকাশকের কাজ এক জায়গায় সামলান।
             </p>
           </div>
           <div className="hero-panel__actions">
@@ -1475,9 +1480,30 @@ export default function Home() {
         </section>
       </main>
 
-      {/* ফুটার */}
-      <footer className="mt-6 border-t bg-primary py-6 text-primary-foreground">
-        <div className="container flex flex-col items-center gap-1 text-center text-sm">
+      {/* ফুটার — header-এর exact logo, banner-inspired keyboard ও Bengali glyph layer */}
+      <footer className="site-footer mt-6 border-t bg-primary py-6 text-primary-foreground">
+        <div
+          className="site-footer__motif pointer-events-none absolute inset-0"
+          aria-hidden>
+          {DECORATIVE_GLYPHS.slice().reverse().map((glyph, i) => (
+            <span
+              key={`footer-${glyph}-${i}`}
+              className="site-footer__glyph select-none font-black">
+              {glyph}
+            </span>
+          ))}
+        </div>
+        <div className="site-footer__inner container relative flex flex-col items-center gap-2 text-center text-sm">
+          <a
+            href="/"
+            aria-label="অভ্রজয় (AvroJoy)-এর হোম"
+            className="site-footer__logo group/footer-logo relative flex h-12 w-[4.7rem] items-center justify-center overflow-hidden rounded-xl bg-primary-foreground/95 p-0.5 shadow-inner transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:scale-[1.04] hover:shadow-lg focus-visible:-translate-y-0.5 focus-visible:scale-[1.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 motion-reduce:transform-none motion-reduce:transition-none">
+            <img
+              src={BRAND_LOGO_SRC}
+              alt="অভ্র ও বিজয় রূপান্তরের চিহ্ন"
+              className="h-full w-full object-contain transition-transform duration-300 ease-out group-hover/footer-logo:rotate-[1.5deg] group-focus-visible/footer-logo:rotate-[1.5deg] motion-reduce:transform-none motion-reduce:transition-none"
+            />
+          </a>
           <p className="flex flex-wrap items-center justify-center gap-2 font-semibold">
             <span className="inline-flex h-7 items-center rounded-full bg-primary-foreground/15 px-2.5 font-serif text-[11px] font-black tracking-tight">
               অভ্র ⇄ বিজয়

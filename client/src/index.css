@@ -968,3 +968,179 @@ button:active {
       url("/manus-storage/bangla-converter-keyboard-background_fad26d5c.png") center / 170% auto repeat;
   }
 }
+
+/* ডিজাইন দিক: টিল ডেস্ক — AvroJoy-এর shared Bengali visual language;
+   hero, header ও footer-এ low-opacity keyboard, ডানদিকে ঘন glyph cluster,
+   এবং exact logo-র চারপাশে পরিষ্কার Bengali-first reading space। */
+@media screen {
+  .site-header {
+    background:
+      linear-gradient(90deg, oklch(0.42 0.09 200 / 0.98) 0%, oklch(0.42 0.09 200 / 0.94) 48%, oklch(0.39 0.09 195 / 0.78) 100%),
+      url("/manus-storage/avrojoy-bengali-glyph-ribbon_f006d975.png") right center / cover no-repeat,
+      url("/manus-storage/bangla-converter-keyboard-background_fad26d5c.png") center top / 760px auto repeat;
+  }
+
+  .site-header__inner,
+  .site-brand,
+  .site-header .group\/logo {
+    z-index: 2;
+  }
+
+  .site-header__motif {
+    width: min(58%, 46rem);
+    justify-content: flex-end;
+    gap: clamp(0.1rem, 0.7vw, 0.72rem);
+    padding: 0.4rem 0.75rem 0.4rem 2.5rem;
+    overflow: hidden;
+    transform: none;
+    opacity: 1;
+  }
+
+  .site-header__glyph {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: oklch(0.88 0.13 190 / 0.2);
+    font-size: clamp(1.8rem, 4.4vw, 4.8rem);
+    line-height: 0.85;
+    text-shadow: 0 3px 16px oklch(0.08 0.03 200 / 0.14);
+  }
+
+  .site-header__glyph:nth-child(3n) {
+    color: oklch(0.84 0.17 75 / 0.22);
+    transform: translateY(0.25rem) rotate(-7deg);
+  }
+
+  .site-header__glyph:nth-child(3n + 1) {
+    color: oklch(0.79 0.16 30 / 0.22);
+    transform: translateY(-0.18rem) rotate(5deg);
+  }
+
+  .hero-panel {
+    min-height: clamp(13.5rem, 23vw, 18rem);
+    background:
+      linear-gradient(90deg, oklch(0.99 0.008 205 / 0.99) 0%, oklch(0.99 0.012 195 / 0.96) 42%, oklch(0.97 0.03 190 / 0.55) 73%, transparent 100%),
+      url("/manus-storage/avrojoy-hero-v2-banner_b1dad7f4.png") right center / cover no-repeat,
+      url("/manus-storage/bangla-converter-keyboard-background_fad26d5c.png") right center / 64% auto repeat;
+  }
+
+  .hero-panel__copy,
+  .hero-panel__actions,
+  .hero-panel__signature {
+    z-index: 2;
+  }
+
+  .site-footer {
+    background:
+      linear-gradient(90deg, oklch(0.42 0.09 200 / 0.98) 0%, oklch(0.42 0.09 200 / 0.93) 48%, oklch(0.38 0.09 195 / 0.78) 100%),
+      url("/manus-storage/avrojoy-bengali-glyph-ribbon_f006d975.png") right center / cover no-repeat,
+      url("/manus-storage/bangla-converter-keyboard-background_fad26d5c.png") center / 760px auto repeat;
+  }
+
+  .site-footer__motif {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: clamp(0.25rem, 1.1vw, 1rem);
+    padding: 0.25rem clamp(0.75rem, 5vw, 5rem);
+    overflow: hidden;
+    opacity: 1;
+  }
+
+  .site-footer__glyph {
+    color: oklch(0.88 0.13 190 / 0.18);
+    font-size: clamp(1.7rem, 3.8vw, 3.5rem);
+    line-height: 0.82;
+    text-shadow: 0 3px 14px oklch(0.08 0.03 200 / 0.16);
+  }
+
+  .site-footer__glyph:nth-child(3n) {
+    color: oklch(0.84 0.17 75 / 0.2);
+    transform: translateY(0.2rem) rotate(6deg);
+  }
+
+  .site-footer__glyph:nth-child(3n + 1) {
+    color: oklch(0.79 0.16 30 / 0.2);
+    transform: translateY(-0.16rem) rotate(-5deg);
+  }
+
+  .site-footer__inner {
+    z-index: 1;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .site-header__motif {
+    width: 48%;
+    gap: 0.18rem;
+    padding-left: 0.5rem;
+    padding-right: 0.45rem;
+  }
+
+  .site-header__glyph {
+    font-size: clamp(1.35rem, 7vw, 2.2rem);
+  }
+
+  .hero-panel {
+    min-height: 0;
+    align-items: stretch;
+    gap: 0.8rem;
+    padding: 3.35rem 1rem 1.15rem;
+    background:
+      linear-gradient(90deg, oklch(0.99 0.008 205 / 0.99) 0%, oklch(0.99 0.012 195 / 0.93) 58%, oklch(0.96 0.03 190 / 0.42) 100%),
+      url("/manus-storage/avrojoy-hero-v2-banner_b1dad7f4.png") 82% center / auto 100% no-repeat,
+      url("/manus-storage/bangla-converter-keyboard-background_fad26d5c.png") center / 190% auto repeat;
+  }
+
+  .hero-panel__signature {
+    position: absolute;
+    top: 0.92rem;
+    right: 1rem;
+    left: auto;
+    order: initial;
+  }
+
+  .hero-panel__copy,
+  .hero-panel__actions {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .site-footer__motif {
+    gap: 0.2rem;
+    padding-inline: 0.45rem;
+  }
+
+  .site-footer__glyph {
+    font-size: clamp(1.25rem, 6vw, 2rem);
+  }
+}
+
+/* ডিজাইন দিক: টিল ডেস্ক — compact product-first hero; crisp teal authority,
+   white editor surfaces, paper-blue canvas এবং restrained shadow। */
+@media screen and (min-width: 768px) {
+  .hero-panel {
+    min-height: clamp(11.5rem, 17vw, 15rem);
+    padding-top: clamp(1.15rem, 2.4vw, 1.85rem);
+    padding-bottom: clamp(1rem, 2vw, 1.45rem);
+    border-color: oklch(0.75 0.07 195 / 0.72);
+    box-shadow: 0 10px 24px oklch(0.22 0.045 210 / 0.1);
+  }
+
+  .hero-panel__copy {
+    max-width: 57%;
+  }
+
+  .hero-summary {
+    color: oklch(0.35 0.035 215);
+  }
+
+  .workspace-tabs {
+    margin-top: 0.15rem;
+  }
+
+  .workspace-card {
+    border-color: oklch(0.68 0.08 195 / 0.56);
+    box-shadow: 0 16px 32px oklch(0.22 0.045 210 / 0.12);
+  }
+}
