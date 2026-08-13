@@ -460,8 +460,8 @@ export default function Home() {
           <div className="flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-foreground/95 p-1 shadow-inner md:h-14 md:w-14">
               <img
-                src="/manus-storage/avro-bijoy-logo_c07dbadf.png"
-                alt="অভ্র ও বিজয় রূপান্তর চিহ্ন"
+                src="/manus-storage/avro-bijoy-opposing-arrows_d4daace7.png"
+                alt="মুখোমুখি দুই arrow-সহ অভ্র ও বিজয় রূপান্তর চিহ্ন"
                 className="h-full w-full object-contain"
               />
             </div>

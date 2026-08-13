@@ -66,3 +66,10 @@
 - [x] স্বচ্ছ background-এ header ও favicon-উপযোগী logo asset তৈরি করা
 - [x] header, browser metadata এবং favicon-এ logo বসানো
 - [x] desktop/mobile preview যাচাই এবং নতুন checkpoint তৈরি করা
+
+# নতুন: মুখোমুখি দুই arrow লোগো
+
+- [x] মুখোমুখি দুইটি arrow-কে প্রধান mark হিসেবে নির্ধারণ করা
+- [x] স্বচ্ছ background-এ header ও favicon-উপযোগী revised logo তৈরি করা
+- [x] header, favicon এবং apple-touch icon-এ revised logo বসানো
+- [x] desktop/mobile preview যাচাই এবং নতুন checkpoint তৈরি করা
