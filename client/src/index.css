@@ -472,9 +472,19 @@ button:active {
 }
 
   .bijoy-rich {
-    background: oklch(0.998 0.006 190 / 0.76);
+    /* Teal Desk output surface: opaque so the synchronization layer cannot
+       wash the Bijoy glyphs out with a pale white veil. */
+    background: oklch(1 0 0);
     cursor: text;
+    position: relative;
+    z-index: 1;
     user-select: text;
+  }
+
+  /* The hidden selection mirror must never contribute a visible surface
+     beneath the readable preview. */
+  .abc-no-native-sel {
+    background: transparent !important;
   }
 
   .bijoy-rich::selection,

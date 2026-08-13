@@ -141,3 +141,10 @@
 - [ ] uploaded DOCX/TXT নির্বাচন ও preview copy করার পর file state অক্ষুণ্ণ রাখা
 - [ ] reset control ছাড়া কোনো accidental clear না হওয়া নিশ্চিত করা
 - [ ] mouse drag, Ctrl/Cmd+C, full copy, mobile behavior, build ও checkpoint যাচাই করা
+
+# নতুন: বিজয় আউটপুটের ফ্যাকাসে overlay/contrast সমস্যা
+
+- [ ] output pane-এর সাদা overlay-এর উৎস: background, textarea layering ও opacity trace করা
+- [ ] বিজয় preview-কে অভ্র input pane-এর মতো পরিষ্কার, opaque surface ও readable contrast দেওয়া
+- [ ] native text selection, selected copy এবং uploaded-file persistence অক্ষুণ্ণ রাখা
+- [ ] desktop/mobile screenshot, build, audit ও checkpoint যাচাই করা
