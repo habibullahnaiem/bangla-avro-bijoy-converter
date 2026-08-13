@@ -471,9 +471,23 @@ button:active {
   line-height: 1.35;
 }
 
-.bijoy-rich {
-  background: oklch(0.998 0.006 190 / 0.76);
-}
+  .bijoy-rich {
+    background: oklch(0.998 0.006 190 / 0.76);
+    cursor: text;
+    user-select: text;
+  }
+
+  .bijoy-rich::selection,
+  .bijoy-rich *::selection {
+    background: rgb(13 148 136 / 0.26);
+    color: inherit;
+  }
+
+  .bijoy-rich::-moz-selection,
+  .bijoy-rich *::-moz-selection {
+    background: rgb(13 148 136 / 0.26);
+    color: inherit;
+  }
 
 .converter-actionbar {
   min-height: 5.1rem;

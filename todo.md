@@ -125,3 +125,11 @@
 - [x] “রূপান্তর করুন” action bar-কে editor content থেকে স্থির রাখা
 - [x] দীর্ঘ টেক্সট, mobile width, keyboard focus এবং copy behavior যাচাই করা
 - [x] production build, screenshot ও নতুন checkpoint তৈরি করা
+
+# নতুন: Selected Bijoy output copy
+
+- [x] visible output-এর বর্তমান selection, hidden textarea এবং pointer mapping audit করা
+- [x] মাউস drag করে selected অংশ nativeভাবে নির্বাচনযোগ্য করা
+- [x] Ctrl/Cmd+C-তে selected অংশ কপি এবং full-copy control অক্ষুণ্ণ রাখা
+- [x] mixed-size output, long text, keyboard selection ও mobile behavior যাচাই করা
+- [x] production build, screenshot ও নতুন checkpoint তৈরি করা

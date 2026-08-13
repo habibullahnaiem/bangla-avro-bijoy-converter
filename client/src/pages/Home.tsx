@@ -541,6 +541,38 @@ export default function Home() {
     }
   };
 
+  const copySelectedPreview = (e: React.ClipboardEvent<HTMLDivElement>) => {
+    if (direction !== "u2b") return;
+    const selection = window.getSelection();
+    const preview = outPreviewRef.current;
+    if (!selection || selection.isCollapsed || !preview) return;
+    const anchor = selection.anchorNode;
+    const focus = selection.focusNode;
+    if (!anchor || !focus || !preview.contains(anchor) || !preview.contains(focus)) return;
+
+    const fragment = selection.getRangeAt(0).cloneContents();
+    const wrapper = document.createElement("div");
+    wrapper.appendChild(fragment);
+    wrapper.querySelectorAll<HTMLElement>(".seg-bn").forEach((node) => {
+      node.style.fontFamily = "SutonnyMJ";
+      node.style.fontSize = `${bnPx}px`;
+    });
+    wrapper.querySelectorAll<HTMLElement>(".seg-lat").forEach((node) => {
+      node.style.fontFamily = '"Times New Roman", Times, serif';
+      node.style.fontSize = `${latPx}px`;
+    });
+
+    e.preventDefault();
+    e.clipboardData.setData("text/plain", selection.toString());
+    e.clipboardData.setData(
+      "text/html",
+      `<div style="font-family:SutonnyMJ;font-size:${bnPx}px">${wrapper.innerHTML}</div>`,
+    );
+    setCopied(true);
+    toast.success("নির্বাচিত বিজয় টেক্সট কপি করা হয়েছে");
+    window.setTimeout(() => setCopied(false), 1500);
+  };
+
   function adjustFontSize(delta: number) {
     setFontSize((s) => {
       const next = Math.min(32, Math.max(12, s + delta));
@@ -838,9 +870,7 @@ export default function Home() {
                     className="bijoy-rich h-full min-h-0 select-text overflow-y-auto px-3 py-2"
                     style={{ fontSize: `${bnPx}px` }}
                     onScroll={(e) => syncScroll(e.currentTarget, outAreaRef.current)}
-                    onMouseDown={previewMouseDown}
-                    onMouseMove={previewMouseMove}
-                    onMouseUp={previewMouseUp}>
+                    onCopy={copySelectedPreview}>
                     {renderRichSegments()}
                   </div>
                 )}
