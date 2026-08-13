@@ -1521,12 +1521,12 @@ export default function Home() {
       {printPreviewOpen && filePrintText && (
         <div className="print-preview-backdrop fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-4 backdrop-blur-sm">
           <section
-            className="print-preview-dialog flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border bg-card shadow-2xl"
+            className="print-preview-dialog flex min-h-0 max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border bg-card shadow-2xl"
             role="dialog"
             aria-modal="true"
             aria-labelledby="print-preview-title">
-            <div className="print-preview-actions flex items-center justify-between gap-3 border-b bg-secondary/60 px-4 py-3">
-              <div>
+            <div className="print-preview-actions flex shrink-0 items-center justify-between gap-3 border-b bg-secondary/60 px-4 py-3">
+              <div className="min-w-0">
                 <h2 id="print-preview-title" className="font-bold text-foreground">
                   প্রিন্ট / PDF প্রিভিউ
                 </h2>
@@ -1544,7 +1544,7 @@ export default function Home() {
                 <X className="h-4 w-4" />
               </Button>
             </div>
-            <div className="print-preview-paper overflow-y-auto bg-white p-6 text-slate-900 sm:p-10">
+            <div className="print-preview-paper min-h-0 flex-1 overflow-y-auto bg-white p-6 text-slate-900 sm:p-10">
               <div className="print-preview-paper__meta mb-5 border-b border-slate-200 pb-3 text-sm text-slate-500">
                 {fileResult?.name ?? "রূপান্তরিত ডকুমেন্ট"}
               </div>
@@ -1567,7 +1567,7 @@ export default function Home() {
                 ))}
               </div>
             </div>
-            <div className="print-preview-actions flex flex-wrap justify-end gap-2 border-t bg-muted/40 px-4 py-3">
+            <div className="print-preview-actions flex shrink-0 flex-wrap justify-end gap-2 border-t bg-muted/40 px-4 py-3">
               <Button type="button" variant="outline" onClick={() => setPrintPreviewOpen(false)}>
                 বন্ধ করুন
               </Button>

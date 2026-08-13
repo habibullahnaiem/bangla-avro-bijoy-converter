@@ -227,3 +227,10 @@
 - [x] নাম, প্রকাশনা-ধাঁচের অনুচ্ছেদ, যুক্তবর্ণ, যতিচিহ্ন ও বাংলা–ইংরেজি mixed sample সাজানো
 - [x] section-টিকে professional Bengali-first presentation-এ update করা
 - [x] desktop/mobile rendering, build, converter audit ও checkpoint যাচাই করা
+
+# নতুন: print/PDF preview action visibility
+
+- [x] preview dialog-এর content overflow ও action-footer positioning audit করা
+- [x] preview content-এ internal scroll এবং স্থির/দৃশ্যমান action bar নিশ্চিত করা
+- [x] desktop ও mobile viewport-এ Print/PDF এবং Close buttons দেখা যাচ্ছে যাচাই করা
+- [x] build, converter audit, screenshot ও checkpoint যাচাই করা
