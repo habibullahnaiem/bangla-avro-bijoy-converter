@@ -937,3 +937,34 @@ button:active {
     font-size: 0.58rem;
   }
 }
+
+/* ডিজাইন দিক: টিল ডেস্ক — keyboard-led AvroJoy restoration;
+   keyboard keys, glyph specimens ও conversion desk-ই হবে প্রধান visual language। */
+@media screen {
+  .app-shell {
+    background:
+      linear-gradient(180deg, oklch(0.985 0.006 220 / 0.82), oklch(0.965 0.009 215 / 0.74)),
+      url("/manus-storage/bangla-converter-keyboard-background_fad26d5c.png") center top / 760px auto repeat,
+      var(--background);
+  }
+
+  .hero-panel {
+    background:
+      linear-gradient(100deg, oklch(1 0 0 / 0.98) 0%, oklch(0.985 0.012 195 / 0.9) 54%, oklch(0.93 0.04 190 / 0.72) 100%),
+      url("/manus-storage/bangla-converter-keyboard-background_fad26d5c.png") right center / 64% auto repeat;
+  }
+
+  .glyph-strip {
+    background:
+      linear-gradient(90deg, oklch(0.98 0.02 195 / 0.94), oklch(1 0 0 / 0.9) 38%, oklch(0.96 0.03 205 / 0.88)),
+      url("/manus-storage/bangla-converter-keyboard-background_fad26d5c.png") right center / 220px auto repeat;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .hero-panel {
+    background:
+      linear-gradient(135deg, oklch(1 0 0 / 0.97), oklch(0.975 0.018 195 / 0.86)),
+      url("/manus-storage/bangla-converter-keyboard-background_fad26d5c.png") center / 170% auto repeat;
+  }
+}

@@ -191,3 +191,10 @@
 - [x] card-গুলোতে ছোট, বাস্তবসম্মত practical example যোগ করা
 - [x] icon-এর accessible label, spacing, contrast ও Bengali typography যাচাই করা
 - [x] desktop/mobile layout, build, screenshot ও checkpoint যাচাই করা
+
+# সংশোধন: আগের keyboard-themed visual ফিরিয়ে আনা
+
+- [x] earlier keyboard-key background, glyph strip ও blue/green accent layer চিহ্নিত করা
+- [x] feature-card icon ও practical example রেখে keyboard-themed styling restore করা
+- [x] hero/converter hierarchy, contrast ও Bengali-first visual treatment যাচাই করা
+- [x] desktop/mobile screenshot, build, regression audit ও checkpoint যাচাই করা
