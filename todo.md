@@ -162,3 +162,10 @@
 - [x] transparent background-এ scalable blue/green conversion logo তৈরি করা
 - [x] header, favicon ও apple-touch icon-এ নতুন logo asset integrate করা
 - [x] desktop/mobile readability, hover behavior, build ও checkpoint যাচাই করা
+
+# সংশোধন: ব্যবহারকারীর দেওয়া ছবিটিই সরাসরি লোগো
+
+- [x] exact supplied image asset-টি webdev static storage-এ সংরক্ষণ করা
+- [x] header, favicon ও apple-touch icon-এ একই exact image reference বসানো
+- [x] original aspect ratio বজায় রেখে header ও mobile scale যাচাই করা
+- [x] build, screenshot ও নতুন checkpoint তৈরি করা
