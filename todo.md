@@ -155,3 +155,10 @@
 - [x] নির্বাচিত ফাইল, preview এবং download result পরিষ্কার করার explicit remove control যোগ করা
 - [x] SutonnyMJ বাংলা ও Times New Roman ইংরেজি সাইজসহ print/PDF preview তৈরি করা
 - [x] print media, desktop/mobile layout, file-state persistence, audit, build ও checkpoint যাচাই করা
+
+# নতুন: রেফারেন্স-অনুপ্রাণিত conversion logo
+
+- [x] supplied reference-এর arrows, bilingual conversion panels ও gesture ধারণা বিশ্লেষণ করে original mark direction নির্ধারণ করা
+- [x] transparent background-এ scalable blue/green conversion logo তৈরি করা
+- [x] header, favicon ও apple-touch icon-এ নতুন logo asset integrate করা
+- [x] desktop/mobile readability, hover behavior, build ও checkpoint যাচাই করা

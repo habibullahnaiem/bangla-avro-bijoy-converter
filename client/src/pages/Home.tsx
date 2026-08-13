@@ -689,8 +689,8 @@ export default function Home() {
                 className="pointer-events-none absolute inset-0 rounded-2xl border border-transparent transition-colors duration-300 group-hover/logo:border-accent/70 group-focus-visible/logo:border-accent/70 motion-reduce:transition-none"
               />
               <img
-                src="/manus-storage/avro-bijoy-letter-pairs_c859b208.png"
-                alt="A ও অ থেকে B ও ব-তে রূপান্তরের চিহ্ন"
+                src="/manus-storage/bangla-converter-reference-logo_dbfbbd7d.png"
+                alt="অভ্র ও বিজয় রূপান্তরের নীল-সবুজ চিহ্ন"
                 className="relative h-full w-full object-contain transition-transform duration-300 ease-out group-hover/logo:rotate-[1.5deg] group-focus-visible/logo:rotate-[1.5deg] motion-reduce:transform-none motion-reduce:transition-none"
               />
             </a>
