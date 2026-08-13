@@ -133,3 +133,11 @@
 - [x] Ctrl/Cmd+C-তে selected অংশ কপি এবং full-copy control অক্ষুণ্ণ রাখা
 - [x] mixed-size output, long text, keyboard selection ও mobile behavior যাচাই করা
 - [x] production build, screenshot ও নতুন checkpoint তৈরি করা
+
+# নতুন: File disappearance during selection/copy
+
+- [ ] selection/copy event, file input, reset handler ও drag/drop state trace করা
+- [ ] selection/copy interaction থেকে file state ও converted result state বিচ্ছিন্ন করা
+- [ ] uploaded DOCX/TXT নির্বাচন ও preview copy করার পর file state অক্ষুণ্ণ রাখা
+- [ ] reset control ছাড়া কোনো accidental clear না হওয়া নিশ্চিত করা
+- [ ] mouse drag, Ctrl/Cmd+C, full copy, mobile behavior, build ও checkpoint যাচাই করা

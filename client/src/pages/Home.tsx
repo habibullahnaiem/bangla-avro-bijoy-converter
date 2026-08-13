@@ -788,7 +788,16 @@ export default function Home() {
                   </Button>
                 </div>
               </div>
-              <div className="converter-editor-body relative">
+              <div
+                className="converter-editor-body relative"
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}>
                 <Textarea
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
@@ -842,7 +851,16 @@ export default function Home() {
                   </Tooltip>
                 )}
               </div>
-              <div className="converter-editor-body relative">
+              <div
+                className="converter-editor-body relative"
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}>
                 <Textarea
                   ref={outAreaRef}
                   value={output}
@@ -858,7 +876,9 @@ export default function Home() {
                     (direction === "u2b"
                       ? "font-output-bijoy"
                       : "font-input-bn") +
-                    (direction === "u2b" ? " absolute inset-0 text-transparent caret-transparent abc-no-native-sel" : "")
+                    (direction === "u2b"
+                      ? " pointer-events-none absolute inset-0 text-transparent caret-transparent abc-no-native-sel"
+                      : "")
                   }
                   style={{ fontSize: `${fontSize}px` }}
                   aria-hidden={direction === "u2b"}
@@ -870,7 +890,15 @@ export default function Home() {
                     className="bijoy-rich h-full min-h-0 select-text overflow-y-auto px-3 py-2"
                     style={{ fontSize: `${bnPx}px` }}
                     onScroll={(e) => syncScroll(e.currentTarget, outAreaRef.current)}
-                    onCopy={copySelectedPreview}>
+                    onCopy={copySelectedPreview}
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}>
                     {renderRichSegments()}
                   </div>
                 )}
