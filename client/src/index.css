@@ -211,6 +211,21 @@
     font-family: "SutonnyMJ", "Times New Roman", "Times", serif;
     line-height: 1.7;
   }
+  /*
+   * ঋ/ৃ-কার visual correction: the legacy U+201E marker is encoded after
+   * its base glyph (for example K„), but SutonnyMJ needs a small optical
+   * nudge in browser-rendered rich text. The underlying Bijoy string stays
+   * untouched for copy, download, and round-trip conversion.
+   */
+  .bijoy-rich .bijoy-rikar {
+    display: inline-block;
+    position: relative;
+    left: -0.1em;
+    top: -0.04em;
+    margin-right: -0.1em;
+    font-family: "SutonnyMJ", "Times New Roman", "Times", serif;
+    line-height: inherit;
+  }
   .bijoy-rich .seg-lat {
     font-family: "Times New Roman", "Times", serif;
     line-height: 1.05;

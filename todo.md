@@ -248,3 +248,10 @@
 - [x] hero heading এবং “উদাহরণ দেখুন” button-এর আগের styling পুনরুদ্ধার করা
 - [x] input/output font ও converter behavior অক্ষুণ্ণ রাখা
 - [x] desktop/mobile screenshot, build ও checkpoint যাচাই করা
+
+# নতুন: ঋ/ৃ-কার placement fix
+
+- [x] Unicode ঋ/ৃ-কার থেকে Bijoy mapping এবং visible rendering path trace করা
+- [x] glyph placement correction প্রয়োগ করা, মূল conversion behavior না ভেঙে
+- [x] ঋ-কার, e-kar, যুক্তবর্ণ ও punctuation regression audit চালানো
+- [x] desktop/mobile preview, build ও checkpoint যাচাই করা

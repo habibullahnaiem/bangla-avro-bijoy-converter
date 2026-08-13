@@ -472,6 +472,25 @@ export default function Home() {
     () => (direction === "u2b" && input ? mapSegmentsToBijoy(input, direction) : []),
     [direction, input],
   );
+  // SutonnyMJ-এর ঋ/ৃ-কার marker (U+201E) একটি legacy glyph; rich preview-তে
+  // আলাদা token দিলে marker-টির সামান্য horizontal/vertical offset ঠিক করা যায়,
+  // কিন্তু copied Bijoy text-এর আসল code sequence অপরিবর্তিত থাকে।
+  const renderBijoyText = (
+    text: string,
+    className: string,
+    size: number,
+    keyPrefix: string,
+  ) =>
+    text.split(/(„)/g).map((part, index) =>
+      part ? (
+        <span
+          key={`${keyPrefix}-${index}`}
+          className={part === "„" ? `${className} bijoy-rikar` : className}
+          style={{ fontSize: `${size}px` }}>
+          {part}
+        </span>
+      ) : null,
+    );
   const outPreviewRef = useRef<HTMLDivElement>(null);
   const outAreaRef = useRef<HTMLTextAreaElement>(null);
   const syncScroll = (from: HTMLElement, to: HTMLElement | null) => {
@@ -574,22 +593,46 @@ export default function Home() {
       if (!sel || hi <= sel.start || lo >= sel.end) {
         // এই সেগমেন্টে সেলেকশন নেই
         nodes.push(
-          <span key={i} className={seg.bangla ? "seg-bn" : "seg-lat"} style={{ fontSize: seg.bangla ? `${bnPx}px` : `${latPx}px` }}>{seg.text}</span>,
+          ...renderBijoyText(
+            seg.text,
+            seg.bangla ? "seg-bn" : "seg-lat",
+            seg.bangla ? bnPx : latPx,
+            `${i}-plain`,
+          ),
         );
         return;
       }
       const selLo = Math.max(sel.start, lo);
       const selHi = Math.min(sel.end, hi);
       // তিন ভাগ: পূর্ব / সেলেক্টেড / পর
-      if (curStart < selLo) nodes.push(
-        <span key={`${i}-a`} className={seg.bangla ? "seg-bn" : "seg-lat"} style={{ fontSize: seg.bangla ? `${bnPx}px` : `${latPx}px` }}>{seg.text.slice(0, selLo - curStart)}</span>,
-      );
+      if (curStart < selLo)
+        nodes.push(
+          ...renderBijoyText(
+            seg.text.slice(0, selLo - curStart),
+            seg.bangla ? "seg-bn" : "seg-lat",
+            seg.bangla ? bnPx : latPx,
+            `${i}-a`,
+          ),
+        );
       nodes.push(
-        <mark key={`${i}-b`} className="!bg-primary/25 !text-inherit rounded-[2px] px-0 py-0">{seg.text.slice(selLo - curStart, selHi - curStart)}</mark>,
+        <mark key={`${i}-b`} className="!bg-primary/25 !text-inherit rounded-[2px] px-0 py-0">
+          {renderBijoyText(
+            seg.text.slice(selLo - curStart, selHi - curStart),
+            seg.bangla ? "seg-bn" : "seg-lat",
+            seg.bangla ? bnPx : latPx,
+            `${i}-b`,
+          )}
+        </mark>,
       );
-      if (selHi < curStart + seg.text.length) nodes.push(
-        <span key={`${i}-c`} className={seg.bangla ? "seg-bn" : "seg-lat"} style={{ fontSize: seg.bangla ? `${bnPx}px` : `${latPx}px` }}>{seg.text.slice(selHi - curStart)}</span>,
-      );
+      if (selHi < curStart + seg.text.length)
+        nodes.push(
+          ...renderBijoyText(
+            seg.text.slice(selHi - curStart),
+            seg.bangla ? "seg-bn" : "seg-lat",
+            seg.bangla ? bnPx : latPx,
+            `${i}-c`,
+          ),
+        );
     });
     return nodes;
   };
@@ -1321,18 +1364,13 @@ export default function Home() {
                       (
                         seg: { text: string; bangla: boolean },
                         i: number,
-                      ) => (
-                        <span
-                          key={i}
-                          className={seg.bangla ? "seg-bn" : "seg-lat"}
-                          style={{
-                            fontSize: seg.bangla
-                              ? `${bnPx}px`
-                              : `${latPx}px`,
-                          }}>
-                          {seg.text}
-                        </span>
-                      ),
+                      ) =>
+                        renderBijoyText(
+                          seg.text,
+                          seg.bangla ? "seg-bn" : "seg-lat",
+                          seg.bangla ? bnPx : latPx,
+                          `file-${i}`,
+                        ),
                     )}
                   </div>
                 </div>
@@ -1549,22 +1587,23 @@ export default function Home() {
                 {fileResult?.name ?? "রূপান্তরিত ডকুমেন্ট"}
               </div>
               <div className="print-preview-content bijoy-rich whitespace-pre-wrap break-words text-left" style={{ fontSize: `${bnPx}px` }}>
-                {filePrintSegments.map((seg, i) => (
-                  <span
-                    key={`${i}-${seg.text.slice(0, 8)}`}
-                    className={
-                      filePrintDirection === "u2b"
-                        ? seg.bangla
-                          ? "seg-bn"
-                          : "seg-lat"
-                        : seg.bangla
-                          ? "font-input-bn"
-                          : "seg-lat"
-                    }
-                    style={{ fontSize: seg.bangla ? `${bnPx}px` : `${latPx}px` }}>
-                    {seg.text}
-                  </span>
-                ))}
+                {filePrintSegments.map((seg, i) =>
+                  filePrintDirection === "u2b"
+                    ? renderBijoyText(
+                        seg.text,
+                        seg.bangla ? "seg-bn" : "seg-lat",
+                        seg.bangla ? bnPx : latPx,
+                        `print-${i}`,
+                      )
+                    : (
+                        <span
+                          key={`${i}-${seg.text.slice(0, 8)}`}
+                          className={seg.bangla ? "font-input-bn" : "seg-lat"}
+                          style={{ fontSize: seg.bangla ? `${bnPx}px` : `${latPx}px` }}>
+                          {seg.text}
+                        </span>
+                      ),
+                )}
               </div>
             </div>
             <div className="print-preview-actions flex shrink-0 flex-wrap justify-end gap-2 border-t bg-muted/40 px-4 py-3">
