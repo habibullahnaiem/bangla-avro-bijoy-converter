@@ -59,3 +59,10 @@
 - [ ] কেবল word-initial/standalone e-kar-এর জন্য matra-less correction প্রয়োগ করা
 - [ ] শুরু, মাঝ এবং যুক্তবর্ণের focused round-trip audit চালানো
 - [ ] UI যাচাই, checkpoint এবং ব্যবহারকারীকে corrected version দেওয়া
+
+# নতুন: কনভার্টার লোগো
+
+- [x] বাংলা অক্ষর ও দ্বিমুখী রূপান্তর বোঝায় এমন স্বতন্ত্র mark direction নির্ধারণ করা
+- [x] স্বচ্ছ background-এ header ও favicon-উপযোগী logo asset তৈরি করা
+- [x] header, browser metadata এবং favicon-এ logo বসানো
+- [x] desktop/mobile preview যাচাই এবং নতুন checkpoint তৈরি করা

@@ -458,10 +458,12 @@ export default function Home() {
         </div>
         <div className="container relative flex items-center justify-between py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary-foreground text-primary shadow-inner">
-              <span className="font-serif text-[1.05rem] font-black leading-none tracking-tight">
-                অ⇄ব
-              </span>
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-foreground/95 p-1 shadow-inner md:h-14 md:w-14">
+              <img
+                src="/manus-storage/avro-bijoy-logo_c07dbadf.png"
+                alt="অভ্র ও বিজয় রূপান্তর চিহ্ন"
+                className="h-full w-full object-contain"
+              />
             </div>
             <div>
               <h1 className="text-lg font-extrabold leading-tight tracking-tight md:text-2xl">
