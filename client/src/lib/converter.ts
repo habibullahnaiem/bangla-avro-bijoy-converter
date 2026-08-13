@@ -360,8 +360,12 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
         : "Times New Roman";
       rFontsAttr(plan.run, ns, want);
       // ইংলিশ/ল্যাটিন রানগুলো বাংলার চেয়ে এক ধাপ ছোট (−2pt) — ডকের
-      // ডিফল্ট সাইজ ধরে: বাংলা ডিফল্টে থাকে, ইংলিশে sz কমানো হয়
-      if (want === "Times New Roman") smRunSize(plan.run, ns);
+      // ডিফল্ট সাইজ ধরে: বাংলা ডিফল্টে থাকে, ইংলিশে sz কমানো হয়।
+      // বয়তিক্রম: সুপারস্ক্রিপ্ট রান (ফুটনোট/ইন্ডনোট রেফারেন্স মার্ক) —
+      // এতে sz কমালে Word-এর নেটিভ মার্কের চেয়ে বহুত ছোট দেখায়,
+      // তাই বেস সাইজেই রাখা হয়।
+      if (want === "Times New Roman" && !isSuperscriptRun(plan.run, ns))
+        smRunSize(plan.run, ns);
     }
   }
 
@@ -378,7 +382,9 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
     const joined = texts.join("");
     const want = LATIN_RE.test(joined) ? "Times New Roman" : "SutonnyMJ";
     rFontsAttr(run, ns, want);
-    if (want === "Times New Roman") smRunSize(run, ns);
+    // সুপারস্ক্রিপ্ট মার্ক (ফুটনোট/ইন্ডনোট) ছোট না করা — দেখুন উপরের মন্তব্য
+    if (want === "Times New Roman" && !isSuperscriptRun(run, ns))
+      smRunSize(run, ns);
   }
   return new XMLSerializer().serializeToString(doc);
 }
@@ -620,6 +626,18 @@ function smRunSize(run: Element, ns: string): void {
     (rPr ?? run).appendChild(np.sz);
     (rPr ?? run).appendChild(np.cs);
   }
+}
+
+/** রান কি সুপারস্ক্রিপ্ট? — ফুটনোট/ইন্ডনোট রেফারেন্স মার্কগুলো Word-এ
+ *  w:vertAlign="super" দিয়ে আঁকা হয়। এদের sz কমালে Word-এর নেটিভ মার্কের
+ *  তুলনায় বহুত ছোট দেখায়, তাই সাইজ-সংকোচন থেকে বাদ দেওয়া হয়। */
+function isSuperscriptRun(run: Element, ns: string): boolean {
+  const rPr = run.querySelector(":scope > rPr");
+  if (!rPr) return false;
+  const va = rPr.querySelector(":scope > vertAlign");
+  if (!va) return false;
+  const v = (va.getAttributeNS(ns, "w:val") ?? "").toLowerCase();
+  return v === "super" || v === "superscript";
 }
 
 /** ডকুমেন্টের ডিফল্ট সাইজ (ডিফল্ট স্টাইল থেকে) হাফ-পয়েন্টে */
