@@ -46,7 +46,7 @@ for (const orig of cases) {
 }
 
 // ৪) উল্টো দিক: b2u-তে সুনতন্নী-কোড থাকলে সমস্যা হবে না (সাধারণ path)
-eq("b2u সাধারণ path", convertToUnicode("Avgvi †mvbvi evsjv"), "আমার সোনার বাংলা");
+eq("b2u সাধারণ path", convertToUnicode("Avgvi ‡mvbvi evsjv"), "আমার সোনার বাংলা");
 
 // ৫) পরিসংখ্যান-পাঙকচুয়েশন রাউন্ড-ট্রিপ (৫ বার u2b চালানো)
 const stress = cases[0];
