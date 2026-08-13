@@ -671,6 +671,18 @@ export default function Home() {
                 <span className="text-xs text-muted-foreground">
                   {outCharCount} অক্ষর
                 </span>
+                {direction === "u2b" && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <span className="cursor-help text-xs font-medium text-primary underline decoration-dotted underline-offset-2">
+                        কোড যাচাই
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" className="max-w-xs whitespace-pre-line text-xs" sideOffset={8}>
+                      শুরুতে এ-কার (ে) → SutonnyMJ-এ U+2021 (‡) কোড — ছোট লেডিং মাত্রা ছাড়াই। উদাহরণ: রেল = ‡ + i + j, কেন = ‡ + K + b। ওয়ার্ডে SutonnyMJ ফন্টে পেস্ট করলে নির্ভুল দেখায়।
+                    </TooltipContent>
+                  </Tooltip>
+                )}
               </div>
               <div className="relative">
                 <Textarea
