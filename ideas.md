@@ -58,3 +58,6 @@ Modern Productivity SaaS + Bengali calligraphic accent. রেফারেন্
 - দাঁড়ি (।) অবশ্যই বিজয় ASCII-তে সঠিক দাঁড়ি-গ্লিফে ম্যাপ হবে (হ-এর মতো নয়)।
 - যুক্তবর্ণ: ন্ত, ল্ল, য়, ড়, ঢ়, র-ফলা (র), শ্র, জ্ঞ, ক্ষ — ভাঙবে না।
 - ইংরেজি + সংখ্যা আউটপুটে Times New Roman স্ট্যাকে থাকবে।
+- দৃশ্যমান interface label বাংলা-first হবে; কেবল SutonnyMJ, Times New Roman, PDF ও অন্যান্য প্রয়োজনীয় technical নাম ইংরেজিতে থাকতে পারে।
+- কনভার্টারই প্রথম নজরের কেন্দ্র; status pill ও secondary action শান্ত থাকবে, যাতে দুই editor pane-ই product desk হিসেবে এগিয়ে থাকে।
+- বাংলা glyph specimen, conversion arrow এবং teal ribbon-ই signature visual motif; generic SaaS decoration বাড়ানো হবে না।

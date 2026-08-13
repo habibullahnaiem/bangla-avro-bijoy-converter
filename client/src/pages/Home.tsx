@@ -19,10 +19,12 @@ import {
   ArrowDownUp,
   Minus,
   Plus,
+  Printer,
   History as HistoryIcon,
   RotateCcw,
   Trash2,
   Clock3,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -115,6 +117,11 @@ export default function Home() {
     name: string;
     url: string;
   } | null>(null);
+  const [filePrintInput, setFilePrintInput] = useState("");
+  const [filePrintText, setFilePrintText] = useState("");
+  const [filePrintDirection, setFilePrintDirection] = useState<ConvertDirection | null>(null);
+  const [isFileDragActive, setIsFileDragActive] = useState(false);
+  const [printPreviewOpen, setPrintPreviewOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -162,7 +169,7 @@ export default function Home() {
 
   const clearHistory = () => {
     setHistory([]);
-    toast.success("Recent conversion history মুছে ফেলা হয়েছে");
+    toast.success("সাম্প্রতিক রূপান্তরের ইতিহাস মুছে ফেলা হয়েছে");
   };
 
   const doConvert = useCallback(
@@ -314,16 +321,62 @@ export default function Home() {
   };
 
   /* ── ফাইল কনভার্টার ─────────────────────────────── */
-  const onFileSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const acceptFile = (file?: File) => {
     if (!file) return;
     const ok = /\.(docx|txt)$/i.test(file.name);
     if (!ok) {
       toast.error("শুধুমাত্র .docx বা .txt ফাইল দিন");
       return;
     }
+    if (fileResult) URL.revokeObjectURL(fileResult.url);
     setSelectedFile(file);
     setFileResult(null);
+    setFilePreviewInput("");
+    setFilePreviewText("");
+    setFilePrintInput("");
+    setFilePrintText("");
+    setFilePrintDirection(null);
+    setPrintPreviewOpen(false);
+  };
+
+  const onFileSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+    acceptFile(e.target.files?.[0]);
+  };
+
+  const handleFileDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsFileDragActive(true);
+  };
+
+  const handleFileDragLeave = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+      setIsFileDragActive(false);
+    }
+  };
+
+  const handleFileDrop = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsFileDragActive(false);
+    acceptFile(e.dataTransfer.files?.[0]);
+  };
+
+  const clearSelectedFile = () => {
+    if (fileResult) URL.revokeObjectURL(fileResult.url);
+    setSelectedFile(null);
+    setFileResult(null);
+    setFilePreviewInput("");
+    setFilePreviewText("");
+    setFilePrintInput("");
+    setFilePrintText("");
+    setFilePrintDirection(null);
+    setPrintPreviewOpen(false);
+    setIsFileDragActive(false);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+    toast.success("ফাইল সরানো হয়েছে");
   };
 
   const runFileConvert = async () => {
@@ -342,6 +395,10 @@ export default function Home() {
       // (যে নিয়মে রান-ফন্ট সিদ্ধান্ত হয়, সেই একই নিয়মে প্রিভিউ দেখে)।
       try {
         const extracted = await extractTextFrom(selectedFile);
+        const convertedFull = extracted ? convert(extracted, direction) : "";
+        setFilePrintInput(extracted);
+        setFilePrintText(convertedFull);
+        setFilePrintDirection(direction);
         const head = extracted ? extracted.slice(0, 700) : "";
         const previewOutput = head ? convert(head, direction) : "";
         setFilePreviewInput(head);
@@ -357,6 +414,9 @@ export default function Home() {
       } catch {
         setFilePreviewInput("");
         setFilePreviewText("");
+        setFilePrintInput("");
+        setFilePrintText("");
+        setFilePrintDirection(null);
         // File download remains successful even if a preview cannot be indexed.
       }
       toast.success(
@@ -374,6 +434,26 @@ export default function Home() {
   const charCount = input.length;
 
   const outCharCount = output.length;
+
+  const filePrintSegments = useMemo(() => {
+    if (!filePrintText || !filePrintDirection) return [];
+    return filePrintDirection === "u2b"
+      ? mapSegmentsToBijoy(filePrintInput, filePrintDirection)
+      : segmentBijoyText(filePrintText);
+  }, [filePrintDirection, filePrintInput, filePrintText]);
+
+  const openPrintPreview = () => {
+    if (!filePrintText) {
+      toast.info("প্রথমে একটি ফাইল রূপান্তর করুন");
+      return;
+    }
+    setPrintPreviewOpen(true);
+  };
+
+  const printPreview = () => {
+    if (!filePrintText) return;
+    window.setTimeout(() => window.print(), 50);
+  };
 
   // ── দুই-সাইজ রিচ প্রিভিউ ──
   // বাংলা fontSize(px) SutonnyMJ-তে, ইংরেজি/সংখ্যা 12/14 অনুপাতে ছোটে TNR-তে।
@@ -645,7 +725,7 @@ export default function Home() {
         {/* প্রোমোট শিরোনাম */}
         <div className="hero-panel mb-6 flex flex-wrap items-end justify-between gap-3">
           <div className="hero-panel__copy">
-            <p className="eyebrow">Bangla typography workspace</p>
+            <p className="eyebrow">বাংলা টাইপোগ্রাফি ডেস্ক</p>
             <h2 className="hero-title text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">
               অভ্রে লিখুন, বিজয়ে নিন
             </h2>
@@ -958,7 +1038,7 @@ export default function Home() {
         </div>
 
         {/* প্রেস/প্রকাশনা চরিত্র — গ্লিফ প্রিভিউ স্ট্রিপ */}
-        <div className="mt-6 rounded-xl border bg-card p-5 shadow-sm">
+        <div className="glyph-strip mt-6 rounded-xl border bg-card p-5 shadow-sm">
           <div className="mb-3 flex items-center gap-2">
             <span className="h-px flex-1 bg-border" />
             <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
@@ -1097,11 +1177,16 @@ export default function Home() {
               <label
                 htmlFor="file-upload"
                 className={
-                  "flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed px-6 py-10 text-center transition-colors " +
+                  "file-dropzone flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed px-6 py-10 text-center transition-colors " +
+                  (isFileDragActive ? "file-dropzone--active " : "") +
                   (selectedFile
                     ? "border-primary/60 bg-primary/5"
                     : "border-border bg-muted/40 hover:border-primary/40 hover:bg-muted/70")
-                }>
+                }
+                onDragEnter={handleFileDragOver}
+                onDragOver={handleFileDragOver}
+                onDragLeave={handleFileDragLeave}
+                onDrop={handleFileDrop}>
                 <Upload
                   className={
                     "mb-3 h-8 w-8 " +
@@ -1129,6 +1214,22 @@ export default function Home() {
                   </>
                 )}
               </label>
+              {selectedFile && (
+                <div className="mt-3 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border/70 bg-muted/30 px-3 py-2">
+                  <span className="text-xs text-muted-foreground">
+                    ফাইলটি রূপান্তরের জন্য প্রস্তুত
+                  </span>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="border-destructive/25 text-destructive hover:bg-destructive/10"
+                    onClick={clearSelectedFile}>
+                    <Trash2 className="mr-1.5 h-3.5 w-3.5" />
+                    ফাইল সরান
+                  </Button>
+                </div>
+              )}
               <input
                 id="file-upload"
                 ref={fileInputRef}
@@ -1157,15 +1258,28 @@ export default function Home() {
                     </>
                   )}
                 </Button>
-                {fileResult && (
-                  <a
-                    href={fileResult.url}
-                    download={fileResult.name}
-                    className="inline-flex h-11 items-center gap-2 rounded-lg bg-emerald-600 px-6 text-sm font-semibold text-white shadow-md transition-transform hover:bg-emerald-700 active:scale-[0.97]">
-                    <Download className="h-4 w-4" />
-                    ডাউনলোড করুন — {fileResult.name}
-                  </a>
-                )}
+                <div className="flex flex-wrap items-center justify-center gap-2">
+                  {filePrintText && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="border-primary/30 text-primary hover:bg-accent"
+                      onClick={openPrintPreview}>
+                      <Printer className="mr-1.5 h-4 w-4" />
+                      প্রিন্ট / PDF প্রিভিউ
+                    </Button>
+                  )}
+                  {fileResult && (
+                    <a
+                      href={fileResult.url}
+                      download={fileResult.name}
+                      className="inline-flex h-10 items-center gap-2 rounded-lg bg-emerald-600 px-4 text-sm font-semibold text-white shadow-md transition-transform hover:bg-emerald-700 active:scale-[0.97]">
+                      <Download className="h-4 w-4" />
+                      ডাউনলোড করুন — {fileResult.name}
+                    </a>
+                  )}
+                </div>
               </div>
 
               {/* ফাইলের কনভার্টেড টেক্সট নমুনা — ডুয়াল-সাইজ: বাংলা বড্ড,
@@ -1227,7 +1341,7 @@ export default function Home() {
                   <h2
                     id="recent-history-title"
                     className="text-lg font-extrabold tracking-tight text-foreground">
-                    Recent conversion history
+                    সাম্প্রতিক রূপান্তর
                   </h2>
                   {history.length > 0 && (
                     <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-bold text-muted-foreground">
@@ -1358,6 +1472,68 @@ export default function Home() {
           </p>
         </div>
       </footer>
+
+      {printPreviewOpen && filePrintText && (
+        <div className="print-preview-backdrop fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-4 backdrop-blur-sm">
+          <section
+            className="print-preview-dialog flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border bg-card shadow-2xl"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="print-preview-title">
+            <div className="print-preview-actions flex items-center justify-between gap-3 border-b bg-secondary/60 px-4 py-3">
+              <div>
+                <h2 id="print-preview-title" className="font-bold text-foreground">
+                  প্রিন্ট / PDF প্রিভিউ
+                </h2>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  বাংলা SutonnyMJ-তে এবং ইংরেজি Times New Roman-এ থাকবে। PDF করতে print dialog-এ “Save as PDF” নির্বাচন করুন।
+                </p>
+              </div>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="shrink-0 text-muted-foreground hover:bg-accent"
+                onClick={() => setPrintPreviewOpen(false)}
+                aria-label="প্রিন্ট preview বন্ধ করুন">
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            <div className="print-preview-paper overflow-y-auto bg-white p-6 text-slate-900 sm:p-10">
+              <div className="print-preview-paper__meta mb-5 border-b border-slate-200 pb-3 text-sm text-slate-500">
+                {fileResult?.name ?? "রূপান্তরিত ডকুমেন্ট"}
+              </div>
+              <div className="print-preview-content bijoy-rich whitespace-pre-wrap break-words text-left" style={{ fontSize: `${bnPx}px` }}>
+                {filePrintSegments.map((seg, i) => (
+                  <span
+                    key={`${i}-${seg.text.slice(0, 8)}`}
+                    className={
+                      filePrintDirection === "u2b"
+                        ? seg.bangla
+                          ? "seg-bn"
+                          : "seg-lat"
+                        : seg.bangla
+                          ? "font-input-bn"
+                          : "seg-lat"
+                    }
+                    style={{ fontSize: seg.bangla ? `${bnPx}px` : `${latPx}px` }}>
+                    {seg.text}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="print-preview-actions flex flex-wrap justify-end gap-2 border-t bg-muted/40 px-4 py-3">
+              <Button type="button" variant="outline" onClick={() => setPrintPreviewOpen(false)}>
+                বন্ধ করুন
+              </Button>
+              <Button type="button" onClick={printPreview}>
+                <Printer className="mr-1.5 h-4 w-4" />
+                প্রিন্ট করুন / PDF সংরক্ষণ
+              </Button>
+            </div>
+          </section>
+        </div>
+      )}
     </div>
   );
 }

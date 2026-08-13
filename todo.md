@@ -148,3 +148,10 @@
 - [ ] বিজয় preview-কে অভ্র input pane-এর মতো পরিষ্কার, opaque surface ও readable contrast দেওয়া
 - [ ] native text selection, selected copy এবং uploaded-file persistence অক্ষুণ্ণ রাখা
 - [ ] desktop/mobile screenshot, build, audit ও checkpoint যাচাই করা
+
+# নতুন: ফাইল আপলোড ও প্রিন্ট প্রিভিউ উন্নতি
+
+- [x] .docx/.txt ফাইলের drag-and-drop upload ও visual drag state যোগ করা
+- [x] নির্বাচিত ফাইল, preview এবং download result পরিষ্কার করার explicit remove control যোগ করা
+- [x] SutonnyMJ বাংলা ও Times New Roman ইংরেজি সাইজসহ print/PDF preview তৈরি করা
+- [x] print media, desktop/mobile layout, file-state persistence, audit, build ও checkpoint যাচাই করা
