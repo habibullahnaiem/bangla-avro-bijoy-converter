@@ -230,7 +230,9 @@ export default defineConfig({
       // on the same proxied host/port instead of localhost:3000.
       protocol: "wss",
       clientPort: 443,
-      host: true,
+      host: process.env.HMR_HOST || undefined,
+      port: process.env.HMR_PORT ? Number(process.env.HMR_PORT) : undefined,
+      path: "/@vite",
     },
     allowedHosts: [
       ".manuspre.computer",
