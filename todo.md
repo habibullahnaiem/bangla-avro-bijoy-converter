@@ -109,3 +109,11 @@
 - [x] converter workspace, controls, file converter ও help content-এর visual hierarchy উন্নত করা
 - [x] mobile, keyboard focus, hover এবং reduced-motion আচরণ refine করা
 - [x] production build, representative screenshots ও নতুন checkpoint তৈরি করা
+
+# নতুন: Recent Conversion History
+
+- [x] current conversion state ও successful conversion insertion points audit করা
+- [x] localStorage-ভিত্তিক সীমিত recent-history persistence তৈরি করা
+- [x] history card-এ direction, time, preview ও দ্রুত পুনঃব্যবহারের action যোগ করা
+- [x] clear-all, empty state, responsive layout ও keyboard accessibility যোগ করা
+- [x] reload persistence, reuse, deletion, build ও UI verification চালানো

@@ -19,6 +19,10 @@ import {
   ArrowDownUp,
   Minus,
   Plus,
+  History as HistoryIcon,
+  RotateCcw,
+  Trash2,
+  Clock3,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -39,7 +43,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-  const EXAMPLE_TEXT = `আমাদের তৈরিকৃত অভ্র/ইউনিকোড ⇄ বিজয় কনভার্টারটির 'লাইভ প্রিভিউ' এবং DOCX ফাইল আপলোড ফিচারটি অত্যন্ত সাবলীলভাবে কাজ করছে। বাংলা ফন্টের পাশাপাশি ইংরেজি (Times New Roman) এবং সংখ্যার (1, 2, 3) মিশ্রণ রেন্ডারিং একেবারেই নিখুঁত।
+const EXAMPLE_TEXT = `আমাদের তৈরিকৃত অভ্র/ইউনিকোড ⇄ বিজয় কনভার্টারটির 'লাইভ প্রিভিউ' এবং DOCX ফাইল আপলোড ফিচারটি অত্যন্ত সাবলীলভাবে কাজ করছে। বাংলা ফন্টের পাশাপাশি ইংরেজি (Times New Roman) এবং সংখ্যার (1, 2, 3) মিশ্রণ রেন্ডারিং একেবারেই নিখুঁত।
 
 কনভার্টারের সর্বোচ্চ সক্ষমতা যাচাইয়ের জন্য নিচের জটিল নমুনাগুলো পরীক্ষা করা হলো:
 
@@ -53,6 +57,31 @@ import {
 মো. হাবিবুল্লাহ নাঈম
 শিক্ষার্থী (আইডি: ২০১০৮০৪১২৭)
 বাংলা বিভাগ, রাজশাহী বিশ্ববিদ্যালয়।`;
+
+const HISTORY_STORAGE_KEY = "abc-recent-conversions";
+const MAX_HISTORY_ITEMS = 6;
+
+type ConversionHistoryItem = {
+  id: string;
+  direction: ConvertDirection;
+  input: string;
+  output: string;
+  label: string;
+  createdAt: number;
+};
+
+const formatHistoryTime = (timestamp: number) =>
+  new Intl.DateTimeFormat("bn-BD", {
+    day: "numeric",
+    month: "short",
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(new Date(timestamp));
+
+const compactHistoryText = (text: string, max = 92) => {
+  const compact = text.replace(/\s+/g, " ").trim();
+  return compact.length > max ? `${compact.slice(0, max)}…` : compact;
+};
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<"text" | "file">("text");
@@ -72,24 +101,93 @@ export default function Home() {
   const [converting, setConverting] = useState(false);
   const [filePreviewText, setFilePreviewText] = useState<string>("");
   const [filePreviewInput, setFilePreviewInput] = useState<string>("");
+  const [history, setHistory] = useState<ConversionHistoryItem[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const saved = localStorage.getItem(HISTORY_STORAGE_KEY);
+      const parsed = saved ? JSON.parse(saved) : [];
+      return Array.isArray(parsed) ? parsed.slice(0, MAX_HISTORY_ITEMS) : [];
+    } catch {
+      return [];
+    }
+  });
   const [fileResult, setFileResult] = useState<{
     name: string;
     url: string;
   } | null>(null);
 
+  useEffect(() => {
+    try {
+      localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(history));
+    } catch {
+      // Private browsing/storage-restricted environments should not block conversion.
+    }
+  }, [history]);
+
+  const addHistoryItem = useCallback(
+    (record: Omit<ConversionHistoryItem, "id" | "createdAt">) => {
+      if (!record.input.trim() || !record.output.trim()) return;
+      setHistory((previous) => {
+        const nextItem: ConversionHistoryItem = {
+          ...record,
+          id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+          createdAt: Date.now(),
+        };
+        const withoutDuplicate = previous.filter(
+          (item) =>
+            !(
+              item.direction === record.direction &&
+              item.input === record.input &&
+              item.output === record.output
+            ),
+        );
+        return [nextItem, ...withoutDuplicate].slice(0, MAX_HISTORY_ITEMS);
+      });
+    },
+    [],
+  );
+
+  const reuseHistoryItem = (item: ConversionHistoryItem) => {
+    setActiveTab("text");
+    setDirection(item.direction);
+    setInput(item.input);
+    setOutput(item.output);
+    setIsLive(true);
+    toast.success("Recent history থেকে রূপান্তরটি ফিরিয়ে আনা হয়েছে");
+  };
+
+  const removeHistoryItem = (id: string) => {
+    setHistory((previous) => previous.filter((item) => item.id !== id));
+  };
+
+  const clearHistory = () => {
+    setHistory([]);
+    toast.success("Recent conversion history মুছে ফেলা হয়েছে");
+  };
+
   const doConvert = useCallback(
-    (text: string, dir: ConvertDirection) => {
+    (text: string, dir: ConvertDirection, remember = false, label = "লাইভ টেক্সট") => {
       if (!text.trim()) {
         setOutput("");
         return;
       }
       try {
-        setOutput(convert(text, dir));
+        const converted = convert(text, dir);
+        setOutput(converted);
+        if (remember) {
+          addHistoryItem({
+            direction: dir,
+            input: text,
+            output: converted,
+            label,
+          });
+        }
+        return converted;
       } catch {
         toast.error("রূপান্তরে ত্রুটি হয়েছে। আবার চেষ্টা করুন।");
       }
     },
-    [],
+    [addHistoryItem],
   );
 
   // লাইভ রূপান্তর (ডিবাউন্স ৩০০ms)
@@ -105,7 +203,7 @@ export default function Home() {
   }, [input, direction, isLive, doConvert]);
 
   const handleManualConvert = () => {
-    doConvert(input, direction);
+    doConvert(input, direction, true);
     toast.success("রূপান্তর সম্পন্ন হয়েছে");
   };
 
@@ -243,12 +341,23 @@ export default function Home() {
       // ফাইলের এক্সট্র্যাক্টেড টেক্সটকে সোজা convert() দিয়ে বিজয়ে নিয়ে আসা হয়
       // (যে নিয়মে রান-ফন্ট সিদ্ধান্ত হয়, সেই একই নিয়মে প্রিভিউ দেখে)।
       try {
-        const t = await extractTextFrom(selectedFile);
-        const head = t ? t.slice(0, 700) : "";
+        const extracted = await extractTextFrom(selectedFile);
+        const head = extracted ? extracted.slice(0, 700) : "";
+        const previewOutput = head ? convert(head, direction) : "";
         setFilePreviewInput(head);
-        setFilePreviewText(head ? convert(head, direction) : "");
+        setFilePreviewText(previewOutput);
+        if (head && previewOutput) {
+          addHistoryItem({
+            direction,
+            input: head,
+            output: previewOutput,
+            label: `${result.name} · preview`,
+          });
+        }
       } catch {
+        setFilePreviewInput("");
         setFilePreviewText("");
+        // File download remains successful even if a preview cannot be indexed.
       }
       toast.success(
         result.kind === "docx"
@@ -1045,6 +1154,136 @@ export default function Home() {
           </div>
         </div>
         )}
+
+        {/* Recent conversion history — local-only, দ্রুত পুনর্ব্যবহারযোগ্য */}
+        <section
+          className="recent-history mt-7 pb-2"
+          aria-labelledby="recent-history-title">
+          <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
+            <div className="flex items-start gap-3">
+              <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <HistoryIcon className="h-5 w-5" aria-hidden="true" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h2
+                    id="recent-history-title"
+                    className="text-lg font-extrabold tracking-tight text-foreground">
+                    Recent conversion history
+                  </h2>
+                  {history.length > 0 && (
+                    <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-bold text-muted-foreground">
+                      {history.length}/ {MAX_HISTORY_ITEMS}
+                    </span>
+                  )}
+                </div>
+                <p className="mt-0.5 text-sm text-muted-foreground">
+                  আপনার সাম্প্রতিক রূপান্তরগুলো এই ডিভাইসেই থাকে
+                </p>
+              </div>
+            </div>
+            {history.length > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                onClick={clearHistory}>
+                <Trash2 className="mr-1.5 h-4 w-4" aria-hidden="true" />
+                সব মুছুন
+              </Button>
+            )}
+          </div>
+
+          {history.length === 0 ? (
+            <div className="rounded-2xl border border-dashed bg-card/70 px-5 py-8 text-center">
+              <Clock3 className="mx-auto h-7 w-7 text-muted-foreground/60" aria-hidden="true" />
+              <p className="mt-2 text-sm font-semibold text-foreground">
+                এখনো কোনো conversion history নেই
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                একটি রূপান্তর সম্পন্ন করলে সেটি এখানে দ্রুত ব্যবহারের জন্য দেখা যাবে।
+              </p>
+            </div>
+          ) : (
+            <div className="grid gap-3 lg:grid-cols-2">
+              {history.map((item) => {
+                const inputClass =
+                  item.direction === "u2b" ? "font-input-bn" : "font-output-bijoy";
+                const outputClass =
+                  item.direction === "u2b" ? "font-output-bijoy" : "font-input-bn";
+                return (
+                  <article
+                    key={item.id}
+                    className="group rounded-2xl border bg-card p-4 shadow-sm transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex min-w-0 items-start gap-2.5">
+                        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent text-primary">
+                          <ArrowRightLeft className="h-4 w-4" aria-hidden="true" />
+                        </span>
+                        <div className="min-w-0">
+                          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                            <span className="text-sm font-bold text-foreground">
+                              {item.direction === "u2b"
+                                ? "অভ্র → বিজয়"
+                                : "বিজয় → অভ্র"}
+                            </span>
+                            <span className="text-[11px] text-muted-foreground">
+                              {formatHistoryTime(item.createdAt)}
+                            </span>
+                          </div>
+                          <p className="mt-0.5 truncate text-xs text-muted-foreground">
+                            {item.label}
+                          </p>
+                        </div>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 shrink-0 text-muted-foreground opacity-70 hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100"
+                        onClick={() => removeHistoryItem(item.id)}
+                        aria-label="এই history মুছুন">
+                        <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
+                      </Button>
+                    </div>
+
+                    <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                      <div className="min-w-0 rounded-xl border bg-muted/35 px-3 py-2">
+                        <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+                          ইনপুট
+                        </p>
+                        <p className={`mt-1 truncate text-sm text-foreground ${inputClass}`}>
+                          {compactHistoryText(item.input)}
+                        </p>
+                      </div>
+                      <div className="min-w-0 rounded-xl border bg-accent/35 px-3 py-2">
+                        <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+                          আউটপুট
+                        </p>
+                        <p className={`mt-1 truncate text-sm text-foreground ${outputClass}`}>
+                          {compactHistoryText(item.output)}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-3 flex items-center justify-between gap-3 border-t pt-3">
+                      <span className="text-xs text-muted-foreground">
+                        {item.input.length.toLocaleString("bn-BD")} অক্ষর
+                      </span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="border-primary/25 text-primary hover:bg-accent"
+                        onClick={() => reuseHistoryItem(item)}>
+                        <RotateCcw className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
+                        আবার ব্যবহার করুন
+                      </Button>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          )}
+        </section>
       </main>
 
       {/* ফুটার */}
