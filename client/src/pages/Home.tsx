@@ -756,7 +756,7 @@ export default function Home() {
                   </Button>
                 </div>
               </div>
-              <div className="relative">
+              <div className="converter-editor-body relative">
                 <Textarea
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
@@ -766,7 +766,7 @@ export default function Home() {
                       : "এখানে বিজয় টেক্সট লিখুন বা পেস্ট করুন..."
                   }
                   className={
-                    "min-h-[320px] resize-none rounded-none border-0 shadow-none focus-visible:ring-0 " +
+                    "h-full min-h-0 resize-none rounded-none border-0 shadow-none focus-visible:ring-0 " +
                     (direction === "u2b" ? "font-input-bn" : "font-output-bijoy")
                   }
                   style={{ fontSize: `${fontSize}px` }}
@@ -810,7 +810,7 @@ export default function Home() {
                   </Tooltip>
                 )}
               </div>
-              <div className="relative">
+              <div className="converter-editor-body relative">
                 <Textarea
                   ref={outAreaRef}
                   value={output}
@@ -822,7 +822,7 @@ export default function Home() {
                   onScroll={(e) => syncScroll(e.currentTarget, outPreviewRef.current)}
                   placeholder="রূপান্তরিত টেক্সট এখানে দেখাবে..."
                     className={
-                    "min-h-[320px] resize-none rounded-none border-0 shadow-none focus-visible:ring-0 " +
+                    "h-full min-h-0 resize-none rounded-none border-0 shadow-none focus-visible:ring-0 " +
                     (direction === "u2b"
                       ? "font-output-bijoy"
                       : "font-input-bn") +
@@ -835,7 +835,7 @@ export default function Home() {
                 {direction === "u2b" && (
                   <div
                     ref={outPreviewRef}
-                    className="bijoy-rich min-h-[320px] select-text px-3 py-2"
+                    className="bijoy-rich h-full min-h-0 select-text overflow-y-auto px-3 py-2"
                     style={{ fontSize: `${bnPx}px` }}
                     onScroll={(e) => syncScroll(e.currentTarget, outAreaRef.current)}
                     onMouseDown={previewMouseDown}

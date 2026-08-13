@@ -413,6 +413,7 @@ button:active {
 }
 
 .editor-pane {
+  min-height: 0;
   background: oklch(1 0 0 / 0.94);
 }
 
@@ -437,6 +438,29 @@ button:active {
 
 .editor-pane textarea:focus {
   background: oklch(0.995 0.008 190);
+}
+
+/* ডিজাইন দিক: টিল ডেস্ক — bounded editor viewport; long text scrolls inside the pane,
+   while the conversion action bar remains in one stable position below it. */
+.converter-editor-body {
+  height: clamp(20rem, 48vh, 30rem);
+  min-height: 20rem;
+  overflow: hidden;
+}
+
+.converter-editor-body > textarea {
+  display: block;
+  height: 100%;
+  max-height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.converter-editor-body > .bijoy-rich {
+  height: 100%;
+  max-height: 100%;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .editor-pane__footer {
@@ -596,6 +620,11 @@ button:active {
 
   .editor-pane__header {
     flex-wrap: wrap;
+  }
+
+  .converter-editor-body {
+    height: clamp(18rem, 52vh, 25rem);
+    min-height: 18rem;
   }
 
   .editor-pane__footer span {

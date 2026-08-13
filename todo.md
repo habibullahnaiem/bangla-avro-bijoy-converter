@@ -117,3 +117,11 @@
 - [x] history card-এ direction, time, preview ও দ্রুত পুনঃব্যবহারের action যোগ করা
 - [x] clear-all, empty state, responsive layout ও keyboard accessibility যোগ করা
 - [x] reload persistence, reuse, deletion, build ও UI verification চালানো
+
+# নতুন: Fixed editor viewport
+
+- [x] input/output editor ও action bar-এর বর্তমান height/overflow আচরণ audit করা
+- [x] editor panes-এ নির্দিষ্ট usable height ও internal scrolling যোগ করা
+- [x] “রূপান্তর করুন” action bar-কে editor content থেকে স্থির রাখা
+- [x] দীর্ঘ টেক্সট, mobile width, keyboard focus এবং copy behavior যাচাই করা
+- [x] production build, screenshot ও নতুন checkpoint তৈরি করা
