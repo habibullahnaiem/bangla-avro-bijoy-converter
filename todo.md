@@ -220,3 +220,10 @@
 - [x] footer logo-কে header-এর exact supplied logo asset/reference-এর সঙ্গে synchronize করা
 - [x] mobile hero overlap fix-এর সঙ্গে header/footer decorative layers-এর responsive behavior যাচাই করা
 - [x] desktop/mobile screenshot, build, converter audit ও checkpoint যাচাই করা
+
+# নতুন: professional “উদাহরণ দেখুন” content
+
+- [x] বর্তমান উদাহরণ অংশের copy, hierarchy ও practical relevance পর্যালোচনা করা
+- [x] নাম, প্রকাশনা-ধাঁচের অনুচ্ছেদ, যুক্তবর্ণ, যতিচিহ্ন ও বাংলা–ইংরেজি mixed sample সাজানো
+- [x] section-টিকে professional Bengali-first presentation-এ update করা
+- [x] desktop/mobile rendering, build, converter audit ও checkpoint যাচাই করা
