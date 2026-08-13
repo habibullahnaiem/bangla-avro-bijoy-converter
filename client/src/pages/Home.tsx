@@ -319,6 +319,60 @@ export default function Home() {
     }
     return Math.min(el.value.length, acc);
   };
+  // রিচ-প্রিভিউতে দৃশ্যমান হাইলাইট — হিডেন টেক্সট-এরিয়ার সিলেকশনের সাথে সিঙ্ক
+  const [outSel, setOutSel] = useState<{ start: number; end: number } | null>(null);
+  useEffect(() => {
+    const onSelectionChange = () => {
+      const el = outAreaRef.current;
+      if (!el || document.activeElement !== el) {
+        setOutSel(null);
+        return;
+      }
+      const start = el.selectionStart ?? 0;
+      const end = el.selectionEnd ?? 0;
+      if (start === end) {
+        setOutSel(null);
+      } else {
+        setOutSel({ start: Math.min(start, end), end: Math.max(start, end) });
+      }
+    };
+    document.addEventListener("selectionchange", onSelectionChange);
+    return () => document.removeEventListener("selectionchange", onSelectionChange);
+  }, []);
+  // সেগমেন্ট-তালিকা → হাইলাইট-সহ রেন্ডার রূপ (sel ইনডেক্সগুলো বিস্তৃত টেক্সটে)
+  const renderRichSegments = () => {
+    const sel = outSel;
+    const nodes: React.ReactNode[] = [];
+    let acc = 0;
+    outSegments.forEach((seg, i) => {
+      const segStart = acc;
+      const segEnd = acc + seg.text.length;
+      acc = segEnd;
+      let lo = segStart;
+      let hi = segEnd; // সেলেক্টেড রঞ্জ বিস্তৃত টেক্সটে [sel.start, sel.end)
+      let curStart = segStart;
+      if (!sel || hi <= sel.start || lo >= sel.end) {
+        // এই সেগমেন্টে সেলেকশন নেই
+        nodes.push(
+          <span key={i} className={seg.bangla ? "seg-bn" : "seg-lat"} style={{ fontSize: seg.bangla ? `${bnPx}px` : `${latPx}px` }}>{seg.text}</span>,
+        );
+        return;
+      }
+      const selLo = Math.max(sel.start, lo);
+      const selHi = Math.min(sel.end, hi);
+      // তিন ভাগ: পূর্ব / সেলেক্টেড / পর
+      if (curStart < selLo) nodes.push(
+        <span key={`${i}-a`} className={seg.bangla ? "seg-bn" : "seg-lat"} style={{ fontSize: seg.bangla ? `${bnPx}px` : `${latPx}px` }}>{seg.text.slice(0, selLo - curStart)}</span>,
+      );
+      nodes.push(
+        <mark key={`${i}-b`} className="!bg-primary/25 !text-inherit rounded-[2px] px-0 py-0">{seg.text.slice(selLo - curStart, selHi - curStart)}</mark>,
+      );
+      if (selHi < curStart + seg.text.length) nodes.push(
+        <span key={`${i}-c`} className={seg.bangla ? "seg-bn" : "seg-lat"} style={{ fontSize: seg.bangla ? `${bnPx}px` : `${latPx}px` }}>{seg.text.slice(selHi - curStart)}</span>,
+      );
+    });
+    return nodes;
+  };
   const previewMouseDown = (e: React.MouseEvent) => {
     if (direction !== "u2b") return;
     const el = outAreaRef.current;
@@ -607,7 +661,7 @@ export default function Home() {
                     (direction === "u2b"
                       ? "font-output-bijoy"
                       : "font-input-bn") +
-                    (direction === "u2b" ? " absolute inset-0 text-transparent caret-foreground selection:bg-primary/20" : "")
+                    (direction === "u2b" ? " absolute inset-0 text-transparent caret-transparent" : "")
                   }
                   style={{ fontSize: `${fontSize}px` }}
                   aria-hidden={direction === "u2b"}
@@ -622,17 +676,7 @@ export default function Home() {
                     onMouseDown={previewMouseDown}
                     onMouseMove={previewMouseMove}
                     onMouseUp={previewMouseUp}>
-                    {outSegments.map((
-                      seg: { text: string; bangla: boolean },
-                      i: number,
-                    ) => (
-                      <span
-                        key={i}
-                        className={seg.bangla ? "seg-bn" : "seg-lat"}
-                        style={{ fontSize: seg.bangla ? `${bnPx}px` : `${latPx}px` }}>
-                        {seg.text}
-                      </span>
-                    ))}
+                    {renderRichSegments()}
                   </div>
                 )}
               </div>
