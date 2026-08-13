@@ -169,3 +169,11 @@
 - [x] header, favicon ও apple-touch icon-এ একই exact image reference বসানো
 - [x] original aspect ratio বজায় রেখে header ও mobile scale যাচাই করা
 - [x] build, screenshot ও নতুন checkpoint তৈরি করা
+
+# নতুন: reference-inspired banner ও background
+
+- [x] supplied reference-এর light blue/green palette, keyboard pattern ও conversion motifs থেকে original visual system নির্ধারণ করা
+- [x] readable Bengali-first hero banner asset তৈরি করা
+- [x] subtle keyboard-pattern background asset তৈরি করা
+- [x] banner/background webdev storage-এ তুলে website-এ integrate করা
+- [x] contrast, desktop/mobile layout, build ও checkpoint যাচাই করা
