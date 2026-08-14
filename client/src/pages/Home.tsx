@@ -1428,6 +1428,12 @@ export default function Home() {
               কম্পিউটারে SutonnyMJ ফন্ট ইনস্টল না থাকলে আউটপুট বাংলা
               দেখাবে না — এটি স্বাভাবিক, কপি করা টেক্সট সঠিকই থাকবে।
             </li>
+            <li>
+              কনভার্ট করা DOCX-এ বাংলা অংশের indent, alignment, line-height ও
+              font-size বদলানো যাবে; তবে বাংলা অংশের font family SutonnyMJ
+              থেকে অন্য ফন্টে বদলাবেন না। বিজয় টেক্সট ফন্ট-নির্ভর হওয়ায় অন্য
+              ফন্টে এটি হিজিবিজি দেখাবে। ইংরেজি অংশ আলাদাভাবে পরিবর্তন করা যায়।
+            </li>
           </ol>
         </div>
         </>
@@ -1611,10 +1617,12 @@ export default function Home() {
                 </div>
               )}
 
-              <p className="mt-4 text-center text-xs text-muted-foreground">
+              <p className="mt-4 text-center text-xs leading-relaxed text-muted-foreground">
                 রূপান্তর করা হয় — প্রতিটি টেক্সট-রানের ফন্ট SutonnyMJ (বাংলা)
-                / Times New Roman (ইংরেজি) হয়ে যায়; বোল্ড, ইটালিক ও
-                ফুটনোট-রেফারেন্স অপরিবর্তিত থাকে।
+                / Times New Roman (ইংরেজি) হয়ে যায়; বোল্ড, ইটালিক, indent,
+                alignment ও font-size সম্পাদনা নিরাপদ। বাংলা অংশের font family
+                SutonnyMJ থেকে বদলালে বিজয় glyph হিজিবিজি দেখাতে পারে; ইংরেজি
+                অংশ আলাদাভাবে পরিবর্তন করা যায়।
               </p>
             </div>
           </div>

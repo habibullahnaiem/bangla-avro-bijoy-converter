@@ -415,3 +415,8 @@
 - [x] direct `w:sz`/`w:szCs`, paragraph style ও font metadata-এর size interaction audit করা
 - [x] alternate sizes-এ Bijoy text readable, editable ও layout-stable রাখার safe fix পরীক্ষা করা
 - [x] ১৪/১২ defaults, alternate sizes, indent edit, portability, full regression ও checkpoint যাচাই করা
+# নতুন: DOCX font-change corruption after indent
+- [x] indent-এর পর selected Bengali run/paragraph-এর font change corruption reproduce করা
+- [x] font-table, `rFonts`, theme/fallback ও Bijoy text encoding interaction trace করা
+- [x] safe font-change resilience বা clear compatibility guard পরীক্ষা করা
+- [x] indent + font change + size edit, full regression ও safe checkpoint যাচাই করা
