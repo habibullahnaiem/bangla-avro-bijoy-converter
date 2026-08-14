@@ -370,3 +370,8 @@
 - [x] আগের mid-word e-kar correction নষ্ট না করে সবচেয়ে ছোট safe adjustment পরীক্ষা করা
 - [x] word-initial e-kar, ঋ/ৃ-কার, যুক্তবর্ণ, raw sequence ও copy behavior regression যাচাই করা
 - [x] TypeScript, production build, responsive screenshot এবং checkpoint বা safe rollback সম্পন্ন করা
+# নতুন: আ-কার vertical audit
+- [x] আ-কারের rich preview vertical position ও surrounding glyph geometry audit করা
+- [x] শুধুমাত্র প্রয়োজন হলে safe scoped আ-কার optical correction পরীক্ষা করা
+- [x] word-initial/mid-word e-kar, ঋ/ৃ-কার, যুক্তবর্ণ, raw sequence ও copy behavior regression যাচাই করা
+- [x] TypeScript, production build, responsive screenshot এবং checkpoint বা safe rollback সম্পন্ন করা

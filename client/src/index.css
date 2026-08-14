@@ -668,6 +668,17 @@ button:active {
     margin-right: -0.04em;
   }
 
+  /*
+   * আ-কার visual correction: ordinary Bijoy আ-কার is encoded as the plain
+   * `v` marker. Split it only inside Bengali rich-preview segments and lower
+   * the visible glyph by a very small amount. The underlying Bijoy string,
+   * Latin `v`, and all conversion/file/copy paths remain untouched.
+   */
+  .bijoy-rich .bijoy-aa-kar {
+    position: relative;
+    top: 0.018em;
+  }
+
   .bijoy-rich::-moz-selection,
   .bijoy-rich *::-moz-selection {
     background: rgb(13 148 136 / 0.26);
