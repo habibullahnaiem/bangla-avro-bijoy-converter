@@ -365,3 +365,8 @@
 - [x] শুধুমাত্র rich preview-এর mid-word e-kar spacing সামান্য সংশোধন করা
 - [x] word-initial e-kar, ঋ/ৃ-কার, যুক্তবর্ণ, raw sequence ও copy behavior regression যাচাই করা
 - [x] TypeScript, production build, responsive screenshot এবং checkpoint সম্পন্ন করা
+# নতুন: e-kar পরবর্তী gap audit
+- [x] এ-কারের পরে দেখা দেওয়া নতুন gap-এর rich preview geometry audit করা
+- [x] আগের mid-word e-kar correction নষ্ট না করে সবচেয়ে ছোট safe adjustment পরীক্ষা করা
+- [x] word-initial e-kar, ঋ/ৃ-কার, যুক্তবর্ণ, raw sequence ও copy behavior regression যাচাই করা
+- [x] TypeScript, production build, responsive screenshot এবং checkpoint বা safe rollback সম্পন্ন করা

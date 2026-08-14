@@ -656,14 +656,16 @@ button:active {
   }
 
   /*
-   * Mid-word e-kar visual correction: SutonnyMJ can expose a small left
-   * bearing before the U+2021 marker in the rich preview. Shift only the
-   * visible marker left without changing inline flow, selection geometry,
-   * raw Bijoy text, or the conversion engine's native ‡ placement.
+   * Mid-word e-kar visual correction: SutonnyMJ can expose small side bearings
+   * around the U+2021 marker in the rich preview. Shift only the visible
+   * marker left and trim the same tiny trailing advance so the correction does
+   * not trade the original pre-marker gap for a post-marker gap. Raw Bijoy
+   * text and the conversion engine's native ‡ placement remain unchanged.
    */
   .bijoy-rich .bijoy-ekar-mid {
     position: relative;
     left: -0.04em;
+    margin-right: -0.04em;
   }
 
   .bijoy-rich::-moz-selection,
