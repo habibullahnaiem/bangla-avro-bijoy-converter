@@ -342,3 +342,14 @@
 - [x] browser install prompt, bookmark fallback এবং Add to Home Screen guidance যোগ করা
 - [x] desktop/mobile layout, theme contrast, reduced motion এবং repeat-visit behavior যাচাই করা
 - [x] TypeScript, production build, screenshot এবং checkpoint সম্পন্ন করা
+
+# সংশোধন: install prompt bookmark reminder
+- [x] banner copy-তে “ভবিষ্যতে ব্যবহারের জন্য বুকমার্ক করে রাখুন।” reminder যোগ করা
+- [x] install action, fallback guidance, responsive layout ও build যাচাই করা
+
+# সংশোধন: main banner bookmark reminder
+- [x] main hero banner-এ একই bookmark reminder স্পষ্টভাবে যোগ করা
+- [x] prompt ও hero banner-এর contrast, wrapping, screenshot এবং build যাচাই করা
+
+# সংশোধন: approved bookmark wording
+- [x] main banner ও install prompt-এ “ভবিষ্যতে ব্যবহারের জন্য বুকমার্ক করে রাখুন।” ব্যবহার করা

@@ -26,6 +26,7 @@ import {
   Clock3,
   X,
   Moon,
+  Bookmark,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -955,8 +956,8 @@ export default function Home() {
             </h2>
             <p className="pwa-install-prompt__copy">
               {installPrompt
-                ? "ফোন বা কম্পিউটারের Home Screen-এ অভ্রজয় যোগ করলে দ্রুত খুলতে পারবেন।"
-                : "ব্রাউজারের Install icon বা menu থেকে Install অভ্রজয় নির্বাচন করুন; না হলে এই পেজটি bookmark করে রাখুন।"}
+                ? "ফোন বা কম্পিউটারের Home Screen-এ অভ্রজয় যোগ করলে দ্রুত খুলতে পারবেন। ভবিষ্যতে ব্যবহারের জন্য বুকমার্ক করে রাখুন।"
+                : "ব্রাউজারের Install icon বা menu থেকে Install অভ্রজয় নির্বাচন করুন। ভবিষ্যতে ব্যবহারের জন্য বুকমার্ক করে রাখুন।"}
             </p>
             {!installPrompt ? (
               <p className="pwa-install-prompt__hint">
@@ -1007,6 +1008,10 @@ export default function Home() {
               অভ্র/ইউনিকোড ⇄ বিজয় রূপান্তরের নির্ভরযোগ্য বাংলা publishing desk।
               যুক্তাক্ষর, যতিচিহ্ন, DOCX/TXT ফাইল এবং font-aware বাংলা–ইংরেজি
               preview—লেখক ও প্রকাশকের কাজ এক জায়গায় সামলান।
+            </p>
+            <p className="hero-bookmark-note mt-3">
+              <Bookmark className="hero-bookmark-note__icon" aria-hidden="true" />
+              ভবিষ্যতে ব্যবহারের জন্য বুকমার্ক করে রাখুন।
             </p>
           </div>
           <div className="hero-panel__actions">
