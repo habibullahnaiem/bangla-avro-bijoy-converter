@@ -380,3 +380,8 @@
 - [x] শুধুমাত্র আ-কারের নতুন vertical rule সরিয়ে আগের baseline ফিরিয়ে আনা
 - [x] e-kar spacing, ঋ/ৃ-কার, যুক্তবর্ণ, raw sequence ও copy behavior regression যাচাই করা
 - [x] TypeScript, production build, responsive screenshot এবং safe restoration checkpoint সম্পন্ন করা
+# নতুন: conjunct alignment audit
+- [x] প্র, ল্ল, ত্ব-এর conversion code sequence ও rich preview geometry audit করা
+- [x] প্রয়োজন হলে শুধুমাত্র সংশ্লিষ্ট conjunct-এর scoped visual correction পরীক্ষা করা
+- [x] e-kar, ঋ/ৃ-কার, র-ফলা, অন্যান্য যুক্তবর্ণ, raw sequence ও copy behavior regression যাচাই করা
+- [x] TypeScript, production build, responsive screenshot এবং safe checkpoint বা no-change সিদ্ধান্ত সম্পন্ন করা
