@@ -634,7 +634,7 @@ function sanitizeXml(text: string): string {
 const BANGLA_RE = /[\u0980-\u09FF]/;
 const LATIN_RE = /[A-Za-z0-9]/;
 const PUNCT_RE =
-  /[।॥“”‘’—–¢£¤¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ\u007C\u005C]/;
+  /[।॥…“”‘’—–¢£¤¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ\u007C\u005C]/;
 
 function hasBanglaOrPunct(text: string): boolean {
   return BANGLA_RE.test(text) || PUNCT_RE.test(text);
@@ -710,7 +710,10 @@ export function mapSegmentsToBijoy(
 // মতো দেখায়। সুতরাং ফন্ট-সিদ্ধান্তে "উৎসে বাংলা" নয়, "উৎসে বাংলা বা
 // ফলাফলে বিজয়-পাঙ্কচুয়েশন" দেখা হয়।
 function needsSutonnyMJ(origText: string, convText: string): boolean {
-  return BANGLA_RE.test(origText) || PUNCT_RE.test(convText);
+  // U+2026 কখনও নিজস্ব <w:r>-এ থাকে। সেটি রূপান্তর না হলে Word SutonnyMJ-তে
+  // Unicode ellipsis-কে ঋ/ৃ-কার-সদৃশ glyph হিসেবে আঁকে। উৎসের punctuation-ও
+  // Bengali-context run হিসেবে ধরলে `…` → `...` একই SutonnyMJ run-এ থাকে।
+  return BANGLA_RE.test(origText) || PUNCT_RE.test(origText) || PUNCT_RE.test(convText);
 }
 
 /** মিশ্র টেক্সটকে বাংলা/অ-বাংলা সেগমেন্টে ভাগ করার শর্ত */

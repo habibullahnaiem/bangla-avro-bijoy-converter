@@ -52,6 +52,11 @@ function minimalDocx(): JSZip {
   <w:p><w:pPr><w:pStyle w:val="Normal"/></w:pPr>
     <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t>প্র, ল্ল, ত্ব, ক্ষ, জ্ঞ, শ্র — English 2026</w:t></w:r>
   </w:p><w:sectPr/>
+  <w:p><w:pPr><w:pStyle w:val="Normal"/></w:pPr>
+    <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t>টাকার দিকে।</w:t></w:r>
+    <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t>…</w:t></w:r>
+    <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t>ওদিকে তাকিয়ে</w:t></w:r>
+  </w:p><w:sectPr/>
 </w:body></w:document>`,
   );
   return zip;
@@ -145,6 +150,9 @@ async function main() {
 
   const zip = await JSZip.loadAsync(output);
   const editedXml = await zip.file("word/document.xml")!.async("string");
+  if (editedXml.includes("…")) {
+    throw new Error("standalone ellipsis run was not normalized before SutonnyMJ DOCX output");
+  }
   const simulatedEdit = editedXml.replace(
     "</w:pStyle>",
     "</w:pStyle><w:ind w:left=\"720\"/><w:rPr><w:sz w:val=\"32\"/><w:szCs w:val=\"32\"/></w:rPr>",

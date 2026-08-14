@@ -425,3 +425,13 @@
 - [x] warning-এর বাইরে automatic protection, embedded-font বা package-level strategy পরীক্ষা করা
 - [x] Word-style mutation, alternate size, package integrity ও full converter regression যাচাই করা
 - [x] genuine fix checkpoint করা অথবা last stable DOCX behavior restore করে limitation স্পষ্ট করা
+
+# সক্রিয়: stable baseline-এ indented DOCX ও দাঁড়ির-পাশের glyph
+- [ ] normal paragraph না বদলে Word-এর indented paragraph-এর exact font/style inheritance trace করা
+- [x] `।`-এর পর দেখা যাওয়া ঋ/ৃ-কার-সদৃশ glyph-এর source text ও Bijoy sequence পুনরুৎপাদন করা
+- [x] standalone U+2026 ellipsis run-কে `...`-এ normalize করা এবং DOCX regression যোগ করা
+
+# Exact Word fixture: দাঁড়ির পরে stray U+2026 ellipsis
+- [x] ব্যবহারকারীর দেওয়া `...w`‡K| …Iw`‡K...` sequence-কে direct conversion ও DOCX run-splitting fixture হিসেবে যোগ করা
+- [x] `|`-এর পরে glyph-টি `†` নয়, Word XML-এ থেকে যাওয়া standalone Unicode ellipsis U+2026 বলে শনাক্ত করা
+- [x] exact fixture-এ U+2026 অপসারণ নিশ্চিত করা; অন্য initial e-kar behavior অপরিবর্তিত রাখা
