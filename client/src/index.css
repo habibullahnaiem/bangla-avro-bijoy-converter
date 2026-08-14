@@ -1909,10 +1909,232 @@ button:active {
     background: oklch(0.2 0.06 70 / 0.88);
   }
 
+  /* First-visit install prompt: an unobtrusive offline-app invitation that
+     follows the Teal Desk surfaces and remains legible in both themes. */
+  .pwa-install-prompt {
+    position: fixed;
+    z-index: 80;
+    right: 1rem;
+    bottom: 1rem;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 0.8rem;
+    width: min(31rem, calc(100vw - 2rem));
+    padding: 1rem 1rem 1rem 1.05rem;
+    border: 1px solid oklch(0.7 0.08 190 / 0.55);
+    border-radius: 1.15rem;
+    color: oklch(0.2 0.045 205);
+    background: oklch(0.98 0.012 185 / 0.98);
+    box-shadow: 0 18px 42px oklch(0.16 0.04 205 / 0.2),
+      0 3px 10px oklch(0.16 0.04 205 / 0.1);
+    backdrop-filter: blur(16px);
+    animation: pwa-prompt-in 260ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+
+  .pwa-install-prompt__mark {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    margin-top: 0.1rem;
+    border-radius: 0.75rem;
+    color: oklch(0.98 0.01 190);
+    background: oklch(0.34 0.1 190);
+    box-shadow: 0 6px 15px oklch(0.34 0.1 190 / 0.22);
+  }
+
+  .pwa-install-prompt__body {
+    min-width: 0;
+  }
+
+  .pwa-install-prompt__eyebrow {
+    margin: 0 0 0.15rem;
+    color: oklch(0.38 0.09 190);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .pwa-install-prompt__title {
+    margin: 0;
+    color: oklch(0.18 0.045 205);
+    font-size: 0.98rem;
+    font-weight: 800;
+    line-height: 1.35;
+  }
+
+  .pwa-install-prompt__copy,
+  .pwa-install-prompt__hint {
+    margin: 0.35rem 0 0;
+    color: oklch(0.36 0.045 205);
+    font-size: 0.78rem;
+    line-height: 1.55;
+  }
+
+  .pwa-install-prompt__hint {
+    color: oklch(0.42 0.055 190);
+    font-size: 0.7rem;
+  }
+
+  .pwa-install-prompt__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 0.7rem;
+  }
+
+  .pwa-install-prompt__install {
+    color: oklch(0.98 0.01 190);
+    background: oklch(0.34 0.1 190);
+    box-shadow: 0 5px 12px oklch(0.34 0.1 190 / 0.2);
+  }
+
+  .pwa-install-prompt__install:hover {
+    color: oklch(0.99 0.005 190);
+    background: oklch(0.28 0.09 195);
+  }
+
+  .pwa-install-prompt__later {
+    color: oklch(0.34 0.065 200);
+  }
+
+  .pwa-install-prompt__later:hover {
+    color: oklch(0.2 0.055 205);
+    background: oklch(0.9 0.04 190);
+  }
+
+  .pwa-install-prompt__close {
+    display: grid;
+    place-items: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    margin: -0.25rem -0.25rem 0 0;
+    border: 0;
+    border-radius: 999px;
+    color: oklch(0.42 0.04 205);
+    background: transparent;
+    cursor: pointer;
+    transition: color 160ms ease-out, background 160ms ease-out, transform 160ms ease-out;
+  }
+
+  .pwa-install-prompt__close:hover {
+    color: oklch(0.2 0.055 205);
+    background: oklch(0.9 0.04 190);
+    transform: rotate(5deg);
+  }
+
+  .pwa-install-prompt__close:focus-visible,
+  .pwa-install-prompt__install:focus-visible,
+  .pwa-install-prompt__later:focus-visible {
+    outline: 2px solid oklch(0.55 0.16 180);
+    outline-offset: 3px;
+  }
+
+  .dark .pwa-install-prompt {
+    border-color: oklch(0.62 0.1 190 / 0.72);
+    color: oklch(0.94 0.02 190);
+    background: oklch(0.16 0.045 205 / 0.98);
+    box-shadow: 0 20px 48px oklch(0.02 0.02 220 / 0.48),
+      0 3px 12px oklch(0.02 0.02 220 / 0.28);
+  }
+
+  .dark .pwa-install-prompt__mark {
+    color: oklch(0.98 0.01 190);
+    background: oklch(0.31 0.09 190);
+  }
+
+  .dark .pwa-install-prompt__eyebrow {
+    color: oklch(0.78 0.1 185);
+  }
+
+  .dark .pwa-install-prompt__title {
+    color: oklch(0.97 0.01 190);
+  }
+
+  .dark .pwa-install-prompt__copy {
+    color: oklch(0.84 0.025 195);
+  }
+
+  .dark .pwa-install-prompt__hint {
+    color: oklch(0.73 0.07 190);
+  }
+
+  .dark .pwa-install-prompt__install {
+    color: oklch(0.12 0.035 205);
+    background: oklch(0.78 0.12 180);
+  }
+
+  .dark .pwa-install-prompt__install:hover {
+    color: oklch(0.1 0.03 205);
+    background: oklch(0.86 0.12 180);
+  }
+
+  .dark .pwa-install-prompt__later,
+  .dark .pwa-install-prompt__close {
+    color: oklch(0.8 0.035 195);
+  }
+
+  .dark .pwa-install-prompt__later:hover,
+  .dark .pwa-install-prompt__close:hover {
+    color: oklch(0.97 0.01 190);
+    background: oklch(0.27 0.06 195);
+  }
+
+  @keyframes pwa-prompt-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.6rem) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
   @media (max-width: 640px) {
     .pwa-status-badge {
       padding-inline: 0.5rem;
       font-size: 0.68rem;
+    }
+
+    .pwa-install-prompt {
+      right: 0.75rem;
+      bottom: 0.75rem;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 0.65rem;
+      width: calc(100vw - 1.5rem);
+      padding: 0.85rem;
+      border-radius: 1rem;
+    }
+
+    .pwa-install-prompt__mark {
+      width: 2rem;
+      height: 2rem;
+    }
+
+    .pwa-install-prompt__title {
+      font-size: 0.88rem;
+    }
+
+    .pwa-install-prompt__copy {
+      font-size: 0.74rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pwa-install-prompt,
+    .pwa-install-prompt__close,
+    .pwa-install-prompt__install,
+    .pwa-install-prompt__later {
+      animation: none;
+      transition: none;
+    }
+
+    .pwa-install-prompt__close:hover {
+      transform: none;
     }
   }
 }

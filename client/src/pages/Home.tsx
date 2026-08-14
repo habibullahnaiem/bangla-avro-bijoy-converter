@@ -64,6 +64,7 @@ const EXAMPLE_TEXT = `বিষয়: বাংলা নথির টাইপ
 const HISTORY_STORAGE_KEY = "abc-recent-conversions";
 const MAX_HISTORY_ITEMS = 6;
 const BRAND_LOGO_SRC = "/manus-storage/bangla-converter-exact-reference-logo_2f0bb0ec.png";
+const INSTALL_PROMPT_DISMISSED_KEY = "avrojoy-install-prompt-dismissed";
 const DECORATIVE_GLYPHS = [
   "অ", "আ", "ই", "ঈ", "উ", "ক", "খ", "গ", "ঘ", "চ", "ছ", "ত",
   "থ", "ন", "প", "ফ", "ব", "ম", "র", "ল", "শ", "স", "হ",
@@ -140,6 +141,7 @@ export default function Home() {
   const [pwaReady, setPwaReady] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [showInstallPrompt, setShowInstallPrompt] = useState(false);
 
   useEffect(() => {
     try {
@@ -160,16 +162,42 @@ export default function Home() {
     const handleBeforeInstallPrompt = (event: Event) => {
       event.preventDefault();
       setInstallPrompt(event as BeforeInstallPromptEvent);
+      try {
+        if (!localStorage.getItem(INSTALL_PROMPT_DISMISSED_KEY)) {
+          setShowInstallPrompt(true);
+        }
+      } catch {
+        setShowInstallPrompt(true);
+      }
     };
     const handleAppInstalled = () => {
       setInstallPrompt(null);
       setIsStandalone(true);
+      setShowInstallPrompt(false);
+      try {
+        localStorage.setItem(INSTALL_PROMPT_DISMISSED_KEY, "installed");
+      } catch {
+        // Storage-restricted environments should still allow installation.
+      }
       toast.success("অভ্রজয় অফলাইন অ্যাপ হিসেবে ইনস্টল হয়েছে");
     };
     const markPwaReady = () => setPwaReady(true);
 
     syncOnlineState();
     syncStandaloneState();
+    const installPromptTimer = window.setTimeout(() => {
+      const standalone =
+        window.matchMedia("(display-mode: standalone)").matches ||
+        Boolean((navigator as Navigator & { standalone?: boolean }).standalone);
+      if (standalone) return;
+      try {
+        if (!localStorage.getItem(INSTALL_PROMPT_DISMISSED_KEY)) {
+          setShowInstallPrompt(true);
+        }
+      } catch {
+        setShowInstallPrompt(true);
+      }
+    }, 1400);
     window.addEventListener("online", syncOnlineState);
     window.addEventListener("offline", syncOnlineState);
     window.addEventListener("resize", syncStandaloneState);
@@ -182,6 +210,7 @@ export default function Home() {
     }
 
     return () => {
+      window.clearTimeout(installPromptTimer);
       window.removeEventListener("online", syncOnlineState);
       window.removeEventListener("offline", syncOnlineState);
       window.removeEventListener("resize", syncStandaloneState);
@@ -784,12 +813,34 @@ export default function Home() {
       await installPrompt.prompt();
       const choice = await installPrompt.userChoice;
       if (choice.outcome === "accepted") {
+        setShowInstallPrompt(false);
+        try {
+          localStorage.setItem(INSTALL_PROMPT_DISMISSED_KEY, "installed");
+        } catch {
+          // The app can still complete installation when storage is restricted.
+        }
         toast.success("অভ্রজয় ইনস্টল করার অনুরোধ গ্রহণ করা হয়েছে");
+      } else {
+        setShowInstallPrompt(false);
+        try {
+          localStorage.setItem(INSTALL_PROMPT_DISMISSED_KEY, "dismissed");
+        } catch {
+          // Dismissal persistence is best-effort.
+        }
       }
     } catch {
       toast.error("অফলাইন অ্যাপ ইনস্টল করা যায়নি");
     } finally {
       setInstallPrompt(null);
+    }
+  };
+
+  const dismissInstallPrompt = () => {
+    setShowInstallPrompt(false);
+    try {
+      localStorage.setItem(INSTALL_PROMPT_DISMISSED_KEY, "dismissed");
+    } catch {
+      // The prompt remains dismissible even when storage is unavailable.
     }
   };
 
@@ -887,6 +938,59 @@ export default function Home() {
           </div>
         </div>
       </header>
+
+      {showInstallPrompt && !isStandalone ? (
+        <aside
+          className="pwa-install-prompt"
+          role="dialog"
+          aria-modal="false"
+          aria-labelledby="pwa-install-prompt-title">
+          <div className="pwa-install-prompt__mark" aria-hidden="true">
+            <Download className="h-5 w-5" />
+          </div>
+          <div className="pwa-install-prompt__body">
+            <p className="pwa-install-prompt__eyebrow">অভ্রজয় অফলাইন অ্যাপ</p>
+            <h2 id="pwa-install-prompt-title" className="pwa-install-prompt__title">
+              একবার রেখে দিন, পরে অফলাইনেও ব্যবহার করুন
+            </h2>
+            <p className="pwa-install-prompt__copy">
+              {installPrompt
+                ? "ফোন বা কম্পিউটারের Home Screen-এ অভ্রজয় যোগ করলে দ্রুত খুলতে পারবেন।"
+                : "ব্রাউজারের Install icon বা menu থেকে Install অভ্রজয় নির্বাচন করুন; না হলে এই পেজটি bookmark করে রাখুন।"}
+            </p>
+            {!installPrompt ? (
+              <p className="pwa-install-prompt__hint">
+                Chrome/Edge: <strong>Ctrl/Cmd + D</strong> · iPhone/iPad: Share → Add to Home Screen
+              </p>
+            ) : null}
+            <div className="pwa-install-prompt__actions">
+              {installPrompt ? (
+                <Button
+                  size="sm"
+                  className="pwa-install-prompt__install"
+                  onClick={installApp}>
+                  <Download className="mr-1.5 h-4 w-4" />
+                  অ্যাপ ইনস্টল করুন
+                </Button>
+              ) : null}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="pwa-install-prompt__later"
+                onClick={dismissInstallPrompt}>
+                {installPrompt ? "এখন নয়" : "বুঝেছি"}
+              </Button>
+            </div>
+          </div>
+          <button
+            type="button"
+            className="pwa-install-prompt__close"
+            onClick={dismissInstallPrompt}
+            aria-label="ইনস্টল বার্তা বন্ধ করুন">
+            <X className="h-4 w-4" />
+          </button>
+        </aside>
+      ) : null}
 
       <main className="app-main container flex-1">
         {/* ডিজাইন দিক: টিল ডেস্ক — compact intro, glyph-first AvroJoy identity, converter as the first-look product desk */}

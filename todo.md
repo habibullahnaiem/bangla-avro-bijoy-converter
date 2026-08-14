@@ -336,3 +336,9 @@
 - [x] SutonnyMJ font ও critical visual assets offline cache-এর জন্য প্রস্তুত করা
 - [x] offline/install UX, production build, manifest/service-worker এবং responsive behavior যাচাই করা
 - [x] stable PWA checkpoint তৈরি করা এবং offline ব্যবহারের নির্দেশনা লেখা
+
+# নতুন: first-visit install prompt
+- [x] first-visit prompt-এর display, dismissal এবং persistence behavior audit করা
+- [x] browser install prompt, bookmark fallback এবং Add to Home Screen guidance যোগ করা
+- [x] desktop/mobile layout, theme contrast, reduced motion এবং repeat-visit behavior যাচাই করা
+- [x] TypeScript, production build, screenshot এবং checkpoint সম্পন্ন করা
