@@ -25,6 +25,7 @@ import {
   Trash2,
   Clock3,
   X,
+  Moon,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -44,6 +45,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const EXAMPLE_TEXT = `বিষয়: বাংলা নথির টাইপসেটিং ও রূপান্তর-সহায়তা
 
@@ -90,6 +92,7 @@ const compactHistoryText = (text: string, max = 92) => {
 };
 
 export default function Home() {
+  const { theme, toggleTheme } = useTheme();
   const [activeTab, setActiveTab] = useState<"text" | "file">("text");
   const [direction, setDirection] = useState<ConvertDirection>("u2b");
   const [input, setInput] = useState("");
@@ -762,14 +765,18 @@ export default function Home() {
                 variant="ghost"
                 size="icon"
                 className="text-primary-foreground hover:bg-primary-foreground/10"
-                onClick={() =>
-                  toast.info("ডার্ক মোড শিগগিরই আসছে")
-                }
-                aria-label="থিম">
-                <Sun className="h-5 w-5" />
+                onClick={() => toggleTheme?.()}
+                aria-label={theme === "dark" ? "লাইট মোড চালু করুন" : "ডার্ক মোড চালু করুন"}>
+                {theme === "dark" ? (
+                  <Sun className="h-5 w-5" />
+                ) : (
+                  <Moon className="h-5 w-5" />
+                )}
               </Button>
             </TooltipTrigger>
-            <TooltipContent>থিম সুইচ শিগগিরই আসছে</TooltipContent>
+            <TooltipContent>
+              {theme === "dark" ? "লাইট মোড" : "ডার্ক মোড"}
+            </TooltipContent>
           </Tooltip>
         </div>
       </header>

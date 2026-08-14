@@ -292,3 +292,11 @@
 - [x] “ন্ত” sample-কে “ন্ট”, “শ্রীরাম” sample-কে “শ্রাবণ”, এবং “বড়াই” sample-কে “রূঢ়” করা
 - [x] বাকি যুক্তবর্ণ preview examples অপরিবর্তিত রাখা
 - [x] copy change, build ও checkpoint যাচাই করা
+
+# নতুন: AvroJoy dark mode
+
+- [x] বর্তমান light theme-এর tokens, ThemeProvider এবং header control audit করা
+- [x] persistent dark-mode toggle যোগ করা, যাতে reload-এর পর পছন্দটি থাকে
+- [x] hero, keyboard background, converter panes, file preview, history এবং footer-এর contrast-safe dark surfaces তৈরি করা
+- [x] SutonnyMJ/Bijoy output, Bengali glyph decoration, focus, hover, print/PDF preview এবং mobile layout dark mode-এ যাচাই করা
+- [x] TypeScript, production build, desktop/mobile screenshot এবং checkpoint সম্পন্ন করা

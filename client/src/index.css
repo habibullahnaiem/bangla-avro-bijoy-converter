@@ -1230,3 +1230,215 @@ button:active {
     box-shadow: 0 16px 32px oklch(0.22 0.045 210 / 0.12);
   }
 }
+
+/* ডিজাইন দিক: টিল ডেস্ক — AvroJoy dark desk
+   - light theme-এর কাগজ-ডেস্কের বিপরীতে গভীর নীল-টিল workbench
+   - primary cyan-teal ink, muted slate text এবং amber/coral glyph accents
+   - converter output একটি আলাদা warm paper surface থাকে, যাতে SutonnyMJ পাঠযোগ্যতা ও copy fidelity অক্ষুণ্ণ থাকে
+   - প্রতিটি interactive surface-এর focus, hover এবং selection state dark background-এ স্পষ্ট থাকে */
+@media screen {
+  .dark .app-shell {
+    background:
+      linear-gradient(180deg, oklch(0.2 0.025 215 / 0.94), oklch(0.16 0.025 220 / 0.98)),
+      url("/manus-storage/bangla-converter-keyboard-background_fad26d5c.png") center top / 760px auto repeat,
+      radial-gradient(circle at 8% 4%, oklch(0.32 0.08 190 / 0.18), transparent 28rem),
+      radial-gradient(circle at 92% 20%, oklch(0.3 0.06 205 / 0.16), transparent 31rem),
+      var(--background);
+  }
+
+  .dark .site-header {
+    background:
+      linear-gradient(90deg, oklch(0.24 0.075 205 / 0.99) 0%, oklch(0.28 0.09 195 / 0.96) 48%, oklch(0.2 0.075 205 / 0.9) 100%),
+      url("/manus-storage/avrojoy-bengali-glyph-ribbon_f006d975.png") right center / cover no-repeat,
+      url("/manus-storage/bangla-converter-keyboard-background_fad26d5c.png") center top / 760px auto repeat;
+    box-shadow: 0 14px 35px oklch(0.04 0.025 215 / 0.42);
+    color: oklch(0.94 0.018 200);
+  }
+
+  .dark .site-header .text-primary-foreground {
+    color: oklch(0.94 0.018 200);
+  }
+
+  .dark .site-header a[aria-label*="হোম"] {
+    background: oklch(0.96 0.008 90 / 0.96);
+  }
+
+  .dark .site-header::after {
+    background: linear-gradient(90deg, transparent, oklch(0.74 0.14 190 / 0.72), transparent);
+  }
+
+  .dark .site-brand__subtitle,
+  .dark .site-footer__inner {
+    color: oklch(0.86 0.035 195 / 0.88);
+  }
+
+  .dark .hero-panel {
+    border-color: oklch(0.5 0.1 195 / 0.48);
+    background:
+      linear-gradient(90deg, oklch(0.23 0.035 215 / 0.98) 0%, oklch(0.23 0.045 205 / 0.94) 43%, oklch(0.21 0.055 195 / 0.58) 72%, transparent 100%),
+      url("/manus-storage/avrojoy-hero-v2-banner_b1dad7f4.png") right center / cover no-repeat,
+      url("/manus-storage/bangla-converter-keyboard-background_fad26d5c.png") right center / 64% auto repeat;
+    box-shadow: 0 16px 34px oklch(0.05 0.025 215 / 0.28);
+  }
+
+  .dark .hero-title {
+    color: var(--foreground);
+  }
+
+  .dark .hero-summary {
+    color: oklch(0.74 0.025 210);
+  }
+
+  .dark .status-puck {
+    border-color: oklch(0.62 0.12 180 / 0.6);
+    background: oklch(0.25 0.06 185 / 0.72);
+    color: oklch(0.86 0.08 180);
+  }
+
+  .dark .hero-example {
+    border-color: oklch(0.65 0.1 195 / 0.5);
+    background: oklch(0.2 0.04 210 / 0.82);
+    color: oklch(0.83 0.1 190);
+  }
+
+  .dark .workspace-tabs,
+  .dark .workspace-card,
+  .dark .converter-card,
+  .dark .file-workspace,
+  .dark .feature-card,
+  .dark .usage-card,
+  .dark .type-legend,
+  .dark .glyph-preview {
+    border-color: oklch(1 0 0 / 12%);
+    box-shadow: 0 18px 42px oklch(0.04 0.025 215 / 0.26);
+  }
+
+  .dark .workspace-tabs {
+    background: oklch(0.22 0.025 212 / 0.96);
+  }
+
+  .dark .workspace-card,
+  .dark .converter-card,
+  .dark .file-workspace {
+    background: oklch(0.205 0.025 213 / 0.96);
+  }
+
+  .dark .converter-toolbar,
+  .dark .converter-actionbar,
+  .dark .editor-pane__header,
+  .dark .editor-pane__footer,
+  .dark .file-workspace__header,
+  .dark .file-direction {
+    background: linear-gradient(180deg, oklch(0.28 0.03 212 / 0.92), oklch(0.24 0.028 212 / 0.92));
+  }
+
+  .dark .converter-toolbar__directions,
+  .dark .converter-toolbar__font-size {
+    border-color: oklch(1 0 0 / 14%);
+    background: oklch(0.18 0.025 215 / 0.78);
+  }
+
+  .dark .editor-pane {
+    background: oklch(0.195 0.025 214 / 0.96);
+  }
+
+  .dark .editor-pane textarea {
+    background: oklch(0.18 0.025 215 / 0.92);
+    color: var(--foreground);
+  }
+
+  .dark .editor-pane textarea:focus {
+    background: oklch(0.21 0.035 205 / 0.98);
+  }
+
+  .dark .bijoy-rich {
+    background: oklch(0.955 0.008 90);
+    color: oklch(0.23 0.028 210);
+  }
+
+  .dark .bijoy-rich::selection,
+  .dark .bijoy-rich *::selection,
+  .dark .bijoy-rich mark {
+    background: oklch(0.62 0.13 178 / 0.34);
+    color: inherit;
+  }
+
+  .dark .glyph-strip {
+    border-color: oklch(0.55 0.1 190 / 0.48);
+    background:
+      linear-gradient(90deg, oklch(0.25 0.06 190 / 0.92), oklch(0.22 0.035 212 / 0.94) 42%, oklch(0.2 0.05 205 / 0.9)),
+      url("/manus-storage/bangla-converter-keyboard-background_fad26d5c.png") right center / 220px auto repeat;
+  }
+
+  .dark .type-legend {
+    background: oklch(0.25 0.035 205 / 0.88);
+  }
+
+  .dark .glyph-preview {
+    background: linear-gradient(135deg, oklch(0.24 0.035 212), oklch(0.2 0.05 190));
+  }
+
+  .dark .feature-card,
+  .dark .usage-card {
+    background: oklch(0.23 0.03 212 / 0.94);
+  }
+
+  .dark .feature-card__icon {
+    background: linear-gradient(135deg, oklch(0.47 0.12 210), oklch(0.54 0.14 165));
+  }
+
+  .dark .feature-card__example {
+    border-left-color: oklch(0.62 0.13 170 / 0.68);
+    background: oklch(0.27 0.045 190 / 0.72);
+  }
+
+  .dark .feature-card__example-label {
+    color: oklch(0.78 0.08 195);
+  }
+
+  .dark .file-dropzone {
+    border-color: oklch(0.58 0.11 195 / 0.62);
+    background: linear-gradient(135deg, oklch(0.25 0.055 190 / 0.78), oklch(0.22 0.035 212 / 0.82));
+  }
+
+  .dark .file-dropzone:hover {
+    background: oklch(0.29 0.07 190 / 0.88);
+  }
+
+  .dark .file-dropzone--active {
+    background: oklch(0.3 0.1 190 / 0.92) !important;
+    box-shadow: 0 0 0 4px oklch(0.62 0.12 195 / 0.22), 0 16px 34px oklch(0.04 0.025 215 / 0.3);
+  }
+
+  .dark .site-footer {
+    background:
+      linear-gradient(90deg, oklch(0.22 0.075 205 / 0.99) 0%, oklch(0.27 0.09 195 / 0.96) 48%, oklch(0.18 0.075 205 / 0.92) 100%),
+      url("/manus-storage/avrojoy-bengali-glyph-ribbon_f006d975.png") right center / cover no-repeat,
+      url("/manus-storage/bangla-converter-keyboard-background_fad26d5c.png") center / 760px auto repeat;
+    box-shadow: 0 -10px 30px oklch(0.04 0.025 215 / 0.32);
+  }
+
+  .dark .print-preview-backdrop {
+    background: oklch(0.04 0.025 215 / 0.7);
+  }
+
+  .dark .print-preview-dialog {
+    border-color: oklch(1 0 0 / 14%);
+    background: var(--card);
+  }
+
+  .dark .print-preview-actions {
+    background: linear-gradient(180deg, oklch(0.28 0.03 212 / 0.94), oklch(0.24 0.028 212 / 0.94));
+  }
+
+  /* The paper remains light by intent: print/PDF preview should mirror the physical page. */
+  .dark .print-preview-paper {
+    background: oklch(0.98 0.004 90);
+    color: oklch(0.2 0.025 210);
+  }
+
+  .dark .print-preview-paper__meta {
+    border-color: oklch(0.86 0.01 210);
+    color: oklch(0.42 0.02 210);
+  }
+}
