@@ -375,3 +375,8 @@
 - [x] শুধুমাত্র প্রয়োজন হলে safe scoped আ-কার optical correction পরীক্ষা করা
 - [x] word-initial/mid-word e-kar, ঋ/ৃ-কার, যুক্তবর্ণ, raw sequence ও copy behavior regression যাচাই করা
 - [x] TypeScript, production build, responsive screenshot এবং checkpoint বা safe rollback সম্পন্ন করা
+# নতুন: আ-কার overcorrection rollback
+- [x] অতিরিক্ত নিচে নামানো আ-কার correction শনাক্ত করা
+- [x] শুধুমাত্র আ-কারের নতুন vertical rule সরিয়ে আগের baseline ফিরিয়ে আনা
+- [x] e-kar spacing, ঋ/ৃ-কার, যুক্তবর্ণ, raw sequence ও copy behavior regression যাচাই করা
+- [x] TypeScript, production build, responsive screenshot এবং safe restoration checkpoint সম্পন্ন করা

@@ -565,15 +565,14 @@ export default function Home() {
   // SutonnyMJ-এর ঋ/ৃ-কার marker (U+201E), word-initial e-kar marker (U+2020),
   // এবং mid-word e-kar marker (U+2021) legacy glyph; rich preview-তে আলাদা token
   // দিলে কেবল optical placement ঠিক করা যায়, কিন্তু copied Bijoy text-এর আসল
-  // code sequence অপরিবর্তিত থাকে। Bengali-only `v` token আ-কারের optical
-  // adjustment-এর জন্য আলাদা করা হয়; Latin text-এর `v` কখনোই split হয় না।
+  // code sequence অপরিবর্তিত থাকে।
   const renderBijoyText = (
     text: string,
     className: string,
     size: number,
     keyPrefix: string,
   ) =>
-    text.split(className.includes("seg-bn") ? /(„|†|‡|v)/g : /(„|†|‡)/g).map((part, index) =>
+    text.split(/(„|†|‡)/g).map((part, index) =>
       part ? (
         <span
           key={`${keyPrefix}-${index}`}
@@ -584,8 +583,6 @@ export default function Home() {
                 ? `${className} bijoy-ekar-initial`
                 : part === "‡"
                   ? `${className} bijoy-ekar-mid`
-                  : part === "v"
-                    ? `${className} bijoy-aa-kar`
                   : className
           }
           style={{ fontSize: `${size}px` }}>
