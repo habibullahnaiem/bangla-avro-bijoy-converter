@@ -446,3 +446,8 @@
 - [x] endnote-reference run ও EndnoteReference style-এ Word override কমানোর নিরাপদ isolation point নির্ণয় করা
 - [x] শুধু note reference/body-তে direct SutonnyMJ mapping ও style containment শক্ত করা
 - [x] normal paragraph, endnote body, superscript reference এবং font-change fixture-এ regression চালানো
+
+# সক্রিয়: word-adjacent endnote reference scope
+- [x] reference anchor-কে paragraph-wide formatting থেকে আলাদা করার বিদ্যমান run structure যাচাই করা
+- [x] reference-এ শুধু নিজস্ব superscript run metadata রাখা; adjacent Bengali word-এর run অপরিবর্তিত রাখা
+- [x] word + reference + trailing text fixture-এ formatting-scope regression চালানো

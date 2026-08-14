@@ -65,6 +65,7 @@ function minimalDocx(): JSZip {
   <w:p><w:pPr><w:pStyle w:val="Normal"/></w:pPr>
     <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t>এন্ডনোটসহ বাংলা বাক্য</w:t></w:r>
     <w:r><w:rPr><w:rStyle w:val="EndnoteReference"/><w:vertAlign w:val="superscript"/><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr><w:endnoteReference w:id="1"/></w:r>
+    <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t> এরপরও বাক্য আছে</w:t></w:r>
   </w:p><w:sectPr/>
 </w:body></w:document>`,
   );
@@ -144,6 +145,24 @@ async function inspectEndnoteHandling(path: string): Promise<void> {
   if (referenceRuns.length !== 1) throw new Error(`endnote reference count mismatch: ${referenceRuns.length}`);
   const reference = referenceRuns[0];
   assertFontSlots(reference, "SutonnyMJ", "endnote reference");
+  const anchorWordRun = reference.previousElementSibling;
+  const trailingTextRun = reference.nextElementSibling;
+  if (!anchorWordRun || anchorWordRun.localName !== "r") {
+    throw new Error("endnote reference is not adjacent to a dedicated anchor-word run");
+  }
+  const anchorWord = anchorWordRun.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "";
+  if (!anchorWord || /\s/.test(anchorWord)) {
+    throw new Error(`endnote anchor run was not reduced to one word: ${anchorWord || "empty"}`);
+  }
+  assertFontSlots(anchorWordRun, "SutonnyMJ", "endnote anchor word");
+  if (!trailingTextRun || trailingTextRun.localName !== "r") {
+    throw new Error("text after the endnote reference was not preserved as its own run");
+  }
+  const trailingText = trailingTextRun.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "";
+  if (!trailingText || trailingTextRun.getElementsByTagNameNS(NS, "endnoteReference").length > 0) {
+    throw new Error("trailing text was absorbed into the endnote reference run");
+  }
+  assertFontSlots(trailingTextRun, "SutonnyMJ", "trailing text after endnote reference");
   const referencePr = reference.getElementsByTagNameNS(NS, "rPr")[0];
   if (
     referencePr?.getElementsByTagNameNS(NS, "rStyle")[0]?.getAttributeNS(NS, "val") !== "EndnoteReference" ||

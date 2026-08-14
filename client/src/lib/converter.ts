@@ -618,6 +618,13 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
     }
   }
 
+  // Endnote markerটি Word-এ নিজস্ব superscript run হলেও, বড় source run-এর
+  // একেবারে শেষে থাকলে কিছু edit operation সেটিকে পুরো paragraph-এর সঙ্গে
+  // যুক্তভাবে ধরতে পারে। তাই marker-এর ঠিক আগের শেষ শব্দটিকে আলাদা ordinary
+  // run-এ রাখি। Reference run-এর নিজস্ব style/metadata এবং পরের text run
+  // কোনোভাবেই বদলানো হয় না।
+  isolateEndnoteAnchorWords(doc, ns);
+
   // শেষ স্যানিটাইজেশন পাস: split/ফন্ট-assignment-এর পর প্রতিটি direct run-এর
   // rPr-এ sz ও szCs জোড়া একসাথে থাকে কি না নিশ্চিত করি। এই ধাপটি Word-এ
   // পরে font-size বা paragraph indentation বদলালে legacy Bijoy run-এর
@@ -655,6 +662,54 @@ function normalizeEndnoteReferenceStyle(xml: string): string {
   for (const rFonts of fontOverrides) rPr.removeChild(rFonts);
 
   return new XMLSerializer().serializeToString(doc);
+}
+
+/**
+ * Endnote marker-এর সঙ্গে শুধুই তার আগের শেষ শব্দকে adjacent রাখে। Word-এর
+ * reference run-কে কখনও text run-এর সঙ্গে merge করা হয় না, কারণ তাতে
+ * superscript/font metadata শব্দের উপর চলে আসতে পারে। শুধু একটি safe,
+ * single-text-node run split করা হয়; complex field, hyperlink বা mixed-content
+ * run স্পর্শ করা হয় না।
+ */
+function isolateEndnoteAnchorWords(doc: Document, ns: string): void {
+  const referenceRuns = Array.from(doc.getElementsByTagNameNS(ns, "r")).filter(
+    (run) => Array.from(run.children).some((child) => child.localName === "endnoteReference"),
+  );
+
+  for (const referenceRun of referenceRuns) {
+    const precedingRun = referenceRun.previousElementSibling;
+    if (!precedingRun || precedingRun.localName !== "r" || isSuperscriptRun(precedingRun, ns)) {
+      continue;
+    }
+
+    // A run containing fields, tabs, breaks, or more than one text node carries
+    // formatting semantics that must not be restructured by this narrow pass.
+    const directChildren = Array.from(precedingRun.children);
+    const textNodes = directChildren.filter((child) => child.localName === "t");
+    if (textNodes.length !== 1 || directChildren.some((child) => child.localName !== "rPr" && child.localName !== "t")) {
+      continue;
+    }
+
+    const textNode = textNodes[0];
+    const text = textNode.textContent ?? "";
+    // Split only when there is a genuine last word after whitespace. Its leading
+    // spacing remains with the ordinary prefix so the reference stays attached
+    // to the word without introducing a visible space before the marker.
+    const match = text.match(/^([\s\S]*\s)(\S+)$/);
+    if (!match) continue;
+
+    textNode.textContent = match[1];
+    const anchorWordRun = precedingRun.cloneNode(true) as Element;
+    const anchorText = Array.from(anchorWordRun.children).find(
+      (child) => child.localName === "t",
+    );
+    if (!anchorText || !referenceRun.parentNode) {
+      textNode.textContent = text;
+      continue;
+    }
+    anchorText.textContent = match[2];
+    referenceRun.parentNode.insertBefore(anchorWordRun, referenceRun);
+  }
 }
 
 // XML 1.0-এ অবৈধ কন্ট্রোল ক্যারেক্টার (0x00–0x08, 0x0B, 0x0C, 0x0E–0x1F, সারোগেট)
