@@ -286,3 +286,9 @@
 - [x] font rendering issue ও conversion-sequence issue আলাদা করে নির্ণয় করা
 - [x] confirmed issue না থাকায় কোনো unnecessary converter change না করা
 - [x] focused r-fola audit, full regression, responsive preview ও checkpoint যাচাই করা
+
+# নতুন: conjunct preview sample corrections
+
+- [x] “ন্ত” sample-কে “ন্ট”, “শ্রীরাম” sample-কে “শ্রাবণ”, এবং “বড়াই” sample-কে “রূঢ়” করা
+- [x] বাকি যুক্তবর্ণ preview examples অপরিবর্তিত রাখা
+- [x] copy change, build ও checkpoint যাচাই করা
