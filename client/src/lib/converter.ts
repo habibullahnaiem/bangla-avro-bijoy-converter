@@ -542,11 +542,14 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
   //   ফাঁকা-স্থান/বিরামচিহ্ন-শুধু রান → সন্দর্ভ অনুযায়ী পরের ধাপে (মিশ্র
   //     সেগমেন্ট-ভাগ বা ইংরেজি-রানের সাথে না থাকলে SutonnyMJ — কারণ পুরো
   //     ডকুমেন্ট বাংলা)
+  const generatedRuns = new Set<Element>();
   for (const plan of runPlans) {
     if (plan.mixed) {
       // মূল টেক্সটেই সেগমেন্ট ভাগ করি, প্রত্যেক সেগমেন্ট আলাদা রূপান্তরিত হয় —
       // বিজয়-কনভার্টার প্রতি-টেক্সট রূপান্তর করে বলে সেগমেন্ট-আলাদা করাই সঠিক
-      splitMixedRun(plan.run, ns, plan.text, convertFn);
+      for (const generatedRun of splitMixedRun(plan.run, ns, plan.text, convertFn)) {
+        generatedRuns.add(generatedRun);
+      }
     } else {
       // সিন্ধান্ত: উৎসে বাংলা থাকলে, অথবা রূপান্তর-পরবর্তী টেক্সটে বিজয়-
       // পাঙ্কচুয়েশন (দাঁড়ি ', কোট ইত্যাদি) থাকলে → SutonnyMJ; বাকি সব →
@@ -567,6 +570,11 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
         // সুপারস্ক্রিপ্ট মার্কের আচরণের সাথে সমান (ইনহেরিটেড সাইজ + super)।
         if (isSuperscriptRun(plan.run, ns)) continue;
         smRunSize(plan.run, ns);
+      } else {
+        // Bengali runs keep their inherited/original size, but if the source
+        // file supplied only one of sz/szCs, complete the pair so later Word
+        // size edits do not make complex-script sizing diverge.
+        ensureRunSizePair(plan.run, ns);
       }
     }
   }
@@ -577,7 +585,10 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
   const allRuns = Array.from(doc.getElementsByTagNameNS(ns, "r"));
   const planned = new Set(runPlans.map((p) => p.run));
   for (const run of allRuns) {
-    if (planned.has(run)) continue;
+    // splitMixedRun ইতোমধ্যে প্রতিটি নতুন সেগমেন্টে সঠিক ফন্ট বসিয়েছে।
+    // এগুলোকে আবার ASCII Bijoy কোড দেখে Times New Roman দিলে SutonnyMJ
+    // হারিয়ে যায় এবং ফন্ট-সাইজ বদলালে আউটপুট হিজিবিজি দেখায়।
+    if (planned.has(run) || generatedRuns.has(run)) continue;
     const texts = Array.from(run.getElementsByTagNameNS(ns, "t")).map(
       (n) => n.textContent ?? "",
     );
@@ -589,7 +600,17 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
       // সুপারস্ক্রিপ্ট মার্ক — বেস সাইজেই রাখা (নেটিভ মার্কের সমান)
       if (isSuperscriptRun(run, ns)) continue;
       smRunSize(run, ns);
+    } else {
+      ensureRunSizePair(run, ns);
     }
+  }
+
+  // শেষ স্যানিটাইজেশন পাস: split/ফন্ট-assignment-এর পর প্রতিটি direct run-এর
+  // rPr-এ sz ও szCs জোড়া একসাথে থাকে কি না নিশ্চিত করি। এই ধাপটি Word-এ
+  // পরে font-size বা paragraph indentation বদলালে legacy Bijoy run-এর
+  // complex-script sizing বিচ্ছিন্ন হওয়া ঠেকায়।
+  for (const run of Array.from(doc.getElementsByTagNameNS(ns, "r"))) {
+    ensureRunSizePair(run, ns);
   }
   return new XMLSerializer().serializeToString(doc);
 }
@@ -706,7 +727,7 @@ function splitMixedRun(
   ns: string,
   text: string,
   convertFn: (t: string) => string,
-): void {
+): Element[] {
   const doc = run.ownerDocument!;
   // রানের অন্যান্য বৈশিষ্ট্য (<w:b>, <w:i> ইত্যাদি) প্রথম সেগমেন্টে রাখি
   const rPr = run.querySelector(":scope > rPr") ?? null;
@@ -767,6 +788,7 @@ function splitMixedRun(
   if (curText) segments.push({ text: curText, bangla: curBangla });
 
   const frag = doc.createDocumentFragment();
+  const generatedRuns: Element[] = [];
   for (const seg of segments) {
     const nr = doc.createElementNS(ns, "w:r");
     const np = rPr ? doc.importNode(rPr, true) : null;
@@ -779,10 +801,19 @@ function splitMixedRun(
     nr.appendChild(t);
     const want = seg.bangla ? "SutonnyMJ" : "Times New Roman";
     rFontsAttr(nr, ns, want);
-    if (want === "Times New Roman") smRunSize(nr, ns);
+    if (want === "Times New Roman") {
+      smRunSize(nr, ns);
+    } else {
+      // Mixed runs are newly created here, so complete the Bengali size pair
+      // before Word receives the file. Without szCs, changing the font size
+      // later can make the legacy Bijoy glyph run reflow unpredictably.
+      ensureRunSizePair(nr, ns);
+    }
+    generatedRuns.push(nr);
     frag.appendChild(nr);
   }
   parent.insertBefore(frag, anchor);
+  return generatedRuns;
 }
 
 /** রানের rPr/rFonts হিন্ট দেওয়া বা বদলানো (রান-এর নাম ও বৈশিষ্ট্য অক্ষুণ্ণ) */
@@ -819,17 +850,65 @@ function smRunSize(run: Element, ns: string): void {
     run.insertBefore(rPr, run.firstChild);
   }
   const szElem = rPr.querySelector(":scope > sz");
+  const szCsElem = rPr.querySelector(":scope > szCs");
   const defaultHalf = readDefaultHalfPts(doc, ns);
   const currentHalf = szElem
     ? Number(szElem.getAttributeNS(ns, "w:val") ?? defaultHalf)
-    : defaultHalf;
+    : szCsElem
+      ? Number(szCsElem.getAttributeNS(ns, "w:val") ?? defaultHalf)
+      : defaultHalf;
   const newHalf = Math.max(8, currentHalf - 4); // সর্বনিম্ন 4pt
   if (szElem) {
     szElem.setAttributeNS(ns, "w:val", String(newHalf));
   } else {
-    const np = makeSzElems(doc, ns, newHalf);
-    (rPr ?? run).appendChild(np.sz);
-    (rPr ?? run).appendChild(np.cs);
+    const sz = doc.createElementNS(ns, "w:sz");
+    sz.setAttributeNS(ns, "w:val", String(newHalf));
+    rPr.appendChild(sz);
+  }
+  if (szCsElem) {
+    szCsElem.setAttributeNS(ns, "w:val", String(newHalf));
+  } else {
+    const szCs = doc.createElementNS(ns, "w:szCs");
+    szCs.setAttributeNS(ns, "w:val", String(newHalf));
+    rPr.appendChild(szCs);
+  }
+}
+
+/** বিদ্যমান direct size থাকলে sz এবং szCs-কে একই মানে রাখে, কিন্তু inherited
+ * size-এ হস্তক্ষেপ করে না। Word-এর পরবর্তী font-size/paragraph edit-এর সময়
+ * এই জোড়া একসাথে থাকা জরুরি, বিশেষত Bijoy ASCII-র complex-script rendering-এ। */
+function ensureRunSizePair(run: Element, ns: string): void {
+  let rPr = Array.from(run.children).find(
+    (child) => child.localName === "rPr",
+  ) as Element | undefined;
+  if (!rPr) return;
+  const szElem = Array.from(rPr.children).find(
+    (child) => child.localName === "sz",
+  ) as Element | undefined;
+  const szCsElem = Array.from(rPr.children).find(
+    (child) => child.localName === "szCs",
+  ) as Element | undefined;
+  if (!szElem && !szCsElem) return;
+  const value =
+    szElem?.getAttribute("w:val") ??
+    szElem?.getAttributeNS(ns, "val") ??
+    szCsElem?.getAttribute("w:val") ??
+    szCsElem?.getAttributeNS(ns, "val") ??
+    "";
+  if (!value) return;
+  if (szElem) {
+    szElem.setAttributeNS(ns, "w:val", value);
+  } else {
+    const sz = run.ownerDocument!.createElementNS(ns, "w:sz");
+    sz.setAttributeNS(ns, "w:val", value);
+    rPr.appendChild(sz);
+  }
+  if (szCsElem) {
+    szCsElem.setAttributeNS(ns, "w:val", value);
+  } else {
+    const szCs = run.ownerDocument!.createElementNS(ns, "w:szCs");
+    szCs.setAttributeNS(ns, "w:val", value);
+    rPr.appendChild(szCs);
   }
 }
 
@@ -884,19 +963,6 @@ function readDefaultHalfPts(doc: Document, ns: string): number {
     .flat()
     .find((v) => Number.isFinite(v) && v > 0);
   return normalStyle ?? 28; // ফলব্যাক: 14pt (28 হাফ-পয়েন্ট)
-}
-
-/** w:sz + w:szCs এলিমেন্ট জোড়া (বাংলা cs-টেক্সটেও প্রযোজ্য হয়) */
-function makeSzElems(
-  doc: Document,
-  ns: string,
-  half: number,
-): { sz: Element; cs: Element } {
-  const sz = doc.createElementNS(ns, "w:sz");
-  sz.setAttributeNS(ns, "w:val", String(half));
-  const cs = doc.createElementNS(ns, "w:szCs");
-  cs.setAttributeNS(ns, "w:val", String(half));
-  return { sz, cs };
 }
 
 /** রান-এ rPr/rFonts না থাকলে SutonnyMJ হিন্ট দাও; থাকলে নাম বদলাও */

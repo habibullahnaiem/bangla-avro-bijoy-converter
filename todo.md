@@ -400,3 +400,18 @@
 - [x] readable contrast বজায় রেখে main workspace-এর tonal balance কমানো
 - [x] light/dark responsive screenshots, build ও conversion regressions যাচাই করা
 - [x] safe checkpoint বা আগের stable version preservation সম্পন্ন করা
+# নতুন: editable DOCX formatting stability
+- [x] DOCX paragraph, run, style inheritance ও font metadata audit করা
+- [x] indentation, font-size ও paragraph editing-এর পর layout stable রাখার output structure তৈরি করা
+- [x] Bengali/English dual-size, SutonnyMJ/Times New Roman এবং conversion behavior regression যাচাই করা
+- [x] DOCX round-trip test, build, responsive UI check এবং safe checkpoint সম্পন্ন করা
+# নতুন: portable DOCX font handling
+- [ ] SutonnyMJ font metadata, embedding support ও distribution constraints audit করা
+- [ ] নিরাপদ portable-font বা fallback strategy নির্ধারণ ও প্রয়োগ করা
+- [ ] font ছাড়া/অন্য computer-এ DOCX খুললে readability ও edit stability যাচাই করা
+- [ ] full regression, build এবং safe checkpoint বা clear limitation report সম্পন্ন করা
+# নতুন: editable DOCX font sizes
+- [x] ১৪pt বাংলা/১২pt English defaults-এর বাইরে ১০, ১৬ ও ১৮pt size edit reproduce করা
+- [x] direct `w:sz`/`w:szCs`, paragraph style ও font metadata-এর size interaction audit করা
+- [x] alternate sizes-এ Bijoy text readable, editable ও layout-stable রাখার safe fix পরীক্ষা করা
+- [x] ১৪/১২ defaults, alternate sizes, indent edit, portability, full regression ও checkpoint যাচাই করা
