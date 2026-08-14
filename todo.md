@@ -451,3 +451,13 @@
 - [x] reference anchor-কে paragraph-wide formatting থেকে আলাদা করার বিদ্যমান run structure যাচাই করা
 - [x] reference-এ শুধু নিজস্ব superscript run metadata রাখা; adjacent Bengali word-এর run অপরিবর্তিত রাখা
 - [x] word + reference + trailing text fixture-এ formatting-scope regression চালানো
+
+# সক্রিয়: marker-only endnote superscript
+- [x] শেষ-শব্দ split বাদ দিয়ে reference marker-এর নিজস্ব run-এই superscript সীমাবদ্ধ রাখা
+- [x] আগের শব্দ ও পরের text normal run হিসেবে অক্ষুণ্ণ আছে নিশ্চিত করা
+- [x] marker-only superscript regression চালানো
+
+# সক্রিয়: reference-site DOCX behavior comparison
+- [x] রেফারেন্স কনভার্টারের endnote/DOCX capability ও দৃশ্যমান আচরণ সরাসরি যাচাই করা
+- [x] Word-এর marker-only endnote rule-এর সঙ্গে প্রাসঙ্গিক অংশ মিলিয়ে ন্যূনতম output rule ঠিক করা
+- [x] একই fixture-এ final DOCX structure ও Word-edit regression পুনরায় চালানো
