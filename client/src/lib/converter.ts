@@ -629,7 +629,7 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
  */
 function normalizeIndentedParagraphs(doc: Document, ns: string): void {
   const paragraphs = Array.from(doc.getElementsByTagNameNS(ns, "p"));
-  const fontOverrideNames = new Set(["rFonts", "sz", "szCs"]);
+  const fontOverrideNames = new Set(["rFonts", "rStyle", "lang", "sz", "szCs"]);
 
   for (const paragraph of paragraphs) {
     const pPr = Array.from(paragraph.children).find(
@@ -637,9 +637,43 @@ function normalizeIndentedParagraphs(doc: Document, ns: string): void {
     ) as Element | undefined;
     if (!pPr) continue;
 
-    const hasIndent = Array.from(pPr.children).some(
+    const numPr = Array.from(pPr.children).find(
+      (child) => child.localName === "numPr",
+    ) as Element | undefined;
+    let ind = Array.from(pPr.children).find(
       (child) => child.localName === "ind",
-    );
+    ) as Element | undefined;
+
+    // Word can represent an indented paragraph as a list/outline paragraph.
+    // Convert that layout to a plain paragraph indent and remove numbering
+    // metadata, so later font changes follow the same path as Normal text.
+    // If Word did not write an explicit w:ind, retain a conservative visual
+    // indent derived from the list level rather than dropping the spacing.
+    if (numPr) {
+      if (!ind) {
+        ind = paragraph.ownerDocument!.createElementNS(ns, "w:ind");
+        const ilvl = Array.from(numPr.children).find(
+          (child) => child.localName === "ilvl",
+        ) as Element | undefined;
+        const level = Number(
+          ilvl?.getAttributeNS(ns, "val") ?? ilvl?.getAttribute("w:val") ?? "0",
+        );
+        const safeLevel = Number.isFinite(level) && level >= 0 ? Math.min(level, 8) : 0;
+        ind.setAttributeNS(ns, "w:left", String((safeLevel + 1) * 720));
+        pPr.insertBefore(ind, numPr);
+      }
+      pPr.removeChild(numPr);
+    }
+
+    const pStyle = Array.from(pPr.children).find(
+      (child) => child.localName === "pStyle",
+    ) as Element | undefined;
+    const styleId = pStyle?.getAttributeNS(ns, "val") ?? pStyle?.getAttribute("w:val") ?? "";
+    if (pStyle && /^(ListParagraph|ListBullet|ListNumber)$/i.test(styleId)) {
+      pStyle.setAttributeNS(ns, "w:val", "Normal");
+    }
+
+    const hasIndent = Boolean(ind);
     if (!hasIndent) continue;
 
     const paragraphRPr = Array.from(pPr.children).find(
@@ -873,10 +907,34 @@ function rFontsAttr(run: Element, ns: string, want: string): void {
     rFonts = run.ownerDocument!.createElementNS(ns, "w:rFonts");
     rPr.insertBefore(rFonts, rPr.firstChild);
   }
+  // Theme font attributes can survive a font change in Word and take
+  // precedence for one script even when an explicit family is present.
+  // Remove them before writing the four direct family hints. For legacy
+  // Bijoy, mark the run as complex-script hinted so Word's font picker uses
+  // the SutonnyMJ mapping instead of treating the stored bytes as Latin.
+  for (const themeAttr of [
+    "asciiTheme",
+    "hAnsiTheme",
+    "eastAsiaTheme",
+    "csTheme",
+  ]) {
+    rFonts.removeAttributeNS(ns, themeAttr);
+  }
   rFonts.setAttributeNS(ns, "w:ascii", want);
   rFonts.setAttributeNS(ns, "w:hAnsi", want);
   rFonts.setAttributeNS(ns, "w:eastAsia", want);
   rFonts.setAttributeNS(ns, "w:cs", want);
+  rFonts.setAttributeNS(ns, "w:hint", want === "SutonnyMJ" ? "cs" : "default");
+  if (want === "SutonnyMJ") {
+    let lang = rPr.querySelector(":scope > lang");
+    if (!lang) {
+      lang = run.ownerDocument!.createElementNS(ns, "w:lang");
+      rPr.appendChild(lang);
+    }
+    // Bijoy bytes are ASCII code points but must be treated as Bengali
+    // complex-script text for Word's font picker and font fallback logic.
+    lang.setAttributeNS(ns, "w:bidi", "bn-BD");
+  }
   // নোট: w:rFonts ECMA-376 অনুযায়ী লিফ-এলিমেন্ট (শুধু অ্যাট্রিবিউট, চাইল্ড নোড নেই)।
   // আগে এখানে w:alias চাইল্ড যোগ করা হত (SutonnyMJ বানান-বিকল্পের জন্য) — কিন্তু
   // ওয়ার্ড স্কিমা-ভ্যালিডেশনে এই চাইল্ড রিজেক্ট করে আর ডকুমেন্টই খুলত না। তাই সরিয়ে দেওয়া হয়েছে।

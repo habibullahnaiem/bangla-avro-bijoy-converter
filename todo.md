@@ -431,3 +431,12 @@
 - [x] সব indent-কে সাধারণ paragraph-এর মতো করে safe DOCX structure প্রয়োগ করা
 - [x] indent → font change → size edit এবং full regression যাচাই করা
 - [x] genuine fix checkpoint করা; legacy Bijoy-এর ক্ষেত্রে SutonnyMJ font-family limitation স্পষ্ট রাখা
+
+# বাস্তবায়িত: indented content-কে সাধারণ paragraph semantics-এ নামিয়ে আনা
+- [x] একই DOCX-এ normal paragraph বনাম indented paragraph-এর XML/layout metadata তুলনা করা
+- [x] paragraph style, pPr/rPr, numbering এবং run-level font inheritance-এর indent-specific ঝুঁকি দূর করা
+- [x] normal paragraph অক্ষুণ্ণ রেখে targeted DOCX fix করা
+- [x] indented/list content থেকে `w:numPr`/list-style metadata বাদ দিয়ে শুধু visual `w:ind` রাখা
+- [x] SutonnyMJ run-এ explicit family, complex-script hint ও Bengali language metadata নিশ্চিত করা
+- [x] normal-versus-indented fixture, full conversion regression এবং desktop/mobile smoke test চালানো
+- [ ] নতুন converted DOCX-এ Microsoft Word-এর বাস্তব indent → Times New Roman → SutonnyMJ পরীক্ষার ফল নিশ্চিত করা
