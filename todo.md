@@ -440,3 +440,9 @@
 - [x] SutonnyMJ run-এ explicit family, complex-script hint ও Bengali language metadata নিশ্চিত করা
 - [x] normal-versus-indented fixture, full conversion regression এবং desktop/mobile smoke test চালানো
 - [ ] নতুন converted DOCX-এ Microsoft Word-এর বাস্তব indent → Times New Roman → SutonnyMJ পরীক্ষার ফল নিশ্চিত করা
+
+# বাস্তব ব্যর্থ DOCX বিশ্লেষণ: CH01PRFD_bijoy(1).docx
+- [x] ব্যবহারকারীর প্রথম indented paragraph ও নিকটবর্তী normal paragraph-এর exact XML/run/style difference বের করা
+- [x] `document.xml`, `styles.xml`, `numbering.xml`, theme ও settings-এ font restoration-কে প্রভাবিত করা metadata trace করা
+- [x] আসল DOCX-এর প্রমাণে paragraph-level font override ও indentation/list metadata সরিয়ে targeted fix করা
+- [x] real-file structure-ভিত্তিক fixture, full DOCX regression এবং desktop/mobile smoke test চালানো

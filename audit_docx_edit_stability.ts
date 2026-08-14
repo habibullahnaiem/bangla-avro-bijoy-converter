@@ -49,11 +49,14 @@ function minimalDocx(): JSZip {
     "word/document.xml",
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:document xmlns:w="${NS}"><w:body>
-  <w:p><w:pPr><w:pStyle w:val="Normal"/><w:ind w:left="720"/><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/><w:sz w:val="32"/><w:szCs w:val="32"/></w:rPr></w:pPr>
+  <w:p><w:pPr><w:pStyle w:val="Normal"/><w:ind w:left="720" w:right="600"/><w:rPr><w:rFonts w:cs="Times New Roman"/><w:sz w:val="32"/><w:szCs w:val="32"/></w:rPr></w:pPr>
     <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t>প্র, ল্ল, ত্ব, ক্ষ, জ্ঞ, শ্র — English 2026</w:t></w:r>
   </w:p>
-  <w:p><w:pPr><w:pStyle w:val="Normal"/><w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/><w:sz w:val="32"/><w:szCs w:val="32"/></w:rPr></w:pPr>
+  <w:p><w:pPr><w:pStyle w:val="Normal"/><w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr><w:rPr><w:rFonts w:cs="Times New Roman"/><w:sz w:val="32"/><w:szCs w:val="32"/></w:rPr></w:pPr>
     <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t>ইন্ডেন্ট করা বাংলা প্যারাগ্রাফ</w:t></w:r>
+  </w:p>
+  <w:p><w:pPr><w:pStyle w:val="Normal"/><w:rPr><w:rFonts w:ascii="SolaimanLipi" w:hAnsi="SolaimanLipi" w:cs="SolaimanLipi"/></w:rPr></w:pPr>
+    <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t>সাধারণ বাংলা প্যারাগ্রাফ</w:t></w:r>
   </w:p><w:sectPr/>
 </w:body></w:document>`,
   );
@@ -75,9 +78,10 @@ async function inspectDocx(
   let fontMismatch = 0;
   let unexpectedSizeValues = 0;
   let paragraphFontOverrides = 0;
-  let misplacedIndent = 0;
+  let residualIndent = 0;
   let missingBijoyHints = 0;
   let missingBijoyLanguage = 0;
+  let missingBijoyComplexFlag = 0;
   let paragraphNumbering = 0;
   let listParagraphStyles = 0;
   for (const run of runs) {
@@ -107,8 +111,15 @@ async function inspectDocx(
       const hint = rFonts.getAttribute("w:hint") ?? rFonts.getAttributeNS(NS, "hint");
       if (expected === "SutonnyMJ" && hint !== "cs") missingBijoyHints++;
       const lang = rPr.getElementsByTagNameNS(NS, "lang")[0];
+      const val = lang?.getAttribute("w:val") ?? lang?.getAttributeNS(NS, "val");
+      const eastAsia = lang?.getAttribute("w:eastAsia") ?? lang?.getAttributeNS(NS, "eastAsia");
       const bidi = lang?.getAttribute("w:bidi") ?? lang?.getAttributeNS(NS, "bidi");
-      if (expected === "SutonnyMJ" && bidi !== "bn-BD") missingBijoyLanguage++;
+      if (expected === "SutonnyMJ" && (val !== "bn-BD" || eastAsia !== "bn-BD" || bidi !== "bn-BD")) {
+        missingBijoyLanguage++;
+      }
+      if (expected === "SutonnyMJ" && !rPr.getElementsByTagNameNS(NS, "cs")[0]) {
+        missingBijoyComplexFlag++;
+      }
     }
   }
   for (const paragraph of Array.from(doc.getElementsByTagNameNS(NS, "p"))) {
@@ -119,7 +130,7 @@ async function inspectDocx(
     const ind = Array.from(pPr.children).find(
       (child) => child.localName === "ind",
     ) as Element | undefined;
-    if (ind && ind.parentNode !== pPr) misplacedIndent++;
+    if (ind) residualIndent++;
     if (Array.from(pPr.children).some((child) => child.localName === "numPr")) {
       paragraphNumbering++;
     }
@@ -138,16 +149,17 @@ async function inspectDocx(
     }
   }
   console.log(
-    `${label}: runs=${runs.length}, mismatchedSizePairs=${mismatchedSizePairs}, fontMismatch=${fontMismatch}, unexpectedSizeValues=${unexpectedSizeValues}, paragraphFontOverrides=${paragraphFontOverrides}, misplacedIndent=${misplacedIndent}, missingBijoyHints=${missingBijoyHints}, missingBijoyLanguage=${missingBijoyLanguage}, paragraphNumbering=${paragraphNumbering}, listParagraphStyles=${listParagraphStyles}`,
+    `${label}: runs=${runs.length}, mismatchedSizePairs=${mismatchedSizePairs}, fontMismatch=${fontMismatch}, unexpectedSizeValues=${unexpectedSizeValues}, paragraphFontOverrides=${paragraphFontOverrides}, residualIndent=${residualIndent}, missingBijoyHints=${missingBijoyHints}, missingBijoyLanguage=${missingBijoyLanguage}, missingBijoyComplexFlag=${missingBijoyComplexFlag}, paragraphNumbering=${paragraphNumbering}, listParagraphStyles=${listParagraphStyles}`,
   );
   if (
     mismatchedSizePairs ||
     fontMismatch ||
     unexpectedSizeValues ||
     paragraphFontOverrides ||
-    misplacedIndent ||
+    residualIndent ||
     missingBijoyHints ||
     missingBijoyLanguage ||
+    missingBijoyComplexFlag ||
     paragraphNumbering ||
     listParagraphStyles ||
     runs.length < 2
@@ -194,18 +206,6 @@ async function main() {
     englishHalfPoints: 24,
   });
 
-  const zip = await JSZip.loadAsync(output);
-  const editedXml = await zip.file("word/document.xml")!.async("string");
-  const simulatedEdit = editedXml.replace('w:left="720"', 'w:left="1440"');
-  zip.file("word/document.xml", simulatedEdit);
-  const edited = await zip.generateAsync({ type: "uint8array" });
-  const editedPath = "/tmp/avrojoy_edit_stability_simulated_edit.docx";
-  fs.writeFileSync(editedPath, edited);
-  await inspectDocx(editedPath, "simulated-indent-edit", {
-    banglaHalfPoints: 28,
-    englishHalfPoints: 24,
-  });
-
   const sizeVariants = [
     { label: "10pt-8pt", banglaHalfPoints: 20, englishHalfPoints: 16 },
     { label: "16pt-14pt", banglaHalfPoints: 32, englishHalfPoints: 28 },
@@ -225,7 +225,7 @@ async function main() {
     fs.writeFileSync(variantPath, variantOutput);
     await inspectDocx(variantPath, `alternate-${variant.label}`, variant);
   }
-  console.log(`wrote ${outputPath} and ${editedPath}`);
+  console.log(`wrote ${outputPath}`);
 }
 
 main().catch((error) => {

@@ -613,21 +613,28 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
     ensureRunSizePair(run, ns);
   }
 
-  // Indentation belongs to w:pPr/w:ind, not to a paragraph-level font rule.
-  // Some Word edits can leave w:pPr/w:rPr font/size overrides beside w:ind;
-  // those overrides may win over the explicit SutonnyMJ font on Bijoy runs
-  // when the user later changes a paragraph's font. Keep only the paragraph
-  // layout property and let the direct runs own their legacy-font metadata.
-  normalizeIndentedParagraphs(doc, ns);
+  // The user's Word-generated failure shows that direct w:ind can make Word
+  // retain a paragraph-level Times New Roman complex-script rule after a
+  // font switch, even when every Bijoy run has direct SutonnyMJ metadata.
+  // Therefore converted indented/list content is flattened to true Normal
+  // paragraph semantics: no w:ind, no w:numPr, and no indent-specific pPr/rPr
+  // font rule. This intentionally removes the source visual indentation so
+  // the user can edit font like an ordinary paragraph without legacy Bijoy
+  // bytes being routed through a Latin font slot.
+  normalizeParagraphsForBijoyFontRecovery(doc, ns);
   return new XMLSerializer().serializeToString(doc);
 }
 
 /**
- * Keeps indentation as a normal paragraph property while removing only
- * paragraph-level font and size overrides. Bold/italic/color/alignment-like
- * paragraph run properties are intentionally preserved.
+ * Converts indented/list-style paragraphs to plain Normal paragraphs. The
+ * source indentation is intentionally removed because the real Word failure
+ * is tied to w:ind retaining a paragraph-level complex-script font override.
+ * Every paragraph-level font/language/size override is also cleared: direct
+ * runs already carry the correct SutonnyMJ or Times New Roman assignment, and
+ * a pPr/rPr font rule can reappear as a competing default after a Word font
+ * change. Bold/italic/color/alignment-like paragraph run properties stay.
  */
-function normalizeIndentedParagraphs(doc: Document, ns: string): void {
+function normalizeParagraphsForBijoyFontRecovery(doc: Document, ns: string): void {
   const paragraphs = Array.from(doc.getElementsByTagNameNS(ns, "p"));
   const fontOverrideNames = new Set(["rFonts", "rStyle", "lang", "sz", "szCs"]);
 
@@ -644,37 +651,20 @@ function normalizeIndentedParagraphs(doc: Document, ns: string): void {
       (child) => child.localName === "ind",
     ) as Element | undefined;
 
-    // Word can represent an indented paragraph as a list/outline paragraph.
-    // Convert that layout to a plain paragraph indent and remove numbering
-    // metadata, so later font changes follow the same path as Normal text.
-    // If Word did not write an explicit w:ind, retain a conservative visual
-    // indent derived from the list level rather than dropping the spacing.
-    if (numPr) {
-      if (!ind) {
-        ind = paragraph.ownerDocument!.createElementNS(ns, "w:ind");
-        const ilvl = Array.from(numPr.children).find(
-          (child) => child.localName === "ilvl",
-        ) as Element | undefined;
-        const level = Number(
-          ilvl?.getAttributeNS(ns, "val") ?? ilvl?.getAttribute("w:val") ?? "0",
-        );
-        const safeLevel = Number.isFinite(level) && level >= 0 ? Math.min(level, 8) : 0;
-        ind.setAttributeNS(ns, "w:left", String((safeLevel + 1) * 720));
-        pPr.insertBefore(ind, numPr);
-      }
-      pPr.removeChild(numPr);
-    }
-
     const pStyle = Array.from(pPr.children).find(
       (child) => child.localName === "pStyle",
     ) as Element | undefined;
     const styleId = pStyle?.getAttributeNS(ns, "val") ?? pStyle?.getAttribute("w:val") ?? "";
-    if (pStyle && /^(ListParagraph|ListBullet|ListNumber)$/i.test(styleId)) {
-      pStyle.setAttributeNS(ns, "w:val", "Normal");
-    }
+    const usesListStyle = /^(ListParagraph|ListBullet|ListNumber)$/i.test(styleId);
+    const requiresNormalSemantics = Boolean(ind || numPr || usesListStyle);
 
-    const hasIndent = Boolean(ind);
-    if (!hasIndent) continue;
+    if (requiresNormalSemantics) {
+      if (numPr) pPr.removeChild(numPr);
+      if (ind) pPr.removeChild(ind);
+      if (pStyle && usesListStyle) {
+        pStyle.setAttributeNS(ns, "w:val", "Normal");
+      }
+    }
 
     const paragraphRPr = Array.from(pPr.children).find(
       (child) => child.localName === "rPr",
@@ -931,9 +921,17 @@ function rFontsAttr(run: Element, ns: string, want: string): void {
       lang = run.ownerDocument!.createElementNS(ns, "w:lang");
       rPr.appendChild(lang);
     }
-    // Bijoy bytes are ASCII code points but must be treated as Bengali
-    // complex-script text for Word's font picker and font fallback logic.
+    // Bijoy bytes are ASCII code points but must be treated as Bengali in all
+    // Word language slots, otherwise a paragraph-level font action may affect
+    // only the Latin/ASCII mapping and leave a non-restorable mixed-font run.
+    lang.setAttributeNS(ns, "w:val", "bn-BD");
+    lang.setAttributeNS(ns, "w:eastAsia", "bn-BD");
     lang.setAttributeNS(ns, "w:bidi", "bn-BD");
+    let cs = rPr.querySelector(":scope > cs");
+    if (!cs) {
+      cs = run.ownerDocument!.createElementNS(ns, "w:cs");
+      rPr.appendChild(cs);
+    }
   }
   // নোট: w:rFonts ECMA-376 অনুযায়ী লিফ-এলিমেন্ট (শুধু অ্যাট্রিবিউট, চাইল্ড নোড নেই)।
   // আগে এখানে w:alias চাইল্ড যোগ করা হত (SutonnyMJ বানান-বিকল্পের জন্য) — কিন্তু
