@@ -23,6 +23,7 @@ function minimalDocx(): JSZip {
   <Default Extension="xml" ContentType="application/xml"/>
   <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
   <Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>
+  <Override PartName="/word/endnotes.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml"/>
 </Types>`,
   );
   zip.file(
@@ -35,7 +36,9 @@ function minimalDocx(): JSZip {
   zip.file(
     "word/_rels/document.xml.rels",
     `<?xml version="1.0" encoding="UTF-8"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"/>`,
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rIdEndnotes" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes" Target="endnotes.xml"/>
+</Relationships>`,
   );
   zip.file(
     "word/styles.xml",
@@ -43,6 +46,8 @@ function minimalDocx(): JSZip {
 <w:styles xmlns:w="${NS}">
   <w:docDefaults><w:rPrDefault><w:rPr><w:sz w:val="28"/><w:szCs w:val="28"/></w:rPr></w:rPrDefault></w:docDefaults>
   <w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/></w:style>
+  <w:style w:type="paragraph" w:styleId="EndnoteText"><w:name w:val="endnote text"/></w:style>
+  <w:style w:type="character" w:styleId="EndnoteReference"><w:name w:val="endnote reference"/><w:rPr><w:vertAlign w:val="superscript"/></w:rPr></w:style>
 </w:styles>`,
   );
   zip.file(
@@ -57,12 +62,41 @@ function minimalDocx(): JSZip {
     <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t>…</w:t></w:r>
     <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t>ওদিকে তাকিয়ে</w:t></w:r>
   </w:p><w:sectPr/>
+  <w:p><w:pPr><w:pStyle w:val="Normal"/></w:pPr>
+    <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t>এন্ডনোটসহ বাংলা বাক্য</w:t></w:r>
+    <w:r><w:rPr><w:rStyle w:val="EndnoteReference"/><w:vertAlign w:val="superscript"/><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr><w:endnoteReference w:id="1"/></w:r>
+  </w:p><w:sectPr/>
 </w:body></w:document>`,
+  );
+  zip.file(
+    "word/endnotes.xml",
+    `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:endnotes xmlns:w="${NS}">
+  <w:endnote w:id="-1" w:type="separator"><w:p><w:r><w:separator/></w:r></w:p></w:endnote>
+  <w:endnote w:id="0" w:type="continuationSeparator"><w:p><w:r><w:continuationSeparator/></w:r></w:p></w:endnote>
+  <w:endnote w:id="1"><w:p><w:pPr><w:pStyle w:val="EndnoteText"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="20"/></w:rPr><w:t>এটি একটি বাংলা এন্ডনোট।</w:t></w:r></w:p></w:endnote>
+</w:endnotes>`,
   );
   return zip;
 }
 
 type ExpectedSizes = { banglaHalfPoints?: number; englishHalfPoints?: number };
+
+function fontSlots(run: Element): string[] {
+  const rPr = run.getElementsByTagNameNS(NS, "rPr")[0];
+  const rFonts = rPr?.getElementsByTagNameNS(NS, "rFonts")[0];
+  if (!rFonts) return [];
+  return ["ascii", "hAnsi", "eastAsia", "cs"].map((key) =>
+    rFonts.getAttribute(`w:${key}`) ?? rFonts.getAttributeNS(NS, key) ?? "",
+  );
+}
+
+function assertFontSlots(run: Element, expected: string, label: string): void {
+  const slots = fontSlots(run);
+  if (slots.length !== 4 || slots.some((slot) => slot !== expected)) {
+    throw new Error(`${label}: expected ${expected} in every font slot, got ${slots.join(", ") || "none"}`);
+  }
+}
 
 async function inspectDocx(
   path: string,
@@ -83,38 +117,49 @@ async function inspectDocx(
     const sz = rPr.getElementsByTagNameNS(NS, "sz")[0]?.getAttributeNS(NS, "val") ?? null;
     const szCs = rPr.getElementsByTagNameNS(NS, "szCs")[0]?.getAttributeNS(NS, "val") ?? null;
     if ((sz && !szCs) || (!sz && szCs) || (sz && szCs && sz !== szCs)) mismatchedSizePairs++;
-    const expectedHalfPoints =
-      text === "English 2026"
-        ? expectedSizes.englishHalfPoints
-        : expectedSizes.banglaHalfPoints;
-    if (expectedHalfPoints !== undefined && sz !== String(expectedHalfPoints)) {
-      unexpectedSizeValues++;
-    }
-    const rFonts = rPr.getElementsByTagNameNS(NS, "rFonts")[0];
-    if (rFonts) {
-      // Converted Bijoy is ASCII too, so ASCII-only detection cannot classify
-      // it as English. This fixture keeps the known English segment explicit;
-      // every other generated segment contains Bengali Bijoy output.
-      const expected = text === "English 2026" ? "Times New Roman" : "SutonnyMJ";
-      const attrs = ["ascii", "hAnsi", "eastAsia", "cs"].map((key) =>
-        rFonts.getAttribute(`w:${key}`) ?? rFonts.getAttributeNS(NS, key),
-      );
-      if (attrs.some((value) => value !== expected)) fontMismatch++;
+    const expectedHalfPoints = text === "English 2026" ? expectedSizes.englishHalfPoints : expectedSizes.banglaHalfPoints;
+    if (text && expectedHalfPoints !== undefined && sz !== String(expectedHalfPoints)) unexpectedSizeValues++;
+    if (text) {
+      const expectedFont = text === "English 2026" ? "Times New Roman" : "SutonnyMJ";
+      if (fontSlots(run).some((value) => value !== expectedFont)) fontMismatch++;
     }
   }
-  console.log(
-    `${label}: runs=${runs.length}, mismatchedSizePairs=${mismatchedSizePairs}, fontMismatch=${fontMismatch}, unexpectedSizeValues=${unexpectedSizeValues}`,
-  );
+  console.log(`${label}: runs=${runs.length}, mismatchedSizePairs=${mismatchedSizePairs}, fontMismatch=${fontMismatch}, unexpectedSizeValues=${unexpectedSizeValues}`);
   if (mismatchedSizePairs || fontMismatch || unexpectedSizeValues || runs.length < 2) {
     throw new Error(`${label}: DOCX run invariants failed`);
   }
 }
 
-function rewriteRunSizes(
-  xml: string,
-  banglaHalfPoints: number,
-  englishHalfPoints: number,
-): string {
+async function inspectEndnoteHandling(path: string): Promise<void> {
+  const zip = await JSZip.loadAsync(fs.readFileSync(path));
+  const documentXml = await zip.file("word/document.xml")!.async("string");
+  const endnotesXml = await zip.file("word/endnotes.xml")!.async("string");
+  const document = new DOMParser().parseFromString(documentXml, "text/xml");
+  const endnotes = new DOMParser().parseFromString(endnotesXml, "text/xml");
+  const referenceRuns = Array.from(document.getElementsByTagNameNS(NS, "r")).filter(
+    (run) => run.getElementsByTagNameNS(NS, "endnoteReference").length > 0,
+  );
+  if (referenceRuns.length !== 1) throw new Error(`endnote reference count mismatch: ${referenceRuns.length}`);
+  const reference = referenceRuns[0];
+  assertFontSlots(reference, "SutonnyMJ", "endnote reference");
+  const referencePr = reference.getElementsByTagNameNS(NS, "rPr")[0];
+  if (
+    referencePr?.getElementsByTagNameNS(NS, "rStyle")[0]?.getAttributeNS(NS, "val") !== "EndnoteReference" ||
+    referencePr.getElementsByTagNameNS(NS, "vertAlign")[0]?.getAttributeNS(NS, "val") !== "superscript"
+  ) {
+    throw new Error("endnote reference lost its Word superscript style");
+  }
+  const noteTextRuns = Array.from(endnotes.getElementsByTagNameNS(NS, "r")).filter(
+    (run) => (run.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "").length > 0,
+  );
+  if (noteTextRuns.length !== 1) throw new Error(`endnote body run count mismatch: ${noteTextRuns.length}`);
+  const noteText = noteTextRuns[0].getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "";
+  assertFontSlots(noteTextRuns[0], "SutonnyMJ", "endnote body");
+  if (/[\u0980-\u09FF]/.test(noteText)) throw new Error("endnote body still contains Unicode Bengali after Bijoy conversion");
+  console.log("endnote-reference-and-body: passed");
+}
+
+function rewriteRunSizes(xml: string, banglaHalfPoints: number, englishHalfPoints: number): string {
   const doc = new DOMParser().parseFromString(xml, "text/xml");
   const runs = Array.from(doc.getElementsByTagNameNS(NS, "r"));
   for (const run of runs) {
@@ -143,16 +188,12 @@ async function main() {
   const output = new Uint8Array(await result.blob.arrayBuffer());
   const outputPath = "/tmp/avrojoy_edit_stability_bijoy.docx";
   fs.writeFileSync(outputPath, output);
-  await inspectDocx(outputPath, "converted-14pt-12pt", {
-    banglaHalfPoints: 28,
-    englishHalfPoints: 24,
-  });
+  await inspectDocx(outputPath, "converted-14pt-12pt", { banglaHalfPoints: 28, englishHalfPoints: 24 });
+  await inspectEndnoteHandling(outputPath);
 
   const zip = await JSZip.loadAsync(output);
   const editedXml = await zip.file("word/document.xml")!.async("string");
-  if (editedXml.includes("…")) {
-    throw new Error("standalone ellipsis run was not normalized before SutonnyMJ DOCX output");
-  }
+  if (editedXml.includes("…")) throw new Error("standalone ellipsis run was not normalized before SutonnyMJ DOCX output");
   const simulatedEdit = editedXml.replace(
     "</w:pStyle>",
     "</w:pStyle><w:ind w:left=\"720\"/><w:rPr><w:sz w:val=\"32\"/><w:szCs w:val=\"32\"/></w:rPr>",
@@ -161,10 +202,7 @@ async function main() {
   const edited = await zip.generateAsync({ type: "uint8array" });
   const editedPath = "/tmp/avrojoy_edit_stability_simulated_edit.docx";
   fs.writeFileSync(editedPath, edited);
-  await inspectDocx(editedPath, "simulated-indent-edit", {
-    banglaHalfPoints: 28,
-    englishHalfPoints: 24,
-  });
+  await inspectDocx(editedPath, "simulated-indent-edit", { banglaHalfPoints: 28, englishHalfPoints: 24 });
 
   const sizeVariants = [
     { label: "10pt-8pt", banglaHalfPoints: 20, englishHalfPoints: 16 },
@@ -174,11 +212,7 @@ async function main() {
   for (const variant of sizeVariants) {
     const variantZip = await JSZip.loadAsync(output);
     const sourceXml = await variantZip.file("word/document.xml")!.async("string");
-    const variantXml = rewriteRunSizes(
-      sourceXml,
-      variant.banglaHalfPoints,
-      variant.englishHalfPoints,
-    );
+    const variantXml = rewriteRunSizes(sourceXml, variant.banglaHalfPoints, variant.englishHalfPoints);
     variantZip.file("word/document.xml", variantXml);
     const variantOutput = await variantZip.generateAsync({ type: "uint8array" });
     const variantPath = `/tmp/avrojoy_edit_stability_${variant.label}.docx`;

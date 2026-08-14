@@ -435,3 +435,9 @@
 - [x] ব্যবহারকারীর দেওয়া `...w`‡K| …Iw`‡K...` sequence-কে direct conversion ও DOCX run-splitting fixture হিসেবে যোগ করা
 - [x] `|`-এর পরে glyph-টি `†` নয়, Word XML-এ থেকে যাওয়া standalone Unicode ellipsis U+2026 বলে শনাক্ত করা
 - [x] exact fixture-এ U+2026 অপসারণ নিশ্চিত করা; অন্য initial e-kar behavior অপরিবর্তিত রাখা
+
+# নতুন hypothesis: footnote/endnote reference-কে indent মনে হওয়া
+- [x] ব্যবহারকারীর DOCX-এ `footnotes.xml`, `endnotes.xml`, reference run ও note styles আছে কি না যাচাই করা
+- [x] normal Bengali run-এর সঙ্গে footnote/endnote reference ও note-body font metadata তুলনা করা
+- [x] endnote reference ও endnote body-র direct SutonnyMJ mapping, superscript style এবং body conversion-এর permanent regression যোগ করা
+- [x] রিপোর্ট করা paragraph-এ endnote reference ID 8 আছে নিশ্চিত করা; তাই এটিকে সাধারণ indent paragraph হিসেবে ধরা সঠিক ছিল না

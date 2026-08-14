@@ -24,6 +24,14 @@ The DOCX pipeline previously did not classify a standalone U+2026 source run as 
 
 ## Related user files
 
+## Footnote and endnote investigation
+
+Both user-provided DOCX files contain **30 real endnote references** in `word/document.xml` and 30 matching note bodies in `word/endnotes.xml` (IDs 1–30). They contain no real footnote references or footnote bodies; `word/footnotes.xml` has only Word's mandatory separator entries. This strongly supports the user's new hypothesis that a visible special mark was mistaken for ordinary indentation.
+
+The converter already sends both `word/document.xml` and `word/endnotes.xml` through the text-conversion pipeline. The special reference runs have no `<w:t>` text node and therefore need dedicated regression coverage.
+
+Direct inspection confirmed the causal difference: a user-saved endnote reference run retained a mixed mapping where `ascii`, `hAnsi`, and `eastAsia` were SutonnyMJ but the complex-script `cs` slot remained Times New Roman. The associated note body follows `EndnoteText`, while the reference follows the `EndnoteReference` character style. This is distinct from an ordinary Bengali text run and is a credible source of the reported Word-only font-change failure.
+
 | File | Purpose |
 |---|---|
 | `/home/ubuntu/upload/CH01PRFD_bijoy(1).docx` | First Word-saved font-switch failure, including indented paragraphs. |
