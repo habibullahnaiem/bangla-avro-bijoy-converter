@@ -451,3 +451,17 @@
 - [x] reference anchor-কে paragraph-wide formatting থেকে আলাদা করার বিদ্যমান run structure যাচাই করা
 - [x] reference-এ শুধু নিজস্ব superscript run metadata রাখা; adjacent Bengali word-এর run অপরিবর্তিত রাখা
 - [x] word + reference + trailing text fixture-এ formatting-scope regression চালানো
+
+# সক্রিয়: marker-preservation regression recovery
+- [x] শেষ reference-marker preservation পরিবর্তনটি আগের স্থিতিশীল checkpoint-এ ফিরিয়ে নেওয়া
+- [x] সরবরাহকৃত Word-saved DOCX-এ ক্ষতিগ্রস্ত reference ও পার্শ্ববর্তী run পুনরায় যাচাই করা
+- [ ] শুধু source-verified আচরণের ভিত্তিতে পরবর্তী scoped fix সিদ্ধান্ত নেওয়া
+
+# সক্রিয়: Word full-run font regression
+- [x] ক্ষতিগ্রস্ত Bijoy paragraph-এর direct run ও paragraph-level font metadata সংগ্রহ করা
+- [x] একই document-এর স্বাভাবিক paragraph-এর সঙ্গে metadata পার্থক্য তুলনা করা
+- [x] text বা endnote structure না বদলে কোনো নিরাপদ metadata correction আছে কি না সিদ্ধান্ত নেওয়া
+
+# সক্রিয়: rollback-এ ফিরে আসা reference split অপসারণ
+- [x] restored converter-এর adjacent-word split সরিয়ে কেবল native superscript marker রাখা
+- [x] marker, আগের শব্দ ও paragraph text অপরিবর্তিত থাকে এমন DOCX regression চালানো

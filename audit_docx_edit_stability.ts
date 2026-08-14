@@ -145,16 +145,19 @@ async function inspectEndnoteHandling(path: string): Promise<void> {
   if (referenceRuns.length !== 1) throw new Error(`endnote reference count mismatch: ${referenceRuns.length}`);
   const reference = referenceRuns[0];
   assertFontSlots(reference, "SutonnyMJ", "endnote reference");
-  const anchorWordRun = reference.previousElementSibling;
+  const precedingTextRun = reference.previousElementSibling;
   const trailingTextRun = reference.nextElementSibling;
-  if (!anchorWordRun || anchorWordRun.localName !== "r") {
-    throw new Error("endnote reference is not adjacent to a dedicated anchor-word run");
+  if (reference.getElementsByTagNameNS(NS, "t").length !== 0) {
+    throw new Error("endnote reference marker absorbed ordinary text");
   }
-  const anchorWord = anchorWordRun.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "";
-  if (!anchorWord || /\s/.test(anchorWord)) {
-    throw new Error(`endnote anchor run was not reduced to one word: ${anchorWord || "empty"}`);
+  if (!precedingTextRun || precedingTextRun.localName !== "r") {
+    throw new Error("text before the endnote reference was not preserved as its own run");
   }
-  assertFontSlots(anchorWordRun, "SutonnyMJ", "endnote anchor word");
+  const precedingText = precedingTextRun.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "";
+  if (!precedingText || precedingTextRun.getElementsByTagNameNS(NS, "endnoteReference").length > 0) {
+    throw new Error("text before the endnote reference was absorbed into the marker run");
+  }
+  assertFontSlots(precedingTextRun, "SutonnyMJ", "text before endnote reference");
   if (!trailingTextRun || trailingTextRun.localName !== "r") {
     throw new Error("text after the endnote reference was not preserved as its own run");
   }
