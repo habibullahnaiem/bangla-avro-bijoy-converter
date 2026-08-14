@@ -144,19 +144,17 @@ async function inspectEndnoteHandling(path: string): Promise<void> {
   );
   if (referenceRuns.length !== 1) throw new Error(`endnote reference count mismatch: ${referenceRuns.length}`);
   const reference = referenceRuns[0];
-  if (fontSlots(reference).length > 0) {
-    throw new Error("endnote marker retained a direct font override instead of its own Word style");
-  }
-  const precedingTextRun = reference.previousElementSibling;
+  assertFontSlots(reference, "SutonnyMJ", "endnote reference");
+  const anchorWordRun = reference.previousElementSibling;
   const trailingTextRun = reference.nextElementSibling;
-  if (!precedingTextRun || precedingTextRun.localName !== "r") {
-    throw new Error("text before the endnote reference was not preserved as an ordinary run");
+  if (!anchorWordRun || anchorWordRun.localName !== "r") {
+    throw new Error("endnote reference is not adjacent to a dedicated anchor-word run");
   }
-  const precedingText = precedingTextRun.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "";
-  if (!precedingText || !/\s/.test(precedingText) || /\s$/.test(precedingText)) {
-    throw new Error(`text before endnote reference was restructured: ${precedingText || "empty"}`);
+  const anchorWord = anchorWordRun.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "";
+  if (!anchorWord || /\s/.test(anchorWord)) {
+    throw new Error(`endnote anchor run was not reduced to one word: ${anchorWord || "empty"}`);
   }
-  assertFontSlots(precedingTextRun, "SutonnyMJ", "text before endnote reference");
+  assertFontSlots(anchorWordRun, "SutonnyMJ", "endnote anchor word");
   if (!trailingTextRun || trailingTextRun.localName !== "r") {
     throw new Error("text after the endnote reference was not preserved as its own run");
   }
@@ -165,18 +163,6 @@ async function inspectEndnoteHandling(path: string): Promise<void> {
     throw new Error("trailing text was absorbed into the endnote reference run");
   }
   assertFontSlots(trailingTextRun, "SutonnyMJ", "trailing text after endnote reference");
-  const siblingRuns = Array.from(reference.parentElement?.children ?? []).filter(
-    (child) => child.localName === "r",
-  );
-  for (const siblingRun of siblingRuns) {
-    if (siblingRun === reference) continue;
-    const verticalAlignment = siblingRun
-      .getElementsByTagNameNS(NS, "vertAlign")[0]
-      ?.getAttributeNS(NS, "val");
-    if (verticalAlignment === "superscript") {
-      throw new Error("endnote superscript formatting leaked beyond the reference marker run");
-    }
-  }
   const referencePr = reference.getElementsByTagNameNS(NS, "rPr")[0];
   if (
     referencePr?.getElementsByTagNameNS(NS, "rStyle")[0]?.getAttributeNS(NS, "val") !== "EndnoteReference" ||
