@@ -78,6 +78,11 @@ type ConversionHistoryItem = {
   createdAt: number;
 };
 
+type BeforeInstallPromptEvent = Event & {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
+};
+
 const formatHistoryTime = (timestamp: number) =>
   new Intl.DateTimeFormat("bn-BD", {
     day: "numeric",
@@ -129,6 +134,12 @@ export default function Home() {
   const [filePrintDirection, setFilePrintDirection] = useState<ConvertDirection | null>(null);
   const [isFileDragActive, setIsFileDragActive] = useState(false);
   const [printPreviewOpen, setPrintPreviewOpen] = useState(false);
+  const [isOnline, setIsOnline] = useState(() =>
+    typeof navigator === "undefined" ? true : navigator.onLine,
+  );
+  const [pwaReady, setPwaReady] = useState(false);
+  const [isStandalone, setIsStandalone] = useState(false);
+  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
 
   useEffect(() => {
     try {
@@ -137,6 +148,48 @@ export default function Home() {
       // Private browsing/storage-restricted environments should not block conversion.
     }
   }, [history]);
+
+  useEffect(() => {
+    const syncOnlineState = () => setIsOnline(navigator.onLine);
+    const syncStandaloneState = () => {
+      const standalone = window.matchMedia("(display-mode: standalone)").matches;
+      setIsStandalone(
+        standalone || Boolean((navigator as Navigator & { standalone?: boolean }).standalone),
+      );
+    };
+    const handleBeforeInstallPrompt = (event: Event) => {
+      event.preventDefault();
+      setInstallPrompt(event as BeforeInstallPromptEvent);
+    };
+    const handleAppInstalled = () => {
+      setInstallPrompt(null);
+      setIsStandalone(true);
+      toast.success("অভ্রজয় অফলাইন অ্যাপ হিসেবে ইনস্টল হয়েছে");
+    };
+    const markPwaReady = () => setPwaReady(true);
+
+    syncOnlineState();
+    syncStandaloneState();
+    window.addEventListener("online", syncOnlineState);
+    window.addEventListener("offline", syncOnlineState);
+    window.addEventListener("resize", syncStandaloneState);
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    window.addEventListener("appinstalled", handleAppInstalled);
+    window.addEventListener("avrojoy:pwa-registered", markPwaReady);
+
+    if (import.meta.env.PROD && "serviceWorker" in navigator) {
+      navigator.serviceWorker.ready.then(markPwaReady).catch(() => undefined);
+    }
+
+    return () => {
+      window.removeEventListener("online", syncOnlineState);
+      window.removeEventListener("offline", syncOnlineState);
+      window.removeEventListener("resize", syncStandaloneState);
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+      window.removeEventListener("appinstalled", handleAppInstalled);
+      window.removeEventListener("avrojoy:pwa-registered", markPwaReady);
+    };
+  }, []);
 
   const addHistoryItem = useCallback(
     (record: Omit<ConversionHistoryItem, "id" | "createdAt">) => {
@@ -721,6 +774,25 @@ export default function Home() {
     });
   }
 
+  const installApp = async () => {
+    if (!installPrompt) {
+      toast.info("ব্রাউজারের menu থেকে ‘Install অভ্রজয়’ নির্বাচন করুন");
+      return;
+    }
+
+    try {
+      await installPrompt.prompt();
+      const choice = await installPrompt.userChoice;
+      if (choice.outcome === "accepted") {
+        toast.success("অভ্রজয় ইনস্টল করার অনুরোধ গ্রহণ করা হয়েছে");
+      }
+    } catch {
+      toast.error("অফলাইন অ্যাপ ইনস্টল করা যায়নি");
+    } finally {
+      setInstallPrompt(null);
+    }
+  };
+
   return (
     <div className="app-shell min-h-screen flex flex-col bg-background">
       {/* হেডার — গভীর টিল, low-opacity keyboard ও ডানদিকে ঘন Bengali glyph cluster */}
@@ -763,25 +835,56 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <Tooltip>
-            <TooltipTrigger asChild>
+          <div className="site-header__actions flex items-center gap-2">
+            {installPrompt && !isStandalone ? (
               <Button
-                variant="ghost"
-                size="icon"
-                className="text-primary-foreground hover:bg-primary-foreground/10"
-                onClick={() => toggleTheme?.()}
-                aria-label={theme === "dark" ? "লাইট মোড চালু করুন" : "ডার্ক মোড চালু করুন"}>
-                {theme === "dark" ? (
-                  <Sun className="h-5 w-5" />
-                ) : (
-                  <Moon className="h-5 w-5" />
-                )}
+                variant="outline"
+                size="sm"
+                className="border-primary-foreground/40 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20 hover:text-primary-foreground"
+                onClick={installApp}
+                aria-label="অভ্রজয় অফলাইন অ্যাপ ইনস্টল করুন">
+                <Download className="mr-1.5 h-4 w-4" />
+                <span className="hidden sm:inline">অফলাইনে ইনস্টল</span>
               </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              {theme === "dark" ? "লাইট মোড" : "ডার্ক মোড"}
-            </TooltipContent>
-          </Tooltip>
+            ) : null}
+            {import.meta.env.PROD ? (
+              <span
+                className={`pwa-status-badge ${!isOnline ? "pwa-status-badge--offline" : ""}`}
+                role="status"
+                aria-live="polite"
+                title={
+                  !isOnline
+                    ? "ইন্টারনেট ছাড়াই converter ব্যবহার করা যাচ্ছে"
+                    : pwaReady
+                      ? "অফলাইন ব্যবহারের জন্য app shell প্রস্তুত"
+                      : "অফলাইন cache প্রস্তুত হচ্ছে"
+                }>
+                <span className="pwa-status-badge__dot" aria-hidden="true" />
+                <span className="hidden sm:inline">
+                  {!isOnline ? "অফলাইন মোড" : pwaReady ? "অফলাইনে প্রস্তুত" : "PWA প্রস্তুত হচ্ছে"}
+                </span>
+              </span>
+            ) : null}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-primary-foreground hover:bg-primary-foreground/10"
+                  onClick={() => toggleTheme?.()}
+                  aria-label={theme === "dark" ? "লাইট মোড চালু করুন" : "ডার্ক মোড চালু করুন"}>
+                  {theme === "dark" ? (
+                    <Sun className="h-5 w-5" />
+                  ) : (
+                    <Moon className="h-5 w-5" />
+                  )}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                {theme === "dark" ? "লাইট মোড" : "ডার্ক মোড"}
+              </TooltipContent>
+            </Tooltip>
+          </div>
         </div>
       </header>
 

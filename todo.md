@@ -329,3 +329,10 @@
 - [x] “লাইভ কনভার্সন সক্রিয়” ও “উদাহরণ দেখুন” control-এর বর্তমান markup ও interaction audit করা
 - [x] দুই theme-এ hover, focus-visible, motion এবং reduced-motion state যোগ করা
 - [x] desktop/mobile behavior, production build ও checkpoint যাচাই করা
+
+# নতুন: offline-capable PWA
+- [x] existing asset loading, fonts, metadata এবং build output-এর offline dependency audit করা
+- [x] PWA manifest, install metadata, service worker এবং cache strategy যোগ করা
+- [x] SutonnyMJ font ও critical visual assets offline cache-এর জন্য প্রস্তুত করা
+- [x] offline/install UX, production build, manifest/service-worker এবং responsive behavior যাচাই করা
+- [x] stable PWA checkpoint তৈরি করা এবং offline ব্যবহারের নির্দেশনা লেখা

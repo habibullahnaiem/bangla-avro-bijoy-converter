@@ -17,6 +17,56 @@
   font-display: block;
 }
 
+/* ডিজাইন দিক: টিল ডেস্ক — Google Fonts-এর বদলে webdev storage-এ রাখা font files,
+   যাতে প্রথম online load-এর পর Bengali UI font পুরোপুরি offline থাকে। */
+@font-face {
+  font-family: "Hind Siliguri";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/manus-storage/hind-siliguri-400_9d724dcd.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Hind Siliguri";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/manus-storage/hind-siliguri-500_ba0a720c.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Hind Siliguri";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/manus-storage/hind-siliguri-600_b9cb6e1f.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Hind Siliguri";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/manus-storage/hind-siliguri-700_6c90ad0b.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Noto Serif Bengali";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/manus-storage/noto-serif-bengali-700_c2fbc861.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Noto Serif Bengali";
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("/manus-storage/noto-serif-bengali-900_1c3eac55.ttf") format("truetype");
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -1811,6 +1861,58 @@ button:active {
     .hero-interactive-control:hover,
     .hero-interactive-control:active {
       transform: none;
+    }
+  }
+
+  /* PWA state in the header: small, informative, and readable in both themes. */
+  .pwa-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 2rem;
+    border: 1px solid oklch(0.78 0.06 195 / 0.75);
+    border-radius: 999px;
+    padding: 0.28rem 0.62rem;
+    color: oklch(0.98 0.005 200);
+    background: oklch(0.23 0.06 200 / 0.58);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+
+  .pwa-status-badge__dot {
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 999px;
+    background: oklch(0.8 0.18 150);
+    box-shadow: 0 0 0 3px oklch(0.8 0.18 150 / 0.16);
+  }
+
+  .pwa-status-badge--offline {
+    border-color: oklch(0.8 0.16 75 / 0.75);
+    background: oklch(0.31 0.07 70 / 0.7);
+  }
+
+  .pwa-status-badge--offline .pwa-status-badge__dot {
+    background: oklch(0.86 0.16 85);
+    box-shadow: 0 0 0 3px oklch(0.86 0.16 85 / 0.18);
+  }
+
+  .dark .pwa-status-badge {
+    border-color: oklch(0.68 0.1 190 / 0.78);
+    background: oklch(0.12 0.035 205 / 0.7);
+  }
+
+  .dark .pwa-status-badge--offline {
+    border-color: oklch(0.77 0.13 80 / 0.8);
+    background: oklch(0.2 0.06 70 / 0.88);
+  }
+
+  @media (max-width: 640px) {
+    .pwa-status-badge {
+      padding-inline: 0.5rem;
+      font-size: 0.68rem;
     }
   }
 }
