@@ -389,6 +389,47 @@ export async function convertFile(
   return { kind: "txt", blob, name: `${name}${suffix}.txt` };
 }
 
+/**
+ * ভুল করে Times New Roman-এ রেন্ডার হওয়া legacy Bijoy DOCX উদ্ধার করে।
+ * টেক্সট byte, paragraph, endnote/footnote ও style অপরিবর্তিত থাকে; কেবল
+ * নির্ভরযোগ্য Bijoy glyph-marker থাকা run-এর font mapping SutonnyMJ-তে ফেরে।
+ */
+export async function repairBijoyFontFile(
+  file: File,
+): Promise<FileConvertResult> {
+  if (!file.name.toLowerCase().endsWith(".docx")) {
+    throw new Error("Bijoy font repair is available only for DOCX files");
+  }
+
+  const name = file.name.replace(/\.docx$/i, "");
+  const zip = await JSZip.loadAsync(await file.arrayBuffer());
+  const parts = [
+    "word/document.xml",
+    "word/header1.xml",
+    "word/header2.xml",
+    "word/header3.xml",
+    "word/footer1.xml",
+    "word/footer2.xml",
+    "word/footer3.xml",
+    "word/footnotes.xml",
+    "word/endnotes.xml",
+  ];
+
+  for (const partPath of parts) {
+    const entry = zip.file(partPath);
+    if (!entry) continue;
+    const xml = stripIllegalXmlChars(await entry.async("string"));
+    zip.file(partPath, repairBijoyFontsInDocXml(xml));
+  }
+
+  const blob = await zip.generateAsync({
+    type: "blob",
+    mimeType:
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  });
+  return { kind: "docx", blob, name: `${name}_sutonny_repaired.docx` };
+}
+
 /** UTF-8 → windows-1252 বাইট (0x00–0xFF); রেঞ্জের বাইরে হলে `?` */
 function toWindows1252(text: string): Uint8Array {
   const out = new Uint8Array(text.length);
@@ -626,6 +667,49 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
     ensureRunSizePair(run, ns);
   }
   return new XMLSerializer().serializeToString(doc);
+}
+
+/**
+ * Word-saved legacy Bijoy text উদ্ধার: কোনো w:t, paragraph property বা note
+ * structure বদলায় না। শুধু bn-BD metadata অথবা দৃঢ় legacy glyph signature
+ * থাকা text run-এ পূর্ণ SutonnyMJ mapping পুনঃস্থাপন করে।
+ */
+function repairBijoyFontsInDocXml(xml: string): string {
+  const doc = new DOMParser().parseFromString(xml, "text/xml");
+  const ns = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
+  if (doc.getElementsByTagName("parsererror").length > 0) return xml;
+
+  for (const run of Array.from(doc.getElementsByTagNameNS(ns, "r"))) {
+    const text = Array.from(run.getElementsByTagNameNS(ns, "t"))
+      .map((node) => node.textContent ?? "")
+      .join("");
+    if (!isHighConfidenceBijoyRun(run, text, ns)) continue;
+    rFontsAttr(run, ns, "SutonnyMJ");
+    ensureRunSizePair(run, ns);
+  }
+  return new XMLSerializer().serializeToString(doc);
+}
+
+/** Bengali language metadata survives Word font-family edits in the supplied
+ * files. If it is absent, require several legacy-specific glyph markers so
+ * ordinary English/Latin text cannot be misclassified as Bijoy. */
+function isHighConfidenceBijoyRun(run: Element, text: string, ns: string): boolean {
+  if (!text || /[\u0980-\u09FF]/.test(text)) return false;
+  const lang = Array.from(run.getElementsByTagNameNS(ns, "lang"))[0];
+  const languageValues = [
+    lang?.getAttributeNS(ns, "val"),
+    lang?.getAttributeNS(ns, "eastAsia"),
+    lang?.getAttributeNS(ns, "bidi"),
+    lang?.getAttribute("w:val"),
+    lang?.getAttribute("w:eastAsia"),
+    lang?.getAttribute("w:bidi"),
+  ].filter(Boolean);
+  const hasBanglaLanguage = languageValues.some((value) => /^(bn|ben)(-|$)/i.test(value!));
+  if (hasBanglaLanguage) return /[A-Za-z]/.test(text);
+
+  const legacyGlyphCount = (text.match(/[†‡„¤¥¦§¨©ª«¬®¯±²³´µ¶·¸¹º»¼½¾¿]/g) ?? [])
+    .length;
+  return legacyGlyphCount >= 3 && /[A-Za-z]/.test(text);
 }
 
 /** শুধু EndnoteReference character style-এর direct rFonts override মুছে দেয়।

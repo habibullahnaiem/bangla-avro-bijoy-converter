@@ -1,7 +1,7 @@
 import { JSDOM } from "jsdom";
 import JSZip from "jszip";
 import fs from "fs";
-import { convertFile } from "./client/src/lib/converter";
+import { convertFile, repairBijoyFontFile } from "./client/src/lib/converter";
 
 const dom = new JSDOM();
 (globalThis as any).DOMParser = dom.window.DOMParser;
@@ -202,6 +202,50 @@ async function inspectEndnoteHandling(path: string): Promise<void> {
   console.log("endnote-reference-and-body: passed");
 }
 
+async function inspectBijoyFontRepair(): Promise<void> {
+  const bijoyText = "mKvj‡ejv †_‡K Avwg †Zvgvi m‡½ K_v ewj|";
+  const englishText = "English text must remain Times New Roman.";
+  const zip = minimalDocx();
+  const sourceXml = await zip.file("word/document.xml")!.async("string");
+  const repairFixture = sourceXml.replace(
+    "<w:sectPr/>",
+    `<w:p><w:pPr><w:pStyle w:val="Normal"/></w:pPr>
+      <w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:eastAsia="Times New Roman" w:cs="Times New Roman"/><w:lang w:val="bn-BD" w:eastAsia="bn-BD" w:bidi="bn-BD"/><w:sz w:val="28"/><w:szCs w:val="28"/></w:rPr><w:t>${bijoyText}</w:t></w:r>
+      <w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:eastAsia="Times New Roman" w:cs="Times New Roman"/><w:lang w:val="en-US"/><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr><w:t>${englishText}</w:t></w:r>
+    </w:p><w:sectPr/>`,
+  );
+  zip.file("word/document.xml", repairFixture);
+  const source = await zip.generateAsync({ type: "uint8array" });
+  const input = new File([source], "damaged_bijoy.docx", {
+    type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  });
+  const repaired = await repairBijoyFontFile(input);
+  if (repaired.kind !== "docx") throw new Error("Expected DOCX repair result");
+
+  const repairedZip = await JSZip.loadAsync(new Uint8Array(await repaired.blob.arrayBuffer()));
+  const repairedXml = await repairedZip.file("word/document.xml")!.async("string");
+  const document = new DOMParser().parseFromString(repairedXml, "text/xml");
+  const textRuns = Array.from(document.getElementsByTagNameNS(NS, "r"));
+  const repairedBijoyRun = textRuns.find(
+    (run) => (run.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "") === bijoyText,
+  );
+  const preservedEnglishRun = textRuns.find(
+    (run) => (run.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "") === englishText,
+  );
+  if (!repairedBijoyRun || !preservedEnglishRun) {
+    throw new Error("repair fixture text runs were changed or lost");
+  }
+  assertFontSlots(repairedBijoyRun, "SutonnyMJ", "repaired high-confidence Bijoy run");
+  assertFontSlots(preservedEnglishRun, "Times New Roman", "ordinary English repair control");
+  const allText = Array.from(document.getElementsByTagNameNS(NS, "t"))
+    .map((node) => node.textContent ?? "")
+    .join("");
+  if (!allText.includes(bijoyText) || !allText.includes(englishText)) {
+    throw new Error("Bijoy font repair modified document text");
+  }
+  console.log("bijoy-font-repair: passed");
+}
+
 function rewriteRunSizes(xml: string, banglaHalfPoints: number, englishHalfPoints: number): string {
   const doc = new DOMParser().parseFromString(xml, "text/xml");
   const runs = Array.from(doc.getElementsByTagNameNS(NS, "r"));
@@ -233,6 +277,7 @@ async function main() {
   fs.writeFileSync(outputPath, output);
   await inspectDocx(outputPath, "converted-14pt-12pt", { banglaHalfPoints: 28, englishHalfPoints: 24 });
   await inspectEndnoteHandling(outputPath);
+  await inspectBijoyFontRepair();
 
   const zip = await JSZip.loadAsync(output);
   const editedXml = await zip.file("word/document.xml")!.async("string");

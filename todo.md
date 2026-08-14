@@ -465,3 +465,9 @@
 # সক্রিয়: rollback-এ ফিরে আসা reference split অপসারণ
 - [x] restored converter-এর adjacent-word split সরিয়ে কেবল native superscript marker রাখা
 - [x] marker, আগের শব্দ ও paragraph text অপরিবর্তিত থাকে এমন DOCX regression চালানো
+
+# সক্রিয়: Word-saved Bijoy font repair
+- [x] স্ক্রিনশটে দেখা Word-saved ক্ষতিগ্রস্ত paragraph-এর font slots ও paragraph properties আলাদা করে শনাক্ত করা
+- [x] legacy Bijoy byte-run চিনে শুধু তার font mapping SutonnyMJ-তে ফিরিয়ে আনার নিরাপদ rule নির্ধারণ করা
+- [x] মূল conversion output না বদলে repair workflow ও regression তৈরি করা
+- [x] সরবরাহকৃত Word-saved DOCX-এ repair চালিয়ে text অপরিবর্তিত রেখে SutonnyMJ mapping পুনরুদ্ধার যাচাই করা

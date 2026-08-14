@@ -38,6 +38,7 @@ import {
   segmentBijoyText,
   mapSegmentsToBijoy,
   extractTextFrom,
+  repairBijoyFontFile,
 } from "@/lib/converter";
 import { Download, FileText, Upload, Loader2 } from "lucide-react";
 import { useRef as useFileRef } from "react";
@@ -520,6 +521,34 @@ export default function Home() {
       );
     } catch {
       toast.error("ফাইল রূপান্তরে ত্রুটি — ফাইলটি ঠিকমতো .docx/.txt কিনা যাচাই করুন");
+    } finally {
+      setConverting(false);
+    }
+  };
+
+  const runBijoyFontRepair = async () => {
+    if (!selectedFile) {
+      toast.info("প্রথমে একটি Word DOCX ফাইল নির্বাচন করুন");
+      return;
+    }
+    if (!/\.docx$/i.test(selectedFile.name)) {
+      toast.error("ফন্ট মেরামত শুধু .docx ফাইলের জন্য প্রযোজ্য");
+      return;
+    }
+    setConverting(true);
+    try {
+      const result = await repairBijoyFontFile(selectedFile);
+      if (fileResult) URL.revokeObjectURL(fileResult.url);
+      const url = URL.createObjectURL(result.blob);
+      setFileResult({ name: result.name, url });
+      setFilePreviewInput("");
+      setFilePreviewText("");
+      setFilePrintInput("");
+      setFilePrintText("");
+      setFilePrintDirection(null);
+      toast.success("Bijoy font mapping মেরামত সম্পন্ন — text অপরিবর্তিত রাখা হয়েছে");
+    } catch {
+      toast.error("ফন্ট মেরামত করা যায়নি — ফাইলটি বৈধ .docx কিনা যাচাই করুন");
     } finally {
       setConverting(false);
     }
@@ -1563,6 +1592,19 @@ export default function Home() {
                     </>
                   )}
                 </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={!selectedFile || converting || !/\.docx$/i.test(selectedFile.name)}
+                  className="border-primary/35 bg-card text-primary hover:bg-primary/5 disabled:opacity-50"
+                  onClick={runBijoyFontRepair}>
+                  <RotateCcw className="mr-2 h-4 w-4" />
+                  ক্ষতিগ্রস্ত বিজয় ফন্ট মেরামত
+                </Button>
+                <p className="max-w-md text-center text-xs leading-relaxed text-muted-foreground">
+                  শুধু Word-এ Times New Roman হয়ে হিজিবিজি দেখা পুরোনো বিজয় DOCX-এর জন্য।
+                  এটি লেখা বদলায় না; উচ্চ-নিশ্চয়তার বিজয় run-এ SutonnyMJ font mapping ফিরিয়ে দেয়।
+                </p>
                 <div className="flex flex-wrap items-center justify-center gap-2">
                   {filePrintText && (
                     <Button
