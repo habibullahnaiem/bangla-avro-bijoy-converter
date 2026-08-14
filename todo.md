@@ -263,3 +263,11 @@
 - [x] `†ij` code sequence এবং SutonnyMJ probe সঠিক প্রমাণিত হওয়ায় unsafe visual বা mapping correction প্রয়োগ না করা
 - [x] correction নিরাপদ না হলে বর্তমান stable version অপরিবর্তিত রাখা এবং তা report করা
 - [x] focused audit ও full conversion regression যাচাই করা; responsive code অপরিবর্তিত রাখা
+
+# নতুন: glyph-level e-kar optical comparison
+
+- [x] supplied reference image-এর red-box geometry ও target relationship নথিভুক্ত করা
+- [x] একই e-kar specimen SutonnyMJ-তে render করে pixel-level position তুলনা করা
+- [x] শুধুমাত্র word-initial marker-এ scoped optical correction পরীক্ষা করা
+- [x] mid-word e-kar, ঋ/ৃ-কার, যুক্তবর্ণ, copy ও print preview regression যাচাই করা
+- [x] safe result হলে checkpoint করা; safe না হলে বর্তমান stable rendering রাখা

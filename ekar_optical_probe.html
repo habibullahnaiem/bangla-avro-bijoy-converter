@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: SutonnyProbe;
+        src: url("file:///home/ubuntu/webdev-static-assets/SutonnyMJ_original.ttf") format("truetype");
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: white; color: #111; font-family: Arial, sans-serif; }
+      .row { display: flex; align-items: baseline; gap: 28px; height: 128px; padding: 20px 28px; border-bottom: 1px solid #ddd; }
+      .label { width: 210px; font-size: 24px; color: #444; }
+      .sample { font-family: SutonnyProbe, serif; font-size: 72px; line-height: 1.35; white-space: nowrap; }
+      .initial { display: inline-block; }
+      .initial-down { display: inline-block; position: relative; top: 0.035em; }
+      .initial-right { display: inline-block; position: relative; left: 0.025em; }
+      .initial-down-right { display: inline-block; position: relative; left: 0.025em; top: 0.035em; }
+      .initial-tiny { display: inline-block; position: relative; left: 0.018em; top: 0.02em; transform: scale(0.98); transform-origin: left bottom; }
+    </style>
+  </head>
+  <body>
+    <div class="row"><div class="label">baseline †ij</div><div class="sample"><span class="initial">†</span>ij</div></div>
+    <div class="row"><div class="label">down +0.035em</div><div class="sample"><span class="initial-down">†</span>ij</div></div>
+    <div class="row"><div class="label">right +0.025em</div><div class="sample"><span class="initial-right">†</span>ij</div></div>
+    <div class="row"><div class="label">down/right</div><div class="sample"><span class="initial-down-right">†</span>ij</div></div>
+    <div class="row"><div class="label">tiny optical</div><div class="sample"><span class="initial-tiny">†</span>ij</div></div>
+  </body>
+</html>
