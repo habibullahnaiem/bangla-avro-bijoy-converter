@@ -112,19 +112,19 @@
 
 :root {
   --radius: 0.75rem;
-  --background: oklch(0.968 0.008 220);
+  --background: oklch(0.942 0.012 220);
   --foreground: oklch(0.2 0.03 210);
-  --card: oklch(1 0 0);
+  --card: oklch(0.972 0.01 210);
   --card-foreground: oklch(0.18 0.03 210);
-  --popover: oklch(1 0 0);
+  --popover: oklch(0.978 0.008 210);
   --popover-foreground: oklch(0.18 0.03 210);
   --primary: oklch(0.39 0.1 198);
   --primary-foreground: oklch(0.985 0.005 200);
-  --secondary: oklch(0.92 0.025 200);
+  --secondary: oklch(0.895 0.03 200);
   --secondary-foreground: oklch(0.26 0.05 200);
-  --muted: oklch(0.925 0.01 220);
+  --muted: oklch(0.895 0.014 220);
   --muted-foreground: oklch(0.4 0.025 215);
-  --accent: oklch(0.87 0.05 195);
+  --accent: oklch(0.825 0.06 195);
   --accent-foreground: oklch(0.23 0.06 200);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
@@ -136,7 +136,7 @@
   --chart-3: oklch(0.42 0.09 200);
   --chart-4: oklch(0.35 0.07 205);
   --chart-5: oklch(0.28 0.05 210);
-  --sidebar: oklch(0.985 0 0);
+  --sidebar: oklch(0.96 0.008 210);
   --sidebar-foreground: oklch(0.25 0.03 210);
   --sidebar-primary: oklch(0.42 0.09 200);
   --sidebar-primary-foreground: oklch(0.985 0.005 200);
@@ -997,11 +997,44 @@ button:active {
 
 /* ডিজাইন দিক: টিল ডেস্ক — AvroJoy refinement layer; crisp desk, glyph-first identity, converter as the hero */
 @media screen {
+  /* Light-mode balance: soften the near-white desk while preserving readable text. */
+  :root {
+    --background: oklch(0.945 0.012 220);
+    --card: oklch(0.975 0.01 205);
+    --popover: oklch(0.98 0.008 205);
+    --secondary: oklch(0.89 0.03 200);
+    --muted: oklch(0.89 0.018 220);
+    --accent: oklch(0.83 0.055 195);
+    --border: oklch(0.78 0.024 215);
+    --input: oklch(0.78 0.024 215);
+  }
+
   .app-shell {
     background:
-      linear-gradient(180deg, oklch(0.985 0.006 220 / 0.96), oklch(0.965 0.009 215 / 0.96)),
+      linear-gradient(180deg, oklch(0.95 0.012 220 / 0.9), oklch(0.925 0.018 215 / 0.86)),
       url("/manus-storage/bangla-converter-keyboard-background_fad26d5c.png") center top / 860px auto repeat,
       var(--background);
+  }
+
+  .workspace-tabs,
+  .workspace-card,
+  .converter-card,
+  .editor-pane,
+  .feature-card,
+  .file-workspace {
+    background-color: oklch(0.965 0.012 205 / 0.96);
+  }
+
+  .type-legend {
+    background: oklch(0.95 0.018 200 / 0.94);
+  }
+
+  .glyph-preview {
+    background: linear-gradient(135deg, oklch(0.965 0.012 200), oklch(0.93 0.025 195));
+  }
+
+  .usage-card {
+    background: oklch(0.92 0.022 205 / 0.72);
   }
 
   .app-main {
@@ -1126,11 +1159,46 @@ button:active {
 /* ডিজাইন দিক: টিল ডেস্ক — keyboard-led AvroJoy restoration;
    keyboard keys, glyph specimens ও conversion desk-ই হবে প্রধান visual language। */
 @media screen {
+  /* Light-mode balance: a softer paper-and-teal desk instead of a near-white
+     canvas. Dark-mode tokens and selectors below intentionally override this
+     layer, while the Bijoy output paper stays bright for print-like fidelity. */
+  :root {
+    --background: oklch(0.945 0.012 220);
+    --card: oklch(0.975 0.01 205);
+    --popover: oklch(0.98 0.008 205);
+    --secondary: oklch(0.89 0.03 200);
+    --muted: oklch(0.89 0.018 220);
+    --accent: oklch(0.83 0.055 195);
+    --border: oklch(0.78 0.024 215);
+    --input: oklch(0.78 0.024 215);
+  }
+
   .app-shell {
     background:
-      linear-gradient(180deg, oklch(0.985 0.006 220 / 0.82), oklch(0.965 0.009 215 / 0.74)),
+      linear-gradient(180deg, oklch(0.95 0.012 220 / 0.9), oklch(0.925 0.018 215 / 0.86)),
       url("/manus-storage/bangla-converter-keyboard-background_fad26d5c.png") center top / 760px auto repeat,
       var(--background);
+  }
+
+  .workspace-tabs,
+  .workspace-card,
+  .converter-card,
+  .editor-pane,
+  .feature-card,
+  .file-workspace {
+    background-color: oklch(0.965 0.012 205 / 0.96);
+  }
+
+  .type-legend {
+    background: oklch(0.95 0.018 200 / 0.94);
+  }
+
+  .glyph-preview {
+    background: linear-gradient(135deg, oklch(0.965 0.012 200), oklch(0.93 0.025 195));
+  }
+
+  .usage-card {
+    background: oklch(0.92 0.022 205 / 0.72);
   }
 
   .hero-panel {
@@ -1739,7 +1807,7 @@ button:active {
 
   html:not(.dark) .app-shell {
     background:
-      linear-gradient(180deg, oklch(0.985 0.006 220 / 0.9), oklch(0.955 0.012 215 / 0.94)),
+      linear-gradient(180deg, oklch(0.955 0.012 220 / 0.94), oklch(0.915 0.022 215 / 0.97)),
       url("/manus-storage/bangla-converter-keyboard-background_fad26d5c.png") center top / 760px auto repeat,
       var(--background) !important;
   }
@@ -1747,7 +1815,7 @@ button:active {
   html:not(.dark) .hero-panel {
     border-color: oklch(0.72 0.07 195 / 0.62) !important;
     background:
-      linear-gradient(90deg, oklch(0.995 0.006 205 / 0.99) 0%, oklch(0.99 0.012 195 / 0.97) 54%, oklch(0.96 0.028 190 / 0.82) 100%),
+      linear-gradient(90deg, oklch(0.965 0.014 205 / 0.98) 0%, oklch(0.95 0.022 195 / 0.94) 54%, oklch(0.91 0.045 190 / 0.8) 100%),
       url("/manus-storage/avrojoy-hero-v2-banner_b1dad7f4.png") right center / cover no-repeat,
       url("/manus-storage/bangla-converter-keyboard-background_fad26d5c.png") right center / 64% auto repeat !important;
     color: var(--foreground);
@@ -1773,7 +1841,7 @@ button:active {
   html:not(.dark) .converter-card,
   html:not(.dark) .file-workspace {
     border-color: oklch(0.78 0.025 210) !important;
-    background: oklch(0.998 0.003 90 / 0.98) !important;
+    background: oklch(0.965 0.012 210 / 0.98) !important;
   }
 
   html:not(.dark) .converter-toolbar,
@@ -1782,14 +1850,14 @@ button:active {
   html:not(.dark) .editor-pane__footer,
   html:not(.dark) .file-workspace__header,
   html:not(.dark) .file-direction {
-    background: linear-gradient(180deg, oklch(0.975 0.012 205 / 0.98), oklch(0.94 0.018 210 / 0.98)) !important;
+    background: linear-gradient(180deg, oklch(0.945 0.018 205 / 0.98), oklch(0.9 0.028 210 / 0.98)) !important;
     color: var(--foreground);
   }
 
   html:not(.dark) .converter-toolbar__directions,
   html:not(.dark) .converter-toolbar__font-size {
     border-color: oklch(0.78 0.025 210) !important;
-    background: oklch(1 0 0 / 0.98) !important;
+    background: oklch(0.94 0.016 210 / 0.98) !important;
   }
 
   html:not(.dark) .converter-toolbar__directions button,
@@ -1816,15 +1884,21 @@ button:active {
     color: oklch(0.99 0.005 200) !important;
   }
 
-  html:not(.dark) .editor-pane,
-  html:not(.dark) .editor-pane textarea {
-    background: oklch(1 0 0 / 0.99) !important;
+  html:not(.dark) .editor-pane:not(.editor-pane--output),
+  html:not(.dark) .editor-pane:not(.editor-pane--output) textarea {
+    background: oklch(0.975 0.01 210 / 0.99) !important;
     color: oklch(0.2 0.03 210) !important;
+  }
+
+  html:not(.dark) .editor-pane--output,
+  html:not(.dark) .editor-pane--output .converter-editor-body,
+  html:not(.dark) .editor-pane--output .bijoy-rich {
+    background: oklch(0.975 0.008 90 / 0.99) !important;
   }
 
   html:not(.dark) .recent-history article {
     border-color: oklch(0.8 0.02 210) !important;
-    background: oklch(0.995 0.004 90 / 0.98) !important;
+    background: oklch(0.955 0.012 210 / 0.98) !important;
   }
 
   html:not(.dark) .glyph-strip .text-muted-foreground,
@@ -1838,7 +1912,7 @@ button:active {
   html:not(.dark) .usage-card,
   html:not(.dark) .file-workspace {
     border-color: oklch(0.78 0.025 210) !important;
-    background: oklch(0.995 0.004 90 / 0.97) !important;
+    background: oklch(0.955 0.012 210 / 0.97) !important;
     color: var(--foreground);
   }
 

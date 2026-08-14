@@ -395,3 +395,8 @@
 - [x] dark mode ও text contrast অক্ষুণ্ণ রেখে restrained light-mode adjustment করা
 - [x] desktop/mobile light-dark screenshots ও production build যাচাই করা
 - [x] safe checkpoint সম্পন্ন করা
+# নতুন: light theme brightness balance
+- [x] light-theme canvas ও প্রধান surfaces-এর অতিরিক্ত brightness audit করা
+- [x] readable contrast বজায় রেখে main workspace-এর tonal balance কমানো
+- [x] light/dark responsive screenshots, build ও conversion regressions যাচাই করা
+- [x] safe checkpoint বা আগের stable version preservation সম্পন্ন করা
