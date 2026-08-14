@@ -851,7 +851,7 @@ export default function Home() {
         <div className="workspace-card converter-card overflow-hidden rounded-2xl border bg-card shadow-lg">
           {/* দিক টগল বার */}
           <div className="converter-toolbar flex flex-wrap items-center justify-between gap-2 border-b bg-secondary/60 px-4 py-3">
-            <div className="converter-toolbar__directions flex items-center gap-1.5 rounded-full bg-card p-1 shadow-sm">
+            <div className="converter-toolbar__directions direction-switch flex items-center gap-1.5 rounded-full bg-card p-1 shadow-sm">
               <Button
                 variant="outline"
                 size="sm"
@@ -1232,7 +1232,7 @@ export default function Home() {
           <div className="px-4 py-6">
             <div className="mx-auto max-w-xl">
               {/* দিক সিলেকশন */}
-              <div className="mb-4 flex items-center justify-center gap-1.5 rounded-full border bg-secondary/50 p-1">
+              <div className="direction-switch mb-4 flex items-center justify-center gap-1.5 rounded-full border bg-secondary/50 p-1">
                 <Button
                   variant="outline"
                   size="sm"

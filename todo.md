@@ -320,3 +320,7 @@
 - [x] light mode-এর hero banner, যুক্তবর্ণ preview এবং semidark sections light করা
 - [x] দুই থিমে text contrast, borders, active/inactive controls এবং logo edges যাচাই করা
 - [x] TypeScript, production build, desktop/mobile theme screenshots এবং checkpoint সম্পন্ন করা
+# নতুন: selected direction-button contrast
+- [x] active “অভ্র → বিজয়” ও “বিজয় → অভ্র” button-এর text/background contrast audit করা
+- [x] light ও dark mode-এ selected, inactive, hover এবং focus state-এর রঙ explicit করা
+- [x] desktop/mobile selection readability, build ও checkpoint যাচাই করা

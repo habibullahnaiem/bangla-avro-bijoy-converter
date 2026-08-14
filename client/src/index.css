@@ -1698,6 +1698,23 @@ button:active {
     color: oklch(0.26 0.035 210) !important;
   }
 
+  /* Selected direction labels must not inherit the inactive control color. */
+  html:not(.dark) .direction-switch button.bg-primary,
+  html:not(.dark) .direction-switch button.bg-primary:hover,
+  html:not(.dark) .direction-switch button.bg-primary:focus-visible {
+    border-color: var(--primary) !important;
+    background: var(--primary) !important;
+    color: oklch(0.985 0.005 200) !important;
+  }
+
+  .dark .direction-switch button.bg-primary,
+  .dark .direction-switch button.bg-primary:hover,
+  .dark .direction-switch button.bg-primary:focus-visible {
+    border-color: oklch(0.72 0.14 190) !important;
+    background: oklch(0.34 0.07 192) !important;
+    color: oklch(0.99 0.005 200) !important;
+  }
+
   html:not(.dark) .editor-pane,
   html:not(.dark) .editor-pane textarea {
     background: oklch(1 0 0 / 0.99) !important;
