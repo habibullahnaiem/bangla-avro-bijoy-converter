@@ -434,6 +434,19 @@ async function convertDocx(
     zip.file(partPath, convertedXml);
   }
 
+  // EndnoteReference is a character style used only by Word's endnote markers.
+  // Clear a direct style-level font override, if a source file has one, so it
+  // cannot compete with the explicit SutonnyMJ font mapping we write on each
+  // endnote-reference run. This deliberately leaves every ordinary paragraph,
+  // every other style, and the superscript behavior untouched.
+  const stylesEntry = zip.file("word/styles.xml");
+  if (stylesEntry) {
+    const stylesXml = await stylesEntry.async("string");
+    const cleanStyles = stripIllegalXmlChars(stylesXml);
+    const normalizedStyles = normalizeEndnoteReferenceStyle(cleanStyles);
+    zip.file("word/styles.xml", normalizedStyles);
+  }
+
   const blob = await zip.generateAsync({
     type: "blob",
     mimeType:
@@ -612,6 +625,35 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
   for (const run of Array.from(doc.getElementsByTagNameNS(ns, "r"))) {
     ensureRunSizePair(run, ns);
   }
+  return new XMLSerializer().serializeToString(doc);
+}
+
+/** শুধু EndnoteReference character style-এর direct rFonts override মুছে দেয়।
+ *  এতে Word-এর font-change অপারেশনে স্টাইল-লেভেলের প্রতিদ্বন্দ্বী font mapping
+ *  থাকে না; তবে superscript ও অন্য সব style property সম্পূর্ণ অক্ষুণ্ণ থাকে। */
+function normalizeEndnoteReferenceStyle(xml: string): string {
+  const doc = new DOMParser().parseFromString(xml, "text/xml");
+  const ns = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
+  const endnoteReferenceStyle = Array.from(
+    doc.getElementsByTagNameNS(ns, "style"),
+  ).find((style) => {
+    const styleId =
+      style.getAttributeNS(ns, "styleId") ?? style.getAttribute("w:styleId") ?? "";
+    return styleId === "EndnoteReference";
+  });
+  if (!endnoteReferenceStyle) return xml;
+
+  const rPr = Array.from(endnoteReferenceStyle.children).find(
+    (child) => child.localName === "rPr",
+  );
+  if (!rPr) return xml;
+
+  const fontOverrides = Array.from(rPr.children).filter(
+    (child) => child.localName === "rFonts",
+  );
+  if (fontOverrides.length === 0) return xml;
+  for (const rFonts of fontOverrides) rPr.removeChild(rFonts);
+
   return new XMLSerializer().serializeToString(doc);
 }
 

@@ -66,3 +66,6 @@ Modern Productivity SaaS + Bengali calligraphic accent. রেফারেন্
 - exact reference logo header identity হিসেবে থাকবে, কিন্তু hero visual language-এ generic illustration-এর বদলে অ⇄ব, glyph specimen, conversion arrow ও font badge-কে signature motif করা হবে।
 - material system হবে crisp teal desk: deep teal authority, clean white workspace cards, light blue-gray paper canvas; pastel/glass softness কেবল restrained supporting surface-এ থাকবে।
 - typography hierarchy-তে Bengali display headline, compact utility labels এবং deliberate specimen text প্রধান brand signal হবে।
+- deep teal `#1D5C63` header ও primary action-এ authority রাখবে; light mode-এর converter এবং supporting card হবে সাদা/হালকা blue-gray paper surface, glass panel নয়।
+- hero হবে সংক্ষিপ্ত brand strip; converter desk-ই first-look hero থাকবে এবং অ⇄ব, glyph specimen, conversion arrow ও font badge illustration-এর চেয়ে বেশি গুরুত্ব পাবে।
+- cyan কেবল active direction, primary conversion action এবং font/conversion indicator-এ ব্যবহৃত হবে; ordinary border, shadow ও supporting card-এ cyan glow নয়।

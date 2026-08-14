@@ -441,3 +441,8 @@
 - [x] normal Bengali run-এর সঙ্গে footnote/endnote reference ও note-body font metadata তুলনা করা
 - [x] endnote reference ও endnote body-র direct SutonnyMJ mapping, superscript style এবং body conversion-এর permanent regression যোগ করা
 - [x] রিপোর্ট করা paragraph-এ endnote reference ID 8 আছে নিশ্চিত করা; তাই এটিকে সাধারণ indent paragraph হিসেবে ধরা সঠিক ছিল না
+
+# সক্রিয়: endnote reference isolation
+- [x] endnote-reference run ও EndnoteReference style-এ Word override কমানোর নিরাপদ isolation point নির্ণয় করা
+- [x] শুধু note reference/body-তে direct SutonnyMJ mapping ও style containment শক্ত করা
+- [x] normal paragraph, endnote body, superscript reference এবং font-change fixture-এ regression চালানো

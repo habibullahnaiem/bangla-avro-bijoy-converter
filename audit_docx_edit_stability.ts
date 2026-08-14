@@ -47,7 +47,7 @@ function minimalDocx(): JSZip {
   <w:docDefaults><w:rPrDefault><w:rPr><w:sz w:val="28"/><w:szCs w:val="28"/></w:rPr></w:rPrDefault></w:docDefaults>
   <w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/></w:style>
   <w:style w:type="paragraph" w:styleId="EndnoteText"><w:name w:val="endnote text"/></w:style>
-  <w:style w:type="character" w:styleId="EndnoteReference"><w:name w:val="endnote reference"/><w:rPr><w:vertAlign w:val="superscript"/></w:rPr></w:style>
+  <w:style w:type="character" w:styleId="EndnoteReference"><w:name w:val="endnote reference"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:eastAsia="Times New Roman" w:cs="Times New Roman"/><w:vertAlign w:val="superscript"/></w:rPr></w:style>
 </w:styles>`,
   );
   zip.file(
@@ -134,8 +134,10 @@ async function inspectEndnoteHandling(path: string): Promise<void> {
   const zip = await JSZip.loadAsync(fs.readFileSync(path));
   const documentXml = await zip.file("word/document.xml")!.async("string");
   const endnotesXml = await zip.file("word/endnotes.xml")!.async("string");
+  const stylesXml = await zip.file("word/styles.xml")!.async("string");
   const document = new DOMParser().parseFromString(documentXml, "text/xml");
   const endnotes = new DOMParser().parseFromString(endnotesXml, "text/xml");
+  const styles = new DOMParser().parseFromString(stylesXml, "text/xml");
   const referenceRuns = Array.from(document.getElementsByTagNameNS(NS, "r")).filter(
     (run) => run.getElementsByTagNameNS(NS, "endnoteReference").length > 0,
   );
@@ -156,6 +158,25 @@ async function inspectEndnoteHandling(path: string): Promise<void> {
   const noteText = noteTextRuns[0].getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "";
   assertFontSlots(noteTextRuns[0], "SutonnyMJ", "endnote body");
   if (/[\u0980-\u09FF]/.test(noteText)) throw new Error("endnote body still contains Unicode Bengali after Bijoy conversion");
+  const endnoteReferenceStyle = Array.from(styles.getElementsByTagNameNS(NS, "style")).find(
+    (style) => style.getAttributeNS(NS, "styleId") === "EndnoteReference",
+  );
+  const styleRunProperties = endnoteReferenceStyle
+    ? Array.from(endnoteReferenceStyle.children).find((child) => child.localName === "rPr")
+    : undefined;
+  if (!styleRunProperties) throw new Error("EndnoteReference style is missing run properties");
+  if (Array.from(styleRunProperties.children).some((child) => child.localName === "rFonts")) {
+    throw new Error("EndnoteReference style retained a competing font override");
+  }
+  if (
+    !Array.from(styleRunProperties.children).some(
+      (child) =>
+        child.localName === "vertAlign" &&
+        (child.getAttributeNS(NS, "val") ?? child.getAttribute("w:val")) === "superscript",
+    )
+  ) {
+    throw new Error("EndnoteReference style lost its superscript behavior");
+  }
   console.log("endnote-reference-and-body: passed");
 }
 
