@@ -300,3 +300,10 @@
 - [x] hero, keyboard background, converter panes, file preview, history এবং footer-এর contrast-safe dark surfaces তৈরি করা
 - [x] SutonnyMJ/Bijoy output, Bengali glyph decoration, focus, hover, print/PDF preview এবং mobile layout dark mode-এ যাচাই করা
 - [x] TypeScript, production build, desktop/mobile screenshot এবং checkpoint সম্পন্ন করা
+
+# নতুন: কনভার্টেড টেক্সট এক-ক্লিক কপি
+
+- [x] বিজয় আউটপুট প্যানেলে Copy to Clipboard বাটন যোগ করা
+- [x] Clipboard API ও fallback copy path, empty-output guard এবং সফল/ব্যর্থ toast যোগ করা
+- [x] mouse selection, Ctrl/Cmd+C, dark mode এবং mobile layout অক্ষুণ্ণ রেখে copy flow যাচাই করা
+- [x] TypeScript, production build, responsive screenshot এবং checkpoint সম্পন্ন করা

@@ -268,6 +268,10 @@ export default function Home() {
       toast.info("কপি করার মতো কিছু নেই");
       return;
     }
+    const copySuccessMessage =
+      direction === "u2b"
+        ? "কনভার্টেড বিজয় টেক্সট কপি হয়েছে — Copy to Clipboard"
+        : "কনভার্টেড ইউনিকোড টেক্সট কপি হয়েছে — Copy to Clipboard";
     try {
       if (direction === "u2b") {
         // রিচ-টেক্সট কপি: Word-এ পেস্ট করলে বাংলা SutonnyMJ (বড়) ও
@@ -297,14 +301,14 @@ export default function Home() {
         await navigator.clipboard.writeText(output);
       }
       setCopied(true);
-      toast.success("বিজয় টেক্সট কপি করা হয়েছে (সাইজ ও ফন্টসহ)");
+      toast.success(copySuccessMessage);
       setTimeout(() => setCopied(false), 1500);
     } catch {
       // ফলব্যাক: শুধু প্ল্যান টেক্সট
       try {
         await navigator.clipboard.writeText(output);
         setCopied(true);
-        toast.success("বিজয় টেক্সট কপি করা হয়েছে");
+        toast.success(copySuccessMessage);
         setTimeout(() => setCopied(false), 1500);
       } catch {
         toast.error("কপি করা যায়নি");
@@ -1041,21 +1045,23 @@ export default function Home() {
                   </div>
                 )}
               </div>
-              <div className="flex items-center gap-2 border-t bg-muted/50 px-4 py-2.5">
+              <div className="flex flex-wrap items-center gap-2 border-t bg-muted/50 px-4 py-2.5">
                 <Button
                   variant="outline"
                   size="sm"
-                  className="border-border bg-card text-muted-foreground hover:bg-accent"
-                  onClick={copyOutput}>
+                  className="copy-output-button border-primary/30 bg-card text-primary hover:bg-accent"
+                  onClick={copyOutput}
+                  aria-label="Copy to Clipboard — কনভার্টেড টেক্সট কপি করুন"
+                  title="Copy to Clipboard">
                   {copied ? (
                     <Check className="mr-1.5 h-3.5 w-3.5 text-emerald-600" />
                   ) : (
                     <ClipboardCopy className="mr-1.5 h-3.5 w-3.5" />
                   )}
-                  কপি
+                  Copy to Clipboard
                 </Button>
                 <span className="text-xs text-muted-foreground">
-                  কপি করে Word-এ SutonnyMJ ফন্টে পেস্ট করুন
+                  এক ক্লিকে কপি করুন • Word-এ SutonnyMJ ফন্টে পেস্ট করুন
                 </span>
               </div>
             </div>
