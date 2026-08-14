@@ -425,3 +425,9 @@
 - [x] warning-এর বাইরে automatic protection, embedded-font বা package-level strategy পরীক্ষা করা
 - [x] Word-style mutation, alternate size, package integrity ও full converter regression যাচাই করা
 - [x] genuine fix checkpoint করা অথবা last stable DOCX behavior restore করে limitation স্পষ্ট করা
+# নতুন: normal paragraph indent behavior জরুরি fix
+- [x] সব converted indented content-এ paragraph-level indent semantics audit করা
+- [x] indent-এর সঙ্গে paragraph-level font/size metadata জড়িয়ে আছে কি না trace করা
+- [x] সব indent-কে সাধারণ paragraph-এর মতো করে safe DOCX structure প্রয়োগ করা
+- [x] indent → font change → size edit এবং full regression যাচাই করা
+- [x] genuine fix checkpoint করা; legacy Bijoy-এর ক্ষেত্রে SutonnyMJ font-family limitation স্পষ্ট রাখা

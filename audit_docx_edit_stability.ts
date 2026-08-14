@@ -49,7 +49,7 @@ function minimalDocx(): JSZip {
     "word/document.xml",
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:document xmlns:w="${NS}"><w:body>
-  <w:p><w:pPr><w:pStyle w:val="Normal"/></w:pPr>
+  <w:p><w:pPr><w:pStyle w:val="Normal"/><w:ind w:left="720"/><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/><w:sz w:val="32"/><w:szCs w:val="32"/></w:rPr></w:pPr>
     <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t>প্র, ল্ল, ত্ব, ক্ষ, জ্ঞ, শ্র — English 2026</w:t></w:r>
   </w:p><w:sectPr/>
 </w:body></w:document>`,
@@ -71,6 +71,8 @@ async function inspectDocx(
   let mismatchedSizePairs = 0;
   let fontMismatch = 0;
   let unexpectedSizeValues = 0;
+  let paragraphFontOverrides = 0;
+  let misplacedIndent = 0;
   for (const run of runs) {
     const text = run.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "";
     const rPr = run.getElementsByTagNameNS(NS, "rPr")[0];
@@ -97,10 +99,35 @@ async function inspectDocx(
       if (attrs.some((value) => value !== expected)) fontMismatch++;
     }
   }
+  for (const paragraph of Array.from(doc.getElementsByTagNameNS(NS, "p"))) {
+    const pPr = Array.from(paragraph.children).find(
+      (child) => child.localName === "pPr",
+    ) as Element | undefined;
+    if (!pPr) continue;
+    const ind = Array.from(pPr.children).find(
+      (child) => child.localName === "ind",
+    ) as Element | undefined;
+    if (ind && ind.parentNode !== pPr) misplacedIndent++;
+    const paragraphRPr = Array.from(pPr.children).find(
+      (child) => child.localName === "rPr",
+    ) as Element | undefined;
+    if (paragraphRPr) {
+      paragraphFontOverrides += Array.from(paragraphRPr.children).filter((child) =>
+        ["rFonts", "sz", "szCs"].includes(child.localName),
+      ).length;
+    }
+  }
   console.log(
-    `${label}: runs=${runs.length}, mismatchedSizePairs=${mismatchedSizePairs}, fontMismatch=${fontMismatch}, unexpectedSizeValues=${unexpectedSizeValues}`,
+    `${label}: runs=${runs.length}, mismatchedSizePairs=${mismatchedSizePairs}, fontMismatch=${fontMismatch}, unexpectedSizeValues=${unexpectedSizeValues}, paragraphFontOverrides=${paragraphFontOverrides}, misplacedIndent=${misplacedIndent}`,
   );
-  if (mismatchedSizePairs || fontMismatch || unexpectedSizeValues || runs.length < 2) {
+  if (
+    mismatchedSizePairs ||
+    fontMismatch ||
+    unexpectedSizeValues ||
+    paragraphFontOverrides ||
+    misplacedIndent ||
+    runs.length < 2
+  ) {
     throw new Error(`${label}: DOCX run invariants failed`);
   }
 }
@@ -145,10 +172,7 @@ async function main() {
 
   const zip = await JSZip.loadAsync(output);
   const editedXml = await zip.file("word/document.xml")!.async("string");
-  const simulatedEdit = editedXml.replace(
-    "</w:pStyle>",
-    "</w:pStyle><w:ind w:left=\"720\"/><w:rPr><w:sz w:val=\"32\"/><w:szCs w:val=\"32\"/></w:rPr>",
-  );
+  const simulatedEdit = editedXml.replace('w:left="720"', 'w:left="1440"');
   zip.file("word/document.xml", simulatedEdit);
   const edited = await zip.generateAsync({ type: "uint8array" });
   const editedPath = "/tmp/avrojoy_edit_stability_simulated_edit.docx";

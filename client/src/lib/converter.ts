@@ -612,7 +612,51 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
   for (const run of Array.from(doc.getElementsByTagNameNS(ns, "r"))) {
     ensureRunSizePair(run, ns);
   }
+
+  // Indentation belongs to w:pPr/w:ind, not to a paragraph-level font rule.
+  // Some Word edits can leave w:pPr/w:rPr font/size overrides beside w:ind;
+  // those overrides may win over the explicit SutonnyMJ font on Bijoy runs
+  // when the user later changes a paragraph's font. Keep only the paragraph
+  // layout property and let the direct runs own their legacy-font metadata.
+  normalizeIndentedParagraphs(doc, ns);
   return new XMLSerializer().serializeToString(doc);
+}
+
+/**
+ * Keeps indentation as a normal paragraph property while removing only
+ * paragraph-level font and size overrides. Bold/italic/color/alignment-like
+ * paragraph run properties are intentionally preserved.
+ */
+function normalizeIndentedParagraphs(doc: Document, ns: string): void {
+  const paragraphs = Array.from(doc.getElementsByTagNameNS(ns, "p"));
+  const fontOverrideNames = new Set(["rFonts", "sz", "szCs"]);
+
+  for (const paragraph of paragraphs) {
+    const pPr = Array.from(paragraph.children).find(
+      (child) => child.localName === "pPr",
+    ) as Element | undefined;
+    if (!pPr) continue;
+
+    const hasIndent = Array.from(pPr.children).some(
+      (child) => child.localName === "ind",
+    );
+    if (!hasIndent) continue;
+
+    const paragraphRPr = Array.from(pPr.children).find(
+      (child) => child.localName === "rPr",
+    ) as Element | undefined;
+    if (!paragraphRPr) continue;
+
+    for (const child of Array.from(paragraphRPr.children)) {
+      if (fontOverrideNames.has(child.localName)) {
+        paragraphRPr.removeChild(child);
+      }
+    }
+
+    if (paragraphRPr.children.length === 0 && paragraphRPr.attributes.length === 0) {
+      pPr.removeChild(paragraphRPr);
+    }
+  }
 }
 
 // XML 1.0-এ অবৈধ কন্ট্রোল ক্যারেক্টার (0x00–0x08, 0x0B, 0x0C, 0x0E–0x1F, সারোগেট)
