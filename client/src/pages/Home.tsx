@@ -840,7 +840,7 @@ export default function Home() {
         <div className="workspace-card converter-card overflow-hidden rounded-2xl border bg-card shadow-lg">
           {/* দিক টগল বার */}
           <div className="converter-toolbar flex flex-wrap items-center justify-between gap-2 border-b bg-secondary/60 px-4 py-3">
-            <div className="flex items-center gap-1.5 rounded-full bg-card p-1 shadow-sm">
+            <div className="converter-toolbar__directions flex items-center gap-1.5 rounded-full bg-card p-1 shadow-sm">
               <Button
                 variant="outline"
                 size="sm"
@@ -864,7 +864,29 @@ export default function Home() {
                 বিজয় → অভ্র
               </Button>
             </div>
-            <div className="flex items-center gap-2">
+            {/* Teal Desk toolbar: keep the type-scale control centered between conversion directions and utility actions. */}
+            <div className="converter-toolbar__font-size flex items-center gap-1" aria-label="ফন্ট সাইজ নিয়ন্ত্রণ">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 w-7 p-0 text-muted-foreground hover:bg-accent"
+                aria-label="ফন্ট ছোট করুন"
+                onClick={() => adjustFontSize(-2)}>
+                <Minus className="h-3.5 w-3.5" />
+              </Button>
+              <span className="w-7 text-center text-xs tabular-nums font-semibold text-muted-foreground">
+                {fontSize}
+              </span>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 w-7 p-0 text-muted-foreground hover:bg-accent"
+                aria-label="ফন্ট বড় করুন"
+                onClick={() => adjustFontSize(2)}>
+                <Plus className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+            <div className="converter-toolbar__actions flex items-center gap-2">
               <Button
                 variant="outline"
                 size="sm"
@@ -896,27 +918,6 @@ export default function Home() {
                 <span className="text-xs text-muted-foreground">
                   {charCount} অক্ষর
                 </span>
-                <div className="flex items-center gap-1">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-7 w-7 p-0 text-muted-foreground hover:bg-accent"
-                    aria-label="ফন্ট ছোট করুন"
-                    onClick={() => adjustFontSize(-2)}>
-                    <Minus className="h-3.5 w-3.5" />
-                  </Button>
-                  <span className="w-7 text-center text-xs tabular-nums text-muted-foreground">
-                    {fontSize}
-                  </span>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-7 w-7 p-0 text-muted-foreground hover:bg-accent"
-                    aria-label="ফন্ট বড় করুন"
-                    onClick={() => adjustFontSize(2)}>
-                    <Plus className="h-3.5 w-3.5" />
-                  </Button>
-                </div>
               </div>
               <div
                 className="converter-editor-body relative"

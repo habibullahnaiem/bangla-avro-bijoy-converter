@@ -271,3 +271,10 @@
 - [x] শুধুমাত্র word-initial marker-এ scoped optical correction পরীক্ষা করা
 - [x] mid-word e-kar, ঋ/ৃ-কার, যুক্তবর্ণ, copy ও print preview regression যাচাই করা
 - [x] safe result হলে checkpoint করা; safe না হলে বর্তমান stable rendering রাখা
+
+# নতুন: upper toolbar font-size control
+
+- [x] বর্তমান font-size control ও upper converter toolbar-এর markup/spacing audit করা
+- [x] − size + control-কে direction toggles-এর মাঝের upper row-এ নেওয়া
+- [x] pane header-এ input/output labels ও counts অপরিবর্তিত রাখা
+- [x] desktop/mobile toolbar wrapping, build ও checkpoint যাচাই করা

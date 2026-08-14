@@ -430,9 +430,26 @@ button:active {
   min-height: 4.15rem;
 }
 
-.converter-toolbar > div:first-child {
+.converter-toolbar__directions {
   border: 1px solid oklch(0.86 0.018 210);
   background: oklch(1 0 0 / 0.7);
+}
+
+.converter-toolbar__font-size {
+  flex: 0 0 auto;
+  min-height: 2.25rem;
+  padding: 0.2rem 0.35rem;
+  border: 1px solid oklch(0.86 0.018 210);
+  border-radius: 999px;
+  background: oklch(1 0 0 / 0.72);
+}
+
+.converter-toolbar__font-size button {
+  flex: 0 0 auto;
+}
+
+.converter-toolbar__actions {
+  flex: 0 0 auto;
 }
 
 .converter-toolbar button,
@@ -749,30 +766,43 @@ button:active {
   }
 
   .converter-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: stretch;
   }
 
-  .converter-toolbar > div:first-child,
-  .converter-toolbar > div:last-child {
+  .converter-toolbar__directions {
     width: 100%;
   }
 
-  .converter-toolbar > div:first-child {
+  .converter-toolbar__directions {
     display: grid;
+    grid-column: 1 / -1;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 0.35rem;
     overflow: hidden;
   }
 
-  .converter-toolbar > div:first-child button {
+  .converter-toolbar__directions button {
     min-width: 0;
     padding-inline: 0.45rem;
     font-size: 0.72rem;
     white-space: nowrap;
   }
 
-  .converter-toolbar > div:first-child button,
-  .converter-toolbar > div:last-child button {
+  .converter-toolbar__font-size {
+    grid-column: 1;
+    justify-self: center;
+  }
+
+  .converter-toolbar__actions {
+    grid-column: 2;
+    width: auto;
+    justify-content: flex-end;
+  }
+
+  .converter-toolbar__directions button,
+  .converter-toolbar__actions button {
     flex: 1;
   }
 
