@@ -1577,3 +1577,156 @@ button:active {
     color: oklch(0.91 0.035 195 / 0.96);
   }
 }
+
+/* ডিজাইন দিক: টিল ডেস্ক — final mode ownership;
+   প্রত্যেক theme নিজের প্রধান surface, control এবং brand edge স্পষ্টভাবে
+   নিয়ন্ত্রণ করবে; কোনো legacy dark surface light mode-এ বা white paper dark
+   mode-এ অনিচ্ছাকৃতভাবে leak করবে না। */
+@media screen {
+  .dark .editor-pane--output,
+  .dark .editor-pane--output .converter-editor-body {
+    background: oklch(0.17 0.03 214) !important;
+  }
+
+  .dark .bijoy-rich {
+    background: oklch(0.17 0.03 214) !important;
+    color: oklch(0.95 0.018 205) !important;
+    caret-color: oklch(0.88 0.12 190);
+  }
+
+  .dark .bijoy-rich mark,
+  .dark .bijoy-rich::selection,
+  .dark .bijoy-rich *::selection {
+    background: oklch(0.66 0.14 178 / 0.48) !important;
+    color: oklch(0.99 0.005 200) !important;
+  }
+
+  .dark .converter-toolbar__directions button,
+  .dark .converter-toolbar__font-size button,
+  .dark .converter-toolbar__font-size span,
+  .dark .converter-toolbar__actions button {
+    color: oklch(0.95 0.018 205) !important;
+  }
+
+  .dark .converter-toolbar__directions button:not(.bg-primary),
+  .dark .converter-toolbar__actions button:not(.bg-primary) {
+    border-color: oklch(1 0 0 / 30%) !important;
+    background: oklch(0.25 0.04 212 / 0.92) !important;
+    color: oklch(0.95 0.018 205) !important;
+  }
+
+  .dark .converter-toolbar__directions button.bg-primary,
+  .dark .converter-toolbar__actions button.bg-primary {
+    color: var(--primary-foreground) !important;
+  }
+
+  .dark .converter-toolbar__directions button:hover,
+  .dark .converter-toolbar__actions button:hover,
+  .dark .converter-toolbar__font-size button:hover {
+    background: oklch(0.34 0.07 192) !important;
+  }
+
+  .dark .site-footer__logo {
+    background: oklch(0.97 0.008 90) !important;
+    border: 1px solid oklch(0.98 0.01 90 / 0.72);
+    box-shadow: none !important;
+  }
+
+  .dark .site-footer__logo img {
+    filter: none;
+  }
+
+  html:not(.dark) .app-shell {
+    background:
+      linear-gradient(180deg, oklch(0.985 0.006 220 / 0.9), oklch(0.955 0.012 215 / 0.94)),
+      url("/manus-storage/bangla-converter-keyboard-background_fad26d5c.png") center top / 760px auto repeat,
+      var(--background) !important;
+  }
+
+  html:not(.dark) .hero-panel {
+    border-color: oklch(0.72 0.07 195 / 0.62) !important;
+    background:
+      linear-gradient(90deg, oklch(0.995 0.006 205 / 0.99) 0%, oklch(0.99 0.012 195 / 0.97) 54%, oklch(0.96 0.028 190 / 0.82) 100%),
+      url("/manus-storage/avrojoy-hero-v2-banner_b1dad7f4.png") right center / cover no-repeat,
+      url("/manus-storage/bangla-converter-keyboard-background_fad26d5c.png") right center / 64% auto repeat !important;
+    color: var(--foreground);
+  }
+
+  html:not(.dark) .hero-title {
+    color: oklch(0.2 0.04 210) !important;
+  }
+
+  html:not(.dark) .hero-summary {
+    color: oklch(0.32 0.035 215) !important;
+  }
+
+  html:not(.dark) .glyph-strip {
+    border-color: oklch(0.7 0.06 195) !important;
+    background:
+      linear-gradient(90deg, oklch(0.985 0.018 195 / 0.98), oklch(1 0 0 / 0.97) 42%, oklch(0.965 0.025 205 / 0.96)),
+      url("/manus-storage/bangla-converter-keyboard-background_fad26d5c.png") right center / 220px auto repeat !important;
+    color: var(--foreground);
+  }
+
+  html:not(.dark) .workspace-card,
+  html:not(.dark) .converter-card,
+  html:not(.dark) .file-workspace {
+    border-color: oklch(0.78 0.025 210) !important;
+    background: oklch(0.998 0.003 90 / 0.98) !important;
+  }
+
+  html:not(.dark) .converter-toolbar,
+  html:not(.dark) .converter-actionbar,
+  html:not(.dark) .editor-pane__header,
+  html:not(.dark) .editor-pane__footer,
+  html:not(.dark) .file-workspace__header,
+  html:not(.dark) .file-direction {
+    background: linear-gradient(180deg, oklch(0.975 0.012 205 / 0.98), oklch(0.94 0.018 210 / 0.98)) !important;
+    color: var(--foreground);
+  }
+
+  html:not(.dark) .converter-toolbar__directions,
+  html:not(.dark) .converter-toolbar__font-size {
+    border-color: oklch(0.78 0.025 210) !important;
+    background: oklch(1 0 0 / 0.98) !important;
+  }
+
+  html:not(.dark) .converter-toolbar__directions button,
+  html:not(.dark) .converter-toolbar__font-size button,
+  html:not(.dark) .converter-toolbar__font-size span,
+  html:not(.dark) .converter-toolbar__actions button {
+    color: oklch(0.26 0.035 210) !important;
+  }
+
+  html:not(.dark) .editor-pane,
+  html:not(.dark) .editor-pane textarea {
+    background: oklch(1 0 0 / 0.99) !important;
+    color: oklch(0.2 0.03 210) !important;
+  }
+
+  html:not(.dark) .recent-history article {
+    border-color: oklch(0.8 0.02 210) !important;
+    background: oklch(0.995 0.004 90 / 0.98) !important;
+  }
+
+  html:not(.dark) .glyph-strip .text-muted-foreground,
+  html:not(.dark) .type-legend .text-muted-foreground {
+    color: oklch(0.34 0.035 210) !important;
+  }
+
+  html:not(.dark) .type-legend,
+  html:not(.dark) .glyph-preview,
+  html:not(.dark) .feature-card,
+  html:not(.dark) .usage-card,
+  html:not(.dark) .file-workspace {
+    border-color: oklch(0.78 0.025 210) !important;
+    background: oklch(0.995 0.004 90 / 0.97) !important;
+    color: var(--foreground);
+  }
+
+  html:not(.dark) .site-footer__logo {
+    background: oklch(0.99 0.004 90) !important;
+    border: 1px solid oklch(0.98 0.01 90);
+    box-shadow: none !important;
+  }
+}

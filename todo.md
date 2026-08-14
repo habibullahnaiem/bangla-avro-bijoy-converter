@@ -314,3 +314,9 @@
 - [x] header, hero, toolbar, editor, output paper, buttons, cards, history, footer ও toast-এর theme-specific colors ঠিক করা
 - [x] theme toggle persistence, focus/hover states এবং mobile readability যাচাই করা
 - [x] TypeScript, production build, দুই মোডের desktop/mobile screenshot এবং checkpoint সম্পন্ন করা
+
+# নতুন: reported theme surface corrections
+- [x] dark mode-এর বিজয় output surface, direction controls এবং footer logo treatment audit করা
+- [x] light mode-এর hero banner, যুক্তবর্ণ preview এবং semidark sections light করা
+- [x] দুই থিমে text contrast, borders, active/inactive controls এবং logo edges যাচাই করা
+- [x] TypeScript, production build, desktop/mobile theme screenshots এবং checkpoint সম্পন্ন করা
