@@ -324,3 +324,8 @@
 - [x] active “অভ্র → বিজয়” ও “বিজয় → অভ্র” button-এর text/background contrast audit করা
 - [x] light ও dark mode-এ selected, inactive, hover এবং focus state-এর রঙ explicit করা
 - [x] desktop/mobile selection readability, build ও checkpoint যাচাই করা
+
+# নতুন: hero control hover interaction
+- [x] “লাইভ কনভার্সন সক্রিয়” ও “উদাহরণ দেখুন” control-এর বর্তমান markup ও interaction audit করা
+- [x] দুই theme-এ hover, focus-visible, motion এবং reduced-motion state যোগ করা
+- [x] desktop/mobile behavior, production build ও checkpoint যাচাই করা

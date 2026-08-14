@@ -1746,4 +1746,71 @@ button:active {
     border: 1px solid oklch(0.98 0.01 90);
     box-shadow: none !important;
   }
+
+  /* Teal Desk interaction: hero controls should acknowledge the pointer without
+     changing layout or making the status badge look like a primary CTA. */
+  .hero-interactive-control {
+    transition:
+      transform 180ms var(--ease-out),
+      box-shadow 180ms var(--ease-out),
+      border-color 180ms ease,
+      background-color 180ms ease,
+      color 180ms ease;
+    will-change: transform;
+  }
+
+  @media (hover: hover) {
+    .hero-interactive-control:hover {
+      transform: translateY(-2px);
+    }
+
+    html:not(.dark) .status-puck:hover {
+      border-color: oklch(0.58 0.12 190) !important;
+      background: oklch(0.91 0.07 190 / 0.98) !important;
+      color: oklch(0.24 0.06 195) !important;
+      box-shadow: 0 8px 18px oklch(0.36 0.08 190 / 0.16);
+    }
+
+    html:not(.dark) .hero-example:hover {
+      border-color: oklch(0.53 0.12 195) !important;
+      background: oklch(0.87 0.08 195) !important;
+      color: oklch(0.2 0.06 205) !important;
+      box-shadow: 0 8px 18px oklch(0.36 0.08 190 / 0.18);
+    }
+
+    .dark .status-puck:hover {
+      border-color: oklch(0.76 0.14 180) !important;
+      background: oklch(0.32 0.08 185 / 0.98) !important;
+      color: oklch(0.98 0.01 190) !important;
+      box-shadow: 0 8px 18px oklch(0.05 0.03 210 / 0.34);
+    }
+
+    .dark .hero-example:hover {
+      border-color: oklch(0.8 0.14 190) !important;
+      background: oklch(0.34 0.08 192) !important;
+      color: oklch(0.99 0.005 200) !important;
+      box-shadow: 0 8px 18px oklch(0.05 0.03 210 / 0.34);
+    }
+  }
+
+  .hero-example:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
+
+  .hero-interactive-control:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-interactive-control {
+      transition: none;
+      will-change: auto;
+    }
+
+    .hero-interactive-control:hover,
+    .hero-interactive-control:active {
+      transform: none;
+    }
+  }
 }

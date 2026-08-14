@@ -803,14 +803,14 @@ export default function Home() {
             </p>
           </div>
           <div className="hero-panel__actions">
-            <div className="status-puck">
+            <div className="status-puck hero-interactive-control">
               <span className="status-puck__dot" />
               লাইভ কনভার্সন সক্রিয়
             </div>
             <Button
               variant="outline"
               size="sm"
-              className="hero-example border-primary/30 text-primary hover:bg-accent"
+              className="hero-example hero-interactive-control border-primary/30 text-primary hover:bg-accent"
               onClick={loadExample}>
               উদাহরণ দেখুন
             </Button>
