@@ -359,3 +359,9 @@
 - [x] শুধুমাত্র rich preview glyph-এর vertical position সামান্য সংশোধন করা
 - [x] word-initial e-kar, mid-word e-kar, ঋ/ৃ-কার, যুক্তবর্ণ ও raw copy sequence regression যাচাই করা
 - [x] TypeScript, production build, responsive screenshot এবং checkpoint সম্পন্ন করা
+
+# নতুন: mid-word e-kar spacing
+- [x] mid-word e-kar-এর আগে অতিরিক্ত spacing-এর কারণ audit করা
+- [x] শুধুমাত্র rich preview-এর mid-word e-kar spacing সামান্য সংশোধন করা
+- [x] word-initial e-kar, ঋ/ৃ-কার, যুক্তবর্ণ, raw sequence ও copy behavior regression যাচাই করা
+- [x] TypeScript, production build, responsive screenshot এবং checkpoint সম্পন্ন করা

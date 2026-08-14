@@ -645,14 +645,25 @@ button:active {
   /*
    * Optical comparison pass: SutonnyMJ's word-initial e-kar marker (†) is
    * encoded correctly, but its legacy glyph needs a very small upward nudge
-   * in the current rich preview. Keep this adjustment scoped to U+2020 only;
-   * mid-word e-kar (‡), ঋ/ৃ-কার, conjuncts, and copied text remain untouched.
+   * in the current rich preview. Keep this vertical adjustment scoped to
+   * U+2020 only; ঋ/ৃ-কার, conjuncts, and copied text remain untouched.
    * Relative positioning preserves the original text geometry.
    */
   .bijoy-rich .bijoy-ekar-initial {
     position: relative;
     left: 0.02em;
     top: -0.012em;
+  }
+
+  /*
+   * Mid-word e-kar visual correction: SutonnyMJ can expose a small left
+   * bearing before the U+2021 marker in the rich preview. Shift only the
+   * visible marker left without changing inline flow, selection geometry,
+   * raw Bijoy text, or the conversion engine's native ‡ placement.
+   */
+  .bijoy-rich .bijoy-ekar-mid {
+    position: relative;
+    left: -0.04em;
   }
 
   .bijoy-rich::-moz-selection,

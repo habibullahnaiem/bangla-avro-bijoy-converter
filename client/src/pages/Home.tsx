@@ -562,16 +562,17 @@ export default function Home() {
     () => (direction === "u2b" && input ? mapSegmentsToBijoy(input, direction) : []),
     [direction, input],
   );
-  // SutonnyMJ-এর ঋ/ৃ-কার marker (U+201E) এবং word-initial e-kar marker (U+2020)
-  // legacy glyph; rich preview-তে আলাদা token দিলে কেবল optical placement ঠিক করা যায়,
-  // কিন্তু copied Bijoy text-এর আসল code sequence অপরিবর্তিত থাকে।
+  // SutonnyMJ-এর ঋ/ৃ-কার marker (U+201E), word-initial e-kar marker (U+2020),
+  // এবং mid-word e-kar marker (U+2021) legacy glyph; rich preview-তে আলাদা token
+  // দিলে কেবল optical placement ঠিক করা যায়, কিন্তু copied Bijoy text-এর আসল
+  // code sequence অপরিবর্তিত থাকে।
   const renderBijoyText = (
     text: string,
     className: string,
     size: number,
     keyPrefix: string,
   ) =>
-    text.split(/(„|†)/g).map((part, index) =>
+    text.split(/(„|†|‡)/g).map((part, index) =>
       part ? (
         <span
           key={`${keyPrefix}-${index}`}
@@ -580,6 +581,8 @@ export default function Home() {
               ? `${className} bijoy-rikar`
               : part === "†"
                 ? `${className} bijoy-ekar-initial`
+                : part === "‡"
+                  ? `${className} bijoy-ekar-mid`
                 : className
           }
           style={{ fontSize: `${size}px` }}>
