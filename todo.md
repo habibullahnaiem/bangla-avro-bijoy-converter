@@ -385,3 +385,8 @@
 - [x] প্রয়োজন হলে শুধুমাত্র সংশ্লিষ্ট conjunct-এর scoped visual correction পরীক্ষা করা
 - [x] e-kar, ঋ/ৃ-কার, র-ফলা, অন্যান্য যুক্তবর্ণ, raw sequence ও copy behavior regression যাচাই করা
 - [x] TypeScript, production build, responsive screenshot এবং safe checkpoint বা no-change সিদ্ধান্ত সম্পন্ন করা
+# নতুন: conjunct CSS ও typography variant audit
+- [x] প্র, ল্ল, ত্ব-এর জন্য scoped CSS, letter-spacing, font-size ও line-height variant তৈরি করা
+- [x] ক্ষ, জ্ঞ, শ্র এবং অন্যান্য যুক্তবর্ণের rendering-এর সঙ্গে variant তুলনা করা
+- [x] কোনো variant যুক্তবর্ণ না ভেঙে এবং e-kar/আ-কার correction অক্ষুণ্ণ রেখে উন্নতি করে কি না যাচাই করা
+- [x] full regression, desktop/mobile preview এবং safe checkpoint বা no-change সিদ্ধান্ত সম্পন্ন করা
