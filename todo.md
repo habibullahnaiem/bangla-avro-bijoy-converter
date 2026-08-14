@@ -420,3 +420,8 @@
 - [x] font-table, `rFonts`, theme/fallback ও Bijoy text encoding interaction trace করা
 - [x] safe font-change resilience বা clear compatibility guard পরীক্ষা করা
 - [x] indent + font change + size edit, full regression ও safe checkpoint যাচাই করা
+# নতুন: persistent DOCX font-change failure
+- [x] user-reported indent → font-change failure পুনরায় reproduce করা
+- [x] warning-এর বাইরে automatic protection, embedded-font বা package-level strategy পরীক্ষা করা
+- [x] Word-style mutation, alternate size, package integrity ও full converter regression যাচাই করা
+- [x] genuine fix checkpoint করা অথবা last stable DOCX behavior restore করে limitation স্পষ্ট করা
