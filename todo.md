@@ -307,3 +307,10 @@
 - [x] Clipboard API ও fallback copy path, empty-output guard এবং সফল/ব্যর্থ toast যোগ করা
 - [x] mouse selection, Ctrl/Cmd+C, dark mode এবং mobile layout অক্ষুণ্ণ রেখে copy flow যাচাই করা
 - [x] TypeScript, production build, responsive screenshot এবং checkpoint সম্পন্ন করা
+
+# নতুন: light/dark mode contrast fix
+
+- [x] light ও dark theme token, text-muted এবং component surface contrast audit করা
+- [x] header, hero, toolbar, editor, output paper, buttons, cards, history, footer ও toast-এর theme-specific colors ঠিক করা
+- [x] theme toggle persistence, focus/hover states এবং mobile readability যাচাই করা
+- [x] TypeScript, production build, দুই মোডের desktop/mobile screenshot এবং checkpoint সম্পন্ন করা
