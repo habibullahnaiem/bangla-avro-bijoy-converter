@@ -278,3 +278,11 @@
 - [x] − size + control-কে direction toggles-এর মাঝের upper row-এ নেওয়া
 - [x] pane header-এ input/output labels ও counts অপরিবর্তিত রাখা
 - [x] desktop/mobile toolbar wrapping, build ও checkpoint যাচাই করা
+
+# নতুন: র-ফলা placement audit
+
+- [x] ক্র, গ্র, প্র, ব্র, শ্র ও র-ফলা-সহ যুক্তবর্ণের Unicode/Bijoy codepoint order পরীক্ষা করা
+- [x] live rich preview, file preview, print/PDF preview ও copied text-এ র-ফলা placement মিলিয়ে দেখা
+- [x] font rendering issue ও conversion-sequence issue আলাদা করে নির্ণয় করা
+- [x] confirmed issue না থাকায় কোনো unnecessary converter change না করা
+- [x] focused r-fola audit, full regression, responsive preview ও checkpoint যাচাই করা
