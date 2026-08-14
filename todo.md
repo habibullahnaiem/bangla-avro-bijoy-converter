@@ -390,3 +390,8 @@
 - [x] ক্ষ, জ্ঞ, শ্র এবং অন্যান্য যুক্তবর্ণের rendering-এর সঙ্গে variant তুলনা করা
 - [x] কোনো variant যুক্তবর্ণ না ভেঙে এবং e-kar/আ-কার correction অক্ষুণ্ণ রেখে উন্নতি করে কি না যাচাই করা
 - [x] full regression, desktop/mobile preview এবং safe checkpoint বা no-change সিদ্ধান্ত সম্পন্ন করা
+# নতুন: light hero banner balance
+- [x] light-mode hero banner-এর অতিরিক্ত সাদা অংশ ও overlay balance audit করা
+- [x] dark mode ও text contrast অক্ষুণ্ণ রেখে restrained light-mode adjustment করা
+- [x] desktop/mobile light-dark screenshots ও production build যাচাই করা
+- [x] safe checkpoint সম্পন্ন করা
