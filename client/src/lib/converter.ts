@@ -612,75 +612,7 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
   for (const run of Array.from(doc.getElementsByTagNameNS(ns, "r"))) {
     ensureRunSizePair(run, ns);
   }
-
-  // The user's Word-generated failure shows that direct w:ind can make Word
-  // retain a paragraph-level Times New Roman complex-script rule after a
-  // font switch, even when every Bijoy run has direct SutonnyMJ metadata.
-  // Therefore converted indented/list content is flattened to true Normal
-  // paragraph semantics: no w:ind, no w:numPr, and no indent-specific pPr/rPr
-  // font rule. This intentionally removes the source visual indentation so
-  // the user can edit font like an ordinary paragraph without legacy Bijoy
-  // bytes being routed through a Latin font slot.
-  normalizeParagraphsForBijoyFontRecovery(doc, ns);
   return new XMLSerializer().serializeToString(doc);
-}
-
-/**
- * Converts indented/list-style paragraphs to plain Normal paragraphs. The
- * source indentation is intentionally removed because the real Word failure
- * is tied to w:ind retaining a paragraph-level complex-script font override.
- * Every paragraph-level font/language/size override is also cleared: direct
- * runs already carry the correct SutonnyMJ or Times New Roman assignment, and
- * a pPr/rPr font rule can reappear as a competing default after a Word font
- * change. Bold/italic/color/alignment-like paragraph run properties stay.
- */
-function normalizeParagraphsForBijoyFontRecovery(doc: Document, ns: string): void {
-  const paragraphs = Array.from(doc.getElementsByTagNameNS(ns, "p"));
-  const fontOverrideNames = new Set(["rFonts", "rStyle", "lang", "sz", "szCs"]);
-
-  for (const paragraph of paragraphs) {
-    const pPr = Array.from(paragraph.children).find(
-      (child) => child.localName === "pPr",
-    ) as Element | undefined;
-    if (!pPr) continue;
-
-    const numPr = Array.from(pPr.children).find(
-      (child) => child.localName === "numPr",
-    ) as Element | undefined;
-    let ind = Array.from(pPr.children).find(
-      (child) => child.localName === "ind",
-    ) as Element | undefined;
-
-    const pStyle = Array.from(pPr.children).find(
-      (child) => child.localName === "pStyle",
-    ) as Element | undefined;
-    const styleId = pStyle?.getAttributeNS(ns, "val") ?? pStyle?.getAttribute("w:val") ?? "";
-    const usesListStyle = /^(ListParagraph|ListBullet|ListNumber)$/i.test(styleId);
-    const requiresNormalSemantics = Boolean(ind || numPr || usesListStyle);
-
-    if (requiresNormalSemantics) {
-      if (numPr) pPr.removeChild(numPr);
-      if (ind) pPr.removeChild(ind);
-      if (pStyle && usesListStyle) {
-        pStyle.setAttributeNS(ns, "w:val", "Normal");
-      }
-    }
-
-    const paragraphRPr = Array.from(pPr.children).find(
-      (child) => child.localName === "rPr",
-    ) as Element | undefined;
-    if (!paragraphRPr) continue;
-
-    for (const child of Array.from(paragraphRPr.children)) {
-      if (fontOverrideNames.has(child.localName)) {
-        paragraphRPr.removeChild(child);
-      }
-    }
-
-    if (paragraphRPr.children.length === 0 && paragraphRPr.attributes.length === 0) {
-      pPr.removeChild(paragraphRPr);
-    }
-  }
 }
 
 // XML 1.0-এ অবৈধ কন্ট্রোল ক্যারেক্টার (0x00–0x08, 0x0B, 0x0C, 0x0E–0x1F, সারোগেট)
@@ -897,42 +829,10 @@ function rFontsAttr(run: Element, ns: string, want: string): void {
     rFonts = run.ownerDocument!.createElementNS(ns, "w:rFonts");
     rPr.insertBefore(rFonts, rPr.firstChild);
   }
-  // Theme font attributes can survive a font change in Word and take
-  // precedence for one script even when an explicit family is present.
-  // Remove them before writing the four direct family hints. For legacy
-  // Bijoy, mark the run as complex-script hinted so Word's font picker uses
-  // the SutonnyMJ mapping instead of treating the stored bytes as Latin.
-  for (const themeAttr of [
-    "asciiTheme",
-    "hAnsiTheme",
-    "eastAsiaTheme",
-    "csTheme",
-  ]) {
-    rFonts.removeAttributeNS(ns, themeAttr);
-  }
   rFonts.setAttributeNS(ns, "w:ascii", want);
   rFonts.setAttributeNS(ns, "w:hAnsi", want);
   rFonts.setAttributeNS(ns, "w:eastAsia", want);
   rFonts.setAttributeNS(ns, "w:cs", want);
-  rFonts.setAttributeNS(ns, "w:hint", want === "SutonnyMJ" ? "cs" : "default");
-  if (want === "SutonnyMJ") {
-    let lang = rPr.querySelector(":scope > lang");
-    if (!lang) {
-      lang = run.ownerDocument!.createElementNS(ns, "w:lang");
-      rPr.appendChild(lang);
-    }
-    // Bijoy bytes are ASCII code points but must be treated as Bengali in all
-    // Word language slots, otherwise a paragraph-level font action may affect
-    // only the Latin/ASCII mapping and leave a non-restorable mixed-font run.
-    lang.setAttributeNS(ns, "w:val", "bn-BD");
-    lang.setAttributeNS(ns, "w:eastAsia", "bn-BD");
-    lang.setAttributeNS(ns, "w:bidi", "bn-BD");
-    let cs = rPr.querySelector(":scope > cs");
-    if (!cs) {
-      cs = run.ownerDocument!.createElementNS(ns, "w:cs");
-      rPr.appendChild(cs);
-    }
-  }
   // নোট: w:rFonts ECMA-376 অনুযায়ী লিফ-এলিমেন্ট (শুধু অ্যাট্রিবিউট, চাইল্ড নোড নেই)।
   // আগে এখানে w:alias চাইল্ড যোগ করা হত (SutonnyMJ বানান-বিকল্পের জন্য) — কিন্তু
   // ওয়ার্ড স্কিমা-ভ্যালিডেশনে এই চাইল্ড রিজেক্ট করে আর ডকুমেন্টই খুলত না। তাই সরিয়ে দেওয়া হয়েছে।
