@@ -353,3 +353,9 @@
 
 # সংশোধন: approved bookmark wording
 - [x] main banner ও install prompt-এ “ভবিষ্যতে ব্যবহারের জন্য বুকমার্ক করে রাখুন।” ব্যবহার করা
+
+# নতুন: e-kar optical positioning
+- [x] existing e-kar helper ও optical selectors audit করা
+- [x] শুধুমাত্র rich preview glyph-এর vertical position সামান্য সংশোধন করা
+- [x] word-initial e-kar, mid-word e-kar, ঋ/ৃ-কার, যুক্তবর্ণ ও raw copy sequence regression যাচাই করা
+- [x] TypeScript, production build, responsive screenshot এবং checkpoint সম্পন্ন করা

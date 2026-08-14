@@ -644,15 +644,15 @@ button:active {
 
   /*
    * Optical comparison pass: SutonnyMJ's word-initial e-kar marker (†) is
-   * encoded correctly, but its legacy glyph sits a fraction left/high of the
-   * first consonant in the supplied reference. Keep this adjustment scoped to
-   * U+2020 only; mid-word e-kar (‡), ঋ/ৃ-কার, conjuncts, and copied text remain
-   * untouched. Relative positioning preserves the original text geometry.
+   * encoded correctly, but its legacy glyph needs a very small upward nudge
+   * in the current rich preview. Keep this adjustment scoped to U+2020 only;
+   * mid-word e-kar (‡), ঋ/ৃ-কার, conjuncts, and copied text remain untouched.
+   * Relative positioning preserves the original text geometry.
    */
   .bijoy-rich .bijoy-ekar-initial {
     position: relative;
     left: 0.02em;
-    top: 0.018em;
+    top: -0.012em;
   }
 
   .bijoy-rich::-moz-selection,
