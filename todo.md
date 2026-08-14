@@ -255,3 +255,11 @@
 - [x] glyph placement correction প্রয়োগ করা, মূল conversion behavior না ভেঙে
 - [x] ঋ-কার, e-kar, যুক্তবর্ণ ও punctuation regression audit চালানো
 - [x] desktop/mobile preview, build ও checkpoint যাচাই করা
+
+# নতুন: subtle word-initial e-kar placement audit
+
+- [x] word-initial মাত্রাহীন e-kar ও প্রথম বর্ণের visual/codepoint অবস্থান আলাদা করে reproduce করা
+- [x] mid-word ‡ e-kar, যুক্তবর্ণ, ঋ/ৃ-কার ও punctuation-এর baseline/reference সংরক্ষণ করা
+- [x] `†ij` code sequence এবং SutonnyMJ probe সঠিক প্রমাণিত হওয়ায় unsafe visual বা mapping correction প্রয়োগ না করা
+- [x] correction নিরাপদ না হলে বর্তমান stable version অপরিবর্তিত রাখা এবং তা report করা
+- [x] focused audit ও full conversion regression যাচাই করা; responsive code অপরিবর্তিত রাখা
