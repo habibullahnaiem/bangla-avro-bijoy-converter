@@ -721,12 +721,16 @@ function processDocXml(
     }
   }
 
-  // Footnote/Endnote body text is rendered by Word rather than the web rich
-  // preview. Keep each matched closing Õ at its inherited SutonnyMJ size, but
-  // give only that isolated glyph a small character-width expansion. Unlike a
-  // font-size override, w:w keeps Word on the legacy quote glyph rather than
-  // risking a Bengali glyph substitution in a note context. Bytes, marker,
-  // apostrophes, conjuncts and ordinary document text are never changed.
+  // Word can treat a note's opening Ô and closing Õ as different script classes
+  // when the reference pair crosses source runs (as in the supplied DOCX:
+  // `, Ô` in one run and the title-ending Õ in the next). Lock BOTH matched
+  // members to SutonnyMJ's Complex Script face before any close-only run split.
+  // This changes no byte, font size, width, apostrophe, marker, conjunct or
+  // ordinary document text.
+  lockNoteQuotePairsToComplexScript(doc, ns);
+
+  // A same-run closing Õ is kept as its own run only when it is a true paired
+  // quote, never when it is a word-internal apostrophe.
   normalizeNoteQuoteClosures(doc, ns, noteBodyBaseHalfPoints);
 
   // শেষ স্যানিটাইজেশন পাস: split/ফন্ট-assignment-এর পর প্রতিটি direct run-এর
@@ -757,6 +761,13 @@ function repairBijoyFontsInDocXml(xml: string): string {
     rFontsAttr(run, ns, "SutonnyMJ");
     ensureRunSizePair(run, ns);
   }
+
+  // A supplied document may already contain legacy Bijoy bytes in an Endnote
+  // or Footnote, so it does not pass through the Unicode-to-Bijoy planner.
+  // Apply the same pair-level Complex Script lock here to `Ô … Õ` reference
+  // quotes across source runs. This changes no text bytes, body structure,
+  // marker, size, or ordinary main-text formatting.
+  lockNoteQuotePairsToComplexScript(doc, ns);
   return new XMLSerializer().serializeToString(doc);
 }
 
@@ -1239,15 +1250,7 @@ function normalizeNoteQuoteClosures(
           properties = doc.createElementNS(ns, "w:rPr");
           replacement.insertBefore(properties, replacement.firstChild);
         }
-        // Word's w:w is a character-width percentage. The inherited note size
-        // remains untouched, so Õ stays a SutonnyMJ quote glyph while gaining
-        // enough optical weight to match the opening Ô in note text.
-        let width = properties.querySelector(":scope > w");
-        if (!width) {
-          width = doc.createElementNS(ns, "w:w");
-          properties.appendChild(width);
-        }
-        width.setAttributeNS(ns, "w:val", "135");
+        lockRunToComplexScript(replacement, ns);
       }
       fragment.appendChild(replacement);
     };
@@ -1261,6 +1264,72 @@ function normalizeNoteQuoteClosures(
     appendSegment(text.slice(segmentStart), false);
     parent.removeChild(run);
     parent.insertBefore(fragment, anchor);
+  }
+}
+
+/**
+ * Applies Word's Complex Script selection to an existing run without touching
+ * its legacy text bytes, size, character width, style, or other formatting.
+ */
+function lockRunToComplexScript(run: Element, ns: string): void {
+  let properties = run.querySelector(":scope > rPr");
+  if (!properties) {
+    properties = run.ownerDocument!.createElementNS(ns, "w:rPr");
+    run.insertBefore(properties, run.firstChild);
+  }
+  let fonts = properties.querySelector(":scope > rFonts");
+  if (!fonts) {
+    fonts = run.ownerDocument!.createElementNS(ns, "w:rFonts");
+    properties.insertBefore(fonts, properties.firstChild);
+  }
+  fonts.setAttributeNS(ns, "w:hint", "cs");
+  if (!properties.querySelector(":scope > cs")) {
+    properties.appendChild(run.ownerDocument!.createElementNS(ns, "w:cs"));
+  }
+}
+
+/**
+ * A reference-title quote often crosses Word runs: punctuation plus opening Ô
+ * may be one run while title text plus closing Õ is another. Pair across every
+ * text-bearing note run, then mark both quote-bearing runs as Complex Script.
+ * Native FootnoteReference/EndnoteReference marker runs never have w:t nodes
+ * and are excluded by isNoteBodyRun().
+ */
+function lockNoteQuotePairsToComplexScript(doc: Document, ns: string): void {
+  const notes = [
+    ...Array.from(doc.getElementsByTagNameNS(ns, "footnote")),
+    ...Array.from(doc.getElementsByTagNameNS(ns, "endnote")),
+  ];
+
+  for (const note of notes) {
+    const characters: { value: string; run: Element }[] = [];
+    for (const run of Array.from(note.getElementsByTagNameNS(ns, "r"))) {
+      if (!isNoteBodyRun(run)) continue;
+      const text = Array.from(run.getElementsByTagNameNS(ns, "t"))
+        .map((node) => node.textContent ?? "")
+        .join("");
+      for (const value of text) characters.push({ value, run });
+    }
+
+    const openingRuns: Element[] = [];
+    for (let index = 0; index < characters.length; index += 1) {
+      const current = characters[index];
+      if (current.value === "Ô") {
+        openingRuns.push(current.run);
+        continue;
+      }
+      if (current.value !== "Õ" || openingRuns.length === 0) continue;
+
+      const previous = characters[index - 1]?.value ?? "";
+      const next = characters[index + 1]?.value ?? "";
+      const isWordInternalApostrophe =
+        /[A-Za-z0-9]/.test(previous) && /[A-Za-z0-9]/.test(next);
+      if (isWordInternalApostrophe) continue;
+
+      const openingRun = openingRuns.pop();
+      if (openingRun) lockRunToComplexScript(openingRun, ns);
+      lockRunToComplexScript(current.run, ns);
+    }
   }
 }
 

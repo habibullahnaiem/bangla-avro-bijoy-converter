@@ -92,7 +92,7 @@ function minimalDocx(): JSZip {
 <w:footnotes xmlns:w="${NS}">
   <w:footnote w:id="-1" w:type="separator"><w:p><w:r><w:separator/></w:r></w:p></w:footnote>
   <w:footnote w:id="0" w:type="continuationSeparator"><w:p><w:r><w:continuationSeparator/></w:r></w:p></w:footnote>
-  <w:footnote w:id="1"><w:p><w:pPr><w:pStyle w:val="FootnoteText"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/></w:rPr><w:t>‘চাঁদের বুঝি চোখ আছে’</w:t></w:r></w:p></w:footnote>
+  <w:footnote w:id="1"><w:p><w:pPr><w:pStyle w:val="FootnoteText"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/></w:rPr><w:t>‘</w:t></w:r><w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/></w:rPr><w:t>চাঁদের বুঝি চোখ আছে’</w:t></w:r></w:p></w:footnote>
 </w:footnotes>`,
   );
   return zip;
@@ -209,12 +209,16 @@ async function inspectEndnoteHandling(path: string): Promise<void> {
     const openingQuote = bodyRuns.find((run) =>
       (run.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "").startsWith("Ô"),
     );
-    const quoteOnlyRuns = bodyRuns.filter(
-      (run) => (run.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "") === "Õ",
-    );
-    const closingQuote = quoteOnlyRuns.find(
-      (run) => run.getElementsByTagNameNS(NS, "w")[0]?.getAttributeNS(NS, "val") === "135",
-    );
+    const closingQuote = bodyRuns.find((run) => {
+      const text = run.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "";
+      if (!text.endsWith("Õ")) return false;
+      const properties = run.getElementsByTagNameNS(NS, "rPr")[0];
+      const fonts = properties?.getElementsByTagNameNS(NS, "rFonts")[0];
+      return (
+        properties?.getElementsByTagNameNS(NS, "cs").length === 1 &&
+        fonts?.getAttributeNS(NS, "hint") === "cs"
+      );
+    });
     if (!openingQuote || !closingQuote) {
       throw new Error(`${label} quote markers were not isolated safely`);
     }
@@ -224,6 +228,16 @@ async function inspectEndnoteHandling(path: string): Promise<void> {
     }
     assertFontSlots(openingQuote, "SutonnyMJ", `${label} opening quote`);
     assertFontSlots(closingQuote, "SutonnyMJ", `${label} closing quote`);
+    for (const [name, quoteRun] of [["opening", openingQuote], ["closing", closingQuote]] as const) {
+      const properties = quoteRun.getElementsByTagNameNS(NS, "rPr")[0];
+      const fonts = properties?.getElementsByTagNameNS(NS, "rFonts")[0];
+      if (
+        properties?.getElementsByTagNameNS(NS, "cs").length !== 1 ||
+        fonts?.getAttributeNS(NS, "hint") !== "cs"
+      ) {
+        throw new Error(`${label} ${name} quote did not receive the Complex Script lock`);
+      }
+    }
     const openingSize = openingQuote
       .getElementsByTagNameNS(NS, "sz")[0]
       ?.getAttributeNS(NS, "val");
@@ -233,8 +247,8 @@ async function inspectEndnoteHandling(path: string): Promise<void> {
     if (openingSize !== undefined || closingSize !== undefined) {
       throw new Error(`${label} quote sizes were unexpectedly overridden: ${openingSize}/${closingSize}`);
     }
-    if (closingQuote.getElementsByTagNameNS(NS, "w")[0]?.getAttributeNS(NS, "val") !== "135") {
-      throw new Error(`${label} closing quote does not carry the expected width correction`);
+    if (closingQuote.getElementsByTagNameNS(NS, "w").length !== 0) {
+      throw new Error(`${label} closing quote retained the ineffective width override`);
     }
     if (label === "endnote") {
       const innerApostrophe = bodyRuns.find(

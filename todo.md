@@ -90,6 +90,22 @@
 - [x] Footnote/Endnote exact pair, conjunct integrity ও complete conversion regression চালানো
 - [ ] checkpoint এবং corrected version দেওয়া
 
+# নতুন: width-only exact Ô … Õ correction also ineffective
+
+- [x] ব্যবহারকারীর পুনঃপরীক্ষার ফল নথিভুক্ত করা: `ÔPuv‡`i eywS †PvL Av‡QÕ`-এ width-only correction কার্যকর হয়নি; ‘ষ্ঠ’/যুক্তবর্ণ অংশ ঠিক আছে
+- [ ] ineffective `w:w=135` note-run correction নিরাপদ baseline-এ ফিরিয়ে নেওয়া
+- [ ] exact legacy quote pair-এর জন্য Word glyph selection, complex-script metadata ও rendering compatibility পুনঃবিশ্লেষণ করা
+- [ ] byte-preserving alternatives যাচাই করে কেবল কার্যকর পদ্ধতি বাস্তবায়ন করা
+- [ ] full regression, checkpoint এবং ব্যবহারকারীকে ফল জানানো
+
+# নতুন: supplied `testevsjv.docx` reference-note verification
+
+- [x] ব্যবহারকারীর DOCX পাওয়া এবং focus সীমিত করা: References/Footnote/Endnote-এর quote rendering
+- [x] supplied file-এর note XML, note styles, quote-pair run segmentation এবং font metadata পরিদর্শন করা
+- [x] main-text পরিবর্তন না করে actual reference-note structure অনুযায়ী scoped correction তৈরি করা
+- [x] supplied file conversion, exact note output এবং full regression যাচাই করা
+- [ ] checkpoint করে corrected DOCX behavior ব্যবহারকারীকে জানানো
+
 # নতুন: কনভার্টার লোগো
 
 - [x] বাংলা অক্ষর ও দ্বিমুখী রূপান্তর বোঝায় এমন স্বতন্ত্র mark direction নির্ধারণ করা
