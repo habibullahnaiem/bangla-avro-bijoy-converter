@@ -592,33 +592,66 @@ export default function Home() {
     [direction, input],
   );
   // SutonnyMJ-এর ঋ/ৃ-কার marker (U+201E), word-initial e-kar marker (U+2020),
-  // এবং mid-word e-kar marker (U+2021) legacy glyph; rich preview-তে আলাদা token
-  // দিলে কেবল optical placement ঠিক করা যায়, কিন্তু copied Bijoy text-এর আসল
-  // code sequence অপরিবর্তিত থাকে।
+  // mid-word e-kar marker (U+2021) এবং রেফারেন্সের সিংগেল-কোট ক্লোজার (U+00D5)
+  // legacy glyph। এগুলো আলাদা token দিলে শুধু rich preview-এর optical placement
+  // ঠিক করা যায়; copied Bijoy text-এর আসল code sequence অপরিবর্তিত থাকে।
   const renderBijoyText = (
     text: string,
     className: string,
     size: number,
     keyPrefix: string,
-  ) =>
-    text.split(/(„|†|‡)/g).map((part, index) =>
-      part ? (
+  ) => {
+    // U+00D5 একই সঙ্গে reference-এর closing quote এবং word-internal apostrophe
+    // হতে পারে। শুধু U+00D4-র সঙ্গে জোড়া reference-closing quote চিহ্নিত করি;
+    // apostrophe-এর appearance, copy ও raw code সম্পূর্ণ অপরিবর্তিত থাকে।
+    const referenceCloseOffsets = new Set<number>();
+    let unmatchedSingleQuoteOpens = 0;
+    const isLegacyWordByte = (value: string) => /[A-Za-z0-9]/.test(value);
+    for (let offset = 0; offset < text.length; offset += 1) {
+      const character = text[offset];
+      if (character === "Ô") {
+        unmatchedSingleQuoteOpens += 1;
+        continue;
+      }
+      if (character !== "Õ") continue;
+
+      const previous = offset > 0 ? text[offset - 1] : "";
+      const next = offset + 1 < text.length ? text[offset + 1] : "";
+      const isWordInternalApostrophe =
+        isLegacyWordByte(previous) && isLegacyWordByte(next);
+      if (!isWordInternalApostrophe && unmatchedSingleQuoteOpens > 0) {
+        referenceCloseOffsets.add(offset);
+        unmatchedSingleQuoteOpens -= 1;
+      }
+    }
+
+    let offset = 0;
+    return text.split(/(„|†|‡|Õ)/g).map((part, index) => {
+      const partOffset = offset;
+      offset += part.length;
+      if (!part) return null;
+
+      const tokenClassName =
+        part === "„"
+          ? `${className} bijoy-rikar`
+          : part === "†"
+            ? `${className} bijoy-ekar-initial`
+            : part === "‡"
+              ? `${className} bijoy-ekar-mid`
+              : part === "Õ" && referenceCloseOffsets.has(partOffset)
+                ? `${className} bijoy-quote-close`
+                : className;
+
+      return (
         <span
           key={`${keyPrefix}-${index}`}
-          className={
-            part === "„"
-              ? `${className} bijoy-rikar`
-              : part === "†"
-                ? `${className} bijoy-ekar-initial`
-                : part === "‡"
-                  ? `${className} bijoy-ekar-mid`
-                  : className
-          }
+          className={tokenClassName}
           style={{ fontSize: `${size}px` }}>
           {part}
         </span>
-      ) : null,
-    );
+      );
+    });
+  };
   const outPreviewRef = useRef<HTMLDivElement>(null);
   const outAreaRef = useRef<HTMLTextAreaElement>(null);
   const syncScroll = (from: HTMLElement, to: HTMLElement | null) => {

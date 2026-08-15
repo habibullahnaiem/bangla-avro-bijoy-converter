@@ -668,6 +668,21 @@ button:active {
     margin-right: -0.04em;
   }
 
+  /*
+   * Reference-entry single quotes: SutonnyMJ's Ô/Õ pair keeps the same legacy
+   * advance width, yet Õ can look optically lighter in a dense citation line.
+   * Only a Õ matched to a preceding Ô gets this preview-only micro-scale.
+   * Word-internal apostrophes, raw Bijoy bytes, copied text and DOCX output are
+   * deliberately untouched.
+   */
+  .bijoy-rich .bijoy-quote-close {
+    display: inline-block;
+    transform: scale(1.1);
+    transform-origin: 48% 63%;
+    font-family: "SutonnyMJ", "Times New Roman", "Times", serif;
+    line-height: inherit;
+  }
+
   .bijoy-rich::-moz-selection,
   .bijoy-rich *::-moz-selection {
     background: rgb(13 148 136 / 0.26);

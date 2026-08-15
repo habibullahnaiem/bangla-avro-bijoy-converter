@@ -60,6 +60,12 @@
 - [ ] শুরু, মাঝ এবং যুক্তবর্ণের focused round-trip audit চালানো
 - [ ] UI যাচাই, checkpoint এবং ব্যবহারকারীকে corrected version দেওয়া
 
+# নতুন: রেফারেন্সের smart single-quote visual normalization
+
+- [x] user screenshot, pure ‘ … ’ byte mapping এবং live SutonnyMJ glyph rendering পরিদর্শন করা
+- [x] Ô/Õ reference pair অপরিবর্তিত রেখে rich preview-তে কেবল matched closing Õ-এর optical scale নির্ধারণ করা
+- [x] full regression suite, desktop/mobile visual check এবং checkpoint সম্পন্ন করা
+
 # নতুন: কনভার্টার লোগো
 
 - [x] বাংলা অক্ষর ও দ্বিমুখী রূপান্তর বোঝায় এমন স্বতন্ত্র mark direction নির্ধারণ করা
@@ -471,3 +477,13 @@
 - [x] legacy Bijoy byte-run চিনে শুধু তার font mapping SutonnyMJ-তে ফিরিয়ে আনার নিরাপদ rule নির্ধারণ করা
 - [x] মূল conversion output না বদলে repair workflow ও regression তৈরি করা
 - [x] সরবরাহকৃত Word-saved DOCX-এ repair চালিয়ে text অপরিবর্তিত রেখে SutonnyMJ mapping পুনরুদ্ধার যাচাই করা
+
+# সক্রিয়: inverted quote glyph sizing
+- [x] Unicode/Bijoy inverted quote mapping এবং SutonnyMJ glyph sequence যাচাই করা
+- [x] preview ও DOCX-এ দুই quotation mark-এর সামঞ্জস্যপূর্ণ glyph/size rule প্রয়োগ করা
+- [x] punctuation round-trip ও visual regression চালানো
+
+# সক্রিয়: reference smart single-quote normalization
+- [ ] reference-entry `‘ … ’` pair-এর বর্তমান Bijoy glyph mapping নিশ্চিত করা
+- [ ] শুধু pair-এর opening/closing mark একই visual-size glyph-এ normalise করা
+- [ ] apostrophe, double quote ও সাধারণ punctuation অপরিবর্তিত আছে নিশ্চিত করা

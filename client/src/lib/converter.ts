@@ -45,7 +45,57 @@ function neutralizeLatinPunct(s: string): string {
     .replace(/[\u2014\u2013]/g, "-");
 }
 
+/**
+ * Normalizes only a mixed pair such as “উদ্ধৃতি’ or ‘উদ্ধৃতি”.
+ * SutonnyMJ uses visibly different double- and single-quote glyphs, so a
+ * mixed pair makes one side look larger than the other. Apostrophes inside a
+ * word are deliberately untouched.
+ */
+function normalizeMixedSmartQuotePairs(s: string): string {
+  const stack: Array<"double" | "single"> = [];
+  let out = "";
+
+  for (let index = 0; index < s.length; index += 1) {
+    const ch = s[index];
+    const prev = index > 0 ? s[index - 1] : "";
+    const next = index + 1 < s.length ? s[index + 1] : "";
+    const isWordChar = (value: string) => /[A-Za-z0-9\u0980-\u09FF]/.test(value);
+
+    if (ch === "\u201C") {
+      stack.push("double");
+      out += ch;
+    } else if (ch === "\u2018") {
+      stack.push("single");
+      out += ch;
+    } else if (ch === "\u201D") {
+      const top = stack.at(-1);
+      if (top === "single") {
+        stack.pop();
+        out += "\u2019";
+      } else {
+        if (top === "double") stack.pop();
+        out += ch;
+      }
+    } else if (ch === "\u2019") {
+      const isApostrophe = isWordChar(prev) && isWordChar(next);
+      const top = stack.at(-1);
+      if (!isApostrophe && top === "double") {
+        stack.pop();
+        out += "\u201D";
+      } else {
+        if (!isApostrophe && top === "single") stack.pop();
+        out += ch;
+      }
+    } else {
+      out += ch;
+    }
+  }
+
+  return out;
+}
+
 function preMapPunctuation(s: string): string {
+  s = normalizeMixedSmartQuotePairs(s);
   const map: Record<string, string> = {
     // দাঁড়ি ও ব্র্যাকেট লাইব্রেরি সঠিকভাবেই | (U+007C), [ ] (U+005B/U+005D)
     // কোডে রাখে — এখানে পরিবর্তন করা হয় না।
