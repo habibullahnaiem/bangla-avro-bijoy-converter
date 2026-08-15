@@ -106,6 +106,32 @@
 - [x] supplied file conversion, exact note output এবং full regression যাচাই করা
 - [ ] checkpoint করে corrected DOCX behavior ব্যবহারকারীকে জানানো
 
+# নতুন: Footnote/Endnote parenthesis size mismatch
+
+- [x] ব্যবহারকারীর রিপোর্ট নথিভুক্ত করা: note body-তে opening `(` 14pt কিন্তু closing `)` 11pt
+- [x] ব্যবহারকারীর safety constraint নথিভুক্ত করা: proven-safe না হলে parenthesis fix বাদ দিতে হবে; existing note behavior নষ্ট করা যাবে না
+- [x] supplied reference-note XML-এ matched parenthesis run, paired `w:sz`/`w:szCs` এবং style inheritance পরিদর্শন করা
+- [x] safe correction নেই বলে parenthesis size override প্রয়োগ না করার সিদ্ধান্ত নেওয়া; দুই run-ই একই inherited note style ব্যবহার করছে
+- [x] no-change baseline-এ quotes, apostrophes, plain text ও native marker অক্ষুণ্ণ রাখা নিশ্চিত করা
+- [ ] checkpoint করে corrected behavior ব্যবহারকারীকে জানানো
+
+# নতুন: font-switch garbling regression after recent note work
+
+- [x] user regression নথিভুক্ত করা: converted DOCX-এ এক font থেকে অন্য font-এ গেলে লেখা আবার হিজিবিজি হচ্ছে
+- [x] newly generated normal paragraph, Footnote এবং Endnote run-font metadata prior stable behavior-এর সঙ্গে তুলনা করা
+- [x] ordinary font-family switch, SutonnyMJ restoration এবং existing repair workflow পুনরুৎপাদন করা
+- [x] note-quote change থেকে metadata regression নেই নিশ্চিত করা; legacy Bijoy byte non-Sutonny font-এ গেলে glyph বদলানো encoding limitation
+- [x] main text, note text, quotation, apostrophe ও native marker পরিবর্তন না করে existing safe repair workflow অক্ষুণ্ণ রাখা
+- [ ] checkpoint করে ফল ব্যবহারকারীকে জানানো
+
+# নতুন: supplied `CH03E03PRFDFC_bijoy.docx` recovery
+
+- [x] Word-saved damaged Bijoy DOCX পাওয়া এবং repair scope নির্ধারণ করা
+- [x] main text, Footnote ও Endnote-এ high-confidence legacy Bijoy run এবং বর্তমান font metadata পরিদর্শন করা
+- [x] non-destructive repair চালিয়ে SutonnyMJ mapping পুনঃস্থাপন করা
+- [x] text bytes, quotation, native note marker ও document structure অপরিবর্তিত আছে যাচাই করা
+- [ ] repaired DOCX ব্যবহারকারীকে দেওয়া এবং full regression ফল জানানো
+
 # নতুন: কনভার্টার লোগো
 
 - [x] বাংলা অক্ষর ও দ্বিমুখী রূপান্তর বোঝায় এমন স্বতন্ত্র mark direction নির্ধারণ করা
