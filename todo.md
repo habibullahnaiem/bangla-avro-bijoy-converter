@@ -74,6 +74,22 @@
 - [x] normal body text, note body, raw bytes, apostrophe এবং native note-reference marker অক্ষুণ্ণ রেখে full regression চালানো
 - [ ] Word-compatible DOCX fixture যাচাই, checkpoint এবং ব্যবহারকারীকে জানানো
 
+# নতুন: exact Ô … Õ note-pair still uneven in Word
+
+- [x] ব্যবহারকারীর exact Bijoy pair `ÔPuv‡`i eywS †PvL Av‡QÕ`-এ আগের note font-size metadata fix কার্যকর হয়নি—regression নথিভুক্ত করা
+- [ ] exact pair-সহ Endnote/Footnote fixture তৈরি করে Word-compatible XML ও rendering strategy পুনরায় যাচাই করা
+- [ ] আগের ineffective size-only approach-এর বদলে কেবল matched note quote pair-এর জন্য নির্ভরযোগ্য correction প্রয়োগ করা
+- [ ] exact pair, mixed/apostrophe guard, native note marker এবং সম্পূর্ণ conversion suite পুনরায় যাচাই করা
+- [ ] checkpoint করে corrected version দেওয়া
+
+# নতুন: enlarged note closing quote renders as a Bengali glyph
+
+- [x] ব্যবহারকারীর রিপোর্ট নথিভুক্ত করা: enlarged closing `Õ` quote-এর বদলে ‘ষ্ঠ’-জাতীয় Bengali glyph দেখা যাচ্ছে
+- [x] 1.5× size escalation এবং তার associated exact-pair expectation নিরাপদ অবস্থায় ফিরিয়ে নেওয়া
+- [x] Word-এ `Õ` byte-কে quote glyph হিসেবেই বাধ্য করে এমন safe note-run strategy পরীক্ষা করা
+- [x] Footnote/Endnote exact pair, conjunct integrity ও complete conversion regression চালানো
+- [ ] checkpoint এবং corrected version দেওয়া
+
 # নতুন: কনভার্টার লোগো
 
 - [x] বাংলা অক্ষর ও দ্বিমুখী রূপান্তর বোঝায় এমন স্বতন্ত্র mark direction নির্ধারণ করা

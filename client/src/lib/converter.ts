@@ -722,11 +722,11 @@ function processDocXml(
   }
 
   // Footnote/Endnote body text is rendered by Word rather than the web rich
-  // preview. SutonnyMJ's legacy Ô/Õ pair can look uneven in that smaller note
-  // context even with identical font metadata. Split only a matched closing Õ
-  // into its own cloned run and increase that glyph's size by 10%. The visible
-  // text, its Bijoy bytes, paragraph layout, note marker and word apostrophes
-  // remain unchanged. Ordinary document text deliberately never enters here.
+  // preview. Keep each matched closing Õ at its inherited SutonnyMJ size, but
+  // give only that isolated glyph a small character-width expansion. Unlike a
+  // font-size override, w:w keeps Word on the legacy quote glyph rather than
+  // risking a Bengali glyph substitution in a note context. Bytes, marker,
+  // apostrophes, conjuncts and ordinary document text are never changed.
   normalizeNoteQuoteClosures(doc, ns, noteBodyBaseHalfPoints);
 
   // শেষ স্যানিটাইজেশন পাস: split/ফন্ট-assignment-এর পর প্রতিটি direct run-এর
@@ -1215,11 +1215,6 @@ function normalizeNoteQuoteClosures(
     const parent = run.parentNode;
     if (!parent) continue;
     const anchor = run.nextSibling;
-    const baseHalfPoints = effectiveRunHalfPoints(run, ns, noteBodyBaseHalfPoints);
-    const adjustedHalfPoints = Math.max(
-      baseHalfPoints + 2,
-      Math.round(baseHalfPoints * 1.1),
-    );
     const sourceProperties = run.querySelector(":scope > rPr");
     const fragment = doc.createDocumentFragment();
     let segmentStart = 0;
@@ -1244,14 +1239,15 @@ function normalizeNoteQuoteClosures(
           properties = doc.createElementNS(ns, "w:rPr");
           replacement.insertBefore(properties, replacement.firstChild);
         }
-        for (const tag of ["sz", "szCs"]) {
-          let size = properties.querySelector(`:scope > ${tag}`);
-          if (!size) {
-            size = doc.createElementNS(ns, `w:${tag}`);
-            properties.appendChild(size);
-          }
-          size.setAttributeNS(ns, "w:val", String(adjustedHalfPoints));
+        // Word's w:w is a character-width percentage. The inherited note size
+        // remains untouched, so Õ stays a SutonnyMJ quote glyph while gaining
+        // enough optical weight to match the opening Ô in note text.
+        let width = properties.querySelector(":scope > w");
+        if (!width) {
+          width = doc.createElementNS(ns, "w:w");
+          properties.appendChild(width);
         }
+        width.setAttributeNS(ns, "w:val", "135");
       }
       fragment.appendChild(replacement);
     };

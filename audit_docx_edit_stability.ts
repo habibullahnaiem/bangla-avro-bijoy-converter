@@ -12,6 +12,7 @@ const dom = new JSDOM();
 
 const NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
 const CT = "http://schemas.openxmlformats.org/package/2006/content-types";
+const REPORTED_NOTE_QUOTE_BIJOY = "ÔPuv‡`i eywS †PvL Av‡QÕ";
 
 function minimalDocx(): JSZip {
   const zip = new JSZip();
@@ -91,7 +92,7 @@ function minimalDocx(): JSZip {
 <w:footnotes xmlns:w="${NS}">
   <w:footnote w:id="-1" w:type="separator"><w:p><w:r><w:separator/></w:r></w:p></w:footnote>
   <w:footnote w:id="0" w:type="continuationSeparator"><w:p><w:r><w:continuationSeparator/></w:r></w:p></w:footnote>
-  <w:footnote w:id="1"><w:p><w:pPr><w:pStyle w:val="FootnoteText"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/></w:rPr><w:t>‘এটি একটি বাংলা ফুটনোট’</w:t></w:r></w:p></w:footnote>
+  <w:footnote w:id="1"><w:p><w:pPr><w:pStyle w:val="FootnoteText"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/></w:rPr><w:t>‘চাঁদের বুঝি চোখ আছে’</w:t></w:r></w:p></w:footnote>
 </w:footnotes>`,
   );
   return zip;
@@ -199,8 +200,10 @@ async function inspectEndnoteHandling(path: string): Promise<void> {
       .map((run) => run.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "")
       .join("");
     const sourceText =
-      label === "endnote" ? "‘আল্লাহ’র এন্ডনোট’" : "‘এটি একটি বাংলা ফুটনোট’";
-    if (joined !== convertToBijoy(sourceText)) {
+      label === "endnote" ? "‘আল্লাহ’র এন্ডনোট’" : "‘চাঁদের বুঝি চোখ আছে’";
+    const expectedQuoteBytes =
+      label === "footnote" ? REPORTED_NOTE_QUOTE_BIJOY : convertToBijoy(sourceText);
+    if (joined !== expectedQuoteBytes) {
       throw new Error(`${label} quote bytes changed: ${joined}`);
     }
     const openingQuote = bodyRuns.find((run) =>
@@ -210,8 +213,7 @@ async function inspectEndnoteHandling(path: string): Promise<void> {
       (run) => (run.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "") === "Õ",
     );
     const closingQuote = quoteOnlyRuns.find(
-      (run) =>
-        run.getElementsByTagNameNS(NS, "sz")[0]?.getAttributeNS(NS, "val") === "22",
+      (run) => run.getElementsByTagNameNS(NS, "w")[0]?.getAttributeNS(NS, "val") === "135",
     );
     if (!openingQuote || !closingQuote) {
       throw new Error(`${label} quote markers were not isolated safely`);
@@ -228,8 +230,11 @@ async function inspectEndnoteHandling(path: string): Promise<void> {
     const closingSize = closingQuote
       .getElementsByTagNameNS(NS, "sz")[0]
       ?.getAttributeNS(NS, "val");
-    if (openingSize !== undefined || closingSize !== "22") {
-      throw new Error(`${label} quote style sizes are not inherited/22: ${openingSize}/${closingSize}`);
+    if (openingSize !== undefined || closingSize !== undefined) {
+      throw new Error(`${label} quote sizes were unexpectedly overridden: ${openingSize}/${closingSize}`);
+    }
+    if (closingQuote.getElementsByTagNameNS(NS, "w")[0]?.getAttributeNS(NS, "val") !== "135") {
+      throw new Error(`${label} closing quote does not carry the expected width correction`);
     }
     if (label === "endnote") {
       const innerApostrophe = bodyRuns.find(
