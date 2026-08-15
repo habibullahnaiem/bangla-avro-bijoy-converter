@@ -75,6 +75,13 @@ function minimalDocx(): JSZip {
     <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t>ফুটনোটসহ বাংলা বাক্য</w:t></w:r>
     <w:r><w:rPr><w:vertAlign w:val="superscript"/><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr><w:footnoteReference w:id="1"/></w:r>
   </w:p><w:sectPr/>
+  <w:p><w:pPr><w:pStyle w:val="Normal"/></w:pPr>
+    <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t>বাংলা সূত্রে </w:t></w:r>
+    <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t>‘</w:t></w:r>
+    <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t>Discreditable Identity</w:t></w:r>
+    <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t>’</w:t></w:r>
+    <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t> প্রসঙ্গ।</w:t></w:r>
+  </w:p><w:sectPr/>
 </w:body></w:document>`,
   );
   zip.file(
@@ -135,10 +142,11 @@ async function inspectDocx(
     const sz = rPr.getElementsByTagNameNS(NS, "sz")[0]?.getAttributeNS(NS, "val") ?? null;
     const szCs = rPr.getElementsByTagNameNS(NS, "szCs")[0]?.getAttributeNS(NS, "val") ?? null;
     if ((sz && !szCs) || (!sz && szCs) || (sz && szCs && sz !== szCs)) mismatchedSizePairs++;
-    const expectedHalfPoints = text === "English 2026" ? expectedSizes.englishHalfPoints : expectedSizes.banglaHalfPoints;
+    const isEnglishText = ["English 2026", "‘", "Discreditable Identity", "’"].includes(text);
+    const expectedHalfPoints = isEnglishText ? expectedSizes.englishHalfPoints : expectedSizes.banglaHalfPoints;
     if (text && expectedHalfPoints !== undefined && sz !== String(expectedHalfPoints)) unexpectedSizeValues++;
     if (text) {
-      const expectedFont = text === "English 2026" ? "Times New Roman" : "SutonnyMJ";
+      const expectedFont = isEnglishText ? "Times New Roman" : "SutonnyMJ";
       if (fontSlots(run).some((value) => value !== expectedFont)) fontMismatch++;
     }
   }
@@ -146,6 +154,28 @@ async function inspectDocx(
   if (mismatchedSizePairs || fontMismatch || unexpectedSizeValues || runs.length < 2) {
     throw new Error(`${label}: DOCX run invariants failed`);
   }
+}
+
+async function inspectEnglishSmartQuoteDirection(path: string): Promise<void> {
+  const zip = await JSZip.loadAsync(fs.readFileSync(path));
+  const xml = await zip.file("word/document.xml")!.async("string");
+  const document = new DOMParser().parseFromString(xml, "text/xml");
+  const runs = Array.from(document.getElementsByTagNameNS(NS, "r"));
+  const quotedTitleRuns = runs.filter((run) =>
+    ["‘", "Discreditable Identity", "’"].includes(
+      run.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "",
+    ),
+  );
+  const title = quotedTitleRuns
+    .map((run) => run.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "")
+    .join("");
+  if (title !== "‘Discreditable Identity’") {
+    throw new Error(`English smart quotes lost their direction: ${title}`);
+  }
+  for (const run of quotedTitleRuns) {
+    assertFontSlots(run, "Times New Roman", "English smart-quote title");
+  }
+  console.log("english-smart-quote-direction: passed");
 }
 
 async function inspectEndnoteHandling(path: string): Promise<void> {
@@ -342,7 +372,8 @@ function rewriteRunSizes(xml: string, banglaHalfPoints: number, englishHalfPoint
     const text = run.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "";
     const rPr = run.getElementsByTagNameNS(NS, "rPr")[0];
     if (!rPr || !text) continue;
-    const halfPoints = text === "English 2026" ? englishHalfPoints : banglaHalfPoints;
+    const isEnglishText = ["English 2026", "‘", "Discreditable Identity", "’"].includes(text);
+    const halfPoints = isEnglishText ? englishHalfPoints : banglaHalfPoints;
     const value = String(halfPoints);
     const sz = rPr.getElementsByTagNameNS(NS, "sz")[0];
     const szCs = rPr.getElementsByTagNameNS(NS, "szCs")[0];
@@ -365,6 +396,7 @@ async function main() {
   const outputPath = "/tmp/avrojoy_edit_stability_bijoy.docx";
   fs.writeFileSync(outputPath, output);
   await inspectDocx(outputPath, "converted-14pt-12pt", { banglaHalfPoints: 28, englishHalfPoints: 24 });
+  await inspectEnglishSmartQuoteDirection(outputPath);
   await inspectEndnoteHandling(outputPath);
   await inspectBijoyFontRepair();
 

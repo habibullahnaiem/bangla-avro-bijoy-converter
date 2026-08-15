@@ -527,3 +527,10 @@
 - [ ] reference-entry `‘ … ’` pair-এর বর্তমান Bijoy glyph mapping নিশ্চিত করা
 - [ ] শুধু pair-এর opening/closing mark একই visual-size glyph-এ normalise করা
 - [ ] apostrophe, double quote ও সাধারণ punctuation অপরিবর্তিত আছে নিশ্চিত করা
+
+# নতুন: English opening quote appears reversed in DOCX
+- [x] user screenshot regression নথিভুক্ত করা: English title-এর opening single quote direction ভুল দেখাচ্ছে
+- [x] screenshot crop ও generated DOCX English quote-run bytes/font metadata পরিদর্শন করা
+- [x] Bengali Bijoy punctuation না বদলে English quote-only direction correction নির্ধারণ করা
+- [x] English quote, Bengali quote, Footnote/Endnote ও full DOCX regression যাচাই করা
+- [ ] checkpoint করে সংশোধিত version ব্যবহারকারীকে জানানো

@@ -584,6 +584,7 @@ function processDocXml(
     text: string;
     origHasBangla: boolean;
     mixed: boolean;
+    context: "bangla" | "latin";
     convText: string; // রূপান্তর-পরবর্তী টেক্সট — পাঙ্কচুয়েশন-শুধু রান (যেমন দাঁড়ি)
   }[] = []; // SutonnyMJ পেতে পারে কিনা সেটার জন্য দরকার।
 
@@ -609,6 +610,27 @@ function processDocXml(
   for (const node of textNodes) {
     const run = node.parentElement;
     if (!run || contextOf.get(run) !== "punct") continue;
+    const text = node.textContent ?? "";
+    const previousContext = contextOf.get(run.previousElementSibling as Element);
+    const nextContext = contextOf.get(run.nextElementSibling as Element);
+    const hasOpeningSmartQuote = /[“‘]/.test(text);
+    const hasClosingSmartQuote = /[”’]/.test(text);
+    const hasStraightQuote = /["']/.test(text);
+    // Word often stores a reference title as four independent runs: Bengali
+    // context, opening quote, English title, closing quote. An opening quote
+    // belongs to the following Latin title and a closing quote to the preceding
+    // one, even when the other side of that punctuation run is Bengali. Keep
+    // that typography in the Latin/Times path instead of turning it into a
+    // SutonnyMJ byte. Straight quotes have no directional form, but still
+    // follow an adjacent English run when one exists.
+    if (
+      (hasOpeningSmartQuote && nextContext === "latin") ||
+      (hasClosingSmartQuote && previousContext === "latin") ||
+      (hasStraightQuote && (previousContext === "latin" || nextContext === "latin"))
+    ) {
+      contextOf.set(run, "latin");
+      continue;
+    }
     let found: "bangla" | "latin" | null = null;
     for (let d = 1; d <= 3 && !found; d++) {
       for (const sib of [run.previousElementSibling, run.nextElementSibling]) {
@@ -625,16 +647,13 @@ function processDocXml(
     const text = node.textContent ?? "";
     if (!text || !hasBanglaOrPunct(text)) continue;
     const run = node.parentElement!;
-    const ctx = contextOf.get(run) ?? "punct";
-    // নেবার-কনটেক্সট দিয়ে রূপান্তর: পাঙকচুয়েশন-শুধু রান প্রসঙ্গ অনুযায়ী —
-    // লাতিন-প্রসঙ্গে ASCII-সমতুল্য, বাংলা-প্রসঙ্গে সুনতন্নী ড্যাশ/কোট-কোড।
-    // লাতিন-প্রসঙ্গে কর্লি-কোট/ড্যাশ-টাইপ বিরামচিহ্নকে আগেই ASCII-সমতুল্যে
-    // নেউট্রাল করা হয় (সুনতন্নী-কোডে ম্যাপ হওয়ার আগে), ফলে লাইব্রেরি আর
-    // এগুলোকে হ-/র-আকারের সুনতন্নী গ্লিফে বদলায় না।
-    const conv =
-      ctx === "latin"
-        ? convertToBijoy(neutralizeLatinPunct(text))
-        : convertToBijoy(text);
+    const ctx = contextOf.get(run) === "latin" ? "latin" : "bangla";
+    // Latin Word runs remain Unicode/Times text. In particular, U+2018 and
+    // U+2019 must not be collapsed into one ASCII apostrophe: Word needs their
+    // original directional forms to render an English title’s opening and
+    // closing quotes correctly. Bengali-context punctuation still travels
+    // through the normal Bijoy conversion pipeline unchanged.
+    const conv = ctx === "latin" ? text : convertFn(text);
     const converted = sanitizeXml(conv);
     node.textContent = converted;
 
@@ -644,6 +663,7 @@ function processDocXml(
         text,
         origHasBangla: BANGLA_RE.test(text),
         mixed: hasMixedSegments(text),
+        context: ctx,
         convText: converted,
       });
     }
@@ -670,9 +690,12 @@ function processDocXml(
       // সিন্ধান্ত: উৎসে বাংলা থাকলে, অথবা রূপান্তর-পরবর্তী টেক্সটে বিজয়-
       // পাঙ্কচুয়েশন (দাঁড়ি ', কোট ইত্যাদি) থাকলে → SutonnyMJ; বাকি সব →
       // Times New Roman। এতে দাঁড়ি-শুধু রানও সঠিক ফন্টে থাকে।
-      const want = needsSutonnyMJ(plan.text, plan.convText)
-        ? "SutonnyMJ"
-        : "Times New Roman";
+      const want =
+        plan.context === "latin"
+          ? "Times New Roman"
+          : needsSutonnyMJ(plan.text, plan.convText)
+            ? "SutonnyMJ"
+            : "Times New Roman";
       rFontsAttr(plan.run, ns, want);
       // ইংলিশ/ল্যাটিন রানগুলো বাংলার চেয়ে এক ধাপ ছোট (−2pt) — ডকের
       // ডিফল্ট সাইজ ধরে: বাংলা ডিফল্টে থাকে, ইংলিশে sz কমানো হয়।
@@ -1007,7 +1030,11 @@ function splitMixedRun(
     // xml namespace হিসেবে সেট করতে হয় — Word অ-নেমস্পেসড xml:space অ্যাট্রিবিউট
     // থাকলে ডকুমেন্ট আর খুলতে পারে না ("Word experienced an error" দেখায়)
     t.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve");
-    t.textContent = sanitizeXml(convertFn(seg.text));
+    // The non-Bangla segment is rendered by Times New Roman. Preserve its
+    // original Unicode punctuation, especially U+2018/U+2019, rather than
+    // flattening the two directions into one ASCII apostrophe during Bijoy
+    // conversion. Bengali segments continue through the existing converter.
+    t.textContent = sanitizeXml(seg.bangla ? convertFn(seg.text) : seg.text);
     nr.appendChild(t);
     const want = seg.bangla ? "SutonnyMJ" : "Times New Roman";
     rFontsAttr(nr, ns, want);
