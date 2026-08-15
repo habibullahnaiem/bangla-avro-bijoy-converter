@@ -1,7 +1,7 @@
 import { JSDOM } from "jsdom";
 import JSZip from "jszip";
 import fs from "fs";
-import { convertFile, repairBijoyFontFile } from "./client/src/lib/converter";
+import { convertFile, convertToBijoy, repairBijoyFontFile } from "./client/src/lib/converter";
 
 const dom = new JSDOM();
 (globalThis as any).DOMParser = dom.window.DOMParser;
@@ -24,6 +24,7 @@ function minimalDocx(): JSZip {
   <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
   <Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>
   <Override PartName="/word/endnotes.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml"/>
+  <Override PartName="/word/footnotes.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml"/>
 </Types>`,
   );
   zip.file(
@@ -38,6 +39,7 @@ function minimalDocx(): JSZip {
     `<?xml version="1.0" encoding="UTF-8"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
   <Relationship Id="rIdEndnotes" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes" Target="endnotes.xml"/>
+  <Relationship Id="rIdFootnotes" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes" Target="footnotes.xml"/>
 </Relationships>`,
   );
   zip.file(
@@ -46,7 +48,8 @@ function minimalDocx(): JSZip {
 <w:styles xmlns:w="${NS}">
   <w:docDefaults><w:rPrDefault><w:rPr><w:sz w:val="28"/><w:szCs w:val="28"/></w:rPr></w:rPrDefault></w:docDefaults>
   <w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/></w:style>
-  <w:style w:type="paragraph" w:styleId="EndnoteText"><w:name w:val="endnote text"/></w:style>
+  <w:style w:type="paragraph" w:styleId="EndnoteText"><w:name w:val="endnote text"/><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr></w:style>
+  <w:style w:type="paragraph" w:styleId="FootnoteText"><w:name w:val="footnote text"/><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr></w:style>
   <w:style w:type="character" w:styleId="EndnoteReference"><w:name w:val="endnote reference"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:eastAsia="Times New Roman" w:cs="Times New Roman"/><w:vertAlign w:val="superscript"/></w:rPr></w:style>
 </w:styles>`,
   );
@@ -67,6 +70,10 @@ function minimalDocx(): JSZip {
     <w:r><w:rPr><w:rStyle w:val="EndnoteReference"/><w:vertAlign w:val="superscript"/><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr><w:endnoteReference w:id="1"/></w:r>
     <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t> এরপরও বাক্য আছে</w:t></w:r>
   </w:p><w:sectPr/>
+  <w:p><w:pPr><w:pStyle w:val="Normal"/></w:pPr>
+    <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t>ফুটনোটসহ বাংলা বাক্য</w:t></w:r>
+    <w:r><w:rPr><w:vertAlign w:val="superscript"/><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr><w:footnoteReference w:id="1"/></w:r>
+  </w:p><w:sectPr/>
 </w:body></w:document>`,
   );
   zip.file(
@@ -75,8 +82,17 @@ function minimalDocx(): JSZip {
 <w:endnotes xmlns:w="${NS}">
   <w:endnote w:id="-1" w:type="separator"><w:p><w:r><w:separator/></w:r></w:p></w:endnote>
   <w:endnote w:id="0" w:type="continuationSeparator"><w:p><w:r><w:continuationSeparator/></w:r></w:p></w:endnote>
-  <w:endnote w:id="1"><w:p><w:pPr><w:pStyle w:val="EndnoteText"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="20"/></w:rPr><w:t>এটি একটি বাংলা এন্ডনোট।</w:t></w:r></w:p></w:endnote>
+  <w:endnote w:id="1"><w:p><w:pPr><w:pStyle w:val="EndnoteText"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/></w:rPr><w:t>‘আল্লাহ’র এন্ডনোট’</w:t></w:r></w:p></w:endnote>
 </w:endnotes>`,
+  );
+  zip.file(
+    "word/footnotes.xml",
+    `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:footnotes xmlns:w="${NS}">
+  <w:footnote w:id="-1" w:type="separator"><w:p><w:r><w:separator/></w:r></w:p></w:footnote>
+  <w:footnote w:id="0" w:type="continuationSeparator"><w:p><w:r><w:continuationSeparator/></w:r></w:p></w:footnote>
+  <w:footnote w:id="1"><w:p><w:pPr><w:pStyle w:val="FootnoteText"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/></w:rPr><w:t>‘এটি একটি বাংলা ফুটনোট’</w:t></w:r></w:p></w:footnote>
+</w:footnotes>`,
   );
   return zip;
 }
@@ -135,9 +151,11 @@ async function inspectEndnoteHandling(path: string): Promise<void> {
   const zip = await JSZip.loadAsync(fs.readFileSync(path));
   const documentXml = await zip.file("word/document.xml")!.async("string");
   const endnotesXml = await zip.file("word/endnotes.xml")!.async("string");
+  const footnotesXml = await zip.file("word/footnotes.xml")!.async("string");
   const stylesXml = await zip.file("word/styles.xml")!.async("string");
   const document = new DOMParser().parseFromString(documentXml, "text/xml");
   const endnotes = new DOMParser().parseFromString(endnotesXml, "text/xml");
+  const footnotes = new DOMParser().parseFromString(footnotesXml, "text/xml");
   const styles = new DOMParser().parseFromString(stylesXml, "text/xml");
   const referenceRuns = Array.from(document.getElementsByTagNameNS(NS, "r")).filter(
     (run) => run.getElementsByTagNameNS(NS, "endnoteReference").length > 0,
@@ -173,13 +191,65 @@ async function inspectEndnoteHandling(path: string): Promise<void> {
   ) {
     throw new Error("endnote reference lost its Word superscript style");
   }
-  const noteTextRuns = Array.from(endnotes.getElementsByTagNameNS(NS, "r")).filter(
-    (run) => (run.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "").length > 0,
-  );
-  if (noteTextRuns.length !== 1) throw new Error(`endnote body run count mismatch: ${noteTextRuns.length}`);
-  const noteText = noteTextRuns[0].getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "";
-  assertFontSlots(noteTextRuns[0], "SutonnyMJ", "endnote body");
-  if (/[\u0980-\u09FF]/.test(noteText)) throw new Error("endnote body still contains Unicode Bengali after Bijoy conversion");
+  const assertNormalizedNoteQuotes = (note: Document, label: "endnote" | "footnote") => {
+    const bodyRuns = Array.from(note.getElementsByTagNameNS(NS, "r")).filter(
+      (run) => (run.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "").length > 0,
+    );
+    const joined = bodyRuns
+      .map((run) => run.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "")
+      .join("");
+    const sourceText =
+      label === "endnote" ? "‘আল্লাহ’র এন্ডনোট’" : "‘এটি একটি বাংলা ফুটনোট’";
+    if (joined !== convertToBijoy(sourceText)) {
+      throw new Error(`${label} quote bytes changed: ${joined}`);
+    }
+    const openingQuote = bodyRuns.find((run) =>
+      (run.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "").startsWith("Ô"),
+    );
+    const quoteOnlyRuns = bodyRuns.filter(
+      (run) => (run.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "") === "Õ",
+    );
+    const closingQuote = quoteOnlyRuns.find(
+      (run) =>
+        run.getElementsByTagNameNS(NS, "sz")[0]?.getAttributeNS(NS, "val") === "22",
+    );
+    if (!openingQuote || !closingQuote) {
+      throw new Error(`${label} quote markers were not isolated safely`);
+    }
+    const apostropheCount = Array.from(joined).filter((character) => character === "Õ").length;
+    if (label === "endnote" && apostropheCount !== 2) {
+      throw new Error(`endnote apostrophe byte was modified or lost: ${apostropheCount}`);
+    }
+    assertFontSlots(openingQuote, "SutonnyMJ", `${label} opening quote`);
+    assertFontSlots(closingQuote, "SutonnyMJ", `${label} closing quote`);
+    const openingSize = openingQuote
+      .getElementsByTagNameNS(NS, "sz")[0]
+      ?.getAttributeNS(NS, "val");
+    const closingSize = closingQuote
+      .getElementsByTagNameNS(NS, "sz")[0]
+      ?.getAttributeNS(NS, "val");
+    if (openingSize !== undefined || closingSize !== "22") {
+      throw new Error(`${label} quote style sizes are not inherited/22: ${openingSize}/${closingSize}`);
+    }
+    if (label === "endnote") {
+      const innerApostrophe = bodyRuns.find(
+        (run) =>
+          run !== closingQuote &&
+          (run.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "").includes("Õ"),
+      );
+      const innerApostropheSize = innerApostrophe
+        ?.getElementsByTagNameNS(NS, "sz")[0]
+        ?.getAttributeNS(NS, "val");
+      if (innerApostropheSize !== undefined) {
+        throw new Error(`word-internal endnote apostrophe received quote scaling: ${innerApostropheSize}`);
+      }
+    }
+    if (/[\u0980-\u09FF]/.test(joined)) {
+      throw new Error(`${label} body still contains Unicode Bengali after Bijoy conversion`);
+    }
+  };
+  assertNormalizedNoteQuotes(endnotes, "endnote");
+  assertNormalizedNoteQuotes(footnotes, "footnote");
   const endnoteReferenceStyle = Array.from(styles.getElementsByTagNameNS(NS, "style")).find(
     (style) => style.getAttributeNS(NS, "styleId") === "EndnoteReference",
   );

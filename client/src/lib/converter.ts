@@ -498,6 +498,10 @@ async function convertDocx(
   const buffer = await file.arrayBuffer();
   const zip = await JSZip.loadAsync(buffer);
   const convertFn = (t: string) => convert(t, direction);
+  const stylesEntry = zip.file("word/styles.xml");
+  const noteBaseHalfPoints = stylesEntry
+    ? readNoteTextStyleHalfPoints(await stylesEntry.async("string"))
+    : { endnote: 20, footnote: 20 };
 
   // যেসব পার্টে টেক্সট থাকে
   const parts = [
@@ -521,7 +525,12 @@ async function convertDocx(
     // আগেই পুরো XML স্ট্রিং থেকে অবৈধ ক্যারেক্টার সরানো হয়। ট্যাব (0x09), ক্যারেজ
     // রিটার্ন (0x0D) ও লাইনফিড (0x0A) বৈধ XML ক্যারেক্টার, রাখা হয়।
     const cleanXml = stripIllegalXmlChars(xml);
-    const convertedXml = processDocXml(cleanXml, convertFn);
+    const noteBodyBaseHalfPoints = partPath === "word/endnotes.xml"
+      ? noteBaseHalfPoints.endnote
+      : partPath === "word/footnotes.xml"
+        ? noteBaseHalfPoints.footnote
+        : undefined;
+    const convertedXml = processDocXml(cleanXml, convertFn, noteBodyBaseHalfPoints);
     zip.file(partPath, convertedXml);
   }
 
@@ -530,7 +539,6 @@ async function convertDocx(
   // cannot compete with the explicit SutonnyMJ font mapping we write on each
   // endnote-reference run. This deliberately leaves every ordinary paragraph,
   // every other style, and the superscript behavior untouched.
-  const stylesEntry = zip.file("word/styles.xml");
   if (stylesEntry) {
     const stylesXml = await stylesEntry.async("string");
     const cleanStyles = stripIllegalXmlChars(stylesXml);
@@ -551,7 +559,11 @@ async function convertDocx(
  * কনটেন্ট রূপান্তর করে এবং ফন্ট-হিন্ট সেট করে। <w:b>, <w:i>, স্টাইল,
  * ফুটনোট রেফারেন্স — সব অক্ষুণ্ণ থাকে।
  */
-function processDocXml(xml: string, convertFn: (t: string) => string): string {
+function processDocXml(
+  xml: string,
+  convertFn: (t: string) => string,
+  noteBodyBaseHalfPoints?: number,
+): string {
   const doc = new DOMParser().parseFromString(xml, "text/xml");
   const ns = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
 
@@ -708,6 +720,14 @@ function processDocXml(xml: string, convertFn: (t: string) => string): string {
       ensureRunSizePair(run, ns);
     }
   }
+
+  // Footnote/Endnote body text is rendered by Word rather than the web rich
+  // preview. SutonnyMJ's legacy Ô/Õ pair can look uneven in that smaller note
+  // context even with identical font metadata. Split only a matched closing Õ
+  // into its own cloned run and increase that glyph's size by 10%. The visible
+  // text, its Bijoy bytes, paragraph layout, note marker and word apostrophes
+  // remain unchanged. Ordinary document text deliberately never enters here.
+  normalizeNoteQuoteClosures(doc, ns, noteBodyBaseHalfPoints);
 
   // শেষ স্যানিটাইজেশন পাস: split/ফন্ট-assignment-এর পর প্রতিটি direct run-এর
   // rPr-এ sz ও szCs জোড়া একসাথে থাকে কি না নিশ্চিত করি। এই ধাপটি Word-এ
@@ -1088,6 +1108,163 @@ function ensureRunSizePair(run: Element, ns: string): void {
     const szCs = run.ownerDocument!.createElementNS(ns, "w:szCs");
     szCs.setAttributeNS(ns, "w:val", value);
     rPr.appendChild(szCs);
+  }
+}
+
+/**
+ * Finds the actual half-point size Word will use for a note-body run. Note
+ * styles commonly store their 10pt size on EndnoteText/FootnoteText rather
+ * than on each run, so direct run properties alone are not enough here.
+ */
+function effectiveRunHalfPoints(
+  run: Element,
+  ns: string,
+  noteBodyBaseHalfPoints?: number,
+): number {
+  const readSize = (rPr: Element | null): number | null => {
+    if (!rPr) return null;
+    const size = rPr.querySelector(":scope > sz, :scope > szCs");
+    const value = size?.getAttributeNS(ns, "w:val") ?? size?.getAttribute("w:val");
+    const parsed = Number(value);
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+  };
+
+  const direct = readSize(run.querySelector(":scope > rPr"));
+  if (direct !== null) return direct;
+  return noteBodyBaseHalfPoints ?? readDefaultHalfPts(run.ownerDocument!, ns);
+}
+
+function readNoteTextStyleHalfPoints(stylesXml: string): {
+  endnote: number;
+  footnote: number;
+} {
+  const fallback = { endnote: 20, footnote: 20 };
+  const styles = new DOMParser().parseFromString(stylesXml, "text/xml");
+  const ns = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
+  if (styles.getElementsByTagName("parsererror").length > 0) return fallback;
+  const readStyleSize = (styleId: string): number | null => {
+    const style = Array.from(styles.getElementsByTagNameNS(ns, "style")).find(
+      (candidate) =>
+        (candidate.getAttributeNS(ns, "w:styleId") ?? candidate.getAttribute("w:styleId")) ===
+        styleId,
+    );
+    const size = style?.querySelector(":scope > rPr > sz, :scope > rPr > szCs");
+    const parsed = Number(size?.getAttributeNS(ns, "w:val") ?? size?.getAttribute("w:val"));
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+  };
+  return {
+    endnote: readStyleSize("EndnoteText") ?? fallback.endnote,
+    footnote: readStyleSize("FootnoteText") ?? fallback.footnote,
+  };
+}
+
+function isNoteBodyRun(run: Element): boolean {
+  if (run.querySelector(":scope > footnoteReference, :scope > endnoteReference")) {
+    return false;
+  }
+  let ancestor = run.parentElement;
+  while (ancestor) {
+    if (ancestor.localName === "footnote" || ancestor.localName === "endnote") {
+      return true;
+    }
+    ancestor = ancestor.parentElement;
+  }
+  return false;
+}
+
+function normalizeNoteQuoteClosures(
+  doc: Document,
+  ns: string,
+  noteBodyBaseHalfPoints?: number,
+): void {
+  const candidates = Array.from(doc.getElementsByTagNameNS(ns, "r"));
+  for (const run of candidates) {
+    if (!isNoteBodyRun(run)) continue;
+    const textNodes = Array.from(run.children).filter(
+      (child) => child.localName === "t",
+    ) as Element[];
+    // A non-text child can carry a field, tab, break, drawing or native marker.
+    // Leave such a run intact rather than risking any Word structure.
+    if (
+      textNodes.length !== 1 ||
+      Array.from(run.children).some(
+        (child) => child.localName !== "rPr" && child.localName !== "t",
+      )
+    ) {
+      continue;
+    }
+
+    const textNode = textNodes[0];
+    const text = textNode.textContent ?? "";
+    const closeOffsets = new Set<number>();
+    let unmatchedOpens = 0;
+    for (let index = 0; index < text.length; index += 1) {
+      if (text[index] === "Ô") {
+        unmatchedOpens += 1;
+      } else if (
+        text[index] === "Õ" &&
+        unmatchedOpens > 0 &&
+        !(/[A-Za-z0-9]/.test(text[index - 1] ?? "") && /[A-Za-z0-9]/.test(text[index + 1] ?? ""))
+      ) {
+        closeOffsets.add(index);
+        unmatchedOpens -= 1;
+      }
+    }
+    if (closeOffsets.size === 0) continue;
+
+    const parent = run.parentNode;
+    if (!parent) continue;
+    const anchor = run.nextSibling;
+    const baseHalfPoints = effectiveRunHalfPoints(run, ns, noteBodyBaseHalfPoints);
+    const adjustedHalfPoints = Math.max(
+      baseHalfPoints + 2,
+      Math.round(baseHalfPoints * 1.1),
+    );
+    const sourceProperties = run.querySelector(":scope > rPr");
+    const fragment = doc.createDocumentFragment();
+    let segmentStart = 0;
+
+    const appendSegment = (segment: string, isClosingQuote: boolean) => {
+      if (!segment) return;
+      const replacement = doc.createElementNS(ns, "w:r");
+      if (sourceProperties) {
+        replacement.appendChild(sourceProperties.cloneNode(true));
+      }
+      const replacementText = doc.createElementNS(ns, "w:t");
+      replacementText.setAttributeNS(
+        "http://www.w3.org/XML/1998/namespace",
+        "xml:space",
+        "preserve",
+      );
+      replacementText.textContent = segment;
+      replacement.appendChild(replacementText);
+      if (isClosingQuote) {
+        let properties = replacement.querySelector(":scope > rPr");
+        if (!properties) {
+          properties = doc.createElementNS(ns, "w:rPr");
+          replacement.insertBefore(properties, replacement.firstChild);
+        }
+        for (const tag of ["sz", "szCs"]) {
+          let size = properties.querySelector(`:scope > ${tag}`);
+          if (!size) {
+            size = doc.createElementNS(ns, `w:${tag}`);
+            properties.appendChild(size);
+          }
+          size.setAttributeNS(ns, "w:val", String(adjustedHalfPoints));
+        }
+      }
+      fragment.appendChild(replacement);
+    };
+
+    for (let index = 0; index < text.length; index += 1) {
+      if (!closeOffsets.has(index)) continue;
+      appendSegment(text.slice(segmentStart, index), false);
+      appendSegment(text[index], true);
+      segmentStart = index + 1;
+    }
+    appendSegment(text.slice(segmentStart), false);
+    parent.removeChild(run);
+    parent.insertBefore(fragment, anchor);
   }
 }
 

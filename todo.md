@@ -66,6 +66,14 @@
 - [x] Ô/Õ reference pair অপরিবর্তিত রেখে rich preview-তে কেবল matched closing Õ-এর optical scale নির্ধারণ করা
 - [x] full regression suite, desktop/mobile visual check এবং checkpoint সম্পন্ন করা
 
+# নতুন: Footnote/Endnote smart single-quote size mismatch
+
+- [x] সাধারণ লেখার rich preview ঠিক থাকলেও Footnote/Endnote content-এ অসম opening/closing quote থাকার user regression নথিভুক্ত করা
+- [x] Footnote/Endnote XML conversion, run segmentation এবং quote-font/size metadata আলাদা করে পরিদর্শন করা
+- [x] কেবল note-body-এর matched Ô … Õ pair-এ non-destructive visual-size correction প্রয়োগ করা
+- [x] normal body text, note body, raw bytes, apostrophe এবং native note-reference marker অক্ষুণ্ণ রেখে full regression চালানো
+- [ ] Word-compatible DOCX fixture যাচাই, checkpoint এবং ব্যবহারকারীকে জানানো
+
 # নতুন: কনভার্টার লোগো
 
 - [x] বাংলা অক্ষর ও দ্বিমুখী রূপান্তর বোঝায় এমন স্বতন্ত্র mark direction নির্ধারণ করা
