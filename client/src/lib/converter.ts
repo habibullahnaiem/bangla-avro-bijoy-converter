@@ -106,9 +106,9 @@ function preMapPunctuation(s: string): string {
     "\u201D": "\u00D3", // ” close double
     "\u2018": "\u00D4", // ‘ open single
     "\u2019": "\u00D5", // ’ close single / apostrophe
-    // ঋ-কার (U+09C3) — লাইব্রেরির মধ্যবর্তী রূপ U+201E; SutonnyMJ-তে
-    // user-verified canonical byte হলো U+2026 (`…`)। রূপান্তরের শেষে শুধু
-    // এই মধ্যবর্তী marker-কে canonical glyph-এ নেওয়া হয়।
+    // ঋ-কার (U+09C3) — সুনতন্নী-কোড e„ (U+0065 U+201E)। লাইব্রেরি শব্দ-শেষে/
+    // একক ঋ-কারে ভুলে U+2026 (এলিপসিস) এমিট করে — এখানেই e„-তে বসানো হয,
+    // যাতে পরের এলিপসিস-নর্মালাইজেশন (2026→"...") এটাকে স্পর্শ না করে।
     "\u09C3": "\u201E",
   };
   // ইংরেজি-প্রসঙ্গের কর্লি-কোট/ড্যাশ কোথায়? টেক্সটে অন্য কোনো বাংলা
@@ -219,9 +219,9 @@ export function convertToBijoy(text: string): string {
   // নোট: relocatePreKars সরানো হয়েছে — সুনতন্নী/বিজয়ে ‡/† শব্দ-শুরুতে বসানো
   // আমাদের হাতে পজিশন-বদলানো শব্দ ভেঙে দেয় (কাজ→KvR, কথা→K_v ইত্যাদি)।
   // লাইব্রেরির ReArrangeUnicodeText পজিশনই সঠিক।
-  // নোট: source ellipsis ইনপুটেই তিন-ডটে নর্মালাইজ হয়। রূপান্তরের পরে
-  // U+201E কেবল ঋ-কারের library marker, তাই সেটিকে SutonnyMJ-এর canonical
-  // U+2026 byte-এ নর্মালাইজ করা নিরাপদ।
+  // নোট: U+2026 (এলিপসিস) — লাইব্রেরি ইউনিকোড→বিজয়ে এটি "..." (তিন ডট)
+  // করে দেয়, যা পরবর্তী বিজয়→ইউনিকোড রাউন্ড-ট্রিপে "…Z" কোড সঙ্গে মিশে
+  // করাপশন দেয়। ইনপুটেই তিন-ডটে নর্মালাইজ করা হয় — দুই রানই একই আউটপুট দেবে।
   // নোট: লাইব্রেরি-আর্টিফ্যাক্ট প্রোটেকশন — protectLibArtifacts (preMap-এর আগে)
   // দেখো; দ্বিতীয় রানেও ডাবল-ম্যাপ রোধ করা হয়।
   return restoreLibArtifacts(
@@ -229,7 +229,7 @@ export function convertToBijoy(text: string): string {
       preMapPunctuation(protectLibArtifacts(text.replace(/\u2026/g, "..."))),
     ),
   )
-    .replace(/\u201E/g, "\u2026") // ঋ-কারের library marker → canonical SutonnyMJ byte
+    .replace(/\u2026/g, "...") // লাইব্রেরি-পুনঃতৈরি U+2026 → তিন-ডট
     .replace(/\uE001/g, "\u005C\u005C")
     // লাইব্রেরির native e-kar placement অক্ষুণ্ণ রাখা হয়:
     // শব্দের শুরুতে † (U+2020), আর শব্দের মাঝখানে ‡ (U+2021)।
@@ -350,7 +350,7 @@ function convertToBijoyRaw(seg: string): string {
   return restoreLibArtifacts(
     libUnicodeToBijoy(preMapPunctuation(protectLibArtifacts(seg.replace(/\u2026/g, "..."))))
   )
-    .replace(/\u201E/g, "\u2026")
+    .replace(/\u2026/g, "...")
     .replace(/\uE001/g, "\u005C\u005C")
     // restoreCleanUnicode-এও native e-kar placement অক্ষুণ্ণ রাখা হয়:
     // শুরুতে †, শব্দের মাঝে ‡। mid-word মাত্রা রক্ষার জন্য কোনো collapse নয়।
