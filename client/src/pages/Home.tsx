@@ -591,10 +591,9 @@ export default function Home() {
     () => (direction === "u2b" && input ? mapSegmentsToBijoy(input, direction) : []),
     [direction, input],
   );
-  // SutonnyMJ-এর ঋ/ৃ-কার marker (U+201E), word-initial e-kar marker (U+2020),
-  // mid-word e-kar marker (U+2021) এবং রেফারেন্সের সিংগেল-কোট ক্লোজার (U+00D5)
-  // legacy glyph। এগুলো আলাদা token দিলে শুধু rich preview-এর optical placement
-  // ঠিক করা যায়; copied Bijoy text-এর আসল code sequence অপরিবর্তিত থাকে।
+  // word-initial e-kar marker (U+2020), mid-word e-kar marker (U+2021) এবং
+  // রেফারেন্সের সিংগেল-কোট ক্লোজার (U+00D5) legacy glyph। র-কারের U+2026/U+201E
+  // byte-গুলো কখনো আলাদা span-এ ভাঙা হয় না — SutonnyMJ-এর native spacing-ই সঠিক।
   const renderBijoyText = (
     text: string,
     className: string,
@@ -626,21 +625,19 @@ export default function Home() {
     }
 
     let offset = 0;
-    return text.split(/(„|†|‡|Õ)/g).map((part, index) => {
+    return text.split(/(†|‡|Õ)/g).map((part, index) => {
       const partOffset = offset;
       offset += part.length;
       if (!part) return null;
 
       const tokenClassName =
-        part === "„"
-          ? `${className} bijoy-rikar`
-          : part === "†"
-            ? `${className} bijoy-ekar-initial`
-            : part === "‡"
-              ? `${className} bijoy-ekar-mid`
-              : part === "Õ" && referenceCloseOffsets.has(partOffset)
-                ? `${className} bijoy-quote-close`
-                : className;
+        part === "†"
+          ? `${className} bijoy-ekar-initial`
+          : part === "‡"
+            ? `${className} bijoy-ekar-mid`
+            : part === "Õ" && referenceCloseOffsets.has(partOffset)
+              ? `${className} bijoy-quote-close`
+              : className;
 
       return (
         <span

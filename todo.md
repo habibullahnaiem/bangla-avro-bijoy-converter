@@ -534,3 +534,10 @@
 - [x] Bengali Bijoy punctuation না বদলে English quote-only direction correction নির্ধারণ করা
 - [x] English quote, Bengali quote, Footnote/Endnote ও full DOCX regression যাচাই করা
 - [ ] checkpoint করে সংশোধিত version ব্যবহারকারীকে জানানো
+
+# সক্রিয়: প্রমাণভিত্তিক ঋ-কার mapping
+- [x] SutonnyMJ font cmap/advance, বাস্তব contextual byte specimen এবং converter-library data-table তুলনা করা হয়েছে
+- [x] একক ব্যঞ্জন, ফলা ও যুক্তবর্ণে library-এর native context-sensitive R-kar byte selection-ই সঠিক baseline; একক global byte form ভুল
+- [x] app-level R-kar override ও preview spacing workaround অপসারণ; CSS workaround বা global byte replacement ছাড়া library-native output রাখা হয়েছে
+- [x] TXT/DOCX/copy, quote, e-kar, r-fola, Footnote/Endnote এবং R-kar contextual audit পূর্ণ যাচাই; desktop/mobile previewও যাচাই
+- [ ] checkpoint ও ব্যবহারকারীকে ফল জানানো

@@ -262,17 +262,11 @@
     line-height: 1.7;
   }
   /*
-   * ঋ/ৃ-কার visual correction: the legacy U+201E marker is encoded after
-   * its base glyph (for example K„), but SutonnyMJ needs a small optical
-   * nudge in browser-rendered rich text. The underlying Bijoy string stays
-   * untouched for copy, download, and round-trip conversion.
+   * র-কারের U+201E byte নিজস্ব SutonnyMJ spacing নিয়েই থাকে। এর অবস্থান
+   * নাড়ালে কিছু শব্দে বড় ফাঁক তৈরি হয়, তাই rich preview-তে কোনো
+   * position বা negative-margin correction দেওয়া হয় না।
    */
   .bijoy-rich .bijoy-rikar {
-    display: inline-block;
-    position: relative;
-    left: -0.1em;
-    top: -0.04em;
-    margin-right: -0.1em;
     font-family: "SutonnyMJ", "Times New Roman", "Times", serif;
     line-height: inherit;
   }
