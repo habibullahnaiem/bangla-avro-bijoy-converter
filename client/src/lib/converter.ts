@@ -229,10 +229,7 @@ export function convertToBijoy(text: string): string {
       preMapPunctuation(protectLibArtifacts(text.replace(/\u2026/g, "..."))),
     ),
   )
-    // পূর্বের U+2026→"..." নর্মালাইজেশন সরানো হযেছে: ইনপুটের এলিপসিস ইতোমধ্যে
-    // preMap-এর আগেই ডটে বদলানো, তাই এখানের U+2026 শুধু লাইব্রেরি-এমিটেড
-    // ঋ-কার মার্কার (যেমন কৃষি → K…wl)। SutonnyMJ-এ এটি ঋ-কার গ্লিফ —
-    // ডটে বদলালে ষ/ত্র-জাতীয় কনজাংক্টে মার্কার সরে যায়।
+    .replace(/\u2026/g, "...") // লাইব্রেরি-পুনঃতৈরি U+2026 → তিন-ডট
     .replace(/\uE001/g, "\u005C\u005C")
     // লাইব্রেরির native e-kar placement অক্ষুণ্ণ রাখা হয়:
     // শব্দের শুরুতে † (U+2020), আর শব্দের মাঝখানে ‡ (U+2021)।
@@ -353,10 +350,7 @@ function convertToBijoyRaw(seg: string): string {
   return restoreLibArtifacts(
     libUnicodeToBijoy(preMapPunctuation(protectLibArtifacts(seg.replace(/\u2026/g, "..."))))
   )
-    // পূর্বের U+2026→"..." নর্মালাইজেশন সরানো হযেছে: ইনপুটের এলিপসিস ইতোমধ্যে
-    // preMap-এর আগেই ডটে বদলানো, তাই এখানের U+2026 শুধু লাইব্রেরি-এমিটেড
-    // ঋ-কার মার্কার (যেমন কৃষি → K…wl)। SutonnyMJ-এ এটি ঋ-কার গ্লিফ —
-    // ডটে বদলালে ষ/ত্র-জাতীয় কনজাংক্টে মার্কার সরে যায়।
+    .replace(/\u2026/g, "...")
     .replace(/\uE001/g, "\u005C\u005C")
     // restoreCleanUnicode-এও native e-kar placement অক্ষুণ্ণ রাখা হয়:
     // শুরুতে †, শব্দের মাঝে ‡। mid-word মাত্রা রক্ষার জন্য কোনো collapse নয়।
