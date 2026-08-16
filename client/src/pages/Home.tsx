@@ -626,13 +626,13 @@ export default function Home() {
     }
 
     let offset = 0;
-    return text.split(/(„|†|‡|Õ)/g).map((part, index) => {
+    return text.split(/(„|…|†|‡|Õ)/g).map((part, index) => {
       const partOffset = offset;
       offset += part.length;
       if (!part) return null;
 
       const tokenClassName =
-        part === "„"
+        part === "„" || part === "…"
           ? `${className} bijoy-rikar`
           : part === "†"
             ? `${className} bijoy-ekar-initial`

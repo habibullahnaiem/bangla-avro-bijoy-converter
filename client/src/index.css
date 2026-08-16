@@ -262,19 +262,24 @@
     line-height: 1.7;
   }
   /*
-   * ঋ/ৃ-কার visual correction: the legacy U+201E marker is encoded after
-   * its base glyph (for example K„), but SutonnyMJ needs a small optical
-   * nudge in browser-rendered rich text. The underlying Bijoy string stays
-   * untouched for copy, download, and round-trip conversion.
+   * ঋ/ৃ-কাৰ visual correction: the legacy U+201E marker is encoded after
+   * its base glyph (for example K„). In browser-rendered rich text the marker
+   * is a zero-advance glyph that sinks below its token's baseline, so it is
+   * nudged down-right to sit under the base glyph where SutonnyMJ places
+   * ि/ृ-like signs. The previous left/top nudge pulled the marker up-left,
+   * making it drift (most visible after a Dari). The underlying Bijoy string
+   * stays untouched for copy, download, and round-trip conversion.
    */
   .bijoy-rich .bijoy-rikar {
     display: inline-block;
     position: relative;
-    left: -0.1em;
-    top: -0.04em;
-    margin-right: -0.1em;
+    top: 0.22em;
+    left: 0.08em;
+    margin-left: -0.05em;
+    margin-right: -0.05em;
     font-family: "SutonnyMJ", "Times New Roman", "Times", serif;
-    line-height: inherit;
+    line-height: 0;
+    vertical-align: bottom;
   }
   .bijoy-rich .seg-lat {
     font-family: "Times New Roman", "Times", serif;
