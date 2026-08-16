@@ -59,7 +59,7 @@ function minimalDocx(): JSZip {
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:document xmlns:w="${NS}"><w:body>
   <w:p><w:pPr><w:pStyle w:val="Normal"/></w:pPr>
-    <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t>প্র, ল্ল, ত্ব, ক্ষ, জ্ঞ, শ্র — English 2026</w:t></w:r>
+    <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t>প্র, ল্ল, ত্ব, ক্ষ, জ্ঞ, শ্র, কৃষিভিত্তিক — English 2026</w:t></w:r>
   </w:p><w:sectPr/>
   <w:p><w:pPr><w:pStyle w:val="Normal"/></w:pPr>
     <w:r><w:rPr><w:rFonts w:ascii="Kalpurush" w:hAnsi="Kalpurush" w:cs="Kalpurush"/><w:sz w:val="28"/></w:rPr><w:t>টাকার দিকে।</w:t></w:r>
@@ -176,6 +176,24 @@ async function inspectEnglishSmartQuoteDirection(path: string): Promise<void> {
     assertFontSlots(run, "Times New Roman", "English smart-quote title");
   }
   console.log("english-smart-quote-direction: passed");
+}
+
+async function inspectCanonicalRikarByte(path: string): Promise<void> {
+  const zip = await JSZip.loadAsync(fs.readFileSync(path));
+  const xml = await zip.file("word/document.xml")!.async("string");
+  const document = new DOMParser().parseFromString(xml, "text/xml");
+  const runs = Array.from(document.getElementsByTagNameNS(NS, "r"));
+  const canonicalRun = runs.find((run) =>
+    (run.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "").includes("K…wlwfwËK"),
+  );
+  const legacyGapRun = runs.find((run) =>
+    (run.getElementsByTagNameNS(NS, "t")[0]?.textContent ?? "").includes("K„wlwfwËK"),
+  );
+  if (!canonicalRun || legacyGapRun) {
+    throw new Error("DOCX R-kar did not use the canonical U+2026 SutonnyMJ byte");
+  }
+  assertFontSlots(canonicalRun, "SutonnyMJ", "canonical R-kar DOCX run");
+  console.log("canonical-rikar-byte: passed");
 }
 
 async function inspectEndnoteHandling(path: string): Promise<void> {
@@ -397,12 +415,15 @@ async function main() {
   fs.writeFileSync(outputPath, output);
   await inspectDocx(outputPath, "converted-14pt-12pt", { banglaHalfPoints: 28, englishHalfPoints: 24 });
   await inspectEnglishSmartQuoteDirection(outputPath);
+  await inspectCanonicalRikarByte(outputPath);
   await inspectEndnoteHandling(outputPath);
   await inspectBijoyFontRepair();
 
   const zip = await JSZip.loadAsync(output);
   const editedXml = await zip.file("word/document.xml")!.async("string");
-  if (editedXml.includes("…")) throw new Error("standalone ellipsis run was not normalized before SutonnyMJ DOCX output");
+  if (/<w:t(?:\s[^>]*)?>…<\/w:t>/.test(editedXml)) {
+    throw new Error("standalone ellipsis run was not normalized before SutonnyMJ DOCX output");
+  }
   const simulatedEdit = editedXml.replace(
     "</w:pStyle>",
     "</w:pStyle><w:ind w:left=\"720\"/><w:rPr><w:sz w:val=\"32\"/><w:szCs w:val=\"32\"/></w:rPr>",
