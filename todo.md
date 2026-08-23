@@ -561,3 +561,18 @@
 - [x] কোনো conversion handler, byte transform, file pipeline, localStorage history বা font-render function স্পর্শ করা হয়নি
 - [x] TypeScript/build/core/DOCX regression এবং desktop/mobile editor screenshot যাচাই সম্পন্ন
 - [ ] checkpoint ও ব্যবহারকারীকে ফল জানানো
+
+# সক্রিয়: shumanbd-তুলনায় যুক্তবর্ণ-শুধু উন্নয়ন
+- [x] standard corpus এবং word-example-এ byte output সংগ্রহ; ২৬টি representative form reference-এর সঙ্গে হুবহু মিলে গেছে
+- [x] AvroJoy/reference byte output, Unicode round-trip এবং SutonnyMJ glyph specimen তুলনা করা হয়েছে
+- [x] শুধু পাঁচটি verified ambiguous conjunct byte fix: ক্ষ্ন, ক্ষ্ণ, ণ্ণ, ণ্ন, ত্রূ; কোনো ঋ-কার, e-kar, quote, punctuation বা non-conjunct rule বদলানো হয়নি
+- [x] TXT/DOCX, font slots, PWA, history, print/PDF, metrics এবং UI file অপরিবর্তিত রাখা হয়েছে
+- [x] যুক্তবর্ণ-focused ও সম্পূর্ণ regression এবং unchanged UI screenshot যাচাই সম্পন্ন
+
+## বিস্তৃত যুক্তবর্ণ-ভেরিয়েশন coverage
+
+- [x] ৩৫ ব্যঞ্জনবর্ণের all-pair/all-triple exploratory matrix এবং library-table-ভিত্তিক ১৫২টি supported conjunct mapping audit তৈরি
+- [x] রেফ, র-ফলা, য-ফলা, ব-ফলা, ম-ফলা, ল-ফলা, ক্ষ/জ্ঞ/শ্র/হ্ম, vowel/punctuation/word-context পরীক্ষা করা হয়েছে; isolated formatting fragment আলাদা রাখা হয়েছে
+- [x] library-defined complete conjuncts-এর word context ও standalone round-trip শূন্য deviation-এ পাস
+- [x] reference raw output কেবল comparison signal; SutonnyMJ glyph specimen এবং AvroJoy round-trip-কে final acceptance standard রাখা হয়েছে
+- [x] deterministic candidate, reference এবং ১৫২-ম্যাপ audit artifact যোগ; শুধুই পাঁচটি font-verified mapping পরিবর্তন করা হয়েছে

@@ -177,6 +177,31 @@ function preMapPunctuation(s: string): string {
 // আগে এই প্যারান্টারের আর্টিফ্যাক্টকে প্রাইভেট-প্ল্যাসহোল্ডারে সার্ক করে পরে ফেরত আনা।
 const ART_PH_D3 = "\uE002";
 const ART_PH_D5 = "\uE003";
+
+// কিছু আলাদা Unicode যুক্তবর্ণ একই library byte-তে collapse হয় (যেমন ক্ষ্ন/ক্ষ্ণ
+// এবং ণ্ণ/ণ্ন)। SutonnyMJ-তে তাদের স্বতন্ত্র, font-verified decomposed byte form
+// আছে। Library call-এর সময় PUA দিয়ে রক্ষা করে পরে শুধু সেই পাঁচটি case-এর byte
+// ফিরিয়ে দিই—এটি ঋ-কার, এ-কার, quote বা অন্য কোনো mapping স্পর্শ করে না।
+const CONJUNCT_PH: Record<string, string> = {
+  "ক্ষ্ন": "\uE010",
+  "ক্ষ্ণ": "\uE011",
+  "ণ্ণ": "\uE012",
+  "ণ্ন": "\uE013",
+  "ত্রূ": "\uE014",
+};
+const CONJUNCT_BYTES: Record<string, string> = {
+  "\uE010": "¶&b",
+  "\uE011": "¶&Y",
+  "\uE012": "Y&Y",
+  "\uE013": "Y&b",
+  "\uE014": "Î~",
+};
+function protectVerifiedConjuncts(s: string): string {
+  return s.replace(/ক্ষ্ণ|ক্ষ্ন|ণ্ণ|ণ্ন|ত্রূ/g, (match) => CONJUNCT_PH[match]);
+}
+function restoreVerifiedConjunctBytes(s: string): string {
+  return s.replace(/[\uE010-\uE014]/g, (match) => CONJUNCT_BYTES[match]);
+}
 function protectLibArtifacts(s: string): string {
   // আর্টিফ্যাক্ট স্প্যান: চ্ছ → ”Q (শুধু ”Q — এর পরের v/q আ-কার/য়-কোড, স্পৃশ্য নয়)
   return s.replace(/\u201DQ/g, ART_PH_D3).replace(/\u0161\u2019/g, ART_PH_D5);
@@ -221,9 +246,10 @@ export function convertToBijoy(text: string): string {
   // sequence বদলানো যাবে না।
   // নোট: লাইব্রেরি-আর্টিফ্যাক্ট প্রোটেকশন — protectLibArtifacts (preMap-এর আগে)
   // দেখো; দ্বিতীয় রানেও ডাবল-ম্যাপ রোধ করা হয়।
-  return restoreLibArtifacts(
-    libUnicodeToBijoyWordAware(
-      preMapPunctuation(protectLibArtifacts(text.replace(/\u2026/g, "..."))),
+  const protectedText = protectVerifiedConjuncts(text.replace(/\u2026/g, "..."));
+  return restoreVerifiedConjunctBytes(
+    restoreLibArtifacts(
+      libUnicodeToBijoyWordAware(preMapPunctuation(protectLibArtifacts(protectedText))),
     ),
   )
     .replace(/\uE001/g, "\u005C\u005C")
@@ -343,8 +369,9 @@ export function restoreCleanUnicode(text: string): string {
 
 /** আনে-ম্যাপড ইউনিকোড-সেগমেন্টের ম্যাপ (প্রি-কার/আর্টিফ্যাক্ট-প্রোটেক্ট সহ) */
 function convertToBijoyRaw(seg: string): string {
-  return restoreLibArtifacts(
-    libUnicodeToBijoy(preMapPunctuation(protectLibArtifacts(seg.replace(/\u2026/g, "..."))))
+  const protectedSegment = protectVerifiedConjuncts(seg.replace(/\u2026/g, "..."));
+  return restoreVerifiedConjunctBytes(
+    restoreLibArtifacts(libUnicodeToBijoy(preMapPunctuation(protectLibArtifacts(protectedSegment)))),
   )
     .replace(/\u2026/g, "...")
     .replace(/\uE001/g, "\u005C\u005C")
