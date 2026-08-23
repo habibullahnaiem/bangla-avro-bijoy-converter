@@ -541,3 +541,23 @@
 - [x] app-level R-kar override ও preview spacing workaround অপসারণ; CSS workaround বা global byte replacement ছাড়া library-native output রাখা হয়েছে
 - [x] TXT/DOCX/copy, quote, e-kar, r-fola, Footnote/Endnote এবং R-kar contextual audit পূর্ণ যাচাই; desktop/mobile previewও যাচাই
 - [ ] checkpoint ও ব্যবহারকারীকে ফল জানানো
+
+# সক্রিয়: shumanbd.com তুলনামূলক পর্যালোচনা
+- [ ] রেফারেন্স সাইটের text conversion flow, supported directions, UX, punctuation ও complex Bangla behavior পর্যবেক্ষণ
+- [ ] AvroJoy-এর বর্তমান আচরণের সঙ্গে একই test corpus-এ তুলনা; রূপান্তর ও DOCX behavior আলাদা রাখা
+- [ ] সম্ভাব্য উন্নতিকে low-risk / medium-risk / গ্রহণযোগ্য নয়—এই তিন শ্রেণিতে নথিভুক্ত করা
+- [ ] কেবল low-risk ও প্রমাণিত উন্নতি regression test-সহ প্রয়োগ; কোনো আচরণ বদলালে পূর্ববর্তী checkpoint রাখা
+- [ ] checkpoint ও তুলনামূলক ফল ব্যবহারকারীকে জানানো
+
+## অপরিবর্তনীয় সুরক্ষা-শর্ত
+
+- [ ] তুলনার সময় AvroJoy-এর conversion byte behavior, context-aware ঋ-কার, e-kar, র-ফলা, quotation, DOCX/TXT conversion, SutonnyMJ/Times New Roman font policy, print/PDF, PWA, recent history ও দুই-প্যান workflow অপরিবর্তিত রাখা
+- [ ] রেফারেন্স সাইট থেকে conversion table, legacy ellipsis handling, append-on-reverse UX অথবা ফন্ট-অসচেতন আচরণ গ্রহণ না করা
+- [ ] কেবল প্রমাণিত low-risk UX signal—যেমন word/paragraph metrics—নিলে UI regression check চালানো
+
+# অনুমোদিত: editor word/paragraph metrics
+- [x] input ও output text-এর শব্দ ও অনুচ্ছেদ গণনার সংজ্ঞা ঠিক করা; whitespace-only text-এ শূন্য রাখা
+- [x] বিদ্যমান অক্ষর-গণনার পাশে compact metric যোগ করা; mobile-এ শুধু অক্ষর দেখিয়ে header overflow প্রতিরোধ করা
+- [x] কোনো conversion handler, byte transform, file pipeline, localStorage history বা font-render function স্পর্শ করা হয়নি
+- [x] TypeScript/build/core/DOCX regression এবং desktop/mobile editor screenshot যাচাই সম্পন্ন
+- [ ] checkpoint ও ব্যবহারকারীকে ফল জানানো

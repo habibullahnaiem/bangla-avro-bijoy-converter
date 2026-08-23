@@ -558,6 +558,21 @@ export default function Home() {
 
   const outCharCount = output.length;
 
+  // UX-only metrics: conversion bytes, font rendering and file pipelines never read or modify these values.
+  const getTextMetrics = (text: string) => {
+    const trimmed = text.trim();
+    if (!trimmed) return { words: 0, paragraphs: 0 };
+
+    return {
+      words: trimmed.split(/\s+/).length,
+      // A blank line starts a new paragraph; wrapped lines remain one paragraph.
+      paragraphs: trimmed.split(/\r?\n\s*\r?\n/).filter(Boolean).length,
+    };
+  };
+
+  const inputMetrics = useMemo(() => getTextMetrics(input), [input]);
+  const outputMetrics = useMemo(() => getTextMetrics(output), [output]);
+
   const filePrintSegments = useMemo(() => {
     if (!filePrintText || !filePrintDirection) return [];
     return filePrintDirection === "u2b"
@@ -1200,9 +1215,13 @@ export default function Home() {
                     ? "অভ্র টেক্সট (ইউনিকোড)"
                     : "বিজয় টেক্সট (সুতন্নী এমজে)"}
                 </span>
-                <span className="text-xs text-muted-foreground">
-                  {charCount} অক্ষর
-                </span>
+                <div className="flex shrink-0 items-center gap-1.5 text-[11px] text-muted-foreground" aria-live="polite">
+                  <span>{charCount} অক্ষর</span>
+                  <span className="hidden text-border sm:inline">·</span>
+                  <span className="hidden sm:inline">{inputMetrics.words} শব্দ</span>
+                  <span className="hidden text-border lg:inline">·</span>
+                  <span className="hidden lg:inline">{inputMetrics.paragraphs} অনুচ্ছেদ</span>
+                </div>
               </div>
               <div
                 className="converter-editor-body relative"
@@ -1251,9 +1270,13 @@ export default function Home() {
                     ? "বিজয় আউটপুট (সুতন্নী এমজে)"
                     : "অভ্র আউটপুট (ইউনিকোড)"}
                 </span>
-                <span className="text-xs text-muted-foreground">
-                  {outCharCount} অক্ষর
-                </span>
+                <div className="flex shrink-0 items-center gap-1.5 text-[11px] text-muted-foreground" aria-live="polite">
+                  <span>{outCharCount} অক্ষর</span>
+                  <span className="hidden text-border sm:inline">·</span>
+                  <span className="hidden sm:inline">{outputMetrics.words} শব্দ</span>
+                  <span className="hidden text-border lg:inline">·</span>
+                  <span className="hidden lg:inline">{outputMetrics.paragraphs} অনুচ্ছেদ</span>
+                </div>
                 {direction === "u2b" && (
                   <Tooltip>
                     <TooltipTrigger asChild>
