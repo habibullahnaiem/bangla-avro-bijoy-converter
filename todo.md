@@ -675,3 +675,8 @@
 - [x] empty-state card-এর pale background ও muted-text source শনাক্ত
 - [x] mobile-এ empty-state card-কে opaque dark-workbench surface দেওয়া
 - [x] mobile screenshot, TypeScript/build ও PWA stylesheet cache refresh যাচাই
+
+# সক্রিয়: desktop/web pale surface correction
+- [x] input/output editor footer, legend badge এবং history empty-state-এর desktop source শনাক্ত
+- [x] desktop-এ same dark-workbench surface, button and text contrast প্রয়োগ
+- [x] desktop/mobile screenshot, TypeScript/build ও PWA stylesheet cache refresh যাচাই
