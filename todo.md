@@ -665,3 +665,8 @@
 - [x] instruction, copy/action bar, legend, metadata এবং recent-history surface style source শনাক্ত
 - [x] light-mode override-এ dark workbench surface ও readable text/border hierarchy একীভূত করা
 - [x] mobile ও desktopে actionable copy, legend এবং recent-history contrast যাচাই
+
+# সক্রিয়: অবশিষ্ট mobile pale surface correction
+- [x] recent-history header-এর গণনা badge ও metadata contrast source শনাক্ত
+- [x] output input-pane-এর “পেস্ট” control row-কে opaque high-contrast surface দেওয়া
+- [x] mobile screenshot, TypeScript/build ও PWA stylesheet cache refresh যাচাই

@@ -2364,6 +2364,7 @@ button:active {
 @media screen and (max-width: 767px) {
   .output-copy-footer,
   .converter-actionbar,
+  .editor-paste-footer,
   .type-legend,
   .usage-card {
     border-color: oklch(0.5 0.045 200 / 0.6) !important;
@@ -2372,6 +2373,7 @@ button:active {
   }
 
   .output-copy-footer .text-muted-foreground,
+  .editor-paste-footer .text-muted-foreground,
   .type-legend .text-muted-foreground,
   .usage-card .text-muted-foreground {
     color: oklch(0.84 0.03 200) !important;
@@ -2381,6 +2383,18 @@ button:active {
     border-color: oklch(0.65 0.1 190 / 0.7) !important;
     background: oklch(0.28 0.055 205 / 0.94) !important;
     color: oklch(0.86 0.1 190) !important;
+  }
+
+  .editor-paste-footer > button {
+    border-color: oklch(0.65 0.1 190 / 0.7) !important;
+    background: oklch(0.28 0.055 205 / 0.94) !important;
+    color: oklch(0.92 0.025 200) !important;
+  }
+
+  .history-capacity-badge {
+    border: 1px solid oklch(0.65 0.075 195 / 0.65) !important;
+    background: oklch(0.27 0.05 204 / 0.98) !important;
+    color: oklch(0.94 0.024 200) !important;
   }
 
   .type-legend [class*="bg-muted"] {
