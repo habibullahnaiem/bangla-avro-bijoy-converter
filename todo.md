@@ -721,3 +721,8 @@
 - [x] footer-এর fixed copyright year source শনাক্ত
 - [x] current calendar year থেকে automatic year rendering যোগ
 - [x] footer screenshot, TypeScript/build ও PWA stylesheet cache refresh যাচাই
+
+# সক্রিয়: public share-link option
+- [x] existing header/footer action pattern দেখে share button-এর placement নির্ধারণ
+- [x] native Web Share API এবং link copy fallback with toast যোগ
+- [x] mobile/desktop interaction, TypeScript/build ও PWA stylesheet cache refresh যাচাই

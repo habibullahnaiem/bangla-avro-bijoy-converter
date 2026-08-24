@@ -29,6 +29,7 @@ import {
   Bookmark,
   HeartHandshake,
   MessageCircle,
+  Share2,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -439,6 +440,45 @@ export default function Home() {
       setTimeout(() => setSupportNumberCopied(false), 1500);
     } catch {
       toast.error("নম্বরটি কপি করা যায়নি");
+    }
+  };
+
+  const shareSite = async () => {
+    const shareUrl = window.location.origin;
+    const shareData = {
+      title: "অভ্রজয় (AvroJoy) — অভ্র ⇄ বিজয় কনভার্টার",
+      text: "অভ্র/ইউনিকোড ⇄ বিজয় রূপান্তরের জন্য অভ্রজয় ব্যবহার করুন।",
+      url: shareUrl,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        toast.success("শেয়ার করা হয়েছে");
+        return;
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+      }
+    }
+
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(shareUrl);
+      } else {
+        const copyField = document.createElement("textarea");
+        copyField.value = shareUrl;
+        copyField.setAttribute("readonly", "");
+        copyField.style.position = "fixed";
+        copyField.style.opacity = "0";
+        document.body.appendChild(copyField);
+        copyField.select();
+        const copiedWithFallback = document.execCommand("copy");
+        document.body.removeChild(copyField);
+        if (!copiedWithFallback) throw new Error("Clipboard fallback failed");
+      }
+      toast.success("সাইটের লিংক ক্লিপবোর্ডে কপি হয়েছে");
+    } catch {
+      toast.error("লিংক কপি করা যায়নি");
     }
   };
 
@@ -1026,6 +1066,20 @@ export default function Home() {
                 </span>
               </span>
             ) : null}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="gap-1.5 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+                  onClick={shareSite}
+                  aria-label="অভ্রজয়ের লিংক শেয়ার করুন">
+                  <Share2 className="h-4 w-4" />
+                  <span className="hidden md:inline">শেয়ার</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>সাইটের লিংক শেয়ার করুন</TooltipContent>
+            </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
