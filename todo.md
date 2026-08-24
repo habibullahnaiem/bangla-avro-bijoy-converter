@@ -680,3 +680,8 @@
 - [x] input/output editor footer, legend badge এবং history empty-state-এর desktop source শনাক্ত
 - [x] desktop-এ same dark-workbench surface, button and text contrast প্রয়োগ
 - [x] desktop/mobile screenshot, TypeScript/build ও PWA stylesheet cache refresh যাচাই
+
+# সক্রিয়: desktop history count-badge contrast correction
+- [x] recent-history count badge-এর desktop pale surface source শনাক্ত
+- [x] count badge-এ opaque dark-teal fill, border ও readable text প্রয়োগ
+- [x] desktop/mobile screenshot, TypeScript/build ও PWA stylesheet cache refresh যাচাই

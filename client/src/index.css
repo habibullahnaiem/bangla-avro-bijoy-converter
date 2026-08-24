@@ -2446,6 +2446,12 @@ button:active {
     color: oklch(0.96 0.014 200) !important;
   }
 
+  .history-capacity-badge {
+    border: 1px solid oklch(0.65 0.075 195 / 0.65) !important;
+    background: oklch(0.27 0.05 204 / 0.98) !important;
+    color: oklch(0.94 0.024 200) !important;
+  }
+
   .history-empty-state [class*="text-muted-foreground/60"] {
     color: oklch(0.68 0.055 197) !important;
   }
