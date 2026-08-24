@@ -701,3 +701,8 @@
 - [x] light-mode surface tokens-এর সঙ্গে সামঞ্জস্য রেখে theme-aware style প্রয়োগ
 - [x] voluntary support-এর জন্য “Send Money” নির্দেশনা স্পষ্ট করা; Payment ব্যবহার না করতে বলা
 - [x] light/dark desktop/mobile screenshot, TypeScript/build ও PWA stylesheet cache refresh যাচাই
+
+# সক্রিয়: support copy cleanup ও number click-to-copy
+- [x] চিহ্নিত দুইটি redundant Send Money/Payment instruction অপসারণ
+- [x] payment number-এ click-to-copy, fallback এবং success toast যোগ
+- [x] desktop/mobile interaction, TypeScript/build ও PWA stylesheet cache refresh যাচাই

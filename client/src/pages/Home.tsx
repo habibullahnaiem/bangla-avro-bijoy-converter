@@ -109,6 +109,7 @@ export default function Home() {
   const [output, setOutput] = useState("");
   const [isLive, setIsLive] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [supportNumberCopied, setSupportNumberCopied] = useState(false);
   const [fontSize, setFontSize] = useState<number>(() => {
     const saved = typeof window !== "undefined" ? localStorage.getItem("abc-font-size") : null;
     const n = saved ? parseInt(saved, 10) : NaN;
@@ -409,6 +410,31 @@ export default function Home() {
       toast.success("পেস্ট করা হয়েছে");
     } catch {
       toast.error("ক্লিপবোর্ড পড়া যায়নি — ব্রাউজারের অনুমতি যাচাই করুন");
+    }
+  };
+
+  const copySupportNumber = async () => {
+    const supportNumber = "01601599355";
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(supportNumber);
+      } else {
+        const copyField = document.createElement("textarea");
+        copyField.value = supportNumber;
+        copyField.setAttribute("readonly", "");
+        copyField.style.position = "fixed";
+        copyField.style.opacity = "0";
+        document.body.appendChild(copyField);
+        copyField.select();
+        const copiedWithFallback = document.execCommand("copy");
+        document.body.removeChild(copyField);
+        if (!copiedWithFallback) throw new Error("Clipboard fallback failed");
+      }
+      setSupportNumberCopied(true);
+      toast.success("নম্বরটি ক্লিপবোর্ডে কপি হয়েছে");
+      setTimeout(() => setSupportNumberCopied(false), 1500);
+    } catch {
+      toast.error("নম্বরটি কপি করা যায়নি");
     }
   };
 
@@ -1899,9 +1925,6 @@ export default function Home() {
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
               অভ্রজয়ের উন্নয়ন ও রক্ষণাবেক্ষণে স্বেচ্ছায় সহায়তা করতে চাইলে নিচের নম্বরটি ব্যবহার করতে পারেন।
             </p>
-            <p className="mt-3 text-center text-xs font-bold text-primary">
-              সহায়তার জন্য Send Money ব্যবহার করুন — Payment নয়
-            </p>
             <div className="mt-4 grid grid-cols-3 gap-2" aria-label="মোবাইল পেমেন্ট পদ্ধতি">
               {['বিকাশ', 'নগদ', 'রকেট'].map((method) => (
                 <span
@@ -1911,12 +1934,17 @@ export default function Home() {
                 </span>
               ))}
             </div>
-            <a
-              href="tel:01601599355"
-              className="mt-2 block rounded-xl border border-primary/30 bg-card px-3 py-2 text-center font-mono text-sm font-bold tracking-wide text-primary transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              aria-label="বিকাশ, নগদ ও রকেটে Send Money নম্বর ০১৬০১৫৯৯৩৫৫">
+            <button
+              type="button"
+              onClick={copySupportNumber}
+              title="নম্বর কপি করুন"
+              className="mt-2 block w-full rounded-xl border border-primary/30 bg-card px-3 py-2 text-center font-mono text-sm font-bold tracking-wide text-primary transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              aria-label="বিকাশ, নগদ ও রকেটের নম্বর ০১৬০১৫৯৯৩৫৫ কপি করুন">
               01601599355
-            </a>
+              <span className="sr-only" aria-live="polite">
+                {supportNumberCopied ? "নম্বর কপি হয়েছে" : ""}
+              </span>
+            </button>
             <a
               href="https://wa.me/8801601599355"
               target="_blank"
@@ -1925,9 +1953,6 @@ export default function Home() {
               <MessageCircle className="h-4 w-4" aria-hidden="true" />
               WhatsApp-এ যোগাযোগ করুন
             </a>
-            <p className="mt-3 text-center text-[11px] leading-relaxed text-muted-foreground">
-              সহযোগিতা সম্পূর্ণ স্বেচ্ছাসেবী। বিকাশ/নগদ/রকেট অ্যাপের Send Money অপশন ব্যবহার করুন; Payment নয়। নম্বরটি মিলিয়ে নিন।
-            </p>
           </article>
         </section>
       </main>
