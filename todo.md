@@ -726,3 +726,8 @@
 - [x] existing header/footer action pattern দেখে share button-এর placement নির্ধারণ
 - [x] native Web Share API এবং link copy fallback with toast যোগ
 - [x] mobile/desktop interaction, TypeScript/build ও PWA stylesheet cache refresh যাচাই
+
+# সক্রিয়: published-site SEO ও metadata audit
+- [x] title, meta description, canonical, robots, sitemap, Open Graph/Twitter এবং structured-data source audit
+- [x] public domain অনুযায়ী indexability, metadata ও crawl-discovery assets উন্নত করা
+- [x] metadata, robots/sitemap, TypeScript/build ও production output যাচাই
