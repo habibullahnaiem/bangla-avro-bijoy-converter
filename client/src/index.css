@@ -1379,19 +1379,19 @@ button:active {
     font-size: clamp(1.25rem, 6vw, 2rem);
   }
 
-  /* Teal Desk mobile guard: keep the absolute accent rule well above the
-     eyebrow after narrow-screen font metrics settle. This protects the text
-     stack without changing desktop geometry or converter behavior. */
+  /* Teal Desk mobile guard: the absolute accent rule can intersect the
+     eyebrow on narrow phones, so hide that decorative element only here.
+     Desktop keeps the rule; mobile text returns to its normal stack spacing. */
   .hero-panel {
-    padding-top: 3.75rem;
+    padding-top: 3.35rem;
   }
 
   .hero-panel::before {
-    top: 1.05rem;
+    display: none;
   }
 
   .hero-panel__copy {
-    padding-top: 0.2rem;
+    padding-top: 0;
   }
 }
 

@@ -645,3 +645,8 @@
 - [x] narrow mobile screenshot ও banner CSS/markup থেকে overlap source শনাক্ত
 - [x] শুধু small-screenে decorative line-এর position/stacking এবং heading clearance সংশোধন
 - [x] mobile ও desktop screenshotে banner line, title ও CTA overlap regression যাচাই
+
+# সক্রিয়: permanent mobile banner accent-line removal
+- [x] নতুন screenshot-এর অবশিষ্ট eyebrow overlap নিশ্চিত করা
+- [x] শুধুমাত্র mobile breakpoint-এ `hero-panel::before` accent line লুকানো
+- [x] 382px mobile ও desktopে line removal এবং banner layout যাচাই
