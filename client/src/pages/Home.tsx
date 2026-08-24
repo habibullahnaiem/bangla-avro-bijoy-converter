@@ -27,6 +27,8 @@ import {
   X,
   Moon,
   Bookmark,
+  HeartHandshake,
+  MessageCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -1852,6 +1854,78 @@ export default function Home() {
               })}
             </div>
           )}
+        </section>
+
+        {/* অভ্রজয় সম্পর্কে ও স্বেচ্ছাসেবী সহায়তা — public contact details supplied by the owner. */}
+        <section
+          className="support-section mt-8 grid gap-4 lg:grid-cols-[1.15fr_0.85fr]"
+          aria-label="অভ্রজয় সম্পর্কে ও সমর্থন">
+          <article className="relative overflow-hidden rounded-2xl border border-primary/25 bg-card/90 p-5 shadow-sm sm:p-6">
+            <div className="absolute right-0 top-0 h-24 w-24 -translate-y-8 translate-x-8 rounded-full bg-primary/10" aria-hidden="true" />
+            <div className="relative flex items-start gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <HeartHandshake className="h-5 w-5" aria-hidden="true" />
+              </span>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary">
+                  অভ্রজয় সম্পর্কে
+                </p>
+                <h2 className="mt-1 text-xl font-extrabold tracking-tight text-foreground">
+                  বাংলা লেখার পাশে একটি ব্যবহারিক সহকারী।
+                </h2>
+              </div>
+            </div>
+            <p className="relative mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+              অভ্রজয় বাংলা লেখক, শিক্ষার্থী ও প্রকাশনার কাজের জন্য অভ্র/ইউনিকোড এবং
+              বিজয় টেক্সটের মধ্যে রূপান্তর সহজ করতে তৈরি। যুক্তবর্ণ, ফরম্যাটিং-সচেতন
+              DOCX/TXT কাজ এবং বাংলা–ইংরেজি মিশ্র লেখার ব্যবহারিক প্রবাহকে গুরুত্ব দেওয়া হয়।
+            </p>
+          </article>
+
+          <article className="relative overflow-hidden rounded-2xl border border-primary/30 bg-primary/10 p-5 shadow-sm sm:p-6">
+            <div className="flex items-start gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
+                <HeartHandshake className="h-5 w-5" aria-hidden="true" />
+              </span>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary">
+                  সমর্থন করুন
+                </p>
+                <h2 className="mt-1 text-lg font-extrabold text-foreground">
+                  স্বেচ্ছাসেবী সহযোগিতা
+                </h2>
+              </div>
+            </div>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              অভ্রজয়ের উন্নয়ন ও রক্ষণাবেক্ষণে স্বেচ্ছায় সহায়তা করতে চাইলে নিচের নম্বরটি ব্যবহার করতে পারেন।
+            </p>
+            <div className="mt-4 grid grid-cols-3 gap-2" aria-label="মোবাইল পেমেন্ট পদ্ধতি">
+              {['বিকাশ', 'নগদ', 'রকেট'].map((method) => (
+                <span
+                  key={method}
+                  className="rounded-lg border border-primary/20 bg-card/80 px-2 py-1.5 text-center text-xs font-bold text-foreground">
+                  {method}
+                </span>
+              ))}
+            </div>
+            <a
+              href="tel:01601599355"
+              className="mt-2 block rounded-xl border border-primary/30 bg-card px-3 py-2 text-center font-mono text-sm font-bold tracking-wide text-primary transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              aria-label="বিকাশ, নগদ ও রকেট নম্বর ০১৬০১৫৯৯৩৫৫">
+              01601599355
+            </a>
+            <a
+              href="https://wa.me/8801601599355"
+              target="_blank"
+              rel="noreferrer"
+              className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-primary/30 bg-card px-3 py-2 text-sm font-bold text-primary transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              <MessageCircle className="h-4 w-4" aria-hidden="true" />
+              WhatsApp-এ যোগাযোগ করুন
+            </a>
+            <p className="mt-3 text-center text-[11px] leading-relaxed text-muted-foreground">
+              সহযোগিতা সম্পূর্ণ স্বেচ্ছাসেবী। পেমেন্টের আগে নম্বরটি মিলিয়ে নিন।
+            </p>
+          </article>
         </section>
       </main>
 

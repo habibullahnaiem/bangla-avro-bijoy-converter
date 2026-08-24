@@ -2463,3 +2463,20 @@ button:active {
     color: oklch(0.68 0.055 197) !important;
   }
 }
+
+/* ডিজাইন দিক: টিল ডেস্ক — public About/support cards stay opaque and readable
+   in both themes rather than inheriting a pale card surface in dark mode. */
+.support-section > article {
+  border-color: oklch(0.5 0.045 200 / 0.6) !important;
+  background: linear-gradient(180deg, oklch(0.22 0.03 212 / 0.99), oklch(0.18 0.028 212 / 0.99)) !important;
+  color: oklch(0.94 0.018 200) !important;
+}
+
+.support-section .text-muted-foreground {
+  color: oklch(0.84 0.03 200) !important;
+}
+
+.support-section [class*="bg-card"] {
+  border-color: oklch(0.5 0.045 200 / 0.6) !important;
+  background: oklch(0.25 0.04 208 / 0.98) !important;
+}

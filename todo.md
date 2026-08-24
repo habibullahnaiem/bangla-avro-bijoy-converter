@@ -690,3 +690,8 @@
 - [x] input ও output footer-এর button/helper markup এবং current wrapping audit
 - [x] দুই footer-এ helper text-কে button-এর নিচে একই line-এ স্থাপন
 - [x] desktop/mobile screenshot, TypeScript/build ও PWA stylesheet cache refresh যাচাই
+
+# সক্রিয়: About ও support section
+- [x] existing footer/main-content hierarchy দেখে About এবং public support section-এর নিরাপদ placement নির্ধারণ
+- [x] বিকাশ/নগদ/রকেট ও WhatsApp 01601599355 দিয়ে responsive contact and support cards তৈরি
+- [x] desktop/mobile screenshot, phone-link behavior, TypeScript/build ও PWA stylesheet cache refresh যাচাই
