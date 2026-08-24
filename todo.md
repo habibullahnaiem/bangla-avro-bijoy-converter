@@ -576,3 +576,67 @@
 - [x] library-defined complete conjuncts-এর word context ও standalone round-trip শূন্য deviation-এ পাস
 - [x] reference raw output কেবল comparison signal; SutonnyMJ glyph specimen এবং AvroJoy round-trip-কে final acceptance standard রাখা হয়েছে
 - [x] deterministic candidate, reference এবং ১৫২-ম্যাপ audit artifact যোগ; শুধুই পাঁচটি font-verified mapping পরিবর্তন করা হয়েছে
+
+# সক্রিয়: ShumanBD বনাম AvroJoy পূর্ণ তুলনামূলক রিপোর্ট
+- [x] controlled corpus, raw byte comparison, round-trip observation এবং feature inspection একত্র করা হয়েছে
+- [x] text conversion, complex conjuncts, R-kar, e-kar, punctuation, mixed text, reverse direction, DOCX/TXT, font policy, printing/PWA ও UX পৃথকভাবে তুলনা করা হয়েছে
+- [x] পরীক্ষার সীমা, একই-ফল, AvroJoy-এর সুবিধা, reference-এর সুবিধা এবং গ্রহণযোগ্য নয় এমন আচরণ স্পষ্ট করা হয়েছে
+- [x] Markdown report-এ method, table, controlled result, recommendation ও reference links লেখা হয়েছে
+- [x] রিপোর্ট যাচাই করে ব্যবহারকারীকে attachment হিসেবে দেওয়ার জন্য প্রস্তুত
+
+# সক্রিয়: ShumanBD বনাম AvroJoy raw code-diff report
+- [x] একই input corpus-এর দু-সাইটের raw Bijoy output পুনরুদ্ধার ও token অনুযায়ী align করা
+- [x] শুধু ভিন্ন byte/code point, তার context এবং Bijoy→Unicode round-trip ফল আলাদা করা
+- [x] identical byte form-কে report থেকে বাদ দিয়ে বাস্তব পার্থক্য মাত্র দেখানো
+- [x] সংক্ষিপ্ত Markdown attachment-এ byte table, code points ও সীমা নথিভুক্ত করা
+
+# সক্রিয়: “দারিদ্যের সত্ত্বা” দুই-সাইট পরীক্ষা
+- [x] ShumanBD-এ exact Unicode input দিয়ে Bijoy output সংগ্রহ
+- [x] AvroJoy-এর raw Bijoy output ও code points সংগ্রহ
+- [x] উভয় Bijoy output reverse করে ফল, byte difference এবং রূপান্তর-সমতা জানানো
+
+# সক্রিয়: জটিল শব্দের ShumanBD–AvroJoy byte audit
+- [x] যুক্তবর্ণ, রেফ/র-ফলা, ঋ-কার, এ-কার, ড়/ঢ় ও য-ফলাসহ নিয়ন্ত্রিত শব্দ corpus প্রস্তুত
+- [x] ShumanBD-এ একই corpus চালিয়ে token-ভিত্তিক raw Bijoy output সংগ্রহ
+- [x] AvroJoy output-এর সঙ্গে byte/code-point diff ও reverse ফল মিলানো
+- [x] কেবল বাস্তব byte পার্থক্য থাকলে শব্দ, output এবং round-trip ফল জানানো
+
+# সক্রিয়: ছয়টি byte পার্থক্যের প্রযুক্তিগত ব্যাখ্যা
+- [x] প্রতিটি difference-এর legacy glyph/form, Unicode→Bijoy mapping এবং inverse mapping evidence সাজানো
+- [x] byte alias, context-sensitive mapping ও non-bijective inverse mapping-এর প্রভাব বিশ্লেষণ
+- [x] inter-converter copy/paste, SutonnyMJ rendering এবং round-trip ঝুঁকি আলাদা করে ব্যাখ্যা
+- [x] বিস্তারিত বাংলা প্রযুক্তিগত রিপোর্ট লিখে ব্যবহারকারীকে দেওয়া
+
+# সক্রিয়: AvroJoy → ShumanBD reverse word-change investigation
+- [x] alias-prone যুক্তাক্ষর, কার, রেফ/র-ফলা ও orthographic complex-word corpus বিস্তৃত করা
+- [x] AvroJoy Unicode→Bijoy output-কে ShumanBD Bijoy→Unicode পথে চালানো
+- [x] বদলে যাওয়া শব্দ, raw bytes, returned Unicode ও কোন mapping-family জড়িত তা যাচাই
+- [x] অনুসন্ধানের coverage, নিশ্চিত পরিবর্তন ও সীমাসহ বিস্তারিত রিপোর্ট তৈরি ও দেওয়া
+
+# সক্রিয়: ShumanBD compatibility patch strategy
+- [x] `ঙ্ক্ষ` ও `দারিদ্র্য`+e-kar failure-এর সবচেয়ে সীমিত patch boundary নির্ধারণ
+- [x] default canonical output, targeted override ও optional compatibility-mode তুলনা
+- [x] SutonnyMJ rendering, AvroJoy round-trip ও DOCX/TXT regression safeguards ঠিক করা
+- [x] patch recommendation, ঝুঁকি ও অনুমোদন-পূর্ব test plan রিপোর্টে নথিভুক্ত করা
+
+# সক্রিয়: Unicode-কেন্দ্রিক unified conversion standard strategy
+- [x] legacy Bijoy alias, font-dependent glyph ও non-bijective reverse mapping-এর স্থায়ী সীমা নথিভুক্ত
+- [x] Unicode canonical form, lossless provenance ও multi-profile encoder design মূল্যায়ন
+- [x] compatibility migration, shared conformance corpus ও regression governance ঠিক করা
+- [x] বাস্তবায়ন-পর্যায়, সীমা ও সুপারিশসহ বাংলা strategy report তৈরি
+
+# সক্রিয়: publish-পূর্ব readiness checklist
+- [x] বর্তমান conversion, DOCX/TXT, PWA, UI ও known-compatibility scope inventory
+- [x] regression, real-Word, mobile/PWA, offline, accessibility ও privacy smoke-test plan
+- [x] must-do, should-do, পরে করা যাবে—এই priority-তে go/no-go checklist
+- [x] publish-এর আগে ব্যবহারকারীর জন্য সংক্ষিপ্ত করণীয় রিপোর্ট
+
+# সক্রিয়: executable publish-verification pass
+- [x] desktop ও mobile preview-এ UI layout, runtime asset এবং interaction smoke test
+- [x] manifest, service worker, cache entry ও offline fallback readiness পরীক্ষা
+- [x] copy/selection, keyboard focus ও generated DOCX/TXT artifact smoke test
+- [x] যাচাইকৃত ফল, environment limitation ও publish go/no-go recommendation রিপোর্ট
+
+## প্রকাশ blocker: production build PWA registration
+- [x] production build-এ `NODE_ENV=development` থেকে বাদ পড়া service-worker registration সংশোধন
+- [x] নতুন production bundle-এ active service worker, shell cache ও manifest পুনরায় যাচাই
