@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { createHash } from "node:crypto";
 
 const projectRoot = path.resolve(import.meta.dirname, "..");
 const publicDir = path.join(projectRoot, "dist", "public");
@@ -28,11 +29,18 @@ assetFiles.sort();
 
 const source = fs.readFileSync(sourcePath, "utf8");
 const buildAssets = assetFiles.map((asset) => `  ${JSON.stringify(asset)},`).join("\n");
-const generated = source.replace("  /* @vite-build-assets */", buildAssets);
+const cacheVersion = `avrojoy-offline-${createHash("sha256")
+  .update(source)
+  .update(buildAssets)
+  .digest("hex")
+  .slice(0, 12)}`;
+const generated = source
+  .replace("__AVROJOY_BUILD_CACHE_VERSION__", cacheVersion)
+  .replace("  /* @vite-build-assets */", buildAssets);
 
-if (generated === source) {
-  throw new Error("The service-worker build asset marker was not found.");
+if (generated === source || generated.includes("__AVROJOY_BUILD_CACHE_VERSION__")) {
+  throw new Error("The service-worker build markers were not found.");
 }
 
 fs.writeFileSync(destinationPath, generated, "utf8");
-console.log(`Generated ${destinationPath} with ${assetFiles.length} precached build assets.`);
+console.log(`Generated ${destinationPath} with ${assetFiles.length} precached build assets (${cacheVersion}).`);

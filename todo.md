@@ -650,3 +650,8 @@
 - [x] নতুন screenshot-এর অবশিষ্ট eyebrow overlap নিশ্চিত করা
 - [x] শুধুমাত্র mobile breakpoint-এ `hero-panel::before` accent line লুকানো
 - [x] 382px mobile ও desktopে line removal এবং banner layout যাচাই
+
+# সক্রিয়: PWA stale-cache refresh correction
+- [x] user screenshot ও current service-worker cache-version থেকে পুরোনো CSS cache উৎস নিশ্চিত
+- [x] service-worker cache version bump করে previous shell/runtime cache invalidation
+- [x] rebuilt production PWA-তে নতুন cache name, current CSS asset ও mobile banner যাচাই

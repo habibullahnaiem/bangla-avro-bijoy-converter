@@ -1,4 +1,7 @@
-const VERSION = "avrojoy-offline-v1";
+// Replaced at build time with a content-derived cache namespace. Keeping this
+// build-specific prevents an installed PWA from serving an earlier CSS/JS shell
+// after a new release is published.
+const VERSION = "__AVROJOY_BUILD_CACHE_VERSION__";
 const SHELL_CACHE = `${VERSION}-shell`;
 const RUNTIME_CACHE = `${VERSION}-runtime`;
 
