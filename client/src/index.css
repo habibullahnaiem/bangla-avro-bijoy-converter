@@ -1378,6 +1378,21 @@ button:active {
   .site-footer__glyph {
     font-size: clamp(1.25rem, 6vw, 2rem);
   }
+
+  /* Teal Desk mobile guard: keep the absolute accent rule well above the
+     eyebrow after narrow-screen font metrics settle. This protects the text
+     stack without changing desktop geometry or converter behavior. */
+  .hero-panel {
+    padding-top: 3.75rem;
+  }
+
+  .hero-panel::before {
+    top: 1.05rem;
+  }
+
+  .hero-panel__copy {
+    padding-top: 0.2rem;
+  }
 }
 
 /* ডিজাইন দিক: টিল ডেস্ক — compact product-first hero; crisp teal authority,

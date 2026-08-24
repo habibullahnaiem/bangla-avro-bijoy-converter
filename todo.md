@@ -640,3 +640,8 @@
 ## প্রকাশ blocker: production build PWA registration
 - [x] production build-এ `NODE_ENV=development` থেকে বাদ পড়া service-worker registration সংশোধন
 - [x] নতুন production bundle-এ active service worker, shell cache ও manifest পুনরায় যাচাই
+
+# সক্রিয়: mobile banner line/text overlap repair
+- [x] narrow mobile screenshot ও banner CSS/markup থেকে overlap source শনাক্ত
+- [x] শুধু small-screenে decorative line-এর position/stacking এবং heading clearance সংশোধন
+- [x] mobile ও desktop screenshotে banner line, title ও CTA overlap regression যাচাই
