@@ -655,3 +655,8 @@
 - [x] user screenshot ও current service-worker cache-version থেকে পুরোনো CSS cache উৎস নিশ্চিত
 - [x] service-worker cache version bump করে previous shell/runtime cache invalidation
 - [x] rebuilt production PWA-তে নতুন cache name, current CSS asset ও mobile banner যাচাই
+
+# সক্রিয়: global hero accent-line removal
+- [x] hero `::before` accent rule-ই decorative line-এর একমাত্র source নিশ্চিত
+- [x] সব breakpointে hero accent line বন্ধ করা
+- [x] 382px mobile ও 1280px desktopে line removal যাচাই
