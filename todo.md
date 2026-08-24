@@ -695,3 +695,9 @@
 - [x] existing footer/main-content hierarchy দেখে About এবং public support section-এর নিরাপদ placement নির্ধারণ
 - [x] বিকাশ/নগদ/রকেট ও WhatsApp 01601599355 দিয়ে responsive contact and support cards তৈরি
 - [x] desktop/mobile screenshot, phone-link behavior, TypeScript/build ও PWA stylesheet cache refresh যাচাই
+
+# সক্রিয়: support section light-mode contrast ও payment guidance
+- [x] light-mode-এ About/support card ও nested control-এর contrast source শনাক্ত
+- [x] light-mode surface tokens-এর সঙ্গে সামঞ্জস্য রেখে theme-aware style প্রয়োগ
+- [x] voluntary support-এর জন্য “Send Money” নির্দেশনা স্পষ্ট করা; Payment ব্যবহার না করতে বলা
+- [x] light/dark desktop/mobile screenshot, TypeScript/build ও PWA stylesheet cache refresh যাচাই

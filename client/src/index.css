@@ -2464,19 +2464,34 @@ button:active {
   }
 }
 
-/* ডিজাইন দিক: টিল ডেস্ক — public About/support cards stay opaque and readable
-   in both themes rather than inheriting a pale card surface in dark mode. */
+/* ডিজাইন দিক: টিল ডেস্ক — support cards use the same readable surface family
+   as each active theme, instead of one forced dark treatment for both modes. */
 .support-section > article {
+  border-color: oklch(0.72 0.055 198 / 0.85) !important;
+  background: linear-gradient(145deg, oklch(0.985 0.012 198 / 0.99), oklch(0.93 0.032 198 / 0.99)) !important;
+  color: oklch(0.2 0.03 210) !important;
+}
+
+.support-section .text-muted-foreground {
+  color: oklch(0.39 0.045 205) !important;
+}
+
+.support-section [class*="bg-card"] {
+  border-color: oklch(0.72 0.055 198 / 0.85) !important;
+  background: oklch(0.995 0.006 200 / 0.98) !important;
+}
+
+.dark .support-section > article {
   border-color: oklch(0.5 0.045 200 / 0.6) !important;
   background: linear-gradient(180deg, oklch(0.22 0.03 212 / 0.99), oklch(0.18 0.028 212 / 0.99)) !important;
   color: oklch(0.94 0.018 200) !important;
 }
 
-.support-section .text-muted-foreground {
+.dark .support-section .text-muted-foreground {
   color: oklch(0.84 0.03 200) !important;
 }
 
-.support-section [class*="bg-card"] {
+.dark .support-section [class*="bg-card"] {
   border-color: oklch(0.5 0.045 200 / 0.6) !important;
   background: oklch(0.25 0.04 208 / 0.98) !important;
 }

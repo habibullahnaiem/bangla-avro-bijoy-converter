@@ -1899,6 +1899,9 @@ export default function Home() {
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
               অভ্রজয়ের উন্নয়ন ও রক্ষণাবেক্ষণে স্বেচ্ছায় সহায়তা করতে চাইলে নিচের নম্বরটি ব্যবহার করতে পারেন।
             </p>
+            <p className="mt-3 text-center text-xs font-bold text-primary">
+              সহায়তার জন্য Send Money ব্যবহার করুন — Payment নয়
+            </p>
             <div className="mt-4 grid grid-cols-3 gap-2" aria-label="মোবাইল পেমেন্ট পদ্ধতি">
               {['বিকাশ', 'নগদ', 'রকেট'].map((method) => (
                 <span
@@ -1911,7 +1914,7 @@ export default function Home() {
             <a
               href="tel:01601599355"
               className="mt-2 block rounded-xl border border-primary/30 bg-card px-3 py-2 text-center font-mono text-sm font-bold tracking-wide text-primary transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              aria-label="বিকাশ, নগদ ও রকেট নম্বর ০১৬০১৫৯৯৩৫৫">
+              aria-label="বিকাশ, নগদ ও রকেটে Send Money নম্বর ০১৬০১৫৯৯৩৫৫">
               01601599355
             </a>
             <a
@@ -1923,7 +1926,7 @@ export default function Home() {
               WhatsApp-এ যোগাযোগ করুন
             </a>
             <p className="mt-3 text-center text-[11px] leading-relaxed text-muted-foreground">
-              সহযোগিতা সম্পূর্ণ স্বেচ্ছাসেবী। পেমেন্টের আগে নম্বরটি মিলিয়ে নিন।
+              সহযোগিতা সম্পূর্ণ স্বেচ্ছাসেবী। বিকাশ/নগদ/রকেট অ্যাপের Send Money অপশন ব্যবহার করুন; Payment নয়। নম্বরটি মিলিয়ে নিন।
             </p>
           </article>
         </section>
