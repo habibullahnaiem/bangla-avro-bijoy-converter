@@ -2413,6 +2413,24 @@ html:not(.dark) .file-workspace button:disabled {
     color: oklch(0.84 0.03 200) !important;
   }
 
+  /* Light mode keeps the instruction card in the same pale-teal reading
+     surface family as the other light panels; do not inherit the mobile dark
+     workbench treatment above. */
+  html:not(.dark) .usage-card,
+  html:not(.dark) .usage-card.text-muted-foreground {
+    border-color: oklch(0.72 0.055 198 / 0.85) !important;
+    background: linear-gradient(145deg, oklch(0.985 0.012 198 / 0.99), oklch(0.93 0.032 198 / 0.99)) !important;
+    color: oklch(0.35 0.045 205) !important;
+  }
+
+  html:not(.dark) .usage-card .text-muted-foreground {
+    color: oklch(0.35 0.045 205) !important;
+  }
+
+  html:not(.dark) .usage-card .text-foreground {
+    color: oklch(0.2 0.03 210) !important;
+  }
+
   .output-copy-footer .copy-output-button {
     border-color: oklch(0.65 0.1 190 / 0.7) !important;
     background: oklch(0.28 0.055 205 / 0.94) !important;

@@ -711,3 +711,8 @@
 - [x] file-converter direction control, upload dropzone, action buttons ও explanatory text-এর light-mode source শনাক্ত
 - [x] light-mode surface ও foreground hierarchy বাকি file UI-এর সঙ্গে সামঞ্জস্য করা
 - [x] light/dark desktop/mobile screenshot, TypeScript/build ও PWA stylesheet cache refresh যাচাই
+
+# সক্রিয়: mobile usage-card contrast correction
+- [x] “কীভাবে ব্যবহার করবেন” card-এর mobile pale text/surface source শনাক্ত
+- [x] mobile-এ readable foreground ও matching light surface প্রয়োগ
+- [x] mobile/desktop screenshot, TypeScript/build ও PWA stylesheet cache refresh যাচাই
