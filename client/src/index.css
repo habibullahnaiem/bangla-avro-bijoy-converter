@@ -2397,6 +2397,20 @@ button:active {
     color: oklch(0.94 0.024 200) !important;
   }
 
+  .history-empty-state {
+    border-color: oklch(0.5 0.045 200 / 0.6) !important;
+    background: linear-gradient(180deg, oklch(0.22 0.03 212 / 0.99), oklch(0.18 0.028 212 / 0.99)) !important;
+    color: oklch(0.94 0.018 200) !important;
+  }
+
+  .history-empty-state .text-muted-foreground {
+    color: oklch(0.84 0.03 200) !important;
+  }
+
+  .history-empty-state [class*="text-muted-foreground/60"] {
+    color: oklch(0.68 0.055 197) !important;
+  }
+
   .type-legend [class*="bg-muted"] {
     background: oklch(0.29 0.045 205 / 0.95) !important;
     color: oklch(0.96 0.014 200) !important;

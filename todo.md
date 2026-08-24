@@ -670,3 +670,8 @@
 - [x] recent-history header-এর গণনা badge ও metadata contrast source শনাক্ত
 - [x] output input-pane-এর “পেস্ট” control row-কে opaque high-contrast surface দেওয়া
 - [x] mobile screenshot, TypeScript/build ও PWA stylesheet cache refresh যাচাই
+
+# সক্রিয়: recent-history empty-state contrast correction
+- [x] empty-state card-এর pale background ও muted-text source শনাক্ত
+- [x] mobile-এ empty-state card-কে opaque dark-workbench surface দেওয়া
+- [x] mobile screenshot, TypeScript/build ও PWA stylesheet cache refresh যাচাই

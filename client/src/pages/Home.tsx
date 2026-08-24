@@ -1764,7 +1764,7 @@ export default function Home() {
           </div>
 
           {history.length === 0 ? (
-            <div className="rounded-2xl border border-dashed bg-card/70 px-5 py-8 text-center">
+            <div className="history-empty-state rounded-2xl border border-dashed bg-card/70 px-5 py-8 text-center">
               <Clock3 className="mx-auto h-7 w-7 text-muted-foreground/60" aria-hidden="true" />
               <p className="mt-2 text-sm font-semibold text-foreground">
                 এখনো কোনো রূপান্তরের ইতিহাস নেই
