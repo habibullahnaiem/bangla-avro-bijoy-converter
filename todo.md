@@ -685,3 +685,8 @@
 - [x] recent-history count badge-এর desktop pale surface source শনাক্ত
 - [x] count badge-এ opaque dark-teal fill, border ও readable text প্রয়োগ
 - [x] desktop/mobile screenshot, TypeScript/build ও PWA stylesheet cache refresh যাচাই
+
+# সক্রিয়: desktop editor-footer helper-text alignment
+- [x] input ও output footer-এর button/helper markup এবং current wrapping audit
+- [x] দুই footer-এ helper text-কে button-এর নিচে একই line-এ স্থাপন
+- [x] desktop/mobile screenshot, TypeScript/build ও PWA stylesheet cache refresh যাচাই
