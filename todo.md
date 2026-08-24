@@ -731,3 +731,14 @@
 - [x] title, meta description, canonical, robots, sitemap, Open Graph/Twitter এবং structured-data source audit
 - [x] public domain অনুযায়ী indexability, metadata ও crawl-discovery assets উন্নত করা
 - [x] metadata, robots/sitemap, TypeScript/build ও production output যাচাই
+
+# সক্রিয়: full-stack database ও File Storage
+- [x] conversion history ও uploaded DOCX/TXT-এর persistence/privacy scope নির্ধারণ
+- [x] full-stack database, authentication ও managed File Storage capability enable
+- [x] private document save/list/delete/re-download flow এবং metadata model implement
+- [x] access control, retention messaging, upload/download UX এবং production build যাচাই
+
+# সক্রিয়: full-stack upgrade conflict recovery
+- [x] Home page-এর missing `useAuth` import/runtime crash ঠিক করে existing converter interface পুনরুদ্ধার
+- [x] upgraded backend entry point, PWA build command এবং existing SEO metadata compatibility যাচাই
+- [x] TypeScript 5.9-এর BlobPart typing regression ঠিক করে DOCX download behavior অক্ষুণ্ণ রাখা

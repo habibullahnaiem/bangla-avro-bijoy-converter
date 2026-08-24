@@ -456,7 +456,9 @@ export async function convertFile(
   // সুতন্নী এমজে ANSI ফন্ট — windows-1252 এনকোডিংয়ে ডাউনলোড
   const encoder = new TextEncoder(); // UTF-8 first, then encode to windows-1252 via manual map
   const bytes = toWindows1252(converted);
-  const blob = new Blob([bytes], {
+  // A fresh ArrayBuffer keeps the browser bytes identical while satisfying
+  // TypeScript 5.9's stricter BlobPart typing.
+  const blob = new Blob([Uint8Array.from(bytes).buffer as ArrayBuffer], {
     type: "text/plain;charset=windows-1252",
   });
   return { kind: "txt", blob, name: `${name}${suffix}.txt` };
