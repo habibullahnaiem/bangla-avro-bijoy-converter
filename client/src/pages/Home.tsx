@@ -1549,8 +1549,8 @@ export default function Home() {
         </>
         ) : (
         /* ফাইল কনভার্টার প্যানেল */
-        <div className="overflow-hidden rounded-2xl border bg-card shadow-lg">
-          <div className="border-b bg-secondary/60 px-4 py-3">
+        <div className="file-workspace overflow-hidden rounded-2xl border bg-card shadow-lg">
+          <div className="file-workspace__header border-b bg-secondary/60 px-4 py-3">
             <h3 className="text-base font-bold text-foreground">
               ডকুমেন্ট রূপান্তর — .docx / .txt
             </h3>
@@ -1563,7 +1563,7 @@ export default function Home() {
           <div className="px-4 py-6">
             <div className="mx-auto max-w-xl">
               {/* দিক সিলেকশন */}
-              <div className="direction-switch mb-4 flex items-center justify-center gap-1.5 rounded-full border bg-secondary/50 p-1">
+              <div className="file-direction direction-switch mb-4 flex items-center justify-center gap-1.5 rounded-full border bg-secondary/50 p-1">
                 <Button
                   variant="outline"
                   size="sm"
@@ -1682,7 +1682,7 @@ export default function Home() {
                   <RotateCcw className="mr-2 h-4 w-4" />
                   ক্ষতিগ্রস্ত বিজয় ফন্ট মেরামত
                 </Button>
-                <p className="max-w-md text-center text-xs leading-relaxed text-muted-foreground">
+                <p className="file-repair-note max-w-md text-center text-xs leading-relaxed text-muted-foreground">
                   শুধু Word-এ Times New Roman হয়ে হিজিবিজি দেখা পুরোনো বিজয় DOCX-এর জন্য।
                   এটি লেখা বদলায় না; উচ্চ-নিশ্চয়তার বিজয় run-এ SutonnyMJ font mapping ফিরিয়ে দেয়।
                 </p>
@@ -1740,7 +1740,7 @@ export default function Home() {
                 </div>
               )}
 
-              <p className="mt-4 text-center text-xs leading-relaxed text-muted-foreground">
+              <p className="file-output-note mt-4 text-center text-xs leading-relaxed text-muted-foreground">
                 রূপান্তর করা হয় — প্রতিটি টেক্সট-রানের ফন্ট SutonnyMJ (বাংলা)
                 / Times New Roman (ইংরেজি) হয়ে যায়; বোল্ড, ইটালিক, indent,
                 alignment ও font-size সম্পাদনা নিরাপদ। বাংলা অংশের font family

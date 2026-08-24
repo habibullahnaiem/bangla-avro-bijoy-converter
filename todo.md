@@ -706,3 +706,8 @@
 - [x] চিহ্নিত দুইটি redundant Send Money/Payment instruction অপসারণ
 - [x] payment number-এ click-to-copy, fallback এবং success toast যোগ
 - [x] desktop/mobile interaction, TypeScript/build ও PWA stylesheet cache refresh যাচাই
+
+# সক্রিয়: file-converter light-mode contrast correction
+- [x] file-converter direction control, upload dropzone, action buttons ও explanatory text-এর light-mode source শনাক্ত
+- [x] light-mode surface ও foreground hierarchy বাকি file UI-এর সঙ্গে সামঞ্জস্য করা
+- [x] light/dark desktop/mobile screenshot, TypeScript/build ও PWA stylesheet cache refresh যাচাই

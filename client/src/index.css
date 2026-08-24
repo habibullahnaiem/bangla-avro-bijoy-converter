@@ -781,6 +781,40 @@ button:active {
   box-shadow: 0 0 0 4px oklch(0.72 0.12 195 / 0.14), 0 16px 34px oklch(0.25 0.05 210 / 0.1);
 }
 
+/* ডিজাইন দিক: টিল ডেস্ক — light-mode file conversion uses the same readable
+   pale-teal panels and dark text hierarchy as the surrounding workspace. */
+html:not(.dark) .file-workspace {
+  border-color: oklch(0.72 0.055 198 / 0.85);
+  background: oklch(0.98 0.011 202);
+}
+
+html:not(.dark) .file-workspace__header,
+html:not(.dark) .file-direction {
+  background: linear-gradient(180deg, oklch(0.955 0.025 198), oklch(0.925 0.035 202));
+}
+
+html:not(.dark) .file-workspace .text-muted-foreground,
+html:not(.dark) .file-repair-note,
+html:not(.dark) .file-output-note {
+  color: oklch(0.38 0.045 205) !important;
+}
+
+html:not(.dark) .file-dropzone {
+  border-color: oklch(0.62 0.085 198 / 0.72);
+  background: linear-gradient(135deg, oklch(0.94 0.045 198), oklch(0.91 0.035 205));
+}
+
+html:not(.dark) .file-direction button:not(.bg-primary) {
+  color: oklch(0.34 0.05 205) !important;
+}
+
+html:not(.dark) .file-workspace button:disabled {
+  border-color: oklch(0.62 0.07 198 / 0.65) !important;
+  background: oklch(0.91 0.04 198) !important;
+  color: oklch(0.39 0.055 205) !important;
+  opacity: 0.85;
+}
+
 .print-preview-content {
   min-height: 24rem;
   line-height: 1.78;
