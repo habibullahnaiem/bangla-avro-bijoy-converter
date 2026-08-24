@@ -2356,3 +2356,35 @@ button:active {
     }
   }
 }
+
+/* ডিজাইন দিক: টিল ডেস্ক — mobile reading surfaces must share the same
+   dark-workbench contrast as recent history. These scoped classes cover the
+   output copy footer, conversion action bar, font legend and help card rather
+   than changing global muted/card tokens. */
+@media screen and (max-width: 767px) {
+  .output-copy-footer,
+  .converter-actionbar,
+  .type-legend,
+  .usage-card {
+    border-color: oklch(0.5 0.045 200 / 0.6) !important;
+    background: linear-gradient(180deg, oklch(0.22 0.03 212 / 0.99), oklch(0.18 0.028 212 / 0.99)) !important;
+    color: oklch(0.94 0.018 200) !important;
+  }
+
+  .output-copy-footer .text-muted-foreground,
+  .type-legend .text-muted-foreground,
+  .usage-card .text-muted-foreground {
+    color: oklch(0.84 0.03 200) !important;
+  }
+
+  .output-copy-footer .copy-output-button {
+    border-color: oklch(0.65 0.1 190 / 0.7) !important;
+    background: oklch(0.28 0.055 205 / 0.94) !important;
+    color: oklch(0.86 0.1 190) !important;
+  }
+
+  .type-legend [class*="bg-muted"] {
+    background: oklch(0.29 0.045 205 / 0.95) !important;
+    color: oklch(0.96 0.014 200) !important;
+  }
+}

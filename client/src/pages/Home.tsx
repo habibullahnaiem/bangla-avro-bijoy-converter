@@ -1342,7 +1342,7 @@ export default function Home() {
                   </div>
                 )}
               </div>
-              <div className="flex flex-wrap items-center gap-2 border-t bg-muted/50 px-4 py-2.5">
+              <div className="output-copy-footer flex flex-wrap items-center gap-2 border-t bg-muted/50 px-4 py-2.5">
                 <Button
                   variant="outline"
                   size="sm"
@@ -1365,7 +1365,7 @@ export default function Home() {
           </div>
 
           {/* রূপান্তর বাটন */}
-          <div className="flex flex-wrap items-center justify-center gap-3 border-t bg-secondary/60 px-4 py-4">
+          <div className="converter-actionbar flex flex-wrap items-center justify-center gap-3 border-t bg-secondary/60 px-4 py-4">
             <Button
               size="lg"
               className="h-12 min-w-56 text-base font-semibold shadow-md"
@@ -1377,7 +1377,7 @@ export default function Home() {
         </div>
 
         {/* ফন্ট প্রিভিউ — প্রোডাক্ট প্রমিজ হিসেবে উপস্থাপন */}
-        <div className="mt-4 overflow-hidden rounded-xl border bg-card shadow-sm">
+        <div className="type-legend mt-4 overflow-hidden rounded-xl border bg-card shadow-sm">
           <div className="grid md:grid-cols-2">
             <div className="flex items-center gap-4 border-b border-border/60 px-4 py-3 md:border-b-0 md:border-r">
               <span className="rounded-md bg-muted px-2.5 py-1 font-input-bn text-sm font-semibold text-foreground">
@@ -1493,7 +1493,7 @@ export default function Home() {
         </div>
 
         {/* সহায়তা */}
-        <div className="mt-6 rounded-xl border border-border/70 bg-card/60 p-5 text-sm leading-relaxed text-muted-foreground">
+        <div className="usage-card mt-6 rounded-xl border border-border/70 bg-card/60 p-5 text-sm leading-relaxed text-muted-foreground">
           <p className="mb-2 font-semibold text-foreground">
             কীভাবে ব্যবহার করবেন
           </p>

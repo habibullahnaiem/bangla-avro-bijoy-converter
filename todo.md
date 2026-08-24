@@ -660,3 +660,8 @@
 - [x] hero `::before` accent rule-ই decorative line-এর একমাত্র source নিশ্চিত
 - [x] সব breakpointে hero accent line বন্ধ করা
 - [x] 382px mobile ও 1280px desktopে line removal যাচাই
+
+# সক্রিয়: unified mobile dark-surface contrast correction
+- [x] instruction, copy/action bar, legend, metadata এবং recent-history surface style source শনাক্ত
+- [x] light-mode override-এ dark workbench surface ও readable text/border hierarchy একীভূত করা
+- [x] mobile ও desktopে actionable copy, legend এবং recent-history contrast যাচাই
