@@ -716,3 +716,8 @@
 - [x] “কীভাবে ব্যবহার করবেন” card-এর mobile pale text/surface source শনাক্ত
 - [x] mobile-এ readable foreground ও matching light surface প্রয়োগ
 - [x] mobile/desktop screenshot, TypeScript/build ও PWA stylesheet cache refresh যাচাই
+
+# সক্রিয়: automatic footer copyright year
+- [x] footer-এর fixed copyright year source শনাক্ত
+- [x] current calendar year থেকে automatic year rendering যোগ
+- [x] footer screenshot, TypeScript/build ও PWA stylesheet cache refresh যাচাই

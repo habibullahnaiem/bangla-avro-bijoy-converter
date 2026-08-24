@@ -103,6 +103,10 @@ const compactHistoryText = (text: string, max = 92) => {
 
 export default function Home() {
   const { theme, toggleTheme } = useTheme();
+  const currentCopyrightYear = new Intl.DateTimeFormat("bn-BD", {
+    year: "numeric",
+    timeZone: "Asia/Dhaka",
+  }).format(new Date());
   const [activeTab, setActiveTab] = useState<"text" | "file">("text");
   const [direction, setDirection] = useState<ConvertDirection>("u2b");
   const [input, setInput] = useState("");
@@ -1991,7 +1995,7 @@ export default function Home() {
             অভ্র/ইউনিকোড ⇄ বিজয় • SutonnyMJ • Times New Roman
           </p>
           <p className="text-xs opacity-75">
-            © ২০২৬ মো. হাবিবুল্লাহ নাঈম • সর্বস্বত্ব সংরক্ষিত
+            © {currentCopyrightYear} মো. হাবিবুল্লাহ নাঈম • সর্বস্বত্ব সংরক্ষিত
           </p>
         </div>
       </footer>
