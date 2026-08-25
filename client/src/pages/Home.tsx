@@ -2122,6 +2122,15 @@ export default function Home() {
           <a href="/avrojoy-er-jonmokotha" className="text-xs font-semibold text-primary-foreground/90 underline-offset-4 transition hover:text-primary-foreground hover:underline">
             আমাদের গল্প
           </a>
+          <nav aria-label="Footer navigation" className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs font-semibold text-primary-foreground/90">
+            <a href="/privacy" className="underline-offset-4 transition hover:text-primary-foreground hover:underline">গোপনীয়তা</a>
+            <span aria-hidden="true" className="opacity-50">•</span>
+            <a href="/terms" className="underline-offset-4 transition hover:text-primary-foreground hover:underline">ব্যবহারের শর্ত</a>
+            <span aria-hidden="true" className="opacity-50">•</span>
+            <a href="/contact" className="underline-offset-4 transition hover:text-primary-foreground hover:underline">যোগাযোগ</a>
+            <span aria-hidden="true" className="opacity-50">•</span>
+            <a href="/thesis-bijoy-checklist" className="underline-offset-4 transition hover:text-primary-foreground hover:underline">থিসিস checklist</a>
+          </nav>
           <p className="text-xs opacity-75">
             © {currentCopyrightYear} মো. হাবিবুল্লাহ নাঈম • সর্বস্বত্ব সংরক্ষিত
           </p>

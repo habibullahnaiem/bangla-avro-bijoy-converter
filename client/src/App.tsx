@@ -6,6 +6,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import AvroJoyStoryPage from "./pages/AvroJoyStory";
+import { PublicInfoPage } from "./pages/PublicInfoPages";
 import { SeoGuidePage } from "./pages/SeoGuides";
 
 function Router() {
@@ -14,6 +15,10 @@ function Router() {
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/avrojoy-er-jonmokotha"} component={AvroJoyStoryPage} />
+      <Route path={"/privacy"}><PublicInfoPage slug="privacy" /></Route>
+      <Route path={"/terms"}><PublicInfoPage slug="terms" /></Route>
+      <Route path={"/contact"}><PublicInfoPage slug="contact" /></Route>
+      <Route path={"/thesis-bijoy-checklist"}><PublicInfoPage slug="thesis-bijoy-checklist" /></Route>
       <Route path={"/avro-to-bijoy"}>
         <SeoGuidePage slug="avro-to-bijoy" />
       </Route>

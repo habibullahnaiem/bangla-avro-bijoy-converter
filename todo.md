@@ -823,6 +823,13 @@
 - [x] “সাম্প্রতিক রূপান্তর” empty/history panel-এর ভুল dark light-mode surface শনাক্ত করা
 - [x] Light mode-এ history panel-এর background, icon ও text contrast ঠিক করা
 - [x] Dark mode অপরিবর্তিত রেখে responsive validation, tests ও checkpoint সম্পন্ন করা
+
+# সক্রিয়: AdSense application readiness
+- [x] বর্তমান public pages, contact তথ্য ও policy gap audit করা
+- [x] Bengali Privacy Policy, Terms/Disclaimer ও Contact/Support page যোগ করা
+- [x] Footer-এ policy/contact navigation এবং একটি original Bengali help resource যোগ করা
+- [x] প্রতিটি নতুন route-এর title, description, canonical, structured data ও sitemap entry যোগ করা
+- [x] Compliance routing/metadata test, light/dark responsive validation, production build ও checkpoint সম্পন্ন করা
 - [x] performance/page-experience-এর field এবং lab baseline পরিমাপ করে কেবল প্রমাণভিত্তিক safe improvement নির্ধারণ করা
 - [x] user-visible converter behavior না বদলে প্রয়োজনীয় SEO polish ও owner documentation হালনাগাদ করা
 - [x] live verification, tests, Vercel auto-deploy এবং checkpoint সম্পন্ন করা

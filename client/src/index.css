@@ -2688,3 +2688,22 @@ html:not(.dark) .story-page [class*="bg-card"] {
   color: oklch(0.94 0.018 200) !important;
   opacity: 1 !important;
 }
+
+/* Public policy, contact and checklist pages use the same stable surface logic
+   as the origin story so they remain readable in both saved theme states. */
+html:not(.dark) .public-info-page {
+  background: oklch(0.96 0.018 205) !important;
+}
+
+html:not(.dark) .public-info-page [class*="bg-card"] {
+  background: oklch(0.99 0.008 205) !important;
+}
+
+.dark .public-info-page {
+  background: oklch(0.15 0.028 210) !important;
+}
+
+.dark .public-info-page [class*="bg-card"] {
+  border-color: oklch(0.5 0.045 200 / 0.6) !important;
+  background: oklch(0.22 0.036 208) !important;
+}
