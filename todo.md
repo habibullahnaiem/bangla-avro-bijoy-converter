@@ -782,5 +782,7 @@
 - [x] `avrojoy.vercel.app`-কে primary public search domain হিসেবে canonicalize করা এবং shared crawl directives সাজানো
 - [x] Vercel-compatible robots.txt, sitemap.xml, canonical metadata ও structured data যোগ করা
 - [x] মানুষের কাজে লাগে এমন Bengali Avro/Bijoy, DOCX ও SutonnyMJ guidance/FAQ content যোগ করা
-- [ ] Manus ও Vercel-এ indexability, metadata, build, mobile UI ও shared auto-deploy যাচাই
-- [ ] Google Search Console verification/submission-এর জন্য user handoff এবং legitimate authority-building checklist দেওয়া
+- [x] Manus ও Vercel-এ indexability, metadata, build, mobile UI ও shared auto-deploy যাচাই
+- [x] Git-সিঙ্কড Vercel `avrojoy` প্রজেক্টে `avrojoy.vercel.app` primary production domain স্থানান্তর ও live metadata যাচাই
+- [x] Google Search Console-এ HTML meta-tag ownership verification এবং `sitemap.xml` submission সফলভাবে সম্পন্ন
+- [x] নিয়মিত Search Console review ও people-first authority-building-এর বাস্তবসম্মত checklist নথিভুক্ত
