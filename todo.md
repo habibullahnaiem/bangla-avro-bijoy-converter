@@ -817,7 +817,7 @@
 - [x] Browser-delivered frontend-এর copy সীমাবদ্ধতা ও বাস্তবসম্মত protection plan নথিভুক্ত করা
 - [x] অনুমোদিত হলে repository privacy, ownership notice ও basic anti-copy measures প্রয়োগ করা
 - [x] অনুমোদিত footer notice “© মো. হাবিবুল্লাহ নাঈম। সর্বস্বত্ব সংরক্ষিত। অনুমতি ছাড়া এই সাইটের code, design বা content কপি/পুনঃপ্রকাশ নিষিদ্ধ।” প্রকাশ করা
-- [ ] Verification, checkpoint ও user handoff সম্পন্ন করা
+- [x] Verification, checkpoint ও user handoff সম্পন্ন করা
 - [x] performance/page-experience-এর field এবং lab baseline পরিমাপ করে কেবল প্রমাণভিত্তিক safe improvement নির্ধারণ করা
 - [x] user-visible converter behavior না বদলে প্রয়োজনীয় SEO polish ও owner documentation হালনাগাদ করা
 - [x] live verification, tests, Vercel auto-deploy এবং checkpoint সম্পন্ন করা
