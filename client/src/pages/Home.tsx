@@ -2119,7 +2119,7 @@ export default function Home() {
           <p className="text-xs opacity-80">
             অভ্র/ইউনিকোড ⇄ বিজয় • SutonnyMJ • Times New Roman
           </p>
-          <a href="/avrojoy-er-jonmokotha" className="text-xs font-semibold text-primary-foreground/90 underline-offset-4 transition hover:text-primary-foreground hover:underline">
+          <a href="/avrojoy-er-jonmokotha" className="site-footer__link text-xs font-semibold underline-offset-4 transition hover:underline">
             আমাদের গল্প
           </a>
           <nav aria-label="Footer navigation" className="site-footer__nav flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs font-semibold">

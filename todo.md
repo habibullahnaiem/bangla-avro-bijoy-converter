@@ -835,6 +835,11 @@
 - [x] Footer navigation link-গুলোর ভুল dark text inheritance শনাক্ত করা
 - [x] Teal footer-এ link ও separator-এর readable light contrast ঠিক করা
 - [x] Desktop/mobile validation, test, Vercel auto-deploy ও checkpoint সম্পন্ন করা
+
+# সক্রিয়: footer story-link contrast follow-up
+- [x] “আমাদের গল্প” link-এর অবশিষ্ট dark utility override শনাক্ত করা
+- [x] Story link-সহ footer navigation-এর সব anchor-এ explicit readable light color প্রয়োগ করা
+- [x] Live-style validation, test, Vercel auto-deploy ও checkpoint সম্পন্ন করা
 - [x] performance/page-experience-এর field এবং lab baseline পরিমাপ করে কেবল প্রমাণভিত্তিক safe improvement নির্ধারণ করা
 - [x] user-visible converter behavior না বদলে প্রয়োজনীয় SEO polish ও owner documentation হালনাগাদ করা
 - [x] live verification, tests, Vercel auto-deploy এবং checkpoint সম্পন্ন করা
