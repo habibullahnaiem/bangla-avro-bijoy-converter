@@ -793,6 +793,12 @@
 - [ ] Google Search Console-এ primary homepage inspect করে indexing request পাঠানো এবং initial baseline নথিভুক্ত করা — inspection সম্পন্ন; Google-side indexing-request submission error দেখিয়েছে, তাই ২৪–৭২ ঘণ্টা পরে retry প্রয়োজন
 - [ ] Google-এর সাময়িক indexing-request submission error পুনরায় পরীক্ষা করে homepage request সফলভাবে পাঠানোর চেষ্টা করা — পুনরায় চেষ্টা করে Google Search Console-এর daily quota exceeded নিশ্চিত হয়েছে; Google-এর নির্দেশনা অনুযায়ী আগামীকাল retry প্রয়োজন
 - [x] আগামীকাল Google quota reset হওয়ার পর homepage indexing request-এর একবারের নিরাপদ স্বয়ংক্রিয় retry পদ্ধতি নির্ধারণ ও প্রয়োজনে সেটআপ করা — ২৬ আগস্ট ২০২৬, ১০:০০ Asia/Dhaka-তে one-time schedule active
+
+# সক্রিয়: নতুন ব্র্যান্ড ট্যাগলাইন
+- [x] Hero brand copy-তে “অভ্রজয় — অভ্র হোক বা বিজয়, ফন্ট বদলে ভয় নয়” tagline প্রয়োগ করা
+- [x] চূড়ান্ত wording “অভ্রজয় — অভ্র হোক বা বিজয়, ফন্ট বদলে নেই ভয়” অনুযায়ী hero tagline সংশোধন করা
+- [x] Desktop ও mobile-এ tagline-এর wrap, contrast ও hierarchy যাচাই করা
+- [x] Build, Vercel auto-deploy ও checkpoint সম্পন্ন করা
 - [x] performance/page-experience-এর field এবং lab baseline পরিমাপ করে কেবল প্রমাণভিত্তিক safe improvement নির্ধারণ করা
 - [x] user-visible converter behavior না বদলে প্রয়োজনীয় SEO polish ও owner documentation হালনাগাদ করা
 - [x] live verification, tests, Vercel auto-deploy এবং checkpoint সম্পন্ন করা
