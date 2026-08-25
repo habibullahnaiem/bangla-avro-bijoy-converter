@@ -791,6 +791,8 @@
 - [ ] live homepage-এর crawlability, canonical, robots, sitemap, title/description, social metadata ও structured data পুনরায় audit করা
 - [x] live homepage-এর crawlability, canonical, robots, sitemap, title/description, social metadata ও structured data পুনরায় audit করা
 - [ ] Google Search Console-এ primary homepage inspect করে indexing request পাঠানো এবং initial baseline নথিভুক্ত করা — inspection সম্পন্ন; Google-side indexing-request submission error দেখিয়েছে, তাই ২৪–৭২ ঘণ্টা পরে retry প্রয়োজন
+- [ ] Google-এর সাময়িক indexing-request submission error পুনরায় পরীক্ষা করে homepage request সফলভাবে পাঠানোর চেষ্টা করা — পুনরায় চেষ্টা করে Google Search Console-এর daily quota exceeded নিশ্চিত হয়েছে; Google-এর নির্দেশনা অনুযায়ী আগামীকাল retry প্রয়োজন
+- [x] আগামীকাল Google quota reset হওয়ার পর homepage indexing request-এর একবারের নিরাপদ স্বয়ংক্রিয় retry পদ্ধতি নির্ধারণ ও প্রয়োজনে সেটআপ করা — ২৬ আগস্ট ২০২৬, ১০:০০ Asia/Dhaka-তে one-time schedule active
 - [x] performance/page-experience-এর field এবং lab baseline পরিমাপ করে কেবল প্রমাণভিত্তিক safe improvement নির্ধারণ করা
 - [x] user-visible converter behavior না বদলে প্রয়োজনীয় SEO polish ও owner documentation হালনাগাদ করা
 - [x] live verification, tests, Vercel auto-deploy এবং checkpoint সম্পন্ন করা
