@@ -793,4 +793,4 @@
 - [ ] Google Search Console-এ primary homepage inspect করে indexing request পাঠানো এবং initial baseline নথিভুক্ত করা — inspection সম্পন্ন; Google-side indexing-request submission error দেখিয়েছে, তাই ২৪–৭২ ঘণ্টা পরে retry প্রয়োজন
 - [x] performance/page-experience-এর field এবং lab baseline পরিমাপ করে কেবল প্রমাণভিত্তিক safe improvement নির্ধারণ করা
 - [x] user-visible converter behavior না বদলে প্রয়োজনীয় SEO polish ও owner documentation হালনাগাদ করা
-- [ ] live verification, tests, Vercel auto-deploy এবং checkpoint সম্পন্ন করা
+- [x] live verification, tests, Vercel auto-deploy এবং checkpoint সম্পন্ন করা
