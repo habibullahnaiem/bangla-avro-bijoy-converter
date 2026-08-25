@@ -742,3 +742,24 @@
 - [x] Home page-এর missing `useAuth` import/runtime crash ঠিক করে existing converter interface পুনরুদ্ধার
 - [x] upgraded backend entry point, PWA build command এবং existing SEO metadata compatibility যাচাই
 - [x] TypeScript 5.9-এর BlobPart typing regression ঠিক করে DOCX download behavior অক্ষুণ্ণ রাখা
+
+# নতুন: ব্র্যান্ড-সামঞ্জস্যপূর্ণ পাবলিক সাবডোমেইন
+- [ ] পাবলিক URL-কে `avrojoy.manus.space` করার অনুরোধ যাচাই ও কনফিগার
+- [ ] নতুন URL খোলে কি না যাচাই করে ব্যবহারকারীকে জানানো
+- [ ] সংশোধিত পছন্দ `avro-joy.manus.space`-এর প্রাপ্যতা যাচাই ও কনফিগার
+- [ ] user-এর domain setting edit-blocker-এর কারণ নির্ণয় ও কার্যকর বিকল্প প্রয়োগ
+- [ ] AvroJoy-ভিত্তিক সম্ভাব্য `manus.space` সাবডোমেইনের প্রতিনিধিত্বমূলক প্রাপ্যতা যাচাই
+
+# নতুন: public static converter simplification
+- [ ] login, private document list ও managed File Storage feature live site থেকে সরানোর scope নিশ্চিত
+- [ ] auth/storage-free public converter build ও Vercel deployment compatibility প্রস্তুত
+
+# নতুন: আলাদা Vercel static copy
+- [x] বর্তমান full-stack Manus app অক্ষুণ্ণ রেখে পৃথক Vercel-ready static copy তৈরি
+- [x] copy থেকে login, tRPC, database ও private storage UI/backend বাদ দেওয়া
+- [x] Vercel build/deployment config, static asset references এবং PWA যাচাই
+- [x] user-এর অনুমতিতে HN Vercel team-এ `avrojoy-static` public production deployment তৈরি ও live conversion যাচাই
+
+# নতুন: Vercel auto-deploy sync
+- [ ] static copy-এর জন্য Git-based automatic Vercel deployment path নির্ণয় ও সেটআপ
+- [ ] target Vercel project/alias যাচাই করে ভবিষ্যৎ update flow নিশ্চিত

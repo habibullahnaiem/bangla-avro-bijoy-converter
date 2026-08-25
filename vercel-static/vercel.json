@@ -1,0 +1,13 @@
+{
+  "framework": "vite",
+  "buildCommand": "pnpm run build",
+  "outputDirectory": "dist/public",
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/manus-storage/(.*)",
+      "destination": "https://avro-bijoy-vyfwtatf.manus.space/manus-storage/$1"
+    },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
