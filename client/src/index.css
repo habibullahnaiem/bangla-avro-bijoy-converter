@@ -2632,3 +2632,39 @@ html:not(.dark) .file-workspace button:disabled {
   border-color: oklch(0.5 0.045 200 / 0.6) !important;
   background: oklch(0.25 0.04 208 / 0.98) !important;
 }
+
+/* The origin-story page uses long-form prose. Keep its light-theme body copy
+   explicitly opaque and dark without changing standalone guide styling. */
+html:not(.dark) .story-page .story-page__lead,
+html:not(.dark) .story-page .story-page__content > div > p {
+  color: oklch(0.29 0.04 210) !important;
+  opacity: 1 !important;
+}
+
+html:not(.dark) .story-page .story-page__content > div > h2 {
+  color: oklch(0.2 0.045 210) !important;
+}
+
+html:not(.dark) .story-page {
+  background: oklch(0.96 0.018 205) !important;
+}
+
+html:not(.dark) .story-page [class*="bg-card"] {
+  background: oklch(0.99 0.008 205) !important;
+}
+
+.dark .story-page {
+  background: oklch(0.15 0.028 210) !important;
+}
+
+.dark .story-page [class*="bg-card"] {
+  border-color: oklch(0.5 0.045 200 / 0.6) !important;
+  background: oklch(0.22 0.036 208) !important;
+}
+
+.dark .story-page .story-page__lead,
+.dark .story-page .story-page__content > div > p,
+.dark .story-page .story-page__content > div > h2 {
+  color: oklch(0.94 0.018 200) !important;
+  opacity: 1 !important;
+}

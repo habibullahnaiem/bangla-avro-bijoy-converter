@@ -14,6 +14,6 @@ export default defineConfig({
   },
   test: {
     environment: "node",
-    include: ["static-copy.test.ts"],
+    include: ["static-copy.test.ts", "origin-story.test.ts"],
   },
 });

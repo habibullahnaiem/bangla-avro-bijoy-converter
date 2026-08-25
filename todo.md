@@ -804,6 +804,13 @@
 - [x] “অভ্রজয় সম্পর্কে” ও “সমর্থন করুন” অংশ footer-এর ঠিক আগে স্থানান্তর করা
 - [x] Desktop ও mobile-এ শেষ অংশের spacing, contrast ও responsive flow যাচাই করা
 - [x] Build, Vercel auto-deploy ও checkpoint সম্পন্ন করা
+
+# সক্রিয়: অভ্রজয়ের জন্মকথা
+- [x] ব্যবহারকারীর দেওয়া জন্মকথা দিয়ে `/avrojoy-er-jonmokotha` public story page তৈরি করা
+- [x] “অভ্রজয় সম্পর্কে” অংশে ২–৩ লাইনের teaser ও “অভ্রজয়ের জন্মকথা পড়ুন” CTA যোগ করা
+- [x] Footer-এ “আমাদের গল্প” text link যোগ করা
+- [x] Story page-এর title, description, canonical, Article structured data ও sitemap entry যোগ করা
+- [x] Desktop/mobile validation, tests, Vercel auto-deploy ও checkpoint সম্পন্ন করা
 - [x] performance/page-experience-এর field এবং lab baseline পরিমাপ করে কেবল প্রমাণভিত্তিক safe improvement নির্ধারণ করা
 - [x] user-visible converter behavior না বদলে প্রয়োজনীয় SEO polish ও owner documentation হালনাগাদ করা
 - [x] live verification, tests, Vercel auto-deploy এবং checkpoint সম্পন্ন করা

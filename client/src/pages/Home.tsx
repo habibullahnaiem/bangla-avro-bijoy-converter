@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
   ArrowLeftRight,
+  ArrowRight,
   ArrowRightLeft,
   ClipboardCopy,
   ClipboardPaste,
@@ -2034,8 +2035,14 @@ export default function Home() {
               </div>
             </div>
             <p className="relative mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-              অভ্রজয় বাংলা লেখক, শিক্ষার্থী ও প্রকাশনার কাজের জন্য অভ্র/ইউনিকোড এবং বিজয় টেক্সটের মধ্যে রূপান্তর সহজ করতে তৈরি। যুক্তবর্ণ, ফরম্যাটিং-সচেতন DOCX/TXT কাজ এবং বাংলা–ইংরেজি মিশ্র লেখার ব্যবহারিক প্রবাহকে গুরুত্ব দেওয়া হয়।
+              একটি স্নাতকোত্তর থিসিসের শেষ সময়ের Word ও বিজয় রূপান্তর সমস্যার সমাধান খুঁজতে গিয়েই অভ্রজয়ের শুরু। সেই ব্যক্তিগত প্রয়োজন আজ বাংলা document workflow সহজ করার একটি উদ্যোগে পরিণত হয়েছে।
             </p>
+            <a
+              href="/avrojoy-er-jonmokotha"
+              className="relative mt-4 inline-flex items-center gap-2 rounded-xl border border-primary/30 bg-primary/5 px-3.5 py-2 text-sm font-bold text-primary transition hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              অভ্রজয়ের জন্মকথা পড়ুন
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </a>
           </article>
 
           <article className="relative overflow-hidden rounded-2xl border border-primary/30 bg-primary/10 p-5 shadow-sm sm:p-6">
@@ -2112,6 +2119,9 @@ export default function Home() {
           <p className="text-xs opacity-80">
             অভ্র/ইউনিকোড ⇄ বিজয় • SutonnyMJ • Times New Roman
           </p>
+          <a href="/avrojoy-er-jonmokotha" className="text-xs font-semibold text-primary-foreground/90 underline-offset-4 transition hover:text-primary-foreground hover:underline">
+            আমাদের গল্প
+          </a>
           <p className="text-xs opacity-75">
             © {currentCopyrightYear} মো. হাবিবুল্লাহ নাঈম • সর্বস্বত্ব সংরক্ষিত
           </p>

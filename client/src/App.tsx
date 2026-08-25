@@ -5,6 +5,7 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
+import AvroJoyStoryPage from "./pages/AvroJoyStory";
 import { SeoGuidePage } from "./pages/SeoGuides";
 
 function Router() {
@@ -12,6 +13,7 @@ function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
+      <Route path={"/avrojoy-er-jonmokotha"} component={AvroJoyStoryPage} />
       <Route path={"/avro-to-bijoy"}>
         <SeoGuidePage slug="avro-to-bijoy" />
       </Route>
