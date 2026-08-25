@@ -2125,6 +2125,9 @@ export default function Home() {
           <p className="text-xs opacity-75">
             © {currentCopyrightYear} মো. হাবিবুল্লাহ নাঈম • সর্বস্বত্ব সংরক্ষিত
           </p>
+          <p className="max-w-2xl text-xs leading-relaxed opacity-85">
+            অনুমতি ছাড়া এই সাইটের code, design বা content কপি/পুনঃপ্রকাশ নিষিদ্ধ।
+          </p>
         </div>
       </footer>
 

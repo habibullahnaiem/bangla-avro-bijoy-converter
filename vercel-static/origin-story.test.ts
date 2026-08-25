@@ -12,6 +12,7 @@ describe("AvroJoy origin story discovery", () => {
     expect(app).toContain('path={"/avrojoy-er-jonmokotha"}');
     expect(home).toContain("অভ্রজয়ের জন্মকথা পড়ুন");
     expect(home).toContain("আমাদের গল্প");
+    expect(home).toContain("অনুমতি ছাড়া এই সাইটের code, design বা content কপি/পুনঃপ্রকাশ নিষিদ্ধ।");
   });
 
   it("publishes Bengali Article metadata and a sitemap entry for the story", () => {
