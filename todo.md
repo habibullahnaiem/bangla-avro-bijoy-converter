@@ -799,6 +799,11 @@
 - [x] চূড়ান্ত wording “অভ্রজয় — অভ্র হোক বা বিজয়, ফন্ট বদলে নেই ভয়” অনুযায়ী hero tagline সংশোধন করা
 - [x] Desktop ও mobile-এ tagline-এর wrap, contrast ও hierarchy যাচাই করা
 - [x] Build, Vercel auto-deploy ও checkpoint সম্পন্ন করা
+
+# সক্রিয়: support অংশের অবস্থান
+- [x] “অভ্রজয় সম্পর্কে” ও “সমর্থন করুন” অংশ footer-এর ঠিক আগে স্থানান্তর করা
+- [x] Desktop ও mobile-এ শেষ অংশের spacing, contrast ও responsive flow যাচাই করা
+- [x] Build, Vercel auto-deploy ও checkpoint সম্পন্ন করা
 - [x] performance/page-experience-এর field এবং lab baseline পরিমাপ করে কেবল প্রমাণভিত্তিক safe improvement নির্ধারণ করা
 - [x] user-visible converter behavior না বদলে প্রয়োজনীয় SEO polish ও owner documentation হালনাগাদ করা
 - [x] live verification, tests, Vercel auto-deploy এবং checkpoint সম্পন্ন করা
