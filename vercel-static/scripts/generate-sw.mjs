@@ -3,8 +3,9 @@ import path from "node:path";
 import { createHash } from "node:crypto";
 
 const projectRoot = path.resolve(import.meta.dirname, "..");
+const repositoryRoot = path.resolve(projectRoot, "..");
 const publicDir = path.join(projectRoot, "dist", "public");
-const sourcePath = path.join(projectRoot, "client", "public", "sw.js");
+const sourcePath = path.join(repositoryRoot, "client", "public", "sw.js");
 const destinationPath = path.join(publicDir, "sw.js");
 
 if (!fs.existsSync(publicDir)) {

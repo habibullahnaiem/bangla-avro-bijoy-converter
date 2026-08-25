@@ -6,8 +6,6 @@
  * - দিক টগল, দিক পরিবর্তন (সুয়াপ), মুছুন, কপি, পেস্ট
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useAuth } from "@/_core/hooks/useAuth";
-import { startLogin } from "@/const";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -32,9 +30,6 @@ import {
   HeartHandshake,
   MessageCircle,
   Share2,
-  Cloud,
-  LogIn,
-  LogOut,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -56,7 +51,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useTheme } from "@/contexts/ThemeContext";
-import { trpc } from "@/lib/trpc";
 
 const EXAMPLE_TEXT = `বিষয়: বাংলা নথির টাইপসেটিং ও রূপান্তর-সহায়তা
 
@@ -74,7 +68,6 @@ const EXAMPLE_TEXT = `বিষয়: বাংলা নথির টাইপ
 
 const HISTORY_STORAGE_KEY = "abc-recent-conversions";
 const MAX_HISTORY_ITEMS = 6;
-const MAX_STORED_DOCUMENT_BYTES = 8 * 1024 * 1024;
 const BRAND_LOGO_SRC = "/manus-storage/bangla-converter-exact-reference-logo_2f0bb0ec.png";
 const INSTALL_PROMPT_DISMISSED_KEY = "avrojoy-install-prompt-dismissed";
 const DECORATIVE_GLYPHS = [
@@ -114,49 +107,7 @@ const formatFileSize = (bytes: number) =>
     ? `${(bytes / 1024).toFixed(1)} KB`
     : `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 
-const formatStoredDocumentTime = (timestamp: Date) =>
-  new Intl.DateTimeFormat("bn-BD", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-  }).format(new Date(timestamp));
-
-const fileToBase64 = (file: File) =>
-  new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = () => reject(new Error("Unable to read selected file"));
-    reader.onload = () => {
-      const dataUrl = typeof reader.result === "string" ? reader.result : "";
-      const encoded = dataUrl.split(",", 2)[1];
-      if (!encoded) {
-        reject(new Error("Unable to encode selected file"));
-        return;
-      }
-      resolve(encoded);
-    };
-    reader.readAsDataURL(file);
-  });
-
 export default function Home() {
-  // The useAuth hook provides authentication state.
-  // To implement login/logout, call logout(), or start login from an event
-  // handler: onClick={() => startLogin()} (imported from "@/const"). Never call
-  // startLogin() during render (no href={startLogin()}) — it mints a one-time
-  // nonce cookie and must run only at the moment of navigation.
-  const { user, loading, isAuthenticated, logout } = useAuth();
-
-  const trpcUtils = trpc.useUtils();
-  const storedDocumentsQuery = trpc.documents.list.useQuery(undefined, {
-    enabled: isAuthenticated,
-    retry: false,
-    refetchOnWindowFocus: false,
-  });
-  const saveDocumentMutation = trpc.documents.upload.useMutation();
-  const downloadDocumentMutation = trpc.documents.download.useMutation();
-  const removeDocumentMutation = trpc.documents.remove.useMutation();
-
   const { theme, toggleTheme } = useTheme();
   const currentCopyrightYear = new Intl.DateTimeFormat("bn-BD", {
     year: "numeric",
@@ -598,65 +549,6 @@ export default function Home() {
     setIsFileDragActive(false);
     if (fileInputRef.current) fileInputRef.current.value = "";
     toast.success("ফাইল সরানো হয়েছে");
-  };
-
-  const saveSelectedDocument = async () => {
-    if (!selectedFile) {
-      toast.info("প্রথমে একটি ফাইল নির্বাচন করুন");
-      return;
-    }
-    if (!isAuthenticated) {
-      toast.info("ব্যক্তিগত নথি সংরক্ষণ করতে আগে সাইন ইন করুন");
-      startLogin();
-      return;
-    }
-    if (selectedFile.size > MAX_STORED_DOCUMENT_BYTES) {
-      toast.error("ব্যক্তিগত নথিতে সংরক্ষণের সীমা 8 MB");
-      return;
-    }
-
-    try {
-      const mimeType = /\.txt$/i.test(selectedFile.name)
-        ? "text/plain"
-        : "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-      const contentBase64 = await fileToBase64(selectedFile);
-      await saveDocumentMutation.mutateAsync({
-        fileName: selectedFile.name,
-        mimeType,
-        contentBase64,
-        source: "upload",
-        direction,
-      });
-      await trpcUtils.documents.list.invalidate();
-      toast.success("ফাইলটি শুধু আপনার ব্যক্তিগত নথিতে সংরক্ষিত হয়েছে");
-    } catch {
-      toast.error("নথি সংরক্ষণ করা যায়নি। আবার চেষ্টা করুন।");
-    }
-  };
-
-  const downloadStoredDocument = async (documentId: number, fileName: string) => {
-    try {
-      const { url } = await downloadDocumentMutation.mutateAsync({ id: documentId });
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = fileName;
-      link.rel = "noopener noreferrer";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch {
-      toast.error("নথি ডাউনলোডের লিংক তৈরি করা যায়নি");
-    }
-  };
-
-  const removeStoredDocument = async (documentId: number) => {
-    try {
-      await removeDocumentMutation.mutateAsync({ id: documentId });
-      await trpcUtils.documents.list.invalidate();
-      toast.success("নথিটি আপনার সংরক্ষিত তালিকা থেকে সরানো হয়েছে");
-    } catch {
-      toast.error("নথিটি সরানো যায়নি");
-    }
   };
 
   const runFileConvert = async () => {
@@ -1179,51 +1071,6 @@ export default function Home() {
                 </span>
               </span>
             ) : null}
-            {!loading &&
-              (isAuthenticated ? (
-                <>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="gap-1.5 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
-                        onClick={() => setActiveTab("file")}
-                        aria-label="আমার সংরক্ষিত নথি দেখুন">
-                        <Cloud className="h-4 w-4" />
-                        <span className="hidden lg:inline">আমার নথি</span>
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>{user?.name || "আমার"} সংরক্ষিত নথি</TooltipContent>
-                  </Tooltip>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-primary-foreground hover:bg-primary-foreground/10"
-                        onClick={() => {
-                          void logout()
-                            .then(() => toast.success("সাইন আউট করা হয়েছে"))
-                            .catch(() => toast.error("সাইন আউট করা যায়নি"));
-                        }}
-                        aria-label="সাইন আউট করুন">
-                        <LogOut className="h-4 w-4" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>সাইন আউট</TooltipContent>
-                  </Tooltip>
-                </>
-              ) : (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-primary-foreground/40 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20 hover:text-primary-foreground"
-                  onClick={startLogin}>
-                  <LogIn className="mr-1.5 h-4 w-4" />
-                  <span className="hidden sm:inline">সাইন ইন</span>
-                </Button>
-              ))}
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -1861,32 +1708,6 @@ export default function Home() {
                   </Button>
                 </div>
               )}
-              {selectedFile && (
-                <div className="mt-3 flex flex-col gap-3 rounded-xl border border-primary/25 bg-primary/5 p-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <p className="text-sm font-semibold text-foreground">ব্যক্তিগত নথিতে সংরক্ষণ</p>
-                    <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
-                      শুধু আপনার সাইন-ইন করা অ্যাকাউন্টে দৃশ্যমান থাকবে। সীমা 8 MB।
-                    </p>
-                  </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    disabled={saveDocumentMutation.isPending || selectedFile.size > MAX_STORED_DOCUMENT_BYTES}
-                    className="border-primary/35 bg-card text-primary hover:bg-primary/5 disabled:opacity-50"
-                    onClick={saveSelectedDocument}>
-                    {saveDocumentMutation.isPending ? (
-                      <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
-                    ) : isAuthenticated ? (
-                      <Cloud className="mr-1.5 h-4 w-4" />
-                    ) : (
-                      <LogIn className="mr-1.5 h-4 w-4" />
-                    )}
-                    {isAuthenticated ? "আমার নথিতে সংরক্ষণ করুন" : "সাইন ইন করে সংরক্ষণ"}
-                  </Button>
-                </div>
-              )}
               <input
                 id="file-upload"
                 ref={fileInputRef}
@@ -1951,77 +1772,6 @@ export default function Home() {
                   )}
                 </div>
               </div>
-
-              {isAuthenticated && (
-                <section className="mt-6 rounded-xl border border-border bg-muted/25 p-4" aria-labelledby="private-documents-title">
-                  <div className="flex flex-wrap items-start justify-between gap-3">
-                    <div>
-                      <h4 id="private-documents-title" className="flex items-center gap-2 font-bold text-foreground">
-                        <Cloud className="h-4 w-4 text-primary" />
-                        আমার সংরক্ষিত নথি
-                      </h4>
-                      <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-                        শুধু আপনার অ্যাকাউন্টে দৃশ্যমান। টেক্সট রূপান্তরের local history এখানে স্বয়ংক্রিয়ভাবে সংরক্ষিত হয় না।
-                      </p>
-                    </div>
-                    <span className="rounded-full border border-primary/25 bg-card px-2.5 py-1 text-xs font-semibold text-primary">
-                      {user?.name || "ব্যক্তিগত"}
-                    </span>
-                  </div>
-
-                  <div className="mt-3 space-y-2">
-                    {storedDocumentsQuery.isLoading ? (
-                      <div className="flex items-center gap-2 rounded-lg border border-dashed border-border bg-card/70 px-3 py-4 text-sm text-muted-foreground">
-                        <Loader2 className="h-4 w-4 animate-spin text-primary" />
-                        সংরক্ষিত নথি লোড হচ্ছে...
-                      </div>
-                    ) : storedDocumentsQuery.isError ? (
-                      <div className="rounded-lg border border-destructive/25 bg-destructive/5 px-3 py-3 text-sm text-destructive">
-                        সংরক্ষিত নথি দেখা যাচ্ছে না। আবার চেষ্টা করুন।
-                      </div>
-                    ) : storedDocumentsQuery.data?.length ? (
-                      storedDocumentsQuery.data.map((storedDocument) => (
-                        <div key={storedDocument.id} className="flex flex-col gap-3 rounded-lg border border-border/70 bg-card p-3 sm:flex-row sm:items-center sm:justify-between">
-                          <div className="min-w-0">
-                            <p className="truncate font-semibold text-foreground" title={storedDocument.fileName}>
-                              {storedDocument.fileName}
-                            </p>
-                            <p className="mt-0.5 text-xs text-muted-foreground">
-                              {formatFileSize(storedDocument.byteSize)} · {storedDocument.direction === "u2b" ? "অভ্র → বিজয়" : "বিজয় → অভ্র"} · {formatStoredDocumentTime(storedDocument.createdAt)}
-                            </p>
-                          </div>
-                          <div className="flex shrink-0 flex-wrap items-center gap-2">
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              disabled={downloadDocumentMutation.isPending}
-                              className="border-primary/30 text-primary hover:bg-accent"
-                              onClick={() => void downloadStoredDocument(storedDocument.id, storedDocument.fileName)}>
-                              <Download className="mr-1.5 h-3.5 w-3.5" />
-                              ডাউনলোড
-                            </Button>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              disabled={removeDocumentMutation.isPending}
-                              className="border-destructive/25 text-destructive hover:bg-destructive/10"
-                              onClick={() => void removeStoredDocument(storedDocument.id)}>
-                              <Trash2 className="mr-1.5 h-3.5 w-3.5" />
-                              সরান
-                            </Button>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="rounded-lg border border-dashed border-border bg-card/70 px-3 py-4 text-sm text-muted-foreground">
-                        এখনো কোনো ব্যক্তিগত নথি সংরক্ষণ করা হয়নি। উপরে ফাইল বেছে নিয়ে “আমার নথিতে সংরক্ষণ করুন” চাপুন।
-                      </div>
-                    )}
-                  </div>
-                </section>
-              )}
 
               {/* ফাইলের কনভার্টেড টেক্সট নমুনা — ডুয়াল-সাইজ: বাংলা বড্ড,
                   ইংরেজি এক ধাপ ছোট (12/14 নিয়ম) */}

@@ -767,3 +767,9 @@
 # নতুন: Vercel static copy maintenance guide
 - [x] Vercel, GitHub, `vercel-static/` source এবং auto-deploy workflow-এর বিস্তারিত বাংলা নির্দেশিকা প্রস্তুত
 - [x] safe update, verification, rollback, PWA cache এবং দুই version-এর পার্থক্য ব্যাখ্যা
+
+# নতুন: এক source থেকে Manus ও Vercel update
+- [x] root `client/`-কে Manus ও Vercel-এর একমাত্র shared frontend source করা
+- [x] Vercel build root থেকে duplicate static client source বাদ দিয়ে root client build config নির্ধারণ
+- [x] Manus public UI থেকে login ও private-document storage flow সরিয়ে Vercel-এর সঙ্গে মিলানো
+- [x] দুই deployment-এ একই UI, local DOCX/TXT conversion ও PWA verify করা

@@ -1,20 +1,22 @@
 {
   "include": [
-    "client/src/main.tsx",
-    "client/src/App.tsx",
-    "client/src/pages/Home.tsx",
-    "client/src/pages/NotFound.tsx",
-    "client/src/components/ErrorBoundary.tsx",
-    "client/src/components/ui/button.tsx",
-    "client/src/components/ui/sonner.tsx",
-    "client/src/components/ui/textarea.tsx",
-    "client/src/components/ui/tooltip.tsx",
-    "client/src/contexts/ThemeContext.tsx",
-    "client/src/hooks/useComposition.ts",
-    "client/src/hooks/useMobile.tsx",
-    "client/src/hooks/usePersistFn.ts",
-    "client/src/lib/converter.ts",
-    "client/src/lib/utils.ts"
+    "../client/src/main.tsx",
+    "../client/src/App.tsx",
+    "../client/src/pages/Home.tsx",
+    "../client/src/pages/NotFound.tsx",
+    "../client/src/components/ErrorBoundary.tsx",
+    "../client/src/components/ui/button.tsx",
+    "../client/src/components/ui/dialog.tsx",
+    "../client/src/components/ui/sonner.tsx",
+    "../client/src/components/ui/textarea.tsx",
+    "../client/src/components/ui/tooltip.tsx",
+    "../client/src/contexts/ThemeContext.tsx",
+    "../client/src/hooks/useComposition.ts",
+    "../client/src/hooks/useMobile.tsx",
+    "../client/src/hooks/usePersistFn.ts",
+    "../client/src/lib/converter.ts",
+    "../client/src/lib/utils.ts",
+    "./static-copy.test.ts"
   ],
   "exclude": ["node_modules", "build", "dist", "**/*.test.ts"],
   "compilerOptions": {
@@ -29,11 +31,10 @@
     "skipLibCheck": true,
     "allowImportingTsExtensions": true,
     "moduleResolution": "bundler",
-    "baseUrl": ".",
+    "baseUrl": "..",
     "types": ["node", "vite/client"],
     "paths": {
-      "@/*": ["./client/src/*"],
-      "@shared/*": ["./shared/*"]
+      "@/*": ["./client/src/*"]
     }
   }
 }
