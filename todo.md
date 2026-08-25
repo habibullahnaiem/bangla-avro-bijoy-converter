@@ -773,3 +773,14 @@
 - [x] Vercel build root থেকে duplicate static client source বাদ দিয়ে root client build config নির্ধারণ
 - [x] Manus public UI থেকে login ও private-document storage flow সরিয়ে Vercel-এর সঙ্গে মিলানো
 - [x] দুই deployment-এ একই UI, local DOCX/TXT conversion ও PWA verify করা
+
+# নতুন: Google search visibility
+- [x] AvroJoy-এর বর্তমান SEO foundation ও indexability পুনর্মূল্যায়ন
+- [x] on-page content, technical SEO, Search Console এবং legitimate authority-building-এর অগ্রাধিকার পরিকল্পনা দেওয়া
+
+# সক্রিয়: sustainable Google SEO implementation
+- [x] `avrojoy.vercel.app`-কে primary public search domain হিসেবে canonicalize করা এবং shared crawl directives সাজানো
+- [x] Vercel-compatible robots.txt, sitemap.xml, canonical metadata ও structured data যোগ করা
+- [x] মানুষের কাজে লাগে এমন Bengali Avro/Bijoy, DOCX ও SutonnyMJ guidance/FAQ content যোগ করা
+- [ ] Manus ও Vercel-এ indexability, metadata, build, mobile UI ও shared auto-deploy যাচাই
+- [ ] Google Search Console verification/submission-এর জন্য user handoff এবং legitimate authority-building checklist দেওয়া

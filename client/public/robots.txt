@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://avrojoy.vercel.app/sitemap.xml

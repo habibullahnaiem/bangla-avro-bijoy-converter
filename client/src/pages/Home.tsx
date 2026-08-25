@@ -2018,6 +2018,70 @@ export default function Home() {
             </a>
           </article>
         </section>
+
+        <section
+          id="avro-bijoy-guide"
+          className="seo-guide-section mt-8 rounded-2xl border border-primary/20 bg-card/90 p-5 shadow-sm sm:p-6"
+          aria-labelledby="avro-bijoy-guide-title">
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary">
+            ব্যবহারিক বাংলা গাইড
+          </p>
+          <h2 id="avro-bijoy-guide-title" className="mt-1 text-xl font-extrabold tracking-tight text-foreground sm:text-2xl">
+            অভ্র, বিজয় ও SutonnyMJ রূপান্তর সহজভাবে বুঝুন
+          </h2>
+          <p className="mt-3 max-w-4xl text-sm leading-relaxed text-muted-foreground">
+            অভ্রজয় দিয়ে ইউনিকোড বাংলা ও বিজয় (SutonnyMJ) লেখার মধ্যে রূপান্তর করা যায়।
+            Word-এ ব্যবহার করার আগে আউটপুট দেখে নেওয়া এবং সঠিক ফন্ট নির্বাচন করা ভালো ফল দেয়।
+          </p>
+
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
+            <article className="rounded-xl border bg-muted/30 p-4">
+              <h3 className="font-bold text-foreground">অভ্র থেকে বিজয়</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                <strong className="text-foreground">অভ্র → বিজয়</strong> নির্বাচন করে ইউনিকোড বাংলা লিখুন বা পেস্ট করুন।
+                লাইভ রূপান্তর চালু থাকলে আউটপুট সঙ্গে সঙ্গেই দেখা যাবে; পরে কপি করে Word-এ ব্যবহার করুন।
+              </p>
+            </article>
+            <article className="rounded-xl border bg-muted/30 p-4">
+              <h3 className="font-bold text-foreground">বিজয় থেকে ইউনিকোড</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                <strong className="text-foreground">বিজয় → অভ্র</strong> নির্বাচন করে SutonnyMJ-ভিত্তিক বিজয় টেক্সট দিন।
+                রূপান্তরিত লেখা আধুনিক Unicode বাংলা হিসেবে কপি ও সম্পাদনা করা যাবে।
+              </p>
+            </article>
+            <article className="rounded-xl border bg-muted/30 p-4">
+              <h3 className="font-bold text-foreground">DOCX/TXT ফাইল</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                ফাইল কনভার্টার ট্যাব থেকে <strong className="text-foreground">.docx</strong> বা <strong className="text-foreground">.txt</strong> নির্বাচন করুন,
+                দিক ঠিক করুন এবং রূপান্তরিত file download করুন। এই প্রক্রিয়াটি আপনার ব্রাউজারেই সম্পন্ন হয়।
+              </p>
+            </article>
+          </div>
+
+          <div className="mt-5 rounded-xl border border-primary/15 bg-primary/5 p-4">
+            <h3 className="font-bold text-foreground">সাধারণ প্রশ্ন</h3>
+            <div className="mt-3 divide-y divide-border">
+              <details className="py-3">
+                <summary className="cursor-pointer font-semibold text-foreground">Word-এ বিজয় আউটপুটে কোন font ব্যবহার করব?</summary>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  বাংলা বিজয় অংশে SutonnyMJ এবং ইংরেজি অংশে Times New Roman ব্যবহার করুন। প্রয়োজন হলে এখানে থাকা rich copy বা file converter ব্যবহার করে ফল আগে যাচাই করুন।
+                </p>
+              </details>
+              <details className="py-3">
+                <summary className="cursor-pointer font-semibold text-foreground">আমার টেক্সট বা ফাইল কি server-এ সংরক্ষিত হয়?</summary>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  না। বর্তমান public version-এ text conversion, file conversion এবং recent history আপনার browser-এর মধ্যেই কাজ করে; কোনো login বা ব্যক্তিগত cloud storage নেই।
+                </p>
+              </details>
+              <details className="py-3">
+                <summary className="cursor-pointer font-semibold text-foreground">যুক্তবর্ণ ও এ-কার ঠিক না দেখালে কী করব?</summary>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  সঠিক direction বেছে নিয়েছেন কি না নিশ্চিত করুন এবং বিজয় ফল Word-এ SutonnyMJ font-এ দেখুন। জটিল DOCX হলে file converter-এর output download করে original formattingসহ পরীক্ষা করুন।
+                </p>
+              </details>
+            </div>
+          </div>
+        </section>
       </main>
 
       {/* ফুটার — header-এর exact logo, banner-inspired keyboard ও Bengali glyph layer */}
