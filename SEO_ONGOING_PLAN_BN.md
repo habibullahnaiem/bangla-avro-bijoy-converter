@@ -13,7 +13,15 @@ Google Search Console-এ URL-prefix property-এর ownership **HTML tag**-এ 
 | প্রাথমিক URL | `https://avrojoy.vercel.app/` | canonical, sitemap ও Search Console property একই URL-তে থাকে |
 | মালিকানা যাচাই | HTML meta tag | head থেকে tag সরালে verification হারানোর ঝুঁকি থাকে |
 | Sitemap | `/sitemap.xml` submitted; status: Success | নতুন বা পরিবর্তিত public page Google-কে আবিষ্কার করতে সাহায্য করে |
-| Public content | Bengali converter guide ও FAQ | বাস্তব ব্যবহারকারীর প্রশ্নের উত্তর দেয়; কেবল keyword পুনরাবৃত্তি করে না |
+| Public content | Bengali converter guide, FAQ ও তিনটি focused guide URL | বাস্তব ব্যবহারকারীর প্রশ্নের উত্তর দেয়; কেবল keyword পুনরাবৃত্তি করে না |
+
+## আজকের Search Console ও performance baseline
+
+URL Inspection-এ homepage **`Discovered - currently not indexed`** হিসেবে এসেছে। Google sitemap এবং referring page দুটোতেই `/sitemap.xml` দেখাচ্ছে, অর্থাৎ discovery signal সক্রিয়; কিন্তু এখনো crawl হয়নি। এটি নতুন বা সাম্প্রতিক domain-এর প্রাথমিক অবস্থা হতে পারে। Homepage indexing request পাঠানোর চেষ্টা করা হয়েছিল, তবে Search Console **“We had a problem submitting your indexing request. Please try again later.”** দেখিয়েছে। এটি Google-side submission error; সাইটে crawl block বা canonical conflict পাওয়া যায়নি। Sitemap, canonical এবং robots ঠিক রেখে ২৪–৭২ ঘণ্টা পরে URL Inspection থেকে request আবার চেষ্টা করা উচিত। [5]
+
+এখন sitemap-এ homepage-এর সঙ্গে তিনটি আলাদা, ব্যবহারিক guide URL আছে: `/avro-to-bijoy`, `/bijoy-to-unicode`, এবং `/docx-txt-bijoy-converter`। প্রতিটি route-এ নিজস্ব Bengali title, description, canonical URL, Article structured data, clear task steps ও related internal links আছে। Homepage hero image preload করা হয়েছে, যাতে browser গুরুত্বপূর্ণ above-the-fold image আগে জানতে পারে।
+
+Google PageSpeed Insights-এ এই নতুন URL-এর জন্য এখনও real-user/CrUX field data পাওয়া যায়নি। পর্যাপ্ত Chrome user data না থাকলে এই অবস্থা স্বাভাবিক; তাই এখন অনুমানভিত্তিক performance refactor করা হয়নি। পর্যাপ্ত data এলে Core Web Vitals report ও PageSpeed field data মিলিয়ে কেবল বাস্তব সমস্যা ঠিক করা হবে। [6]
 
 ## পরবর্তী ৩০ দিনের মালিক-রুটিন
 
@@ -48,3 +56,6 @@ Converter mapping, context-sensitive কার/ফলা, DOCX font repair, spec
 
 [4]: https://developers.google.com/search/docs/essentials/spam-policies "Google web search spam policies | Google Search Central"
 
+[5]: https://support.google.com/webmasters/answer/9012289 "URL Inspection Tool | Google Search Console Help"
+
+[6]: https://developers.google.com/search/docs/appearance/core-web-vitals "Understanding the Page Experience and Core Web Vitals | Google Search Central"

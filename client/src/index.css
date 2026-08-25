@@ -2586,3 +2586,49 @@ html:not(.dark) .file-workspace button:disabled {
   border-color: oklch(0.5 0.045 200 / 0.6) !important;
   background: oklch(0.25 0.04 208 / 0.98) !important;
 }
+
+/* Standalone SEO guides share the main page's readable surface system without
+   inheriting the deliberately muted decorative treatment used elsewhere. */
+.seo-guide-page .text-foreground,
+.seo-guide-page h1,
+.seo-guide-page h2,
+.seo-guide-page h3,
+.seo-guide-page summary,
+.seo-guide-page li {
+  color: oklch(0.2 0.03 210) !important;
+}
+
+.seo-guide-page .text-muted-foreground {
+  color: oklch(0.39 0.045 205) !important;
+}
+
+.seo-guide-page .text-primary {
+  color: oklch(0.39 0.1 198) !important;
+}
+
+.seo-guide-page [class*="bg-primary/5"] {
+  border-color: oklch(0.72 0.055 198 / 0.82) !important;
+  background: oklch(0.94 0.032 198 / 0.98) !important;
+}
+
+.dark .seo-guide-page .text-foreground,
+.dark .seo-guide-page h1,
+.dark .seo-guide-page h2,
+.dark .seo-guide-page h3,
+.dark .seo-guide-page summary,
+.dark .seo-guide-page li {
+  color: oklch(0.96 0.014 200) !important;
+}
+
+.dark .seo-guide-page .text-muted-foreground {
+  color: oklch(0.84 0.03 200) !important;
+}
+
+.dark .seo-guide-page .text-primary {
+  color: oklch(0.76 0.105 192) !important;
+}
+
+.dark .seo-guide-page [class*="bg-primary/5"] {
+  border-color: oklch(0.5 0.045 200 / 0.6) !important;
+  background: oklch(0.25 0.04 208 / 0.98) !important;
+}

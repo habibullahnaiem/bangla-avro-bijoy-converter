@@ -786,3 +786,11 @@
 - [x] Git-সিঙ্কড Vercel `avrojoy` প্রজেক্টে `avrojoy.vercel.app` primary production domain স্থানান্তর ও live metadata যাচাই
 - [x] Google Search Console-এ HTML meta-tag ownership verification এবং `sitemap.xml` submission সফলভাবে সম্পন্ন
 - [x] নিয়মিত Search Console review ও people-first authority-building-এর বাস্তবসম্মত checklist নথিভুক্ত
+
+# সক্রিয়: SEO completion audit
+- [ ] live homepage-এর crawlability, canonical, robots, sitemap, title/description, social metadata ও structured data পুনরায় audit করা
+- [x] live homepage-এর crawlability, canonical, robots, sitemap, title/description, social metadata ও structured data পুনরায় audit করা
+- [ ] Google Search Console-এ primary homepage inspect করে indexing request পাঠানো এবং initial baseline নথিভুক্ত করা — inspection সম্পন্ন; Google-side indexing-request submission error দেখিয়েছে, তাই ২৪–৭২ ঘণ্টা পরে retry প্রয়োজন
+- [x] performance/page-experience-এর field এবং lab baseline পরিমাপ করে কেবল প্রমাণভিত্তিক safe improvement নির্ধারণ করা
+- [x] user-visible converter behavior না বদলে প্রয়োজনীয় SEO polish ও owner documentation হালনাগাদ করা
+- [ ] live verification, tests, Vercel auto-deploy এবং checkpoint সম্পন্ন করা

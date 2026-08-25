@@ -2041,6 +2041,9 @@ export default function Home() {
                 <strong className="text-foreground">অভ্র → বিজয়</strong> নির্বাচন করে ইউনিকোড বাংলা লিখুন বা পেস্ট করুন।
                 লাইভ রূপান্তর চালু থাকলে আউটপুট সঙ্গে সঙ্গেই দেখা যাবে; পরে কপি করে Word-এ ব্যবহার করুন।
               </p>
+              <a href="/avro-to-bijoy" className="mt-3 inline-flex items-center gap-1 text-sm font-bold text-primary hover:underline">
+                বিস্তারিত গাইড <ArrowRightLeft className="h-3.5 w-3.5" aria-hidden="true" />
+              </a>
             </article>
             <article className="rounded-xl border bg-muted/30 p-4">
               <h3 className="font-bold text-foreground">বিজয় থেকে ইউনিকোড</h3>
@@ -2048,6 +2051,9 @@ export default function Home() {
                 <strong className="text-foreground">বিজয় → অভ্র</strong> নির্বাচন করে SutonnyMJ-ভিত্তিক বিজয় টেক্সট দিন।
                 রূপান্তরিত লেখা আধুনিক Unicode বাংলা হিসেবে কপি ও সম্পাদনা করা যাবে।
               </p>
+              <a href="/bijoy-to-unicode" className="mt-3 inline-flex items-center gap-1 text-sm font-bold text-primary hover:underline">
+                বিস্তারিত গাইড <ArrowRightLeft className="h-3.5 w-3.5" aria-hidden="true" />
+              </a>
             </article>
             <article className="rounded-xl border bg-muted/30 p-4">
               <h3 className="font-bold text-foreground">DOCX/TXT ফাইল</h3>
@@ -2055,6 +2061,9 @@ export default function Home() {
                 ফাইল কনভার্টার ট্যাব থেকে <strong className="text-foreground">.docx</strong> বা <strong className="text-foreground">.txt</strong> নির্বাচন করুন,
                 দিক ঠিক করুন এবং রূপান্তরিত file download করুন। এই প্রক্রিয়াটি আপনার ব্রাউজারেই সম্পন্ন হয়।
               </p>
+              <a href="/docx-txt-bijoy-converter" className="mt-3 inline-flex items-center gap-1 text-sm font-bold text-primary hover:underline">
+                বিস্তারিত গাইড <ArrowRightLeft className="h-3.5 w-3.5" aria-hidden="true" />
+              </a>
             </article>
           </div>
 
