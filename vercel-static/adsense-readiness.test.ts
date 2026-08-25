@@ -25,6 +25,7 @@ describe("AdSense application readiness pages", () => {
     expect(home).toContain("গোপনীয়তা");
     expect(home).toContain("ব্যবহারের শর্ত");
     expect(home).toContain("থিসিস checklist");
+    expect(home).toContain("site-footer__nav");
     for (const slug of ["privacy", "terms", "contact", "thesis-bijoy-checklist"]) {
       expect(sitemap).toContain(`https://avrojoy.vercel.app/${slug}`);
     }

@@ -830,6 +830,11 @@
 - [x] Footer-এ policy/contact navigation এবং একটি original Bengali help resource যোগ করা
 - [x] প্রতিটি নতুন route-এর title, description, canonical, structured data ও sitemap entry যোগ করা
 - [x] Compliance routing/metadata test, light/dark responsive validation, production build ও checkpoint সম্পন্ন করা
+
+# সক্রিয়: footer navigation contrast
+- [x] Footer navigation link-গুলোর ভুল dark text inheritance শনাক্ত করা
+- [x] Teal footer-এ link ও separator-এর readable light contrast ঠিক করা
+- [x] Desktop/mobile validation, test, Vercel auto-deploy ও checkpoint সম্পন্ন করা
 - [x] performance/page-experience-এর field এবং lab baseline পরিমাপ করে কেবল প্রমাণভিত্তিক safe improvement নির্ধারণ করা
 - [x] user-visible converter behavior না বদলে প্রয়োজনীয় SEO polish ও owner documentation হালনাগাদ করা
 - [x] live verification, tests, Vercel auto-deploy এবং checkpoint সম্পন্ন করা

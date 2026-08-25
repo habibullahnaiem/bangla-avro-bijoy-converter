@@ -867,6 +867,20 @@ html:not(.dark) .file-workspace button:disabled {
   color: oklch(0.9 0.03 195 / 0.9);
 }
 
+.site-footer__nav,
+.site-footer__nav a {
+  color: oklch(0.96 0.015 200) !important;
+}
+
+.site-footer__nav a:hover,
+.site-footer__nav a:focus-visible {
+  color: oklch(1 0 0) !important;
+}
+
+.site-footer__nav [aria-hidden="true"] {
+  color: oklch(0.84 0.04 195) !important;
+}
+
 @media (max-width: 767px) {
   .app-main {
     padding-top: 1.7rem;
