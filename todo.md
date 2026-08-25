@@ -761,5 +761,5 @@
 - [x] user-এর অনুমতিতে HN Vercel team-এ `avrojoy-static` public production deployment তৈরি ও live conversion যাচাই
 
 # নতুন: Vercel auto-deploy sync
-- [ ] static copy-এর জন্য Git-based automatic Vercel deployment path নির্ণয় ও সেটআপ
-- [ ] target Vercel project/alias যাচাই করে ভবিষ্যৎ update flow নিশ্চিত
+- [x] static copy-এর জন্য Git-based automatic Vercel deployment path নির্ণয় ও সেটআপ
+- [x] target Vercel project/alias যাচাই করে ভবিষ্যৎ update flow নিশ্চিত
