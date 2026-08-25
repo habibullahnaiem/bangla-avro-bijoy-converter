@@ -2516,6 +2516,26 @@ html:not(.dark) .file-workspace button:disabled {
   }
 }
 
+/* The responsive workbench rules above intentionally use dark surfaces in dark
+   mode; scope the empty history state back to the light surface system here. */
+html:not(.dark) .history-empty-state {
+  border-color: oklch(0.72 0.055 198 / 0.85) !important;
+  background: linear-gradient(145deg, oklch(0.99 0.008 205 / 0.99), oklch(0.935 0.03 198 / 0.98)) !important;
+  color: oklch(0.2 0.03 210) !important;
+}
+
+html:not(.dark) .history-empty-state .text-foreground {
+  color: oklch(0.2 0.03 210) !important;
+}
+
+html:not(.dark) .history-empty-state .text-muted-foreground {
+  color: oklch(0.39 0.045 205) !important;
+}
+
+html:not(.dark) .history-empty-state [class*="text-muted-foreground/60"] {
+  color: oklch(0.45 0.075 198) !important;
+}
+
 /* ডিজাইন দিক: টিল ডেস্ক — support cards use the same readable surface family
    as each active theme, instead of one forced dark treatment for both modes. */
 .support-section > article {
