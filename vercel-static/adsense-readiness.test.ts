@@ -31,4 +31,16 @@ describe("AdSense application readiness pages", () => {
       expect(sitemap).toContain(`https://avrojoy.vercel.app/${slug}`);
     }
   });
+
+  it("identifies the homepage as the primary AvroJoy website entity and keeps guides connected to it", () => {
+    const index = fs.readFileSync(path.join(repositoryRoot, "client/index.html"), "utf8");
+    const guides = fs.readFileSync(path.join(repositoryRoot, "client/src/pages/SeoGuides.tsx"), "utf8");
+
+    expect(index).toContain('"@type": "WebSite"');
+    expect(index).toContain('"@id": "https://avrojoy.vercel.app/#website"');
+    expect(index).toContain('"name": "অভ্রজয়"');
+    expect(index).toContain('"alternateName": ["AvroJoy", "অভ্রজয়", "avrojoy.vercel.app"]');
+    expect(guides).toContain('isPartOf: { "@id": `${BASE_URL}/#website` }');
+    expect(guides).toContain("অভ্রজয়ের মূল কনভার্টারে যান");
+  });
 });

@@ -848,3 +848,18 @@
 - [x] শেষ footer contrast পরিবর্তনে হওয়া visual regression-এর কারণ শনাক্ত করা
 - [x] Footer-কে পূর্বের স্থিতিশীল design hierarchy-তে ফিরিয়ে কেবল প্রয়োজনীয় readable fix রাখা
 - [x] Footer visual, tests, shared auto-deploy ও checkpoint যাচাই করা
+
+# সক্রিয়: dark-theme footer regression
+- [ ] Dark theme-এ footer-এর নতুন regression ও responsible cascade শনাক্ত করা
+- [ ] Light theme অপরিবর্তিত রেখে dark-theme footer style সীমিতভাবে ঠিক করা
+- [ ] Light/dark footer validation, tests, shared auto-deploy ও checkpoint সম্পন্ন করা
+
+# সক্রিয়: root homepage route regression
+- [x] Live root URL ও shared route behavior যাচাই করে `/avro-to-bijoy`-এ যাওয়ার কারণ শনাক্ত করা: `/` সরাসরি homepage-এই থাকে; redirect নেই
+- [x] Root homepage route/discovery configuration পর্যালোচনা করা: `/avro-to-bijoy` হলো আলাদা SEO guide route, source change প্রয়োজন হয়নি
+- [x] Live root route validation সম্পন্ন করা; source change না থাকায় test, auto-deploy বা checkpoint প্রয়োজন হয়নি
+
+# সক্রিয়: brand search-এ homepage priority
+- [x] Homepage ও guide route-এর brand title, canonical, structured data এবং internal link signals audit করা
+- [x] “অভ্রজয় / AvroJoy” query-তে homepage-কে primary entity হিসেবে শক্তিশালী করা
+- [x] SEO regression validation ও tests সম্পন্ন করা; shared auto-deploy ও checkpoint বাকি

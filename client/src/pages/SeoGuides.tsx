@@ -150,6 +150,7 @@ function GuideMetadata({ guide }: { guide: Guide }) {
       description: guide.description,
       inLanguage: "bn-BD",
       mainEntityOfPage: url,
+      isPartOf: { "@id": `${BASE_URL}/#website` },
       author: { "@type": "Person", name: "মো. হাবিবুল্লাহ নাঈম" },
       publisher: { "@type": "Organization", name: "অভ্রজয় (AvroJoy)" },
       dateModified: "2026-08-25",
@@ -211,7 +212,7 @@ export function SeoGuidePage({ slug }: { slug: keyof typeof GUIDES }) {
             <p className="mt-5 max-w-3xl text-base leading-relaxed text-muted-foreground sm:text-lg">{guide.lead}</p>
             <a href="/" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground shadow-sm transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
               <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-              কনভার্টারে যান
+              অভ্রজয়ের মূল কনভার্টারে যান
             </a>
           </header>
 
