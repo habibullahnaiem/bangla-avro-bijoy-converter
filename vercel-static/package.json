@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "node scripts/link-shared-node-modules.mjs && vite build && node scripts/generate-sw.mjs",
+    "build": "node scripts/link-shared-node-modules.mjs && vite build && node scripts/prerender-guides.mjs && node scripts/generate-sw.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "check": "tsc --noEmit",
     "test": "vitest run"

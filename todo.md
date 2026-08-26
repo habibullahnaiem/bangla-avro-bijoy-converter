@@ -901,9 +901,26 @@
 - [x] বাস্তব conversion, Word/DOCX, font ও mixed-text প্রশ্ন দিয়ে FAQ coverage audit করা
 - [x] Detailed people-first Unicode-to-Bijoy FAQ ও matching FAQ structured data যোগ করা
 - [x] FAQ validation-এ দৃশ্যমান guide-page light/dark text-contrast regression ঠিক করা
-- [x] FAQ readability ও SEO regression সম্পন্ন করা; shared auto-deploy ও checkpoint বাকি
+- [x] FAQ readability, SEO regression, shared auto-deploy ও checkpoint সম্পন্ন করা
 
 # সক্রিয়: Google site-name ও homepage preference
 - [x] Google result-এর “Vercel” site-name এবং guide-first appearance-এর source-level signal audit করা
 - [x] AvroJoy WebSite/Organization site-name ও root-homepage preference metadata শক্তিশালী করা
-- [x] Structured data, canonical, FAQ ও regression যাচাই করা; shared auto-deploy ও checkpoint বাকি
+- [x] Structured data, canonical, FAQ, regression, shared auto-deploy ও checkpoint যাচাই করা
+
+# সক্রিয়: live Google visibility check
+- [x] “ইউনিকোড টু বিজয়” ও “অভ্রজয়” query-তে AvroJoy result, displayed site name এবং target URL যাচাই করা
+
+# সক্রিয়: conversion SEO growth roadmap
+- [x] Conversion-intent on-page SEO, site-name selection ও authority-growth-এর current Google guidance audit করা
+- [x] AvroJoy-এর priority on-page improvements, site-name wait/validation steps এবং ethical backlink channels নির্ধারণ করা
+- [x] বাস্তবসম্মত roadmap, cadence ও spam-risk boundary নথিভুক্ত করা
+
+# সক্রিয়: live Google rank check
+- [x] “অভ্রজয়”, “ইউনিকোড টু বিজয়” এবং “অভ্র টু বিজয়” query-তে AvroJoy-এর visible organic position যাচাই করা
+
+# সক্রিয়: sustainable generic-query visibility pass
+- [x] Public routes-এর crawler-visible content, canonical/source consistency এবং generic-query relevance audit করা
+- [x] Concise primary site identity ও high-intent conversion pathways আরও পরিষ্কার করা
+- [x] Original authority asset ও ethical outreach package প্রস্তুত করা
+- [x] Regression validation সম্পন্ন করা; shared auto-deploy ও Search Console monitoring baseline বাকি

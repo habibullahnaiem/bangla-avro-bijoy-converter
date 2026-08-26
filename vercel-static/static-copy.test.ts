@@ -30,6 +30,22 @@ describe("Vercel static copy boundaries", () => {
     expect(sitemap).toContain("<lastmod>2026-08-26</lastmod>");
   });
 
+  it("builds crawl-visible static HTML for the high-intent guide routes", () => {
+    const packageJson = fs.readFileSync(path.join(staticProjectRoot, "package.json"), "utf8");
+    const prerenderer = fs.readFileSync(
+      path.join(staticProjectRoot, "scripts/prerender-guides.mjs"),
+      "utf8",
+    );
+
+    expect(packageJson).toContain("node scripts/prerender-guides.mjs");
+    for (const slug of ["avro-to-bijoy", "bijoy-to-unicode", "docx-txt-bijoy-converter"]) {
+      expect(prerenderer).toContain(`slug: "${slug}"`);
+    }
+    expect(prerenderer).toContain('"@type": "FAQPage"');
+    expect(prerenderer).toContain('"@type": "BreadcrumbList"');
+    expect(prerenderer).toContain('data-route="${guide.slug}"');
+  });
+
   it("states AvroJoy as the root site identity rather than its hosting provider", () => {
     const homepage = fs.readFileSync(path.join(repositoryRoot, "client/index.html"), "utf8");
     const guides = fs.readFileSync(path.join(repositoryRoot, "client/src/pages/SeoGuides.tsx"), "utf8");
