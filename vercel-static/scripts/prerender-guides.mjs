@@ -68,12 +68,12 @@ const guides = [
   },
   {
     slug: "bijoy-to-unicode",
-    eyebrow: "বিজয় থেকে ইউনিকোড গাইড",
-    title: "বিজয় থেকে Unicode বাংলা: পুরোনো SutonnyMJ লেখা রূপান্তরের নিয়ম",
+    eyebrow: "বিজয় থেকে ইউনিকোড কনভার্টার গাইড",
+    title: "বিজয় থেকে ইউনিকোড কনভার্টার: পুরোনো SutonnyMJ লেখা Unicode বাংলায় রূপান্তর",
     description:
-      "SutonnyMJ-ভিত্তিক বিজয় টেক্সট Unicode বা অভ্র বাংলা লেখায় রূপান্তরের বাংলা গাইড, সঠিক input direction ও সম্পাদনার পরামর্শ।",
+      "বিজয় থেকে ইউনিকোড কনভার্টার দিয়ে পুরোনো SutonnyMJ বিজয় লেখা Unicode বাংলায় নিন—বিজয় টু ইউনিকোড direction, copy/paste, Word ও web ব্যবহারের ব্যবহারিক গাইড।",
     lead:
-      "পুরোনো বিজয় text আধুনিক Unicode পরিবেশে ব্যবহার করতে চাইলে সঠিক উৎস ও direction জানা জরুরি। অভ্রজয় বিজয় → অভ্র mode-এ সেই text Unicode বাংলায় রূপান্তর করে, যাতে তা আধুনিক app ও web-এ ব্যবহার করা যায়।",
+      "বিজয় থেকে ইউনিকোড বা বিজয় টু ইউনিকোড বলতে পুরোনো SutonnyMJ-ভিত্তিক বাংলা লেখাকে আধুনিক Unicode বাংলায় নেওয়া বোঝায়। অভ্রজয়-এর বিজয় → অভ্র mode-এ সেই text রূপান্তর করে copy করা যায়, যাতে তা আধুনিক editor, website ও app-এ ব্যবহার করা সহজ হয়।",
     steps: [
       "Text Converter-এ “বিজয় → অভ্র” নির্বাচন করুন।",
       "SutonnyMJ-ভিত্তিক বিজয় লেখা input box-এ paste করুন।",
@@ -85,7 +85,31 @@ const guides = [
       "পুরোনো document-এর layout আলাদা হতে পারে, তাই প্রকাশের আগে transformed text proofread করুন।",
       "রূপান্তরটি browser-ভিত্তিক; login বা ব্যক্তিগত cloud storage প্রয়োজন হয় না।",
     ],
+    useCases: [
+      ["পুরোনো SutonnyMJ লেখা উদ্ধার", "আগের বিজয় font-এ লেখা article, note বা manuscript আধুনিক Unicode editor-এ নিতে হলে আগে একটি ছোট অংশে direction ও output যাচাই করুন।"],
+      ["ওয়েবসাইট ও সামাজিক মাধ্যমে পুনঃব্যবহার", "Unicode output copy করে website, CMS, Facebook বা অন্য Unicode-compatible platform-এ ব্যবহার করা যায়; প্রকাশের আগে নাম, যতিচিহ্ন ও spacing দ্রুত দেখে নিন।"],
+      ["সম্পাদনা ও সংরক্ষণ", "পুরোনো বিজয় লেখা Unicode হলে খোঁজা, সম্পাদনা ও নতুন document-এ ব্যবহার সহজ হয়। রূপান্তরের আগে original copy রেখে final output proofread করুন।"],
+    ],
+    reviewMethod: {
+      title: "বিজয় টু ইউনিকোড করার আগে সংক্ষিপ্ত review method",
+      intro: "এটি কোনো স্বয়ংক্রিয় নিখুঁততার guarantee নয়। পুরোনো বিজয় লেখা নতুন editor বা web-এ নেওয়ার আগে নিচের ছোট review-টি করলে ভুল direction বা context-জনিত সমস্যা আগে ধরা সহজ হয়।",
+      checks: [
+        "উৎস যাচাই করুন: লেখাটি সত্যিই SutonnyMJ বা অন্য বিজয়-ভিত্তিক text কি না দেখুন; Unicode লেখা হলে এই direction ব্যবহার করবেন না।",
+        "সঠিক direction নিন: Text Converter-এ “বিজয় → অভ্র” নির্বাচন করে ছোট একটি representative অংশ আগে paste করুন।",
+        "চোখে পড়ার অংশ পরীক্ষা করুন: নাম, যুক্তবর্ণ, কারচিহ্ন, যতিচিহ্ন, quotation mark ও English name/URL দেখে নিন।",
+        "Unicode output একটি নতুন Unicode-compatible editor-এ paste করে কয়েকটি line পড়ুন; অর্থহীন অক্ষর বা ভুল spacing থাকলে source ও direction আবার যাচাই করুন।",
+        "মূল বিজয় লেখা আলাদা রেখে দিন এবং publish, edit বা archive করার আগে transformed output একবার final proofread করুন।",
+      ],
+    },
     faqs: [
+      [
+        "বিজয় থেকে ইউনিকোড কনভার্টার কী করে?",
+        "এটি SutonnyMJ-ভিত্তিক পুরোনো বিজয় text-কে আধুনিক Unicode বাংলায় রূপান্তর করতে সাহায্য করে। Unicode output পরে সাধারণ browser, editor ও social platform-এ ব্যবহার করা যায়।",
+      ],
+      [
+        "বিজয় টু ইউনিকোড করতে কোন লেখা input দেব?",
+        "যে লেখা বিজয়/SutonnyMJ font-এ তৈরি হয়েছিল সেটি input box-এ paste করুন এবং “বিজয় → অভ্র” নির্বাচন করুন। Unicode লেখা ভুল করে এই direction-এ দিলে অর্থবহ ফল নাও আসতে পারে।",
+      ],
       [
         "বিজয় লেখা কীভাবে Unicode-এ নেব?",
         "বিজয় → অভ্র direction নির্বাচন করে SutonnyMJ-ভিত্তিক বিজয় লেখা paste করুন, তারপর Unicode output দেখে কপি করুন।",
@@ -97,6 +121,14 @@ const guides = [
       [
         "রূপান্তরিত লেখা কি website বা social platform-এ ব্যবহার করা যাবে?",
         "হ্যাঁ। Unicode output আধুনিক browser, social platform এবং Unicode-compatible editor-এ ব্যবহার করা যায়; প্রকাশের আগে একবার দেখে নেওয়া ভালো।",
+      ],
+      [
+        "পুরোনো বিজয় DOCX file কীভাবে Unicode করব?",
+        "হোমপেজের File Converter-এ “বিজয় → অভ্র” direction নির্বাচন করে DOCX file দিন। Preview ও download-এর পরে Word-এ গুরুত্বপূর্ণ paragraph, heading এবং reference অংশ একবার proofread করুন।",
+      ],
+      [
+        "রূপান্তরের ফল অর্থহীন বা ভাঙা দেখালে কী করব?",
+        "আগে source লেখাটি সত্যিই বিজয়/SutonnyMJ কি না এবং direction ঠিক আছে কি না যাচাই করুন। একটি ছোট অংশে আবার পরীক্ষা করুন; তারপর Unicode-compatible editor-এ paste করে নাম, যতিচিহ্ন ও spacing দেখুন।",
       ],
     ],
   },
@@ -149,6 +181,9 @@ function replaceTag(html, expression, replacement) {
 function pageMarkup(guide, url) {
   const steps = guide.steps.map((step) => `<li>${escapeHtml(step)}</li>`).join("");
   const notes = guide.notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("");
+  const useCases = guide.useCases
+    ? `<section aria-labelledby="use-cases-title"><h2 id="use-cases-title">কোন কাজে এই রূপান্তর দরকার হয়?</h2>${guide.useCases.map(([title, description]) => `<section><h3>${escapeHtml(title)}</h3><p>${escapeHtml(description)}</p></section>`).join("")}</section>`
+    : "";
   const reviewMethod = guide.reviewMethod
     ? `<section aria-labelledby="review-method-title"><h2 id="review-method-title">${escapeHtml(guide.reviewMethod.title)}</h2><p>${escapeHtml(guide.reviewMethod.intro)}</p><ol>${guide.reviewMethod.checks.map((check) => `<li>${escapeHtml(check)}</li>`).join("")}</ol></section>`
     : "";
@@ -170,6 +205,7 @@ function pageMarkup(guide, url) {
     <ol>${steps}</ol>
     <h2>মনে রাখুন</h2>
     <ul>${notes}</ul>
+    ${useCases}
     ${reviewMethod}
     <h2>সাধারণ প্রশ্ন</h2>
     ${faqs}

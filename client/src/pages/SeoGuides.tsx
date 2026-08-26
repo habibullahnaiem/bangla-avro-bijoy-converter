@@ -13,6 +13,7 @@ type Guide = {
   lead: string;
   steps: string[];
   notes: string[];
+  useCasesHeading?: string;
   useCases?: Array<{ title: string; description: string }>;
   reviewMethod?: {
     title: string;
@@ -59,6 +60,7 @@ const GUIDES: Record<string, Guide> = {
           "একই document-এ English নাম, title বা citation থাকলে বাংলা অংশের বিজয় font এবং English অংশের Times New Roman font আলাদা রাখলে Word-এ পড়া ও সম্পাদনা সহজ হয়।",
       },
     ],
+    useCasesHeading: "কোন কাজে Unicode টু বিজয় দরকার হয়?",
     reviewMethod: {
       title: "থিসিস বা Word file দেওয়ার আগে অভ্রজয়ের review method",
       intro:
@@ -136,12 +138,12 @@ const GUIDES: Record<string, Guide> = {
   },
   "bijoy-to-unicode": {
     slug: "bijoy-to-unicode",
-    eyebrow: "বিজয় থেকে ইউনিকোড গাইড",
-    title: "বিজয় থেকে Unicode বাংলা: পুরোনো SutonnyMJ লেখা রূপান্তরের নিয়ম",
+    eyebrow: "বিজয় থেকে ইউনিকোড কনভার্টার গাইড",
+    title: "বিজয় থেকে ইউনিকোড কনভার্টার: পুরোনো SutonnyMJ লেখা Unicode বাংলায় রূপান্তর",
     description:
-      "SutonnyMJ-ভিত্তিক বিজয় টেক্সট Unicode বা অভ্র বাংলা লেখায় রূপান্তরের বাংলা গাইড, সঠিক input direction ও সম্পাদনার পরামর্শ।",
+      "বিজয় থেকে ইউনিকোড কনভার্টার দিয়ে পুরোনো SutonnyMJ বিজয় লেখা Unicode বাংলায় নিন—বিজয় টু ইউনিকোড direction, copy/paste, Word ও web ব্যবহারের ব্যবহারিক গাইড।",
     lead:
-      "পুরোনো বিজয় text আধুনিক Unicode পরিবেশে ব্যবহার করতে চাইলে সঠিক উৎস ও direction জানা জরুরি। অভ্রজয় বিজয় → অভ্র mode-এ সেই text Unicode বাংলায় রূপান্তর করে, যাতে তা আধুনিক app ও web-এ ব্যবহার করা যায়।",
+      "বিজয় থেকে ইউনিকোড বা বিজয় টু ইউনিকোড বলতে পুরোনো SutonnyMJ-ভিত্তিক বাংলা লেখাকে আধুনিক Unicode বাংলায় নেওয়া বোঝায়। অভ্রজয়-এর বিজয় → অভ্র mode-এ সেই text রূপান্তর করে copy করা যায়, যাতে তা আধুনিক editor, website ও app-এ ব্যবহার করা সহজ হয়।",
     steps: [
       "Text Converter-এ “বিজয় → অভ্র” নির্বাচন করুন।",
       "SutonnyMJ-ভিত্তিক বিজয় লেখা input box-এ paste করুন।",
@@ -153,7 +155,47 @@ const GUIDES: Record<string, Guide> = {
       "পুরোনো document-এর layout আলাদা হতে পারে, তাই প্রকাশের আগে transformed text একবার proofread করা ভালো।",
       "রূপান্তরটি browser-ভিত্তিক; login বা ব্যক্তিগত cloud storage প্রয়োজন হয় না।",
     ],
+    useCasesHeading: "কোন কাজে বিজয় থেকে ইউনিকোড দরকার হয়?",
+    useCases: [
+      {
+        title: "পুরোনো SutonnyMJ লেখা উদ্ধার",
+        description:
+          "আগের বিজয় font-এ লেখা article, note বা manuscript আধুনিক Unicode editor-এ নিতে হলে আগে একটি ছোট অংশে direction ও output যাচাই করুন।",
+      },
+      {
+        title: "ওয়েবসাইট ও সামাজিক মাধ্যমে পুনঃব্যবহার",
+        description:
+          "Unicode output copy করে website, CMS, Facebook বা অন্য Unicode-compatible platform-এ ব্যবহার করা যায়; প্রকাশের আগে নাম, যতিচিহ্ন ও spacing দ্রুত দেখে নিন।",
+      },
+      {
+        title: "সম্পাদনা ও সংরক্ষণ",
+        description:
+          "পুরোনো বিজয় লেখা Unicode হলে খোঁজা, সম্পাদনা ও নতুন document-এ ব্যবহার সহজ হয়। রূপান্তরের আগে original copy রেখে final output proofread করুন।",
+      },
+    ],
+    reviewMethod: {
+      title: "বিজয় টু ইউনিকোড করার আগে সংক্ষিপ্ত review method",
+      intro:
+        "এটি কোনো স্বয়ংক্রিয় নিখুঁততার guarantee নয়। পুরোনো বিজয় লেখা নতুন editor বা web-এ নেওয়ার আগে নিচের ছোট review-টি করলে ভুল direction বা context-জনিত সমস্যা আগে ধরা সহজ হয়।",
+      checks: [
+        "উৎস যাচাই করুন: লেখাটি সত্যিই SutonnyMJ বা অন্য বিজয়-ভিত্তিক text কি না দেখুন; Unicode লেখা হলে এই direction ব্যবহার করবেন না।",
+        "সঠিক direction নিন: Text Converter-এ “বিজয় → অভ্র” নির্বাচন করে ছোট একটি representative অংশ আগে paste করুন।",
+        "চোখে পড়ার অংশ পরীক্ষা করুন: নাম, যুক্তবর্ণ, কারচিহ্ন, যতিচিহ্ন, quotation mark ও English name/URL দেখে নিন।",
+        "Unicode output একটি নতুন Unicode-compatible editor-এ paste করে কয়েকটি line পড়ুন; অর্থহীন অক্ষর বা ভুল spacing থাকলে source ও direction আবার যাচাই করুন।",
+        "মূল বিজয় লেখা আলাদা রেখে দিন এবং publish, edit বা archive করার আগে transformed output একবার final proofread করুন।",
+      ],
+    },
     faqs: [
+      {
+        question: "বিজয় থেকে ইউনিকোড কনভার্টার কী করে?",
+        answer:
+          "এটি SutonnyMJ-ভিত্তিক পুরোনো বিজয় text-কে আধুনিক Unicode বাংলায় রূপান্তর করতে সাহায্য করে। Unicode output পরে সাধারণ browser, editor ও social platform-এ ব্যবহার করা যায়।",
+      },
+      {
+        question: "বিজয় টু ইউনিকোড করতে কোন লেখা input দেব?",
+        answer:
+          "যে লেখা বিজয়/SutonnyMJ font-এ তৈরি হয়েছিল সেটি input box-এ paste করুন এবং “বিজয় → অভ্র” নির্বাচন করুন। Unicode লেখা ভুল করে এই direction-এ দিলে অর্থবহ ফল নাও আসতে পারে।",
+      },
       {
         question: "Unicode লেখা ভুল করে বিজয় → অভ্র-তে দিলে কী হবে?",
         answer:
@@ -163,6 +205,16 @@ const GUIDES: Record<string, Guide> = {
         question: "রূপান্তরিত লেখা কি সরাসরি Facebook বা website-এ ব্যবহার করা যাবে?",
         answer:
           "হ্যাঁ। Unicode output সাধারণত আধুনিক browser, social platform ও Unicode-compatible editor-এ ব্যবহার করা যায়; প্রকাশের আগে text দেখে নেওয়া ভালো।",
+      },
+      {
+        question: "পুরোনো বিজয় DOCX file কীভাবে Unicode করব?",
+        answer:
+          "হোমপেজের File Converter-এ “বিজয় → অভ্র” direction নির্বাচন করে DOCX file দিন। Preview ও download-এর পরে Word-এ গুরুত্বপূর্ণ paragraph, heading এবং reference অংশ একবার proofread করুন।",
+      },
+      {
+        question: "রূপান্তরের ফল অর্থহীন বা ভাঙা দেখালে কী করব?",
+        answer:
+          "আগে source লেখাটি সত্যিই বিজয়/SutonnyMJ কি না এবং direction ঠিক আছে কি না যাচাই করুন। একটি ছোট অংশে আবার পরীক্ষা করুন; তারপর Unicode-compatible editor-এ paste করে নাম, যতিচিহ্ন ও spacing দেখুন।",
       },
     ],
   },
@@ -366,7 +418,7 @@ export function SeoGuidePage({ slug }: { slug: keyof typeof GUIDES }) {
           {guide.useCases && (
             <section className="mt-6 rounded-2xl border bg-card p-5 shadow-sm sm:p-7" aria-labelledby="use-cases-title">
               <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary">কাজের ধরন</p>
-              <h2 id="use-cases-title" className="mt-1 text-xl font-extrabold text-foreground">কোন কাজে Unicode টু বিজয় দরকার হয়?</h2>
+                <h2 id="use-cases-title" className="mt-1 text-xl font-extrabold text-foreground">{guide.useCasesHeading ?? "কোন কাজে এই রূপান্তর দরকার হয়?"}</h2>
               <div className="mt-4 grid gap-3 sm:grid-cols-3">
                 {guide.useCases.map((useCase) => (
                   <section key={useCase.title} className="rounded-xl border bg-muted/30 p-4">

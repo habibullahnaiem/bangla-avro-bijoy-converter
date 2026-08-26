@@ -70,4 +70,21 @@ describe("AdSense application readiness pages", () => {
     expect(styles).toContain("html:not(.dark) .seo-guide-page .text-foreground");
     expect(styles).toContain("explicit opaque foreground layer");
   });
+
+  it("presents the Bijoy-to-Unicode route with exact Bengali intent and a source-aware review workflow", () => {
+    const guides = fs.readFileSync(path.join(repositoryRoot, "client/src/pages/SeoGuides.tsx"), "utf8");
+    const prerenderer = fs.readFileSync(
+      path.join(repositoryRoot, "vercel-static/scripts/prerender-guides.mjs"),
+      "utf8",
+    );
+
+    expect(guides).toContain("বিজয় থেকে ইউনিকোড কনভার্টার");
+    expect(guides).toContain("বিজয় টু ইউনিকোড");
+    expect(guides).toContain("বিজয় টু ইউনিকোড করার আগে সংক্ষিপ্ত review method");
+    expect(guides).toContain("ওয়েবসাইট ও সামাজিক মাধ্যমে পুনঃব্যবহার");
+    expect(guides).toContain("রূপান্তরের ফল অর্থহীন বা ভাঙা দেখালে কী করব?");
+    expect(prerenderer).toContain("বিজয় থেকে ইউনিকোড কনভার্টার");
+    expect(prerenderer).toContain("বিজয় টু ইউনিকোড করার আগে সংক্ষিপ্ত review method");
+    expect(prerenderer).toContain('aria-labelledby="use-cases-title"');
+  });
 });
