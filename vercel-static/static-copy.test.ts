@@ -30,6 +30,17 @@ describe("Vercel static copy boundaries", () => {
     expect(sitemap).toContain("<lastmod>2026-08-26</lastmod>");
   });
 
+  it("states AvroJoy as the root site identity rather than its hosting provider", () => {
+    const homepage = fs.readFileSync(path.join(repositoryRoot, "client/index.html"), "utf8");
+    const guides = fs.readFileSync(path.join(repositoryRoot, "client/src/pages/SeoGuides.tsx"), "utf8");
+
+    expect(homepage).toContain('"name": "অভ্রজয় (AvroJoy)"');
+    expect(homepage).toContain('"@id": "https://avrojoy.vercel.app/#organization"');
+    expect(homepage).toContain('<meta property="og:site_name" content="অভ্রজয় (AvroJoy)" />');
+    expect(guides).toContain('"@type": "BreadcrumbList"');
+    expect(guides).toContain('name: "অভ্রজয় (AvroJoy)"');
+  });
+
   it("builds the Vercel static project from the shared root client and keeps the public asset proxy", () => {
     const viteConfig = fs.readFileSync(path.join(staticProjectRoot, "vite.config.ts"), "utf8");
     const vercelConfig = fs.readFileSync(path.join(staticProjectRoot, "vercel.json"), "utf8");

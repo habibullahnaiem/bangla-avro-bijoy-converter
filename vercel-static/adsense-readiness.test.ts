@@ -38,9 +38,11 @@ describe("AdSense application readiness pages", () => {
 
     expect(index).toContain('"@type": "WebSite"');
     expect(index).toContain('"@id": "https://avrojoy.vercel.app/#website"');
-    expect(index).toContain('"name": "অভ্রজয়"');
-    expect(index).toContain('"alternateName": ["AvroJoy", "অভ্রজয়", "avrojoy.vercel.app"]');
+    expect(index).toContain('"name": "অভ্রজয় (AvroJoy)"');
+    expect(index).toContain('"alternateName": ["অভ্রজয়", "AvroJoy", "avrojoy.vercel.app"]');
+    expect(index).toContain('"@id": "https://avrojoy.vercel.app/#organization"');
     expect(guides).toContain('isPartOf: { "@id": `${BASE_URL}/#website` }');
+    expect(guides).toContain('"@type": "BreadcrumbList"');
     expect(guides).toContain("অভ্রজয়ের মূল কনভার্টারে যান");
   });
 
@@ -55,6 +57,11 @@ describe("AdSense application readiness pages", () => {
     expect(guides).toContain("কোন কাজে Unicode টু বিজয় দরকার হয়?");
     expect(guides).toContain("থিসিস ও গবেষণাপত্র");
     expect(guides).toContain("বই, জার্নাল ও DTP handoff");
+    expect(guides).toContain("যুক্তাক্ষর, কারচিহ্ন বা যতিচিহ্ন রূপান্তরের পর কীভাবে যাচাই করব?");
+    expect(guides).toContain("আমার লেখা কি server-এ পাঠানো বা সংরক্ষণ করা হয়?");
+    expect(guides).toContain('"@type": "FAQPage"');
+    expect(styles).toContain(".dark .seo-guide-page [class*=\"bg-card\"]");
+    expect(styles).toContain("html:not(.dark) .seo-guide-page article p:not(.text-primary)");
     expect(home).toContain("ইউনিকোড টু বিজয় গাইড");
     expect(home).toContain('href="/avro-to-bijoy"');
     expect(styles).toContain("html:not(.dark) .seo-guide-page .text-foreground");

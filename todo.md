@@ -895,4 +895,15 @@
 # সক্রিয়: multi-competitor conversion SEO study
 - [x] “ইউনিকোড টু বিজয়” search result-এর একাধিক visible competitor-এর task relevance, page structure ও public technical signals তুলনা করা
 - [x] Competitor থেকে নকল ছাড়া AvroJoy-এর people-first conversion-intent content ও discovery gap নির্ধারণ করা
-- [x] Original landing-page/discovery improvement ও SEO regression সম্পন্ন করা; shared auto-deploy ও checkpoint বাকি
+- [x] Original landing-page/discovery improvement, SEO regression, shared auto-deploy ও checkpoint সম্পন্ন করা
+
+# সক্রিয়: detailed Unicode-to-Bijoy FAQ
+- [x] বাস্তব conversion, Word/DOCX, font ও mixed-text প্রশ্ন দিয়ে FAQ coverage audit করা
+- [x] Detailed people-first Unicode-to-Bijoy FAQ ও matching FAQ structured data যোগ করা
+- [x] FAQ validation-এ দৃশ্যমান guide-page light/dark text-contrast regression ঠিক করা
+- [x] FAQ readability ও SEO regression সম্পন্ন করা; shared auto-deploy ও checkpoint বাকি
+
+# সক্রিয়: Google site-name ও homepage preference
+- [x] Google result-এর “Vercel” site-name এবং guide-first appearance-এর source-level signal audit করা
+- [x] AvroJoy WebSite/Organization site-name ও root-homepage preference metadata শক্তিশালী করা
+- [x] Structured data, canonical, FAQ ও regression যাচাই করা; shared auto-deploy ও checkpoint বাকি

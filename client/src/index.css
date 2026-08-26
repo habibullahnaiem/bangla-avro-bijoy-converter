@@ -2703,6 +2703,26 @@ html:not(.dark) .seo-guide-page .text-muted-foreground {
   opacity: 1 !important;
 }
 
+html:not(.dark) .seo-guide-page article p:not(.text-primary),
+html:not(.dark) .seo-guide-page article details {
+  color: oklch(0.31 0.04 210) !important;
+  opacity: 1 !important;
+}
+
+.dark .seo-guide-page {
+  background: oklch(0.15 0.028 210) !important;
+}
+
+.dark .seo-guide-page [class*="bg-card"] {
+  border-color: oklch(0.5 0.045 200 / 0.6) !important;
+  background: oklch(0.22 0.036 208) !important;
+}
+
+.dark .seo-guide-page [class*="bg-muted"] {
+  border-color: oklch(0.5 0.045 200 / 0.55) !important;
+  background: oklch(0.19 0.032 208) !important;
+}
+
 /* The origin-story page uses long-form prose. Keep its light-theme body copy
    explicitly opaque and dark without changing standalone guide styling. */
 html:not(.dark) .story-page .story-page__lead,

@@ -56,9 +56,39 @@ const GUIDES: Record<string, Guide> = {
     ],
     faqs: [
       {
+        question: "ইউনিকোড টু বিজয় বলতে কী বোঝায়?",
+        answer:
+          "ইউনিকোড টু বিজয় বলতে অভ্র বা অন্য Unicode বাংলা লেখাকে SutonnyMJ-ভিত্তিক বিজয় ফরম্যাটে নেওয়া বোঝায়। এটি সাধারণত Word, প্রকাশনা বা এমন প্রতিষ্ঠানের কাজে লাগে যেখানে বিজয় ফরম্যাট চাওয়া হয়।",
+      },
+      {
+        question: "অভ্র ও Unicode কি একই জিনিস?",
+        answer:
+          "অভ্র হলো বাংলা লেখার একটি জনপ্রিয় input method; অভ্র দিয়ে লেখা বাংলা সাধারণত Unicode text হিসেবেই থাকে। তাই অভ্র থেকে বিজয় রূপান্তরের কাজটি Unicode থেকে বিজয় রূপান্তরের একই workflow-এ করা যায়।",
+      },
+      {
         question: "ইউনিকোড টু বিজয় করতে কী লাগবে?",
         answer:
           "আপনার Unicode বাংলা লেখা paste করুন, “অভ্র → বিজয়” direction নির্বাচন করুন এবং output preview দেখে কপি করুন। Word-এ বাংলা বিজয় অংশের জন্য SutonnyMJ ও English অংশের জন্য Times New Roman ব্যবহার করুন।",
+      },
+      {
+        question: "যুক্তাক্ষর, কারচিহ্ন বা যতিচিহ্ন রূপান্তরের পর কীভাবে যাচাই করব?",
+        answer:
+          "Output preview-তে কয়েকটি representative শব্দ, যেমন যুক্তাক্ষর, ি/ী/ে/ৈ/ৃ-কার, দাড়ি ও quotation mark দেখে নিন। গুরুত্বপূর্ণ document হলে Word-এ পেস্ট করার পরও একটি দ্রুত proofread করা ভালো অভ্যাস।",
+      },
+      {
+        question: "বাংলা–English mixed লেখা কি রূপান্তর করা যায়?",
+        answer:
+          "হ্যাঁ। বাংলা অংশ বিজয় output হিসেবে নেওয়ার পর Word-এ বাংলা run-এ SutonnyMJ এবং English name, title বা citation-এ Times New Roman রাখুন। এতে দুই ভাষার font ভূমিকা পরিষ্কার থাকে।",
+      },
+      {
+        question: "Bold বা italic করা লেখা নিয়ে কী খেয়াল রাখব?",
+        answer:
+          "Text conversion-এর পর Word-এ bold বা italic emphasis একবার দেখে নিন, বিশেষ করে বাংলা ও English একই লাইনে থাকলে। ফাইল রূপান্তরের ক্ষেত্রে download করা DOCX খুলে গুরুত্বপূর্ণ heading, quotation ও emphasis proofread করা ভালো।",
+      },
+      {
+        question: "DOCX বা TXT file কীভাবে Unicode থেকে বিজয়ে রূপান্তর করব?",
+        answer:
+          "হোমপেজের File Converter tab খুলে “অভ্র → বিজয়” direction নির্বাচন করুন, তারপর DOCX বা TXT file দিন। Preview দেখে ফল download করুন এবং Word-এ বাংলা বিজয় run-এর font SutonnyMJ আছে কি না যাচাই করুন।",
       },
       {
         question: "Word-এ বাংলা অক্ষর হিজিবিজি দেখালে কী করব?",
@@ -69,6 +99,16 @@ const GUIDES: Record<string, Guide> = {
         question: "রূপান্তরের পর পুরো লেখা একবারে কপি করা যায়?",
         answer:
           "হ্যাঁ। output-এর Copy to Clipboard control ব্যবহার করুন, অথবা প্রয়োজনীয় অংশ mouse দিয়ে নির্বাচন করে কপি করুন।",
+      },
+      {
+        question: "আমার লেখা কি server-এ পাঠানো বা সংরক্ষণ করা হয়?",
+        answer:
+          "Public converter-এ text conversion আপনার browser-এই চলে; login বা public cloud document list প্রয়োজন হয় না। তবু যেকোনো সংবেদনশীল document নিয়ে কাজের আগে নিজের প্রতিষ্ঠানের privacy policy-ও বিবেচনা করুন।",
+      },
+      {
+        question: "ভুল direction বেছে নিলে কী হবে?",
+        answer:
+          "Unicode লেখা বিজয় → অভ্র direction-এ বা বিজয় লেখা অভ্র → বিজয় direction-এ দিলে অর্থবহ ফল নাও আসতে পারে। Input-এর উৎস অনুযায়ী direction বদলান, তারপর preview দেখে আবার রূপান্তর করুন।",
       },
     ],
   },
@@ -168,15 +208,47 @@ function GuideMetadata({ guide }: { guide: Guide }) {
     structuredData.id = "avrojoy-guide-structured-data";
     structuredData.text = JSON.stringify({
       "@context": "https://schema.org",
-      "@type": "Article",
-      headline: guide.title,
-      description: guide.description,
-      inLanguage: "bn-BD",
-      mainEntityOfPage: url,
-      isPartOf: { "@id": `${BASE_URL}/#website` },
-      author: { "@type": "Person", name: "মো. হাবিবুল্লাহ নাঈম" },
-      publisher: { "@type": "Organization", name: "অভ্রজয় (AvroJoy)" },
-      dateModified: "2026-08-25",
+      "@graph": [
+        {
+          "@type": "Article",
+          "@id": `${url}#article`,
+          headline: guide.title,
+          description: guide.description,
+          inLanguage: "bn-BD",
+          mainEntityOfPage: url,
+          isPartOf: { "@id": `${BASE_URL}/#website` },
+          author: { "@type": "Person", name: "মো. হাবিবুল্লাহ নাঈম" },
+          publisher: { "@id": `${BASE_URL}/#organization` },
+          about: { "@id": `${BASE_URL}/#webapplication` },
+          dateModified: "2026-08-26",
+        },
+        {
+          "@type": "FAQPage",
+          "@id": `${url}#faq`,
+          mainEntity: guide.faqs.map((faq) => ({
+            "@type": "Question",
+            name: faq.question,
+            acceptedAnswer: { "@type": "Answer", text: faq.answer },
+          })),
+        },
+        {
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "অভ্রজয় (AvroJoy)",
+              item: `${BASE_URL}/`,
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: guide.eyebrow,
+              item: url,
+            },
+          ],
+        },
+      ],
     });
     document.head.appendChild(structuredData);
 
