@@ -1965,13 +1965,13 @@ export default function Home() {
 
           <div className="mt-5 grid gap-4 md:grid-cols-3">
             <article className="rounded-xl border bg-muted/30 p-4">
-              <h3 className="font-bold text-foreground">অভ্র থেকে বিজয়</h3>
+              <h3 className="font-bold text-foreground">ইউনিকোড টু বিজয় (অভ্র থেকে বিজয়)</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                <strong className="text-foreground">অভ্র → বিজয়</strong> নির্বাচন করে ইউনিকোড বাংলা লিখুন বা পেস্ট করুন।
+                <strong className="text-foreground">অভ্র → বিজয়</strong> নির্বাচন করে ইউনিকোড বাংলা লিখুন বা পেস্ট করুন—এভাবেই ইউনিকোড টু বিজয় রূপান্তর শুরু হয়।
                 লাইভ রূপান্তর চালু থাকলে আউটপুট সঙ্গে সঙ্গেই দেখা যাবে; পরে কপি করে Word-এ ব্যবহার করুন।
               </p>
               <a href="/avro-to-bijoy" className="mt-3 inline-flex items-center gap-1 text-sm font-bold text-primary hover:underline">
-                বিস্তারিত গাইড <ArrowRightLeft className="h-3.5 w-3.5" aria-hidden="true" />
+                ইউনিকোড টু বিজয় গাইড <ArrowRightLeft className="h-3.5 w-3.5" aria-hidden="true" />
               </a>
             </article>
             <article className="rounded-xl border bg-muted/30 p-4">

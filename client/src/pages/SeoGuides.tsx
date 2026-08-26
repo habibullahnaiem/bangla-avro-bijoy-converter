@@ -19,12 +19,12 @@ type Guide = {
 const GUIDES: Record<string, Guide> = {
   "avro-to-bijoy": {
     slug: "avro-to-bijoy",
-    eyebrow: "অভ্র থেকে বিজয় গাইড",
-    title: "অভ্র থেকে বিজয় কনভার্টার: SutonnyMJ-তে নিরাপদে রূপান্তর করুন",
+    eyebrow: "ইউনিকোড টু বিজয় গাইড",
+    title: "ইউনিকোড টু বিজয় কনভার্টার: অভ্র লেখা SutonnyMJ-তে রূপান্তর",
     description:
-      "অভ্র বা Unicode বাংলা টেক্সট বিজয় (SutonnyMJ) ফরম্যাটে রূপান্তরের সহজ বাংলা নির্দেশনা, Word font নির্বাচন এবং local privacy তথ্য।",
+      "ইউনিকোড টু বিজয় কনভার্টার দিয়ে অভ্র/Unicode বাংলা লেখা SutonnyMJ বিজয় ফরম্যাটে রূপান্তরের ব্যবহারিক গাইড—Word-এ বাংলা ও English font ব্যবহারের নির্দেশনাসহ।",
     lead:
-      "Unicode বাংলা লেখা পুরোনো বিজয়-ভিত্তিক প্রকাশনা বা Word workflow-তে নেওয়ার আগে সঠিক direction, preview এবং font নির্বাচন গুরুত্বপূর্ণ। অভ্রজয় এই কাজটি browser-এর ভেতরেই করতে সাহায্য করে।",
+      "ইউনিকোড টু বিজয় বলতে আধুনিক অভ্র/Unicode বাংলা লেখাকে SutonnyMJ-ভিত্তিক বিজয় ফরম্যাটে নেওয়া বোঝায়। থিসিস, বই বা Word document-এ ব্যবহার করার আগে সঠিক direction, output preview এবং বাংলা–English font নির্বাচন জরুরি; অভ্রজয় এই রূপান্তরটি browser-এর ভেতরেই করতে সাহায্য করে।",
     steps: [
       "হোমপেজের Text Converter-এ “অভ্র → বিজয়” নির্বাচন করুন।",
       "আপনার Unicode বাংলা লেখা টাইপ করুন বা পেস্ট করুন; লাইভ রূপান্তর চালু থাকলে ফল সঙ্গে সঙ্গে দেখা যাবে।",
@@ -37,6 +37,11 @@ const GUIDES: Record<string, Guide> = {
       "সংবেদনশীল লেখা server-এ পাঠানো হয় না; public version-এ text conversion আপনার browser-এই চলে।",
     ],
     faqs: [
+      {
+        question: "ইউনিকোড টু বিজয় করতে কী লাগবে?",
+        answer:
+          "আপনার Unicode বাংলা লেখা paste করুন, “অভ্র → বিজয়” direction নির্বাচন করুন এবং output preview দেখে কপি করুন। Word-এ বাংলা বিজয় অংশের জন্য SutonnyMJ ও English অংশের জন্য Times New Roman ব্যবহার করুন।",
+      },
       {
         question: "Word-এ বাংলা অক্ষর হিজিবিজি দেখালে কী করব?",
         answer:

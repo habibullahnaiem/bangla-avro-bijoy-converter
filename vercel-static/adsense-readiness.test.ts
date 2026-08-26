@@ -43,4 +43,18 @@ describe("AdSense application readiness pages", () => {
     expect(guides).toContain('isPartOf: { "@id": `${BASE_URL}/#website` }');
     expect(guides).toContain("অভ্রজয়ের মূল কনভার্টারে যান");
   });
+
+  it("presents the Avro-to-Bijoy route as a people-first Unicode-to-Bijoy landing page", () => {
+    const home = fs.readFileSync(path.join(repositoryRoot, "client/src/pages/Home.tsx"), "utf8");
+    const guides = fs.readFileSync(path.join(repositoryRoot, "client/src/pages/SeoGuides.tsx"), "utf8");
+    const styles = fs.readFileSync(path.join(repositoryRoot, "client/src/index.css"), "utf8");
+
+    expect(guides).toContain("ইউনিকোড টু বিজয় কনভার্টার");
+    expect(guides).toContain("ইউনিকোড টু বিজয় বলতে আধুনিক অভ্র/Unicode বাংলা লেখাকে");
+    expect(guides).toContain("ইউনিকোড টু বিজয় করতে কী লাগবে?");
+    expect(home).toContain("ইউনিকোড টু বিজয় গাইড");
+    expect(home).toContain('href="/avro-to-bijoy"');
+    expect(styles).toContain("html:not(.dark) .seo-guide-page .text-foreground");
+    expect(styles).toContain("explicit opaque foreground layer");
+  });
 });

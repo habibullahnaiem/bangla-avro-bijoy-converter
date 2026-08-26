@@ -873,4 +873,10 @@
 # সক্রিয়: banner two-way conversion clarity
 - [x] Banner-এ অভ্র/ইউনিকোড → বিজয় এবং বিজয় → অভ্র/ইউনিকোড—দুই দিক স্পষ্ট করে যোগ করা
 - [x] Desktop/mobile readability ও existing hero hierarchy যাচাই করা
-- [ ] Shared auto-deploy ও checkpoint সম্পন্ন করা
+- [x] Shared auto-deploy ও checkpoint সম্পন্ন করা
+
+# সক্রিয়: Unicode-to-Bijoy search visibility
+- [x] “ইউনিকোড টু বিজয়” search result, current landing page ও indexability audit করা
+- [x] People-first content, title/description ও internal-link signals দিয়ে প্রাসঙ্গিক landing page শক্তিশালী করা
+- [x] Unicode-to-Bijoy guide-এর light/dark theme text contrast ও reading experience ঠিক করা
+- [x] SEO regression ও crawl-readiness validation সম্পন্ন করা; shared auto-deploy ও checkpoint বাকি
