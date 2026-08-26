@@ -750,6 +750,100 @@
 - [ ] user-এর domain setting edit-blocker-এর কারণ নির্ণয় ও কার্যকর বিকল্প প্রয়োগ
 - [ ] AvroJoy-ভিত্তিক সম্ভাব্য `manus.space` সাবডোমেইনের প্রতিনিধিত্বমূলক প্রাপ্যতা যাচাই
 
+# নতুন: public static converter simplification
+- [ ] login, private document list ও managed File Storage feature live site থেকে সরানোর scope নিশ্চিত
+- [ ] auth/storage-free public converter build ও Vercel deployment compatibility প্রস্তুত
+
+# নতুন: আলাদা Vercel static copy
+- [x] বর্তমান full-stack Manus app অক্ষুণ্ণ রেখে পৃথক Vercel-ready static copy তৈরি
+- [x] copy থেকে login, tRPC, database ও private storage UI/backend বাদ দেওয়া
+- [x] Vercel build/deployment config, static asset references এবং PWA যাচাই
+- [x] user-এর অনুমতিতে HN Vercel team-এ `avrojoy-static` public production deployment তৈরি ও live conversion যাচাই
+
+# নতুন: Vercel auto-deploy sync
+- [x] static copy-এর জন্য Git-based automatic Vercel deployment path নির্ণয় ও সেটআপ
+- [x] target Vercel project/alias যাচাই করে ভবিষ্যৎ update flow নিশ্চিত
+
+# নতুন: Vercel static copy maintenance guide
+- [x] Vercel, GitHub, `vercel-static/` source এবং auto-deploy workflow-এর বিস্তারিত বাংলা নির্দেশিকা প্রস্তুত
+- [x] safe update, verification, rollback, PWA cache এবং দুই version-এর পার্থক্য ব্যাখ্যা
+
+# নতুন: এক source থেকে Manus ও Vercel update
+- [x] root `client/`-কে Manus ও Vercel-এর একমাত্র shared frontend source করা
+- [x] Vercel build root থেকে duplicate static client source বাদ দিয়ে root client build config নির্ধারণ
+- [x] Manus public UI থেকে login ও private-document storage flow সরিয়ে Vercel-এর সঙ্গে মিলানো
+- [x] দুই deployment-এ একই UI, local DOCX/TXT conversion ও PWA verify করা
+
+# নতুন: Google search visibility
+- [x] AvroJoy-এর বর্তমান SEO foundation ও indexability পুনর্মূল্যায়ন
+- [x] on-page content, technical SEO, Search Console এবং legitimate authority-building-এর অগ্রাধিকার পরিকল্পনা দেওয়া
+
+# সক্রিয়: sustainable Google SEO implementation
+- [x] `avrojoy.vercel.app`-কে primary public search domain হিসেবে canonicalize করা এবং shared crawl directives সাজানো
+- [x] Vercel-compatible robots.txt, sitemap.xml, canonical metadata ও structured data যোগ করা
+- [x] মানুষের কাজে লাগে এমন Bengali Avro/Bijoy, DOCX ও SutonnyMJ guidance/FAQ content যোগ করা
+- [x] Manus ও Vercel-এ indexability, metadata, build, mobile UI ও shared auto-deploy যাচাই
+- [x] Git-সিঙ্কড Vercel `avrojoy` প্রজেক্টে `avrojoy.vercel.app` primary production domain স্থানান্তর ও live metadata যাচাই
+- [x] Google Search Console-এ HTML meta-tag ownership verification এবং `sitemap.xml` submission সফলভাবে সম্পন্ন
+- [x] নিয়মিত Search Console review ও people-first authority-building-এর বাস্তবসম্মত checklist নথিভুক্ত
+
+# সক্রিয়: SEO completion audit
+- [ ] live homepage-এর crawlability, canonical, robots, sitemap, title/description, social metadata ও structured data পুনরায় audit করা
+- [x] live homepage-এর crawlability, canonical, robots, sitemap, title/description, social metadata ও structured data পুনরায় audit করা
+- [ ] Google Search Console-এ primary homepage inspect করে indexing request পাঠানো এবং initial baseline নথিভুক্ত করা — inspection সম্পন্ন; Google-side indexing-request submission error দেখিয়েছে, তাই ২৪–৭২ ঘণ্টা পরে retry প্রয়োজন
+- [ ] Google-এর সাময়িক indexing-request submission error পুনরায় পরীক্ষা করে homepage request সফলভাবে পাঠানোর চেষ্টা করা — পুনরায় চেষ্টা করে Google Search Console-এর daily quota exceeded নিশ্চিত হয়েছে; Google-এর নির্দেশনা অনুযায়ী আগামীকাল retry প্রয়োজন
+- [x] আগামীকাল Google quota reset হওয়ার পর homepage indexing request-এর একবারের নিরাপদ স্বয়ংক্রিয় retry পদ্ধতি নির্ধারণ ও প্রয়োজনে সেটআপ করা — ২৬ আগস্ট ২০২৬, ১০:০০ Asia/Dhaka-তে one-time schedule active
+
+# সক্রিয়: নতুন ব্র্যান্ড ট্যাগলাইন
+- [x] Hero brand copy-তে “অভ্রজয় — অভ্র হোক বা বিজয়, ফন্ট বদলে ভয় নয়” tagline প্রয়োগ করা
+- [x] চূড়ান্ত wording “অভ্রজয় — অভ্র হোক বা বিজয়, ফন্ট বদলে নেই ভয়” অনুযায়ী hero tagline সংশোধন করা
+- [x] Desktop ও mobile-এ tagline-এর wrap, contrast ও hierarchy যাচাই করা
+- [x] Build, Vercel auto-deploy ও checkpoint সম্পন্ন করা
+
+# সক্রিয়: support অংশের অবস্থান
+- [x] “অভ্রজয় সম্পর্কে” ও “সমর্থন করুন” অংশ footer-এর ঠিক আগে স্থানান্তর করা
+- [x] Desktop ও mobile-এ শেষ অংশের spacing, contrast ও responsive flow যাচাই করা
+- [x] Build, Vercel auto-deploy ও checkpoint সম্পন্ন করা
+
+# সক্রিয়: অভ্রজয়ের জন্মকথা
+- [x] ব্যবহারকারীর দেওয়া জন্মকথা দিয়ে `/avrojoy-er-jonmokotha` public story page তৈরি করা
+- [x] “অভ্রজয় সম্পর্কে” অংশে ২–৩ লাইনের teaser ও “অভ্রজয়ের জন্মকথা পড়ুন” CTA যোগ করা
+- [x] Footer-এ “আমাদের গল্প” text link যোগ করা
+- [x] Story page-এর title, description, canonical, Article structured data ও sitemap entry যোগ করা
+- [x] Desktop/mobile validation, tests, Vercel auto-deploy ও checkpoint সম্পন্ন করা
+
+# সক্রিয়: source protection ও ownership
+- [x] GitHub repository visibility এবং public source exposure যাচাই করা
+- [x] Browser-delivered frontend-এর copy সীমাবদ্ধতা ও বাস্তবসম্মত protection plan নথিভুক্ত করা
+- [x] অনুমোদিত হলে repository privacy, ownership notice ও basic anti-copy measures প্রয়োগ করা
+- [x] অনুমোদিত footer notice “© মো. হাবিবুল্লাহ নাঈম। সর্বস্বত্ব সংরক্ষিত। অনুমতি ছাড়া এই সাইটের code, design বা content কপি/পুনঃপ্রকাশ নিষিদ্ধ।” প্রকাশ করা
+- [x] Verification, checkpoint ও user handoff সম্পন্ন করা
+
+# সক্রিয়: light mode history surface
+- [x] “সাম্প্রতিক রূপান্তর” empty/history panel-এর ভুল dark light-mode surface শনাক্ত করা
+- [x] Light mode-এ history panel-এর background, icon ও text contrast ঠিক করা
+- [x] Dark mode অপরিবর্তিত রেখে responsive validation, tests ও checkpoint সম্পন্ন করা
+
+# সক্রিয়: AdSense application readiness
+- [x] বর্তমান public pages, contact তথ্য ও policy gap audit করা
+- [x] Bengali Privacy Policy, Terms/Disclaimer ও Contact/Support page যোগ করা
+- [x] Footer-এ policy/contact navigation এবং একটি original Bengali help resource যোগ করা
+- [x] প্রতিটি নতুন route-এর title, description, canonical, structured data ও sitemap entry যোগ করা
+- [x] Compliance routing/metadata test, light/dark responsive validation, production build ও checkpoint সম্পন্ন করা
+
+# সক্রিয়: footer navigation contrast
+- [x] Footer navigation link-গুলোর ভুল dark text inheritance শনাক্ত করা
+- [x] Teal footer-এ link ও separator-এর readable light contrast ঠিক করা
+- [x] Desktop/mobile validation, test, Vercel auto-deploy ও checkpoint সম্পন্ন করা
+
+# সক্রিয়: footer story-link contrast follow-up
+- [x] “আমাদের গল্প” link-এর অবশিষ্ট dark utility override শনাক্ত করা
+- [x] Story link-সহ footer navigation-এর সব anchor-এ explicit readable light color প্রয়োগ করা
+- [x] Live-style validation, test, Vercel auto-deploy ও checkpoint সম্পন্ন করা
+- [x] performance/page-experience-এর field এবং lab baseline পরিমাপ করে কেবল প্রমাণভিত্তিক safe improvement নির্ধারণ করা
+- [x] user-visible converter behavior না বদলে প্রয়োজনীয় SEO polish ও owner documentation হালনাগাদ করা
+- [x] live verification, tests, Vercel auto-deploy এবং checkpoint সম্পন্ন করা
+
 # সক্রিয়: footer visual regression restoration
 - [ ] শেষ footer contrast পরিবর্তনে হওয়া visual regression-এর কারণ শনাক্ত করা
 - [ ] Footer-কে পূর্বের স্থিতিশীল design hierarchy-তে ফিরিয়ে কেবল প্রয়োজনীয় readable fix রাখা

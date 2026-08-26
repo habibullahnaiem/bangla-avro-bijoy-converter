@@ -6,12 +6,11 @@
  * - দিক টগল, দিক পরিবর্তন (সুয়াপ), মুছুন, কপি, পেস্ট
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useAuth } from "@/_core/hooks/useAuth";
-import { startLogin } from "@/const";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
   ArrowLeftRight,
+  ArrowRight,
   ArrowRightLeft,
   ClipboardCopy,
   ClipboardPaste,
@@ -32,9 +31,6 @@ import {
   HeartHandshake,
   MessageCircle,
   Share2,
-  Cloud,
-  LogIn,
-  LogOut,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -56,7 +52,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useTheme } from "@/contexts/ThemeContext";
-import { trpc } from "@/lib/trpc";
 
 const EXAMPLE_TEXT = `বিষয়: বাংলা নথির টাইপসেটিং ও রূপান্তর-সহায়তা
 
@@ -74,7 +69,6 @@ const EXAMPLE_TEXT = `বিষয়: বাংলা নথির টাইপ
 
 const HISTORY_STORAGE_KEY = "abc-recent-conversions";
 const MAX_HISTORY_ITEMS = 6;
-const MAX_STORED_DOCUMENT_BYTES = 8 * 1024 * 1024;
 const BRAND_LOGO_SRC = "/manus-storage/bangla-converter-exact-reference-logo_2f0bb0ec.png";
 const INSTALL_PROMPT_DISMISSED_KEY = "avrojoy-install-prompt-dismissed";
 const DECORATIVE_GLYPHS = [
@@ -114,49 +108,7 @@ const formatFileSize = (bytes: number) =>
     ? `${(bytes / 1024).toFixed(1)} KB`
     : `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 
-const formatStoredDocumentTime = (timestamp: Date) =>
-  new Intl.DateTimeFormat("bn-BD", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-  }).format(new Date(timestamp));
-
-const fileToBase64 = (file: File) =>
-  new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = () => reject(new Error("Unable to read selected file"));
-    reader.onload = () => {
-      const dataUrl = typeof reader.result === "string" ? reader.result : "";
-      const encoded = dataUrl.split(",", 2)[1];
-      if (!encoded) {
-        reject(new Error("Unable to encode selected file"));
-        return;
-      }
-      resolve(encoded);
-    };
-    reader.readAsDataURL(file);
-  });
-
 export default function Home() {
-  // The useAuth hook provides authentication state.
-  // To implement login/logout, call logout(), or start login from an event
-  // handler: onClick={() => startLogin()} (imported from "@/const"). Never call
-  // startLogin() during render (no href={startLogin()}) — it mints a one-time
-  // nonce cookie and must run only at the moment of navigation.
-  const { user, loading, isAuthenticated, logout } = useAuth();
-
-  const trpcUtils = trpc.useUtils();
-  const storedDocumentsQuery = trpc.documents.list.useQuery(undefined, {
-    enabled: isAuthenticated,
-    retry: false,
-    refetchOnWindowFocus: false,
-  });
-  const saveDocumentMutation = trpc.documents.upload.useMutation();
-  const downloadDocumentMutation = trpc.documents.download.useMutation();
-  const removeDocumentMutation = trpc.documents.remove.useMutation();
-
   const { theme, toggleTheme } = useTheme();
   const currentCopyrightYear = new Intl.DateTimeFormat("bn-BD", {
     year: "numeric",
@@ -598,65 +550,6 @@ export default function Home() {
     setIsFileDragActive(false);
     if (fileInputRef.current) fileInputRef.current.value = "";
     toast.success("ফাইল সরানো হয়েছে");
-  };
-
-  const saveSelectedDocument = async () => {
-    if (!selectedFile) {
-      toast.info("প্রথমে একটি ফাইল নির্বাচন করুন");
-      return;
-    }
-    if (!isAuthenticated) {
-      toast.info("ব্যক্তিগত নথি সংরক্ষণ করতে আগে সাইন ইন করুন");
-      startLogin();
-      return;
-    }
-    if (selectedFile.size > MAX_STORED_DOCUMENT_BYTES) {
-      toast.error("ব্যক্তিগত নথিতে সংরক্ষণের সীমা 8 MB");
-      return;
-    }
-
-    try {
-      const mimeType = /\.txt$/i.test(selectedFile.name)
-        ? "text/plain"
-        : "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-      const contentBase64 = await fileToBase64(selectedFile);
-      await saveDocumentMutation.mutateAsync({
-        fileName: selectedFile.name,
-        mimeType,
-        contentBase64,
-        source: "upload",
-        direction,
-      });
-      await trpcUtils.documents.list.invalidate();
-      toast.success("ফাইলটি শুধু আপনার ব্যক্তিগত নথিতে সংরক্ষিত হয়েছে");
-    } catch {
-      toast.error("নথি সংরক্ষণ করা যায়নি। আবার চেষ্টা করুন।");
-    }
-  };
-
-  const downloadStoredDocument = async (documentId: number, fileName: string) => {
-    try {
-      const { url } = await downloadDocumentMutation.mutateAsync({ id: documentId });
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = fileName;
-      link.rel = "noopener noreferrer";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch {
-      toast.error("নথি ডাউনলোডের লিংক তৈরি করা যায়নি");
-    }
-  };
-
-  const removeStoredDocument = async (documentId: number) => {
-    try {
-      await removeDocumentMutation.mutateAsync({ id: documentId });
-      await trpcUtils.documents.list.invalidate();
-      toast.success("নথিটি আপনার সংরক্ষিত তালিকা থেকে সরানো হয়েছে");
-    } catch {
-      toast.error("নথিটি সরানো যায়নি");
-    }
   };
 
   const runFileConvert = async () => {
@@ -1179,51 +1072,6 @@ export default function Home() {
                 </span>
               </span>
             ) : null}
-            {!loading &&
-              (isAuthenticated ? (
-                <>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="gap-1.5 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
-                        onClick={() => setActiveTab("file")}
-                        aria-label="আমার সংরক্ষিত নথি দেখুন">
-                        <Cloud className="h-4 w-4" />
-                        <span className="hidden lg:inline">আমার নথি</span>
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>{user?.name || "আমার"} সংরক্ষিত নথি</TooltipContent>
-                  </Tooltip>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-primary-foreground hover:bg-primary-foreground/10"
-                        onClick={() => {
-                          void logout()
-                            .then(() => toast.success("সাইন আউট করা হয়েছে"))
-                            .catch(() => toast.error("সাইন আউট করা যায়নি"));
-                        }}
-                        aria-label="সাইন আউট করুন">
-                        <LogOut className="h-4 w-4" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>সাইন আউট</TooltipContent>
-                  </Tooltip>
-                </>
-              ) : (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-primary-foreground/40 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20 hover:text-primary-foreground"
-                  onClick={startLogin}>
-                  <LogIn className="mr-1.5 h-4 w-4" />
-                  <span className="hidden sm:inline">সাইন ইন</span>
-                </Button>
-              ))}
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -1323,7 +1171,7 @@ export default function Home() {
           <div className="hero-panel__copy">
             <p className="eyebrow">অভ্রজয় • বাংলা লিপির সহজ সেতু</p>
             <h2 className="hero-title text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">
-              অভ্রজয়ে লিখুন, বিজয়ে নিন।
+              অভ্রজয় — অভ্র হোক বা বিজয়, ফন্ট বদলে নেই ভয়
             </h2>
             <p className="hero-summary mt-2 max-w-2xl text-[0.95rem] leading-relaxed text-muted-foreground">
               অভ্র/ইউনিকোড ⇄ বিজয় রূপান্তরের নির্ভরযোগ্য বাংলা publishing desk।
@@ -1861,32 +1709,6 @@ export default function Home() {
                   </Button>
                 </div>
               )}
-              {selectedFile && (
-                <div className="mt-3 flex flex-col gap-3 rounded-xl border border-primary/25 bg-primary/5 p-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <p className="text-sm font-semibold text-foreground">ব্যক্তিগত নথিতে সংরক্ষণ</p>
-                    <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
-                      শুধু আপনার সাইন-ইন করা অ্যাকাউন্টে দৃশ্যমান থাকবে। সীমা 8 MB।
-                    </p>
-                  </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    disabled={saveDocumentMutation.isPending || selectedFile.size > MAX_STORED_DOCUMENT_BYTES}
-                    className="border-primary/35 bg-card text-primary hover:bg-primary/5 disabled:opacity-50"
-                    onClick={saveSelectedDocument}>
-                    {saveDocumentMutation.isPending ? (
-                      <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
-                    ) : isAuthenticated ? (
-                      <Cloud className="mr-1.5 h-4 w-4" />
-                    ) : (
-                      <LogIn className="mr-1.5 h-4 w-4" />
-                    )}
-                    {isAuthenticated ? "আমার নথিতে সংরক্ষণ করুন" : "সাইন ইন করে সংরক্ষণ"}
-                  </Button>
-                </div>
-              )}
               <input
                 id="file-upload"
                 ref={fileInputRef}
@@ -1951,77 +1773,6 @@ export default function Home() {
                   )}
                 </div>
               </div>
-
-              {isAuthenticated && (
-                <section className="mt-6 rounded-xl border border-border bg-muted/25 p-4" aria-labelledby="private-documents-title">
-                  <div className="flex flex-wrap items-start justify-between gap-3">
-                    <div>
-                      <h4 id="private-documents-title" className="flex items-center gap-2 font-bold text-foreground">
-                        <Cloud className="h-4 w-4 text-primary" />
-                        আমার সংরক্ষিত নথি
-                      </h4>
-                      <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-                        শুধু আপনার অ্যাকাউন্টে দৃশ্যমান। টেক্সট রূপান্তরের local history এখানে স্বয়ংক্রিয়ভাবে সংরক্ষিত হয় না।
-                      </p>
-                    </div>
-                    <span className="rounded-full border border-primary/25 bg-card px-2.5 py-1 text-xs font-semibold text-primary">
-                      {user?.name || "ব্যক্তিগত"}
-                    </span>
-                  </div>
-
-                  <div className="mt-3 space-y-2">
-                    {storedDocumentsQuery.isLoading ? (
-                      <div className="flex items-center gap-2 rounded-lg border border-dashed border-border bg-card/70 px-3 py-4 text-sm text-muted-foreground">
-                        <Loader2 className="h-4 w-4 animate-spin text-primary" />
-                        সংরক্ষিত নথি লোড হচ্ছে...
-                      </div>
-                    ) : storedDocumentsQuery.isError ? (
-                      <div className="rounded-lg border border-destructive/25 bg-destructive/5 px-3 py-3 text-sm text-destructive">
-                        সংরক্ষিত নথি দেখা যাচ্ছে না। আবার চেষ্টা করুন।
-                      </div>
-                    ) : storedDocumentsQuery.data?.length ? (
-                      storedDocumentsQuery.data.map((storedDocument) => (
-                        <div key={storedDocument.id} className="flex flex-col gap-3 rounded-lg border border-border/70 bg-card p-3 sm:flex-row sm:items-center sm:justify-between">
-                          <div className="min-w-0">
-                            <p className="truncate font-semibold text-foreground" title={storedDocument.fileName}>
-                              {storedDocument.fileName}
-                            </p>
-                            <p className="mt-0.5 text-xs text-muted-foreground">
-                              {formatFileSize(storedDocument.byteSize)} · {storedDocument.direction === "u2b" ? "অভ্র → বিজয়" : "বিজয় → অভ্র"} · {formatStoredDocumentTime(storedDocument.createdAt)}
-                            </p>
-                          </div>
-                          <div className="flex shrink-0 flex-wrap items-center gap-2">
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              disabled={downloadDocumentMutation.isPending}
-                              className="border-primary/30 text-primary hover:bg-accent"
-                              onClick={() => void downloadStoredDocument(storedDocument.id, storedDocument.fileName)}>
-                              <Download className="mr-1.5 h-3.5 w-3.5" />
-                              ডাউনলোড
-                            </Button>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              disabled={removeDocumentMutation.isPending}
-                              className="border-destructive/25 text-destructive hover:bg-destructive/10"
-                              onClick={() => void removeStoredDocument(storedDocument.id)}>
-                              <Trash2 className="mr-1.5 h-3.5 w-3.5" />
-                              সরান
-                            </Button>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="rounded-lg border border-dashed border-border bg-card/70 px-3 py-4 text-sm text-muted-foreground">
-                        এখনো কোনো ব্যক্তিগত নথি সংরক্ষণ করা হয়নি। উপরে ফাইল বেছে নিয়ে “আমার নথিতে সংরক্ষণ করুন” চাপুন।
-                      </div>
-                    )}
-                  </div>
-                </section>
-              )}
 
               {/* ফাইলের কনভার্টেড টেক্সট নমুনা — ডুয়াল-সাইজ: বাংলা বড্ড,
                   ইংরেজি এক ধাপ ছোট (12/14 নিয়ম) */}
@@ -2195,7 +1946,80 @@ export default function Home() {
           )}
         </section>
 
-        {/* অভ্রজয় সম্পর্কে ও স্বেচ্ছাসেবী সহায়তা — public contact details supplied by the owner. */}
+        <section
+          id="avro-bijoy-guide"
+          className="seo-guide-section mt-8 rounded-2xl border border-primary/20 bg-card/90 p-5 shadow-sm sm:p-6"
+          aria-labelledby="avro-bijoy-guide-title">
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary">
+            ব্যবহারিক বাংলা গাইড
+          </p>
+          <h2 id="avro-bijoy-guide-title" className="mt-1 text-xl font-extrabold tracking-tight text-foreground sm:text-2xl">
+            অভ্র, বিজয় ও SutonnyMJ রূপান্তর সহজভাবে বুঝুন
+          </h2>
+          <p className="mt-3 max-w-4xl text-sm leading-relaxed text-muted-foreground">
+            অভ্রজয় দিয়ে ইউনিকোড বাংলা ও বিজয় (SutonnyMJ) লেখার মধ্যে রূপান্তর করা যায়।
+            Word-এ ব্যবহার করার আগে আউটপুট দেখে নেওয়া এবং সঠিক ফন্ট নির্বাচন করা ভালো ফল দেয়।
+          </p>
+
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
+            <article className="rounded-xl border bg-muted/30 p-4">
+              <h3 className="font-bold text-foreground">অভ্র থেকে বিজয়</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                <strong className="text-foreground">অভ্র → বিজয়</strong> নির্বাচন করে ইউনিকোড বাংলা লিখুন বা পেস্ট করুন।
+                লাইভ রূপান্তর চালু থাকলে আউটপুট সঙ্গে সঙ্গেই দেখা যাবে; পরে কপি করে Word-এ ব্যবহার করুন।
+              </p>
+              <a href="/avro-to-bijoy" className="mt-3 inline-flex items-center gap-1 text-sm font-bold text-primary hover:underline">
+                বিস্তারিত গাইড <ArrowRightLeft className="h-3.5 w-3.5" aria-hidden="true" />
+              </a>
+            </article>
+            <article className="rounded-xl border bg-muted/30 p-4">
+              <h3 className="font-bold text-foreground">বিজয় থেকে ইউনিকোড</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                <strong className="text-foreground">বিজয় → অভ্র</strong> নির্বাচন করে SutonnyMJ-ভিত্তিক বিজয় টেক্সট দিন।
+                রূপান্তরিত লেখা আধুনিক Unicode বাংলা হিসেবে কপি ও সম্পাদনা করা যাবে।
+              </p>
+              <a href="/bijoy-to-unicode" className="mt-3 inline-flex items-center gap-1 text-sm font-bold text-primary hover:underline">
+                বিস্তারিত গাইড <ArrowRightLeft className="h-3.5 w-3.5" aria-hidden="true" />
+              </a>
+            </article>
+            <article className="rounded-xl border bg-muted/30 p-4">
+              <h3 className="font-bold text-foreground">DOCX/TXT ফাইল</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                ফাইল কনভার্টার ট্যাব থেকে <strong className="text-foreground">.docx</strong> বা <strong className="text-foreground">.txt</strong> নির্বাচন করুন,
+                দিক ঠিক করুন এবং রূপান্তরিত file download করুন। এই প্রক্রিয়াটি আপনার ব্রাউজারেই সম্পন্ন হয়।
+              </p>
+              <a href="/docx-txt-bijoy-converter" className="mt-3 inline-flex items-center gap-1 text-sm font-bold text-primary hover:underline">
+                বিস্তারিত গাইড <ArrowRightLeft className="h-3.5 w-3.5" aria-hidden="true" />
+              </a>
+            </article>
+          </div>
+
+          <div className="mt-5 rounded-xl border border-primary/15 bg-primary/5 p-4">
+            <h3 className="font-bold text-foreground">সাধারণ প্রশ্ন</h3>
+            <div className="mt-3 divide-y divide-border">
+              <details className="py-3">
+                <summary className="cursor-pointer font-semibold text-foreground">Word-এ বিজয় আউটপুটে কোন font ব্যবহার করব?</summary>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  বাংলা বিজয় অংশে SutonnyMJ এবং ইংরেজি অংশে Times New Roman ব্যবহার করুন। প্রয়োজন হলে এখানে থাকা rich copy বা file converter ব্যবহার করে ফল আগে যাচাই করুন।
+                </p>
+              </details>
+              <details className="py-3">
+                <summary className="cursor-pointer font-semibold text-foreground">আমার টেক্সট বা ফাইল কি server-এ সংরক্ষিত হয়?</summary>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  না। বর্তমান public version-এ text conversion, file conversion এবং recent history আপনার browser-এর মধ্যেই কাজ করে; কোনো login বা ব্যক্তিগত cloud storage নেই।
+                </p>
+              </details>
+              <details className="py-3">
+                <summary className="cursor-pointer font-semibold text-foreground">যুক্তবর্ণ ও এ-কার ঠিক না দেখালে কী করব?</summary>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  সঠিক direction বেছে নিয়েছেন কি না নিশ্চিত করুন এবং বিজয় ফল Word-এ SutonnyMJ font-এ দেখুন। জটিল DOCX হলে file converter-এর output download করে original formattingসহ পরীক্ষা করুন।
+                </p>
+              </details>
+            </div>
+          </div>
+        </section>
+
+        {/* অভ্রজয় সম্পর্কে ও স্বেচ্ছাসেবী সহায়তা — page-end cards immediately before the footer. */}
         <section
           className="support-section mt-8 grid gap-4 lg:grid-cols-[1.15fr_0.85fr]"
           aria-label="অভ্রজয় সম্পর্কে ও সমর্থন">
@@ -2206,19 +2030,19 @@ export default function Home() {
                 <HeartHandshake className="h-5 w-5" aria-hidden="true" />
               </span>
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary">
-                  অভ্রজয় সম্পর্কে
-                </p>
-                <h2 className="mt-1 text-xl font-extrabold tracking-tight text-foreground">
-                  বাংলা লেখার পাশে একটি ব্যবহারিক সহকারী।
-                </h2>
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary">অভ্রজয় সম্পর্কে</p>
+                <h2 className="mt-1 text-xl font-extrabold tracking-tight text-foreground">বাংলা লেখার পাশে একটি ব্যবহারিক সহকারী।</h2>
               </div>
             </div>
             <p className="relative mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-              অভ্রজয় বাংলা লেখক, শিক্ষার্থী ও প্রকাশনার কাজের জন্য অভ্র/ইউনিকোড এবং
-              বিজয় টেক্সটের মধ্যে রূপান্তর সহজ করতে তৈরি। যুক্তবর্ণ, ফরম্যাটিং-সচেতন
-              DOCX/TXT কাজ এবং বাংলা–ইংরেজি মিশ্র লেখার ব্যবহারিক প্রবাহকে গুরুত্ব দেওয়া হয়।
+              একটি স্নাতকোত্তর থিসিসের শেষ সময়ের Word ও বিজয় রূপান্তর সমস্যার সমাধান খুঁজতে গিয়েই অভ্রজয়ের শুরু। সেই ব্যক্তিগত প্রয়োজন আজ বাংলা document workflow সহজ করার একটি উদ্যোগে পরিণত হয়েছে।
             </p>
+            <a
+              href="/avrojoy-er-jonmokotha"
+              className="relative mt-4 inline-flex items-center gap-2 rounded-xl border border-primary/30 bg-primary/5 px-3.5 py-2 text-sm font-bold text-primary transition hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              অভ্রজয়ের জন্মকথা পড়ুন
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </a>
           </article>
 
           <article className="relative overflow-hidden rounded-2xl border border-primary/30 bg-primary/10 p-5 shadow-sm sm:p-6">
@@ -2227,12 +2051,8 @@ export default function Home() {
                 <HeartHandshake className="h-5 w-5" aria-hidden="true" />
               </span>
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary">
-                  সমর্থন করুন
-                </p>
-                <h2 className="mt-1 text-lg font-extrabold text-foreground">
-                  স্বেচ্ছাসেবী সহযোগিতা
-                </h2>
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary">সমর্থন করুন</p>
+                <h2 className="mt-1 text-lg font-extrabold text-foreground">স্বেচ্ছাসেবী সহযোগিতা</h2>
               </div>
             </div>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
@@ -2240,9 +2060,7 @@ export default function Home() {
             </p>
             <div className="mt-4 grid grid-cols-3 gap-2" aria-label="মোবাইল পেমেন্ট পদ্ধতি">
               {['বিকাশ', 'নগদ', 'রকেট'].map((method) => (
-                <span
-                  key={method}
-                  className="rounded-lg border border-primary/20 bg-card/80 px-2 py-1.5 text-center text-xs font-bold text-foreground">
+                <span key={method} className="rounded-lg border border-primary/20 bg-card/80 px-2 py-1.5 text-center text-xs font-bold text-foreground">
                   {method}
                 </span>
               ))}
@@ -2254,9 +2072,7 @@ export default function Home() {
               className="mt-2 block w-full rounded-xl border border-primary/30 bg-card px-3 py-2 text-center font-mono text-sm font-bold tracking-wide text-primary transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               aria-label="বিকাশ, নগদ ও রকেটের নম্বর ০১৬০১৫৯৯৩৫৫ কপি করুন">
               01601599355
-              <span className="sr-only" aria-live="polite">
-                {supportNumberCopied ? "নম্বর কপি হয়েছে" : ""}
-              </span>
+              <span className="sr-only" aria-live="polite">{supportNumberCopied ? "নম্বর কপি হয়েছে" : ""}</span>
             </button>
             <a
               href="https://wa.me/8801601599355"
@@ -2303,8 +2119,23 @@ export default function Home() {
           <p className="text-xs opacity-80">
             অভ্র/ইউনিকোড ⇄ বিজয় • SutonnyMJ • Times New Roman
           </p>
+          <a href="/avrojoy-er-jonmokotha" className="site-footer__link text-xs font-semibold underline-offset-4 transition hover:underline">
+            আমাদের গল্প
+          </a>
+          <nav aria-label="Footer navigation" className="site-footer__nav flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs font-semibold">
+            <a href="/privacy" className="underline-offset-4 transition hover:text-primary-foreground hover:underline">গোপনীয়তা</a>
+            <span aria-hidden="true" className="opacity-50">•</span>
+            <a href="/terms" className="underline-offset-4 transition hover:text-primary-foreground hover:underline">ব্যবহারের শর্ত</a>
+            <span aria-hidden="true" className="opacity-50">•</span>
+            <a href="/contact" className="underline-offset-4 transition hover:text-primary-foreground hover:underline">যোগাযোগ</a>
+            <span aria-hidden="true" className="opacity-50">•</span>
+            <a href="/thesis-bijoy-checklist" className="underline-offset-4 transition hover:text-primary-foreground hover:underline">থিসিস checklist</a>
+          </nav>
           <p className="text-xs opacity-75">
             © {currentCopyrightYear} মো. হাবিবুল্লাহ নাঈম • সর্বস্বত্ব সংরক্ষিত
+          </p>
+          <p className="max-w-2xl text-xs leading-relaxed opacity-85">
+            অনুমতি ছাড়া এই সাইটের code, design বা content কপি/পুনঃপ্রকাশ নিষিদ্ধ।
           </p>
         </div>
       </footer>

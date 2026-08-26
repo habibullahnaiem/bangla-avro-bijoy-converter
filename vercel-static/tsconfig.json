@@ -1,0 +1,40 @@
+{
+  "include": [
+    "../client/src/main.tsx",
+    "../client/src/App.tsx",
+    "../client/src/pages/Home.tsx",
+    "../client/src/pages/NotFound.tsx",
+    "../client/src/components/ErrorBoundary.tsx",
+    "../client/src/components/ui/button.tsx",
+    "../client/src/components/ui/dialog.tsx",
+    "../client/src/components/ui/sonner.tsx",
+    "../client/src/components/ui/textarea.tsx",
+    "../client/src/components/ui/tooltip.tsx",
+    "../client/src/contexts/ThemeContext.tsx",
+    "../client/src/hooks/useComposition.ts",
+    "../client/src/hooks/useMobile.tsx",
+    "../client/src/hooks/usePersistFn.ts",
+    "../client/src/lib/converter.ts",
+    "../client/src/lib/utils.ts",
+    "./static-copy.test.ts"
+  ],
+  "exclude": ["node_modules", "build", "dist", "**/*.test.ts"],
+  "compilerOptions": {
+    "incremental": true,
+    "tsBuildInfoFile": "./node_modules/typescript/tsbuildinfo",
+    "noEmit": true,
+    "module": "ESNext",
+    "strict": true,
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "moduleResolution": "bundler",
+    "baseUrl": "..",
+    "types": ["node", "vite/client"],
+    "paths": {
+      "@/*": ["./client/src/*"]
+    }
+  }
+}

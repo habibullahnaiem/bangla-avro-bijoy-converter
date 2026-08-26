@@ -867,6 +867,23 @@ html:not(.dark) .file-workspace button:disabled {
   color: oklch(0.9 0.03 195 / 0.9);
 }
 
+.site-footer__nav,
+.site-footer__nav a,
+.site-footer__link {
+  color: oklch(0.96 0.015 200) !important;
+}
+
+.site-footer__nav a:hover,
+.site-footer__nav a:focus-visible,
+.site-footer__link:hover,
+.site-footer__link:focus-visible {
+  color: oklch(1 0 0) !important;
+}
+
+.site-footer__nav [aria-hidden="true"] {
+  color: oklch(0.84 0.04 195) !important;
+}
+
 @media (max-width: 767px) {
   .app-main {
     padding-top: 1.7rem;
@@ -2516,6 +2533,26 @@ html:not(.dark) .file-workspace button:disabled {
   }
 }
 
+/* The responsive workbench rules above intentionally use dark surfaces in dark
+   mode; scope the empty history state back to the light surface system here. */
+html:not(.dark) .history-empty-state {
+  border-color: oklch(0.72 0.055 198 / 0.85) !important;
+  background: linear-gradient(145deg, oklch(0.99 0.008 205 / 0.99), oklch(0.935 0.03 198 / 0.98)) !important;
+  color: oklch(0.2 0.03 210) !important;
+}
+
+html:not(.dark) .history-empty-state .text-foreground {
+  color: oklch(0.2 0.03 210) !important;
+}
+
+html:not(.dark) .history-empty-state .text-muted-foreground {
+  color: oklch(0.39 0.045 205) !important;
+}
+
+html:not(.dark) .history-empty-state [class*="text-muted-foreground/60"] {
+  color: oklch(0.45 0.075 198) !important;
+}
+
 /* ডিজাইন দিক: টিল ডেস্ক — support cards use the same readable surface family
    as each active theme, instead of one forced dark treatment for both modes. */
 .support-section > article {
@@ -2546,4 +2583,144 @@ html:not(.dark) .file-workspace button:disabled {
 .dark .support-section [class*="bg-card"] {
   border-color: oklch(0.5 0.045 200 / 0.6) !important;
   background: oklch(0.25 0.04 208 / 0.98) !important;
+}
+
+/* Search guidance remains a readable member of the established Teal Desk surface family. */
+.seo-guide-section {
+  border-color: oklch(0.72 0.055 198 / 0.85) !important;
+  background: linear-gradient(145deg, oklch(0.985 0.012 198 / 0.99), oklch(0.93 0.032 198 / 0.99)) !important;
+  color: oklch(0.2 0.03 210) !important;
+}
+
+.seo-guide-section .text-muted-foreground {
+  color: oklch(0.39 0.045 205) !important;
+}
+
+.seo-guide-section [class*="bg-muted"],
+.seo-guide-section [class*="bg-primary/5"] {
+  border-color: oklch(0.72 0.055 198 / 0.72) !important;
+  background: oklch(0.995 0.006 200 / 0.98) !important;
+}
+
+.dark .seo-guide-section {
+  border-color: oklch(0.5 0.045 200 / 0.6) !important;
+  background: linear-gradient(180deg, oklch(0.22 0.03 212 / 0.99), oklch(0.18 0.028 212 / 0.99)) !important;
+  color: oklch(0.94 0.018 200) !important;
+}
+
+.dark .seo-guide-section .text-foreground,
+.dark .seo-guide-section strong,
+.dark .seo-guide-section summary {
+  color: oklch(0.96 0.014 200) !important;
+}
+
+.dark .seo-guide-section .text-muted-foreground {
+  color: oklch(0.84 0.03 200) !important;
+}
+
+.dark .seo-guide-section [class*="bg-muted"],
+.dark .seo-guide-section [class*="bg-primary/5"] {
+  border-color: oklch(0.5 0.045 200 / 0.6) !important;
+  background: oklch(0.25 0.04 208 / 0.98) !important;
+}
+
+/* Standalone SEO guides share the main page's readable surface system without
+   inheriting the deliberately muted decorative treatment used elsewhere. */
+.seo-guide-page .text-foreground,
+.seo-guide-page h1,
+.seo-guide-page h2,
+.seo-guide-page h3,
+.seo-guide-page summary,
+.seo-guide-page li {
+  color: oklch(0.2 0.03 210) !important;
+}
+
+.seo-guide-page .text-muted-foreground {
+  color: oklch(0.39 0.045 205) !important;
+}
+
+.seo-guide-page .text-primary {
+  color: oklch(0.39 0.1 198) !important;
+}
+
+.seo-guide-page [class*="bg-primary/5"] {
+  border-color: oklch(0.72 0.055 198 / 0.82) !important;
+  background: oklch(0.94 0.032 198 / 0.98) !important;
+}
+
+.dark .seo-guide-page .text-foreground,
+.dark .seo-guide-page h1,
+.dark .seo-guide-page h2,
+.dark .seo-guide-page h3,
+.dark .seo-guide-page summary,
+.dark .seo-guide-page li {
+  color: oklch(0.96 0.014 200) !important;
+}
+
+.dark .seo-guide-page .text-muted-foreground {
+  color: oklch(0.84 0.03 200) !important;
+}
+
+.dark .seo-guide-page .text-primary {
+  color: oklch(0.76 0.105 192) !important;
+}
+
+.dark .seo-guide-page [class*="bg-primary/5"] {
+  border-color: oklch(0.5 0.045 200 / 0.6) !important;
+  background: oklch(0.25 0.04 208 / 0.98) !important;
+}
+
+/* The origin-story page uses long-form prose. Keep its light-theme body copy
+   explicitly opaque and dark without changing standalone guide styling. */
+html:not(.dark) .story-page .story-page__lead,
+html:not(.dark) .story-page .story-page__content > div > p {
+  color: oklch(0.29 0.04 210) !important;
+  opacity: 1 !important;
+}
+
+html:not(.dark) .story-page .story-page__content > div > h2 {
+  color: oklch(0.2 0.045 210) !important;
+}
+
+html:not(.dark) .story-page {
+  background: oklch(0.96 0.018 205) !important;
+}
+
+html:not(.dark) .story-page [class*="bg-card"] {
+  background: oklch(0.99 0.008 205) !important;
+}
+
+.dark .story-page {
+  background: oklch(0.15 0.028 210) !important;
+}
+
+.dark .story-page [class*="bg-card"] {
+  border-color: oklch(0.5 0.045 200 / 0.6) !important;
+  background: oklch(0.22 0.036 208) !important;
+}
+
+.dark .story-page .story-page__lead,
+.dark .story-page .story-page__content > div > p,
+.dark .story-page .story-page__content > div > h2 {
+  color: oklch(0.94 0.018 200) !important;
+  opacity: 1 !important;
+}
+
+/* Public policy, contact and checklist pages use the same stable surface logic
+   as the origin story so they remain readable in both saved theme states. */
+html:not(.dark) .public-info-page {
+  background: oklch(0.96 0.018 205) !important;
+}
+
+html:not(.dark) .public-info-page [class*="bg-card"] {
+  background: oklch(0.99 0.008 205) !important;
+}
+
+.dark .public-info-page {
+  background: oklch(0.15 0.028 210) !important;
+}
+
+.dark .public-info-page [class*="bg-card"] {
+  border-color: oklch(0.5 0.045 200 / 0.6) !important;
+  background: oklch(0.22 0.036 208) !important;
 }
