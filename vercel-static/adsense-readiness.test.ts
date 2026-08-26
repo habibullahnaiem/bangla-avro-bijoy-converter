@@ -57,6 +57,9 @@ describe("AdSense application readiness pages", () => {
     expect(guides).toContain("কোন কাজে Unicode টু বিজয় দরকার হয়?");
     expect(guides).toContain("থিসিস ও গবেষণাপত্র");
     expect(guides).toContain("বই, জার্নাল ও DTP handoff");
+    expect(guides).toContain("থিসিস বা Word file দেওয়ার আগে অভ্রজয়ের review method");
+    expect(guides).toContain("এটি কোনো স্বয়ংক্রিয় নিখুঁততার guarantee নয়");
+    expect(guides).toContain("Formatting-sensitive অংশ দেখুন");
     expect(guides).toContain("যুক্তাক্ষর, কারচিহ্ন বা যতিচিহ্ন রূপান্তরের পর কীভাবে যাচাই করব?");
     expect(guides).toContain("আমার লেখা কি server-এ পাঠানো বা সংরক্ষণ করা হয়?");
     expect(guides).toContain('"@type": "FAQPage"');

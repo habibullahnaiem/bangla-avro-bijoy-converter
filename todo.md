@@ -931,10 +931,16 @@
 - [x] Verified owner account `avrojoyconverter@gmail.com` দিয়ে Search Console property access পুনরুদ্ধার করা
 - [x] কোনো বাস্তব technical discovery blocker পাওয়া যায়নি; current live URL Google fetch ও index করতে পারে নিশ্চিত করা
 - [x] Correction প্রয়োজন হয়নি; existing shared production release-এর live verification সম্পন্ন করা
-- [ ] বাস্তব next-step, recrawl dependency ও authority approval boundary জানানো
+- [x] বাস্তব next-step, recrawl dependency ও authority approval boundary জানানো
 
 # সক্রিয়: generic-query first-page comparator study
 - [x] `ইউনিকোড টু বিজয়` ও `অভ্র টু বিজয়` query-র current first-page comparator set নথিভুক্ত করা
 - [x] Comparator সাইটগুলোর publicly visible title/content, raw crawlability, structured data, sitemap/internal discovery ও editorial signals তুলনা করা
 - [x] AvroJoy-এর public gap ও শুধুই safe, original improvement priority নির্ধারণ করা
-- [ ] কোনো implementation বা external outreach-এর আগে owner approval boundaryসহ comparative result জানানো
+- [x] কোনো implementation বা external outreach-এর আগে owner approval boundaryসহ comparative result জানানো
+
+# সক্রিয়: original DOCX/থিসিস review-method guide enhancement
+- [x] `/avro-to-bijoy` guide-এ concise, original conversion-review method section যোগ করা
+- [x] Prerendered route body ও static regression coverage-এ নতুন section প্রতিফলিত করা
+- [x] Root ও Vercel-static type check, test এবং production build চালানো
+- [ ] Shared publish-এর পরে live guide route verify করা

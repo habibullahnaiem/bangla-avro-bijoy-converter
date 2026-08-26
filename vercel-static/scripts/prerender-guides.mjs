@@ -27,6 +27,18 @@ const guides = [
       "বাংলা–English mixed document-এ দুই ভাষার font family আলাদা রাখা পাঠযোগ্যতায় সহায়ক।",
       "Public converter-এ text conversion browser-এর ভেতরেই চলে।",
     ],
+    reviewMethod: {
+      title: "থিসিস বা Word file দেওয়ার আগে অভ্রজয়ের review method",
+      intro:
+        "এটি কোনো স্বয়ংক্রিয় নিখুঁততার guarantee নয়। গুরুত্বপূর্ণ thesis, বই বা Word document-এ রূপান্তরের পরে নিচের ছোট review-টি করলে font ও rendering-সংক্রান্ত ভুল আগে ধরা সহজ হয়।",
+      checks: [
+        "উৎস যাচাই করুন: লেখা Unicode/অভ্র হলে “অভ্র → বিজয়” direction-ই নির্বাচন করেছেন কি না দেখুন।",
+        "প্রতিনিধি বাংলা অংশ দেখুন: যুক্তবর্ণ, ি/ী/ে/ৈ/ৃ-কার, দাড়ি, quotation mark এবং নাম বা শিরোনামের মতো চোখে পড়ার অংশ preview-তে পরীক্ষা করুন।",
+        "মিশ্র ভাষার run দেখুন: English নাম, title, citation বা URL আলাদা করে পড়ুন; Word-এ বাংলা বিজয় অংশে SutonnyMJ এবং English অংশে Times New Roman রাখুন।",
+        "Formatting-sensitive অংশ দেখুন: heading, bold/italic emphasis, quotation ও reference-ঘেঁষা অংশগুলো DOCX download করার পর Word-এ দ্রুত proofread করুন।",
+        "শেষে output খোলা অবস্থায় একবার দ্রুত পড়ুন: publishing, submission বা print-এর আগে নিজের document requirement অনুযায়ী final proofread করুন।",
+      ],
+    },
     faqs: [
       [
         "ইউনিকোড টু বিজয় বলতে কী বোঝায়?",
@@ -39,6 +51,10 @@ const guides = [
       [
         "বাংলা–English mixed লেখা কি রূপান্তর করা যায়?",
         "হ্যাঁ। Word-এ বাংলা বিজয় অংশে SutonnyMJ এবং English name, title বা citation-এ Times New Roman রাখুন।",
+      ],
+      [
+        "থিসিস বা Word file দেওয়ার আগে অভ্রজয়ের review method কী?",
+        "প্রথমে direction ঠিক আছে কি না নিশ্চিত করুন। তারপর representative যুক্তবর্ণ, কারচিহ্ন, যতিচিহ্ন, English name/citation ও heading-এর মতো formatting-sensitive অংশ preview-তে দেখুন। DOCX download করলে Word-এ বাংলা অংশ SutonnyMJ এবং English অংশ Times New Roman রেখে একটি final proofread করুন।",
       ],
       [
         "Word-এ বাংলা অক্ষর হিজিবিজি দেখালে কী করব?",
@@ -133,6 +149,9 @@ function replaceTag(html, expression, replacement) {
 function pageMarkup(guide, url) {
   const steps = guide.steps.map((step) => `<li>${escapeHtml(step)}</li>`).join("");
   const notes = guide.notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("");
+  const reviewMethod = guide.reviewMethod
+    ? `<section aria-labelledby="review-method-title"><h2 id="review-method-title">${escapeHtml(guide.reviewMethod.title)}</h2><p>${escapeHtml(guide.reviewMethod.intro)}</p><ol>${guide.reviewMethod.checks.map((check) => `<li>${escapeHtml(check)}</li>`).join("")}</ol></section>`
+    : "";
   const faqs = guide.faqs
     .map(
       ([question, answer]) =>
@@ -151,6 +170,7 @@ function pageMarkup(guide, url) {
     <ol>${steps}</ol>
     <h2>মনে রাখুন</h2>
     <ul>${notes}</ul>
+    ${reviewMethod}
     <h2>সাধারণ প্রশ্ন</h2>
     ${faqs}
     <p><a href="/bijoy-to-unicode">বিজয় থেকে Unicode গাইড</a> · <a href="/docx-txt-bijoy-converter">DOCX ও TXT ফাইল গাইড</a></p>

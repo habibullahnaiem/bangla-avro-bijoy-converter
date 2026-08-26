@@ -44,6 +44,8 @@ describe("Vercel static copy boundaries", () => {
     expect(prerenderer).toContain('"@type": "FAQPage"');
     expect(prerenderer).toContain('"@type": "BreadcrumbList"');
     expect(prerenderer).toContain('data-route="${guide.slug}"');
+    expect(prerenderer).toContain("থিসিস বা Word file দেওয়ার আগে অভ্রজয়ের review method");
+    expect(prerenderer).toContain('aria-labelledby="review-method-title"');
   });
 
   it("states AvroJoy as the root site identity rather than its hosting provider", () => {

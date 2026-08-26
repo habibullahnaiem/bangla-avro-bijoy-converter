@@ -14,6 +14,11 @@ type Guide = {
   steps: string[];
   notes: string[];
   useCases?: Array<{ title: string; description: string }>;
+  reviewMethod?: {
+    title: string;
+    intro: string;
+    checks: string[];
+  };
   faqs: Array<{ question: string; answer: string }>;
 };
 
@@ -54,6 +59,18 @@ const GUIDES: Record<string, Guide> = {
           "একই document-এ English নাম, title বা citation থাকলে বাংলা অংশের বিজয় font এবং English অংশের Times New Roman font আলাদা রাখলে Word-এ পড়া ও সম্পাদনা সহজ হয়।",
       },
     ],
+    reviewMethod: {
+      title: "থিসিস বা Word file দেওয়ার আগে অভ্রজয়ের review method",
+      intro:
+        "এটি কোনো স্বয়ংক্রিয় নিখুঁততার guarantee নয়। গুরুত্বপূর্ণ thesis, বই বা Word document-এ রূপান্তরের পরে নিচের ছোট review-টি করলে font ও rendering-সংক্রান্ত ভুল আগে ধরা সহজ হয়।",
+      checks: [
+        "উৎস যাচাই করুন: লেখা Unicode/অভ্র হলে “অভ্র → বিজয়” direction-ই নির্বাচন করেছেন কি না দেখুন।",
+        "প্রতিনিধি বাংলা অংশ দেখুন: যুক্তবর্ণ, ি/ী/ে/ৈ/ৃ-কার, দাড়ি, quotation mark এবং নাম বা শিরোনামের মতো চোখে পড়ার অংশ preview-তে পরীক্ষা করুন।",
+        "মিশ্র ভাষার run দেখুন: English নাম, title, citation বা URL আলাদা করে পড়ুন; Word-এ বাংলা বিজয় অংশে SutonnyMJ এবং English অংশে Times New Roman রাখুন।",
+        "Formatting-sensitive অংশ দেখুন: heading, bold/italic emphasis, quotation ও reference-ঘেঁষা অংশগুলো DOCX download করার পর Word-এ দ্রুত proofread করুন।",
+        "শেষে output খোলা অবস্থায় একবার দ্রুত পড়ুন: publishing, submission বা print-এর আগে নিজের document requirement অনুযায়ী final proofread করুন।",
+      ],
+    },
     faqs: [
       {
         question: "ইউনিকোড টু বিজয় বলতে কী বোঝায়?",
@@ -89,6 +106,11 @@ const GUIDES: Record<string, Guide> = {
         question: "DOCX বা TXT file কীভাবে Unicode থেকে বিজয়ে রূপান্তর করব?",
         answer:
           "হোমপেজের File Converter tab খুলে “অভ্র → বিজয়” direction নির্বাচন করুন, তারপর DOCX বা TXT file দিন। Preview দেখে ফল download করুন এবং Word-এ বাংলা বিজয় run-এর font SutonnyMJ আছে কি না যাচাই করুন।",
+      },
+      {
+        question: "থিসিস বা Word file দেওয়ার আগে অভ্রজয়ের review method কী?",
+        answer:
+          "প্রথমে direction ঠিক আছে কি না নিশ্চিত করুন। তারপর representative যুক্তবর্ণ, কারচিহ্ন, যতিচিহ্ন, English name/citation ও heading-এর মতো formatting-sensitive অংশ preview-তে দেখুন। DOCX download করলে Word-এ বাংলা অংশ SutonnyMJ এবং English অংশ Times New Roman রেখে একটি final proofread করুন।",
       },
       {
         question: "Word-এ বাংলা অক্ষর হিজিবিজি দেখালে কী করব?",
@@ -353,6 +375,22 @@ export function SeoGuidePage({ slug }: { slug: keyof typeof GUIDES }) {
                   </section>
                 ))}
               </div>
+            </section>
+          )}
+
+          {guide.reviewMethod && (
+            <section className="mt-6 rounded-2xl border border-primary/20 bg-card p-5 shadow-sm sm:p-7" aria-labelledby="review-method-title">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary">বাস্তব কাজের আগে যাচাই</p>
+              <h2 id="review-method-title" className="mt-1 text-xl font-extrabold text-foreground">{guide.reviewMethod.title}</h2>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base">{guide.reviewMethod.intro}</p>
+              <ol className="mt-5 space-y-3">
+                {guide.reviewMethod.checks.map((check, index) => (
+                  <li key={check} className="flex gap-3 text-sm leading-relaxed text-foreground sm:text-base">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-black text-primary-foreground">{index + 1}</span>
+                    <span className="pt-0.5">{check}</span>
+                  </li>
+                ))}
+              </ol>
             </section>
           )}
 
