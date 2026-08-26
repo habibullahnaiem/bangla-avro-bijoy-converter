@@ -981,3 +981,8 @@
 - [x] `অভ্রজয়` query-তে top result, AvroJoy homepage position ও entity ambiguity যাচাই করা
 - [x] Current homepage brand metadata, visible disambiguation copy ও raw HTML entity signal gap নির্ধারণ করা
 - [x] Safe brand-signal improvement publish ও live verification করা
+
+# সক্রিয়: targeted brand-ambiguity diagnosis
+- [x] `অভ্রজয়` query-র AI/knowledge interpretation, top organic result ও snippet wording তুলনা করা
+- [x] AvroJoy homepage entity/title/snippet এবং available public references-এ remaining ambiguity gap নির্ণয় করা
+- [x] কেবল justified correction থাকলে validate করা; না থাকলে recrawl-dependent boundary report করা
