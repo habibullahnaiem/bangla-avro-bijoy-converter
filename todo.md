@@ -944,3 +944,8 @@
 - [x] Prerendered route body ও static regression coverage-এ নতুন section প্রতিফলিত করা
 - [x] Root ও Vercel-static type check, test এবং production build চালানো
 - [x] Shared publish-এর পরে live guide route verify করা
+
+# সক্রিয়: ethical personalized outreach draft
+- [x] একটিমাত্র thesis/Word-audience resource candidate-এর relevance ও public contact path পুনরায় যাচাই করা
+- [x] Candidate-specific, non-paid Bengali resource-suggestion draft প্রস্তুত করা
+- [ ] User-কে খসড়া দেখিয়ে message পাঠানোর জন্য পৃথক final consent চাওয়া

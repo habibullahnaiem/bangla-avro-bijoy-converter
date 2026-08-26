@@ -15,3 +15,7 @@ AvroJoy-এর জন্য outreach কেবল তখনই বিবেচ�
 যদি owner অনুমোদন করেন, প্রথমে সম্ভাব্য resource owner-এর public editorial/contact policy যাচাই করতে হবে। তারপর AvroJoy-এর relevant guide-এর একটি সংক্ষিপ্ত ব্যাখ্যা পাঠানো যাবে—যেমন thesis-এর Bengali–English mixed DOCX-এ font-aware review বা Unicode-to-Bijoy direction check। তারা নিজের editorial বিচারেই কোনো resource যোগ করবেন কি না সিদ্ধান্ত নেবেন।
 
 কোনো URL প্রকাশ, message পাঠানো, comment করা বা social post দেওয়ার আগে আলাদা করে owner-এর সম্মতি নিতে হবে।
+
+## ২৬ আগস্ট ২০২৬: refreshed candidate verification
+
+Wada Research-এর thesis-format page এখনও Bangladesh university thesis, MS Word formatting, department-specific manual এবং final proofread নিয়ে লেখা। তাদের public homepage-এ thesis/dissertation support, editing/proofreading ও print formatting/binding service দেখা যায়। Public contact route হিসেবে `research.wada@gmail.com` দেওয়া আছে। এই email ব্যবহার কেবল একবারের relevant editorial resource suggestion-এর draft target হিসেবে বিবেচ্য; কোনো automated sending, paid placement, follow-link request, reciprocal arrangement বা WhatsApp message অনুমোদিত নয়।
