@@ -44,3 +44,11 @@ Search Console-এর **Live Test** ২৬ আগস্ট ২০২৬-এ `/av
 Verified owner account-এ Search Console Overview পুনরায় খোলা হলে Performance, Indexing, Experience এবং Enhancements report এখনও **“Processing data, please check again in a day or so”** দেখিয়েছে। তাই query-level CTR, average position বা impression দিয়ে এখনো content decision নেওয়া যাচ্ছে না।
 
 Source review-এ দেখা গেছে root homepage-এর title ও description `অভ্রজয় (AvroJoy)` দিয়ে শুরু হলেও visible converter control ও hero-তে `অভ্র/ইউনিকোড → বিজয়` এবং `বিজয় → অভ্র/ইউনিকোড` স্পষ্ট। প্রথম-page comparator-দের মতো root page-এ exact generic query phrase শুরুতেই না থাকা একটি safe on-page alignment opportunity—কিন্তু এটি ranking guarantee নয় এবং keyword stuffing ছাড়া শুধু title/description ও প্রথম visible explanatory copy-তে natural wording হিসেবে বিবেচ্য।
+
+Links report-ও এখনও **“Processing data, please check again in a day or so”** দেখাচ্ছে। ফলে Search Console থেকে external-link count, referring domain বা anchor-text evidence এখনও পাওয়া যায়নি; এই মুহূর্তে external-link-based diagnosis বা action করা যুক্তিসঙ্গত নয়।
+
+Core Web Vitals report-এ mobile ও desktop—দুই ক্ষেত্রেই গত ৯০ দিনে **“Not enough usage data”** দেখিয়েছে। তাই field CWV failure-কে generic ranking gap-এর কারণ বলা যায় না; site-টির query-level Performance, links এবং field-experience data এখনও যথেষ্ট পরিমাণে জমেনি।
+
+PageSpeed Insights-এর mobile lab run-এ Performance **60**, Accessibility **95**, Best Practices **100** এবং SEO **100** এসেছে; একই report-এ real-user data **No Data**। এটি একটি synthetic lab result—Google Search Console-এর field CWV বা direct ranking measurement নয়—তবে mobile loading experience উন্নত করার সম্ভাব্য সুযোগ আছে। কোনো performance change করার আগে specific diagnostic opportunity আলাদা করে যাচাই করা দরকার।
+
+পরবর্তী lab diagnostic-এ FCP **6.2 s**, LCP **10.8 s**, TBT **0 ms** এবং CLS **0.008** দেখা গেছে; render-blocking request-এর estimate **4,840 ms** এবং image delivery savings **353 KiB**। Homepage-এর mobile hero-তে ব্যবহৃত public image দুটির বর্তমান payload মেপে পাওয়া গেছে: `avrojoy-hero-v2-banner` প্রায় **275 KiB** এবং `bangla-converter-keyboard-background` প্রায় **77 KiB**—মোট প্রায় **352 KiB**। তাই একই artwork-এর efficient modern-image delivery যাচাই করা একটি concrete, low-risk performance candidate; এটি field ranking guarantee নয়।

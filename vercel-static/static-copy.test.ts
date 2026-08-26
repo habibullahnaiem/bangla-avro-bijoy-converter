@@ -27,6 +27,18 @@ describe("Vercel static copy boundaries", () => {
     expect(homepage).toContain("ইউনিকোড টু বিজয় গাইড");
   });
 
+  it("preloads the active compact hero artwork and uses WebP for the shared hero surfaces", () => {
+    const homepage = fs.readFileSync(path.join(repositoryRoot, "client/index.html"), "utf8");
+    const stylesheet = fs.readFileSync(path.join(repositoryRoot, "client/src/index.css"), "utf8");
+
+    expect(homepage).toContain('href="/manus-storage/avrojoy-hero-v2-banner_32621bd4.webp"');
+    expect(homepage).toContain('type="image/webp"');
+    expect(stylesheet).toContain("/manus-storage/avrojoy-hero-v2-banner_32621bd4.webp");
+    expect(stylesheet).toContain("/manus-storage/bangla-converter-keyboard-background_6048064b.webp");
+    expect(stylesheet).not.toContain("avrojoy-hero-v2-banner_b1dad7f4.png");
+    expect(stylesheet).not.toContain("bangla-converter-keyboard-background_fad26d5c.png");
+  });
+
   it("keeps the primary conversion routes clearly discoverable in the current sitemap", () => {
     const sitemap = fs.readFileSync(path.join(repositoryRoot, "client/public/sitemap.xml"), "utf8");
 

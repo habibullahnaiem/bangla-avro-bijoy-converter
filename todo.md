@@ -954,3 +954,9 @@
 - [x] `ইউনিকোড টু বিজয়` ও `অভ্র টু বিজয়` query-তে AvroJoy guide/homepage alignment এবং current Google/Performance evidence পুনরায় যাচাই করা
 - [x] First-page intent অনুযায়ী কেবল safe, original on-page enhancement নির্ধারণ করা
 - [x] অনুমোদনযোগ্য enhancement বাস্তবায়ন, test, publish ও crawl-visible output যাচাই করা
+
+# সক্রিয়: mobile PageSpeed image-delivery follow-up
+- [x] Mobile lab-এর image-delivery ও render-blocking diagnostic থেকে safe concrete change নির্দিষ্ট করা
+- [x] Visual identity অপরিবর্তিত রেখে image-delivery improvement বাস্তবায়ন করা
+- [x] Root/Vercel-static validation ও mobile visual check সম্পন্ন করা; PageSpeed re-test production publish-এর পরে করা হবে
+- [ ] Shared publish ও live output verification করা
