@@ -964,4 +964,4 @@
 # সক্রিয়: Bijoy-to-Unicode page-specific gap check
 - [x] `বিজয় থেকে ইউনিকোড` ও related query-তে current Google visibility এবং route-level intent alignment যাচাই করা
 - [x] Route-এর raw HTML, metadata, structured data ও internal discovery gap নির্ধারণ করা
-- [ ] Safe, original page-specific improvement publish ও live crawl-visible output যাচাই করা
+- [x] Safe, original page-specific improvement publish ও live crawl-visible output যাচাই করা
