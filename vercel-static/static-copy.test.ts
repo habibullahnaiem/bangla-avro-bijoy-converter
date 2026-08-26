@@ -22,6 +22,14 @@ describe("Vercel static copy boundaries", () => {
     expect(home).toContain("বিজয় → অভ্র/ইউনিকোড");
   });
 
+  it("keeps the primary conversion routes clearly discoverable in the current sitemap", () => {
+    const sitemap = fs.readFileSync(path.join(repositoryRoot, "client/public/sitemap.xml"), "utf8");
+
+    expect(sitemap).toContain("https://avrojoy.vercel.app/");
+    expect(sitemap).toContain("https://avrojoy.vercel.app/avro-to-bijoy");
+    expect(sitemap).toContain("<lastmod>2026-08-26</lastmod>");
+  });
+
   it("builds the Vercel static project from the shared root client and keeps the public asset proxy", () => {
     const viteConfig = fs.readFileSync(path.join(staticProjectRoot, "vite.config.ts"), "utf8");
     const vercelConfig = fs.readFileSync(path.join(staticProjectRoot, "vercel.json"), "utf8");

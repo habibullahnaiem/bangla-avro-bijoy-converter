@@ -879,4 +879,15 @@
 - [x] “ইউনিকোড টু বিজয়” search result, current landing page ও indexability audit করা
 - [x] People-first content, title/description ও internal-link signals দিয়ে প্রাসঙ্গিক landing page শক্তিশালী করা
 - [x] Unicode-to-Bijoy guide-এর light/dark theme text contrast ও reading experience ঠিক করা
-- [x] SEO regression ও crawl-readiness validation সম্পন্ন করা; shared auto-deploy ও checkpoint বাকি
+- [x] SEO regression, shared auto-deploy ও crawl-readiness validation সম্পন্ন করা
+
+# সক্রিয়: Bangla.plus ranking comparison
+- [x] “ইউনিকোড টু বিজয়” query-তে Bangla.plus ও AvroJoy-এর live search appearance এবং landing-page signals তুলনা করা
+- [x] Publicly observable content, technical relevance ও authority/discovery gap প্রমাণভিত্তিকভাবে ব্যাখ্যা করা
+- [x] Copying বা keyword stuffing ছাড়া people-first low-risk improvement plan নির্ধারণ করা
+
+# সক্রিয়: organic search discovery growth
+- [x] Search Console performance/query এবং index coverage baseline সংগ্রহ করা
+- [x] Highest-intent conversion searches, sitemap discovery ও landing-page gap নির্ধারণ করা
+- [x] People-first content ও internal discovery improvements প্রয়োগ করা
+- [x] Coverage validation সম্পন্ন করা; shared auto-deploy ও safe monitoring plan বাকি
