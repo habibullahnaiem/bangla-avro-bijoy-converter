@@ -18,6 +18,8 @@ describe("Vercel static copy boundaries", () => {
     expect(home).toContain("থিসিস, বই, রিপোর্ট বা Word-এর বাংলা লেখা বিজয়ে নিতে");
     expect(home).toContain("bold/italic, DOCX/TXT ও বাংলা–ইংরেজি mixed text");
     expect(home).toContain("SutonnyMJ–Times New Roman preview-তে ফল যাচাই করুন");
+    expect(home).toContain("অভ্র/ইউনিকোড → বিজয়");
+    expect(home).toContain("বিজয় → অভ্র/ইউনিকোড");
   });
 
   it("builds the Vercel static project from the shared root client and keeps the public asset proxy", () => {

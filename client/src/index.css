@@ -1121,6 +1121,14 @@ html:not(.dark) .file-workspace button:disabled {
     letter-spacing: 0.06em;
   }
 
+  .hero-panel__signature-label {
+    white-space: nowrap;
+  }
+
+  .hero-panel__signature-separator {
+    color: oklch(0.58 0.09 195 / 0.72);
+  }
+
   .hero-panel__signature-key {
     display: inline-flex;
     height: 1.65rem;
@@ -1195,6 +1203,9 @@ html:not(.dark) .file-workspace button:disabled {
     top: auto;
     right: auto;
     order: -1;
+    flex-wrap: wrap;
+    row-gap: 0.15rem;
+    letter-spacing: 0.025em;
   }
 
   .hero-panel__signature-specimen {

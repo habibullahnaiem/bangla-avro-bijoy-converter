@@ -1165,8 +1165,10 @@ export default function Home() {
       <main className="app-main container flex-1">
         {/* ডিজাইন দিক: টিল ডেস্ক — compact intro, glyph-first AvroJoy identity, converter as the first-look product desk */}
         <div className="hero-panel mb-4 flex flex-wrap items-end justify-between gap-3">
-          <div className="hero-panel__signature" aria-label="অভ্র ⇄ বিজয়">
-            <span className="hero-panel__signature-label">অভ্র ⇄ বিজয়</span>
+          <div className="hero-panel__signature" aria-label="অভ্র/ইউনিকোড থেকে বিজয় এবং বিজয় থেকে অভ্র/ইউনিকোড রূপান্তর">
+            <span className="hero-panel__signature-label">অভ্র/ইউনিকোড → বিজয়</span>
+            <span className="hero-panel__signature-separator" aria-hidden="true">•</span>
+            <span className="hero-panel__signature-label">বিজয় → অভ্র/ইউনিকোড</span>
           </div>
           <div className="hero-panel__copy">
             <p className="eyebrow">অভ্রজয় • বাংলা লিপির সহজ সেতু</p>
