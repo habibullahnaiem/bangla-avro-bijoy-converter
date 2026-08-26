@@ -862,4 +862,4 @@
 # সক্রিয়: brand search-এ homepage priority
 - [x] Homepage ও guide route-এর brand title, canonical, structured data এবং internal link signals audit করা
 - [x] “অভ্রজয় / AvroJoy” query-তে homepage-কে primary entity হিসেবে শক্তিশালী করা
-- [x] SEO regression validation ও tests সম্পন্ন করা; shared auto-deploy ও checkpoint বাকি
+- [x] SEO regression validation, tests, shared auto-deploy ও checkpoint সম্পন্ন করা
