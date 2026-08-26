@@ -14,12 +14,17 @@ describe("Vercel static copy boundaries", () => {
 
   it("states the homepage’s formatting-aware Word and mixed-text value proposition", () => {
     const home = fs.readFileSync(path.join(repositoryRoot, "client/src/pages/Home.tsx"), "utf8");
+    const homepage = fs.readFileSync(path.join(repositoryRoot, "client/index.html"), "utf8");
 
     expect(home).toContain("থিসিস, বই, রিপোর্ট বা Word-এর বাংলা লেখা বিজয়ে নিতে");
     expect(home).toContain("bold/italic, DOCX/TXT ও বাংলা–ইংরেজি mixed text");
     expect(home).toContain("SutonnyMJ–Times New Roman preview-তে ফল যাচাই করুন");
     expect(home).toContain("অভ্র/ইউনিকোড → বিজয়");
     expect(home).toContain("বিজয় → অভ্র/ইউনিকোড");
+    expect(home).toContain("ইউনিকোড টু বিজয় ও অভ্র টু বিজয় কনভার্টার");
+    expect(homepage).toContain("ইউনিকোড টু বিজয় ও অভ্র টু বিজয় কনভার্টার | অভ্রজয়");
+    expect(homepage).toContain('data-route="home"');
+    expect(homepage).toContain("ইউনিকোড টু বিজয় গাইড");
   });
 
   it("keeps the primary conversion routes clearly discoverable in the current sitemap", () => {
@@ -46,6 +51,7 @@ describe("Vercel static copy boundaries", () => {
     expect(prerenderer).toContain('data-route="${guide.slug}"');
     expect(prerenderer).toContain("থিসিস বা Word file দেওয়ার আগে অভ্রজয়ের review method");
     expect(prerenderer).toContain('aria-labelledby="review-method-title"');
+    expect(prerenderer).toContain('/<div id="root">[\\s\\S]*?<\\/div>/');
   });
 
   it("states AvroJoy as the root site identity rather than its hosting provider", () => {

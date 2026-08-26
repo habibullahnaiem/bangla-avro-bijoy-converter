@@ -1171,7 +1171,7 @@ export default function Home() {
             <span className="hero-panel__signature-label">বিজয় → অভ্র/ইউনিকোড</span>
           </div>
           <div className="hero-panel__copy">
-            <p className="eyebrow">অভ্রজয় • বাংলা লিপির সহজ সেতু</p>
+            <p className="eyebrow">ইউনিকোড টু বিজয় ও অভ্র টু বিজয় কনভার্টার</p>
             <h2 className="hero-title text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">
               অভ্রজয় — অভ্র হোক বা বিজয়, ফন্ট বদলে নেই ভয়
             </h2>

@@ -948,4 +948,9 @@
 # সক্রিয়: ethical personalized outreach draft
 - [x] একটিমাত্র thesis/Word-audience resource candidate-এর relevance ও public contact path পুনরায় যাচাই করা
 - [x] Candidate-specific, non-paid Bengali resource-suggestion draft প্রস্তুত করা
-- [ ] User-কে খসড়া দেখিয়ে message পাঠানোর জন্য পৃথক final consent চাওয়া
+- [ ] User-কে খসড়া দেখিয়ে message পাঠানোর জন্য পৃথক final consent চাওয়া — user-এর নির্দেশে স্থগিত
+
+# সক্রিয়: query-specific search visibility only
+- [x] `ইউনিকোড টু বিজয়` ও `অভ্র টু বিজয়` query-তে AvroJoy guide/homepage alignment এবং current Google/Performance evidence পুনরায় যাচাই করা
+- [x] First-page intent অনুযায়ী কেবল safe, original on-page enhancement নির্ধারণ করা
+- [ ] অনুমোদনযোগ্য enhancement বাস্তবায়ন, test, publish ও crawl-visible output যাচাই করা

@@ -38,3 +38,9 @@ Live production sitemap নিজে যাচাই করে **৯টি URL e
 ## Current live-fetch test
 
 Search Console-এর **Live Test** ২৬ আগস্ট ২০২৬-এ `/avro-to-bijoy`-কে **“URL is available to Google”** এবং **“Page can be indexed”** হিসেবে দেখিয়েছে। একই test-এ **Breadcrumbs: 2 valid items detected** পাওয়া গেছে। অর্থাৎ Google বর্তমানে live production document fetch করতে ও structured breadcrumb signal বুঝতে পারছে। এখন প্রয়োজন Google-এর স্বাভাবিক recrawl, index refresh এবং সময়ের সঙ্গে query/authority signal জমা হওয়া—আর কোনো crawl-blocking code fix নয়।
+
+## Latest query-alignment check
+
+Verified owner account-এ Search Console Overview পুনরায় খোলা হলে Performance, Indexing, Experience এবং Enhancements report এখনও **“Processing data, please check again in a day or so”** দেখিয়েছে। তাই query-level CTR, average position বা impression দিয়ে এখনো content decision নেওয়া যাচ্ছে না।
+
+Source review-এ দেখা গেছে root homepage-এর title ও description `অভ্রজয় (AvroJoy)` দিয়ে শুরু হলেও visible converter control ও hero-তে `অভ্র/ইউনিকোড → বিজয়` এবং `বিজয় → অভ্র/ইউনিকোড` স্পষ্ট। প্রথম-page comparator-দের মতো root page-এ exact generic query phrase শুরুতেই না থাকা একটি safe on-page alignment opportunity—কিন্তু এটি ranking guarantee নয় এবং keyword stuffing ছাড়া শুধু title/description ও প্রথম visible explanatory copy-তে natural wording হিসেবে বিবেচ্য।

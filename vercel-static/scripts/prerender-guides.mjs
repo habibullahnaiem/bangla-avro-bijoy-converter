@@ -253,7 +253,7 @@ for (const guide of guides) {
     /<script id="avrojoy-home-faq-structured-data"[\s\S]*?<\/script>/,
     `<script id="avrojoy-guide-structured-data" type="application/ld+json">${data}</script>`,
   );
-  html = replaceTag(html, /<div id="root"><\/div>/, `<div id="root">${pageMarkup(guide, url)}</div>`);
+  html = replaceTag(html, /<div id="root">[\s\S]*?<\/div>/, `<div id="root">${pageMarkup(guide, url)}</div>`);
 
   const routeDirectory = path.join(publicDir, guide.slug);
   fs.mkdirSync(routeDirectory, { recursive: true });
