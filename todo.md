@@ -925,3 +925,10 @@
 - [x] Original authority asset ও ethical outreach package প্রস্তুত করা
 - [x] Regression validation, shared auto-deploy ও Search Console monitoring baseline সম্পন্ন করা
 - [x] থিসিস, Word/DOCX ও প্রকাশনা-সংক্রান্ত প্রাসঙ্গিক public resource candidate যাচাই করা; কোনো outreach পাঠানো নয়
+
+# সক্রিয়: live generic-query discovery follow-up
+- [x] Search Console ও live Google result-এ current indexed/coverage/discovery signal পুনরায় যাচাই করা
+- [x] Verified owner account `avrojoyconverter@gmail.com` দিয়ে Search Console property access পুনরুদ্ধার করা
+- [x] কোনো বাস্তব technical discovery blocker পাওয়া যায়নি; current live URL Google fetch ও index করতে পারে নিশ্চিত করা
+- [x] Correction প্রয়োজন হয়নি; existing shared production release-এর live verification সম্পন্ন করা
+- [ ] বাস্তব next-step, recrawl dependency ও authority approval boundary জানানো
