@@ -742,3 +742,15 @@
 - [x] Home page-এর missing `useAuth` import/runtime crash ঠিক করে existing converter interface পুনরুদ্ধার
 - [x] upgraded backend entry point, PWA build command এবং existing SEO metadata compatibility যাচাই
 - [x] TypeScript 5.9-এর BlobPart typing regression ঠিক করে DOCX download behavior অক্ষুণ্ণ রাখা
+
+# নতুন: ব্র্যান্ড-সামঞ্জস্যপূর্ণ পাবলিক সাবডোমেইন
+- [ ] পাবলিক URL-কে `avrojoy.manus.space` করার অনুরোধ যাচাই ও কনফিগার
+- [ ] নতুন URL খোলে কি না যাচাই করে ব্যবহারকারীকে জানানো
+- [ ] সংশোধিত পছন্দ `avro-joy.manus.space`-এর প্রাপ্যতা যাচাই ও কনফিগার
+- [ ] user-এর domain setting edit-blocker-এর কারণ নির্ণয় ও কার্যকর বিকল্প প্রয়োগ
+- [ ] AvroJoy-ভিত্তিক সম্ভাব্য `manus.space` সাবডোমেইনের প্রতিনিধিত্বমূলক প্রাপ্যতা যাচাই
+
+# সক্রিয়: footer visual regression restoration
+- [ ] শেষ footer contrast পরিবর্তনে হওয়া visual regression-এর কারণ শনাক্ত করা
+- [ ] Footer-কে পূর্বের স্থিতিশীল design hierarchy-তে ফিরিয়ে কেবল প্রয়োজনীয় readable fix রাখা
+- [ ] Footer visual, tests, shared auto-deploy ও checkpoint যাচাই করা
