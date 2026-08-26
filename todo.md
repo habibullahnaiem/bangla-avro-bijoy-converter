@@ -970,3 +970,9 @@
 - [x] DOCX/TXT বিজয় conversion query-তে current Google visibility এবং route-level intent alignment যাচাই করা
 - [x] Route-এর raw HTML, metadata, structured data ও file-workflow content gap নির্ধারণ করা
 - [x] Safe, original page-specific improvement publish ও live crawl-visible output যাচাই করা
+
+# সক্রিয়: Google visibility and competitor survey
+- [x] Search Console-এর current index, sitemap, Performance, Links ও Core Web Vitals evidence সংগ্রহ করা
+- [x] Brand এবং priority generic conversion query-তে live Google visible-result snapshot নেওয়া
+- [x] Competitor advantage, AvroJoy-এর verified benefit ও first-page gap বিশ্লেষণ করা
+- [ ] Findings, ranking limitation এবং sustainable next steps-এর Bengali survey report দেওয়া
