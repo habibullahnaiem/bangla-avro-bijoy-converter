@@ -958,5 +958,5 @@
 # সক্রিয়: mobile PageSpeed image-delivery follow-up
 - [x] Mobile lab-এর image-delivery ও render-blocking diagnostic থেকে safe concrete change নির্দিষ্ট করা
 - [x] Visual identity অপরিবর্তিত রেখে image-delivery improvement বাস্তবায়ন করা
-- [x] Root/Vercel-static validation ও mobile visual check সম্পন্ন করা; PageSpeed re-test production publish-এর পরে করা হবে
-- [ ] Shared publish ও live output verification করা
+- [x] Root/Vercel-static validation, mobile visual check এবং production PageSpeed re-test সম্পন্ন করা
+- [x] Shared publish ও live WebP output verification করা
