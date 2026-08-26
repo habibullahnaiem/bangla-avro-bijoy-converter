@@ -969,4 +969,4 @@
 # সক্রিয়: DOCX/TXT file-conversion page-specific gap check
 - [x] DOCX/TXT বিজয় conversion query-তে current Google visibility এবং route-level intent alignment যাচাই করা
 - [x] Route-এর raw HTML, metadata, structured data ও file-workflow content gap নির্ধারণ করা
-- [ ] Safe, original page-specific improvement publish ও live crawl-visible output যাচাই করা
+- [x] Safe, original page-specific improvement publish ও live crawl-visible output যাচাই করা
