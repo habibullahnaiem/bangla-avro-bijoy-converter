@@ -980,4 +980,4 @@
 # সক্রিয়: brand-query homepage position investigation
 - [x] `অভ্রজয়` query-তে top result, AvroJoy homepage position ও entity ambiguity যাচাই করা
 - [x] Current homepage brand metadata, visible disambiguation copy ও raw HTML entity signal gap নির্ধারণ করা
-- [ ] Safe brand-signal improvement publish ও live verification করা
+- [x] Safe brand-signal improvement publish ও live verification করা
