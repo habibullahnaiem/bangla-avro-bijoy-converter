@@ -87,4 +87,21 @@ describe("AdSense application readiness pages", () => {
     expect(prerenderer).toContain("বিজয় টু ইউনিকোড করার আগে সংক্ষিপ্ত review method");
     expect(prerenderer).toContain('aria-labelledby="use-cases-title"');
   });
+
+  it("presents the DOCX and TXT route as a formatting-aware file-conversion guide", () => {
+    const guides = fs.readFileSync(path.join(repositoryRoot, "client/src/pages/SeoGuides.tsx"), "utf8");
+    const prerenderer = fs.readFileSync(
+      path.join(repositoryRoot, "vercel-static/scripts/prerender-guides.mjs"),
+      "utf8",
+    );
+
+    expect(guides).toContain("DOCX বিজয় কনভার্টার");
+    expect(guides).toContain("Word ফাইল বিজয় কনভার্টার");
+    expect(guides).toContain("DOCX বিজয় কনভার্ট করার আগে file review method");
+    expect(guides).toContain("Formatting-sensitive Word document");
+    expect(guides).toContain("Bold, italic, table বা reference থাকা DOCX কীভাবে যাচাই করব?");
+    expect(prerenderer).toContain("DOCX বিজয় কনভার্টার");
+    expect(prerenderer).toContain("DOCX বিজয় কনভার্ট করার আগে file review method");
+    expect(prerenderer).toContain("কোন DOCX/TXT কাজে file conversion দরকার হয়?");
+  });
 });

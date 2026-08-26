@@ -134,12 +134,12 @@ const guides = [
   },
   {
     slug: "docx-txt-bijoy-converter",
-    eyebrow: "DOCX ও TXT ফাইল গাইড",
-    title: "DOCX ও TXT বিজয় কনভার্টার: Word ফাইল রূপান্তরের ব্যবহারিক নির্দেশনা",
+    eyebrow: "DOCX বিজয় কনভার্টার গাইড",
+    title: "DOCX বিজয় কনভার্টার: Word ফাইল Unicode ও বিজয় রূপান্তরের ব্যবহারিক গাইড",
     description:
-      "DOCX বা TXT file-কে অভ্র/Unicode ও বিজয় (SutonnyMJ)-এর মধ্যে রূপান্তরের বাংলা নির্দেশনা, download ও font-check workflow।",
+      "DOCX বিজয় কনভার্টার দিয়ে Word ফাইল ও TXT-কে Unicode/অভ্র এবং বিজয় (SutonnyMJ)-এর মধ্যে রূপান্তর করুন—direction, preview, download ও Word proofread-এর ব্যবহারিক গাইড।",
     lead:
-      "Word document বা plain-text file রূপান্তরের জন্য File Converter ব্যবহার করুন। রূপান্তরের দিক ঠিক করে file নির্বাচন, preview এবং download—সব ধাপ browser-এর ভেতরেই সম্পন্ন হয়।",
+      "DOCX বিজয় কনভার্টার বা Word ফাইল বিজয় কনভার্টার প্রয়োজন হলে অভ্রজয়ের File Converter ব্যবহার করুন। Unicode/অভ্র ও বিজয়/SutonnyMJ—দুই direction-এই DOCX বা TXT file নির্বাচন, preview ও download browser-এর ভেতরেই করা যায়; গুরুত্বপূর্ণ document হলে Word-এ final proofread জরুরি।",
     steps: [
       "হোমপেজে File Converter tab খুলুন এবং প্রয়োজনীয় direction নির্বাচন করুন।",
       ".docx বা .txt file নির্বাচন করুন অথবা dropzone-এ টেনে আনুন।",
@@ -151,14 +151,43 @@ const guides = [
       "জটিল Word document-এ মূল formatting ও output আলাদা করে পরীক্ষা করা ভালো অভ্যাস।",
       "পুরোনো বিজয় DOCX unreadable হলে font-repair action শুধু সেই ধরনের file-এর জন্য ব্যবহার করুন।",
     ],
+    useCasesHeading: "কোন DOCX/TXT কাজে file conversion দরকার হয়?",
+    useCases: [
+      ["থিসিস, রিপোর্ট ও জমা দেওয়ার আগে প্রস্তুতি", "Unicode Word file বিজয় policy অনুযায়ী প্রস্তুত করতে হলে original file আলাদা রেখে সঠিক direction, preview ও download-এর পর Word proofread করুন।"],
+      ["Formatting-sensitive Word document", "Heading, bold/italic, quotation, table cell বা reference-ঘেঁষা অংশ থাকলে representative অংশ preview-তে দেখুন এবং downloaded DOCX খুলে গুরুত্বপূর্ণ জায়গা যাচাই করুন।"],
+      ["Plain TXT ও ছোট manuscript", "TXT file-এ direction ঠিক করে দ্রুত Unicode বা বিজয় output নিন। প্রকাশ বা সম্পাদনার আগে নাম, যুক্তবর্ণ, যতিচিহ্ন ও spacing দেখে রাখুন।"],
+    ],
+    reviewMethod: {
+      title: "DOCX বিজয় কনভার্ট করার আগে file review method",
+      intro: "এটি কোনো স্বয়ংক্রিয় নিখুঁততার guarantee নয়। থিসিস, রিপোর্ট বা formatting-sensitive Word file রূপান্তরের আগে ও পরে নিচের ছোট review-টি করলে ভুল direction এবং চোখে পড়ার formatting সমস্যা আগে ধরা সহজ হয়।",
+      checks: [
+        "মূল file-এর একটি আলাদা copy রেখে দিন এবং fileটি Unicode/অভ্র না পুরোনো বিজয়/SutonnyMJ source—তা আগে নিশ্চিত করুন।",
+        "File Converter-এ সঠিক direction নির্বাচন করে DOCX বা TXT file দিন; ভুল direction-এ অর্থবহ ফল নাও আসতে পারে।",
+        "Preview-তে heading, নাম, যুক্তবর্ণ, কারচিহ্ন, দাড়ি, quotation এবং বাংলা–English mixed অংশের কয়েকটি representative line দেখুন।",
+        "Downloaded DOCX Word-এ খুলে bold/italic, table cell, reference ও indentation-ঘেঁষা অংশ দ্রুত proofread করুন; জটিল document-এ সব formatting একবার পরীক্ষা করা ভালো।",
+        "প্রয়োজনে বাংলা বিজয় run-এ SutonnyMJ এবং English run-এ Times New Roman আছে কি না যাচাই করে তারপর final file ব্যবহার করুন।",
+      ],
+    },
     faqs: [
       [
         "কোন file format ব্যবহার করা যায়?",
         "বর্তমান File Converter-এ DOCX এবং TXT file নির্বাচন করা যায়। অন্য format আগে উপযুক্তভাবে DOCX বা TXT-তে প্রস্তুত করুন।",
       ],
       [
+        "DOCX বিজয় কনভার্টার কি দুই direction-এ কাজ করে?",
+        "হ্যাঁ। File Converter-এ প্রয়োজন অনুযায়ী “অভ্র → বিজয়” বা “বিজয় → অভ্র” direction নির্বাচন করুন। File-এর উৎস encoding অনুযায়ী direction ঠিক করা সবচেয়ে গুরুত্বপূর্ণ ধাপ।",
+      ],
+      [
+        "Bold, italic, table বা reference থাকা DOCX কীভাবে যাচাই করব?",
+        "রূপান্তরের আগে preview-তে কয়েকটি representative অংশ দেখুন। Download করার পরে Word-এ heading, bold/italic emphasis, quotation, table cell ও reference-ঘেঁষা অংশ দ্রুত proofread করুন; জটিল file-এ original copy রেখে কাজ করা ভালো।",
+      ],
+      [
         "Download করা file খোলার পর font আলাদা দেখালে কী করব?",
         "বাংলা বিজয় run-এ SutonnyMJ এবং English run-এ Times New Roman আছে কি না দেখুন। প্রয়োজনে output download করার আগে preview দেখুন।",
+      ],
+      [
+        "পুরোনো বিজয় DOCX পড়া না গেলে কী করব?",
+        "পুরোনো বিজয় byte Times New Roman-এর মতো Unicode font-এ দেখালে লেখা unreadable হতে পারে। আগে source ও direction যাচাই করুন; প্রয়োজন হলে হোমপেজের font-repair action কেবল পুরোনো বিজয় DOCX-এর জন্য ব্যবহার করুন, তারপর output proofread করুন।",
       ],
     ],
   },
@@ -182,7 +211,7 @@ function pageMarkup(guide, url) {
   const steps = guide.steps.map((step) => `<li>${escapeHtml(step)}</li>`).join("");
   const notes = guide.notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("");
   const useCases = guide.useCases
-    ? `<section aria-labelledby="use-cases-title"><h2 id="use-cases-title">কোন কাজে এই রূপান্তর দরকার হয়?</h2>${guide.useCases.map(([title, description]) => `<section><h3>${escapeHtml(title)}</h3><p>${escapeHtml(description)}</p></section>`).join("")}</section>`
+    ? `<section aria-labelledby="use-cases-title"><h2 id="use-cases-title">${escapeHtml(guide.useCasesHeading ?? "কোন কাজে এই রূপান্তর দরকার হয়?")}</h2>${guide.useCases.map(([title, description]) => `<section><h3>${escapeHtml(title)}</h3><p>${escapeHtml(description)}</p></section>`).join("")}</section>`
     : "";
   const reviewMethod = guide.reviewMethod
     ? `<section aria-labelledby="review-method-title"><h2 id="review-method-title">${escapeHtml(guide.reviewMethod.title)}</h2><p>${escapeHtml(guide.reviewMethod.intro)}</p><ol>${guide.reviewMethod.checks.map((check) => `<li>${escapeHtml(check)}</li>`).join("")}</ol></section>`
