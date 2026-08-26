@@ -932,3 +932,9 @@
 - [x] কোনো বাস্তব technical discovery blocker পাওয়া যায়নি; current live URL Google fetch ও index করতে পারে নিশ্চিত করা
 - [x] Correction প্রয়োজন হয়নি; existing shared production release-এর live verification সম্পন্ন করা
 - [ ] বাস্তব next-step, recrawl dependency ও authority approval boundary জানানো
+
+# সক্রিয়: generic-query first-page comparator study
+- [x] `ইউনিকোড টু বিজয়` ও `অভ্র টু বিজয়` query-র current first-page comparator set নথিভুক্ত করা
+- [x] Comparator সাইটগুলোর publicly visible title/content, raw crawlability, structured data, sitemap/internal discovery ও editorial signals তুলনা করা
+- [x] AvroJoy-এর public gap ও শুধুই safe, original improvement priority নির্ধারণ করা
+- [ ] কোনো implementation বা external outreach-এর আগে owner approval boundaryসহ comparative result জানানো
