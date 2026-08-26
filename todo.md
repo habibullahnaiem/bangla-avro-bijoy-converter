@@ -986,3 +986,8 @@
 - [x] `অভ্রজয়` query-র AI/knowledge interpretation, top organic result ও snippet wording তুলনা করা
 - [x] AvroJoy homepage entity/title/snippet এবং available public references-এ remaining ambiguity gap নির্ণয় করা
 - [x] কেবল justified correction থাকলে validate করা; না থাকলে recrawl-dependent boundary report করা
+
+# সক্রিয়: Search Console brand-query performance check
+- [x] Verified property-তে Performance report-এর current availability যাচাই করা
+- [x] `অভ্রজয়` query-এর impression, click ও average-position evidence সংগ্রহ করা
+- [x] Available data অথবা processing limitation owner-কে জানানো

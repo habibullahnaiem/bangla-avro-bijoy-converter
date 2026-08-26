@@ -54,3 +54,9 @@ PageSpeed Insights-এর mobile lab run-এ Performance **60**, Accessibility *
 পরবর্তী lab diagnostic-এ FCP **6.2 s**, LCP **10.8 s**, TBT **0 ms** এবং CLS **0.008** দেখা গেছে; render-blocking request-এর estimate **4,840 ms** এবং image delivery savings **353 KiB**। Homepage-এর mobile hero-তে ব্যবহৃত public image দুটির বর্তমান payload মেপে পাওয়া গেছে: `avrojoy-hero-v2-banner` প্রায় **275 KiB** এবং `bangla-converter-keyboard-background` প্রায় **77 KiB**—মোট প্রায় **352 KiB**। তাই একই artwork-এর efficient modern-image delivery যাচাই করা একটি concrete, low-risk performance candidate; এটি field ranking guarantee নয়।
 
 WebP release production-এ READY হওয়ার পরে PageSpeed Insights mobile re-test-এ Performance **60 থেকে 72** হয়েছে; Accessibility **95**, Best Practices **100** এবং SEO **100** অপরিবর্তিত আছে, আর real-user data এখনও **No Data**। এই single lab run-এর score পরিবেশভেদে বদলাতে পারে; তবে identical artwork রেখে smaller WebP preload/delivery করার পর measurable mobile lab improvement দেখা গেছে।
+
+## Latest Performance recheck
+
+২৬ আগস্ট ২০২৬-এ `avrojoyconverter@gmail.com` দিয়ে owner-accessed URL-prefix property `https://avrojoy.vercel.app/`-এর Performance report আবার দেখা হয়েছে। তিন মাসের Web report-এ **“Processing data, please check again in a day or so”** এবং query table-এ **“No data”** দেখা গেছে; report-এর displayed last update ছিল ৩.৫ ঘণ্টা আগে। ফলে এখনো `অভ্রজয়` query filter দিয়ে impression, click বা average position বের করার মতো Search Console evidence তৈরি হয়নি।
+
+একই account-এ domain property `sc-domain:avrojoy.vercel.app` access পাওয়া যায়নি; এটি URL-prefix property-তে ownership/access থাকা অবস্থায় স্বাভাবিক property-scope mismatch এবং indexability failure নয়। কোনো ownership change, indexing request, filter-based estimate বা SEO source change করা হয়নি। বাস্তব metrics পাওয়ার জন্য Search Console-এর processing শেষ হওয়া পর্যন্ত অপেক্ষা করে তারপর একবার recheck করা হবে।
