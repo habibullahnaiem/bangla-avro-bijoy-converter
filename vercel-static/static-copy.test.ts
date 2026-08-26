@@ -12,6 +12,14 @@ describe("Vercel static copy boundaries", () => {
     expect(home).not.toMatch(/useAuth|startLogin|trpc\.|storedDocuments|saveSelectedDocument/);
   });
 
+  it("states the homepage’s formatting-aware Word and mixed-text value proposition", () => {
+    const home = fs.readFileSync(path.join(repositoryRoot, "client/src/pages/Home.tsx"), "utf8");
+
+    expect(home).toContain("থিসিস, বই, রিপোর্ট বা Word-এর বাংলা লেখা বিজয়ে নিতে");
+    expect(home).toContain("bold/italic, DOCX/TXT ও বাংলা–ইংরেজি mixed text");
+    expect(home).toContain("SutonnyMJ–Times New Roman preview-তে ফল যাচাই করুন");
+  });
+
   it("builds the Vercel static project from the shared root client and keeps the public asset proxy", () => {
     const viteConfig = fs.readFileSync(path.join(staticProjectRoot, "vite.config.ts"), "utf8");
     const vercelConfig = fs.readFileSync(path.join(staticProjectRoot, "vercel.json"), "utf8");

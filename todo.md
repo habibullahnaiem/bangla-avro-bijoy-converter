@@ -863,3 +863,9 @@
 - [x] Homepage ও guide route-এর brand title, canonical, structured data এবং internal link signals audit করা
 - [x] “অভ্রজয় / AvroJoy” query-তে homepage-কে primary entity হিসেবে শক্তিশালী করা
 - [x] SEO regression validation, tests, shared auto-deploy ও checkpoint সম্পন্ন করা
+
+# সক্রিয়: hero feature-copy refinement
+- [x] Banner-এর প্রথম পাঠেই Word/DOCX, mixed-text ও formatting-সংক্রান্ত বাস্তব প্রয়োজন ও AvroJoy-এর পার্থক্য স্পষ্ট করা
+- [x] Hero description-এ প্রমাণভিত্তিক mixed-text, bold/italic, DOCX/TXT ও font-aware সুবিধা গুছিয়ে লেখা
+- [x] Desktop/mobile wrap ও accessible reading flow যাচাই করা
+- [ ] Shared auto-deploy ও checkpoint সম্পন্ন করা

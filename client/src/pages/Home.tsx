@@ -1174,9 +1174,9 @@ export default function Home() {
               অভ্রজয় — অভ্র হোক বা বিজয়, ফন্ট বদলে নেই ভয়
             </h2>
             <p className="hero-summary mt-2 max-w-2xl text-[0.95rem] leading-relaxed text-muted-foreground">
-              অভ্র/ইউনিকোড ⇄ বিজয় রূপান্তরের নির্ভরযোগ্য বাংলা publishing desk।
-              যুক্তাক্ষর, যতিচিহ্ন, DOCX/TXT ফাইল এবং font-aware বাংলা–ইংরেজি
-              preview—লেখক ও প্রকাশকের কাজ এক জায়গায় সামলান।
+              থিসিস, বই, রিপোর্ট বা Word-এর বাংলা লেখা বিজয়ে নিতে শুধু রূপান্তর নয়—formatting ঠিক থাকাও জরুরি।
+              অভ্রজয় তাই যুক্তাক্ষর, যতিচিহ্ন, bold/italic, DOCX/TXT ও বাংলা–ইংরেজি mixed text যত্নে সামলায়;
+              English শব্দের font বজায় রেখে SutonnyMJ–Times New Roman preview-তে ফল যাচাই করুন।
             </p>
             <p className="hero-bookmark-note mt-3">
               <Bookmark className="hero-bookmark-note__icon" aria-hidden="true" />
