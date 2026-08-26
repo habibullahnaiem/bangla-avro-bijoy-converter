@@ -953,4 +953,4 @@
 # সক্রিয়: query-specific search visibility only
 - [x] `ইউনিকোড টু বিজয়` ও `অভ্র টু বিজয়` query-তে AvroJoy guide/homepage alignment এবং current Google/Performance evidence পুনরায় যাচাই করা
 - [x] First-page intent অনুযায়ী কেবল safe, original on-page enhancement নির্ধারণ করা
-- [ ] অনুমোদনযোগ্য enhancement বাস্তবায়ন, test, publish ও crawl-visible output যাচাই করা
+- [x] অনুমোদনযোগ্য enhancement বাস্তবায়ন, test, publish ও crawl-visible output যাচাই করা
