@@ -975,4 +975,9 @@
 - [x] Search Console-এর current index, sitemap, Performance, Links ও Core Web Vitals evidence সংগ্রহ করা
 - [x] Brand এবং priority generic conversion query-তে live Google visible-result snapshot নেওয়া
 - [x] Competitor advantage, AvroJoy-এর verified benefit ও first-page gap বিশ্লেষণ করা
-- [ ] Findings, ranking limitation এবং sustainable next steps-এর Bengali survey report দেওয়া
+- [x] Findings, ranking limitation এবং sustainable next steps-এর Bengali survey report দেওয়া
+
+# সক্রিয়: brand-query homepage position investigation
+- [x] `অভ্রজয়` query-তে top result, AvroJoy homepage position ও entity ambiguity যাচাই করা
+- [x] Current homepage brand metadata, visible disambiguation copy ও raw HTML entity signal gap নির্ধারণ করা
+- [ ] Safe brand-signal improvement publish ও live verification করা

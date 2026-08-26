@@ -38,8 +38,8 @@ describe("AdSense application readiness pages", () => {
 
     expect(index).toContain('"@type": "WebSite"');
     expect(index).toContain('"@id": "https://avrojoy.vercel.app/#website"');
-    expect(index).toContain('"name": "অভ্রজয় (AvroJoy)"');
-    expect(index).toContain('"alternateName": ["অভ্রজয়", "AvroJoy", "avrojoy.vercel.app"]');
+    expect(index).toContain('"name": "অভ্রজয়"');
+    expect(index).toContain('"alternateName": ["AvroJoy", "অভ্রজয়", "avrojoy.vercel.app"]');
     expect(index).toContain('"@id": "https://avrojoy.vercel.app/#organization"');
     expect(guides).toContain('isPartOf: { "@id": `${BASE_URL}/#website` }');
     expect(guides).toContain('"@type": "BreadcrumbList"');

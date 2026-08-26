@@ -5,7 +5,7 @@ const projectRoot = path.resolve(import.meta.dirname, "..");
 const publicDir = path.join(projectRoot, "dist", "public");
 const templatePath = path.join(publicDir, "index.html");
 const siteUrl = "https://avrojoy.vercel.app";
-const siteName = "অভ্রজয় (AvroJoy)";
+const siteName = "অভ্রজয়";
 
 const guides = [
   {

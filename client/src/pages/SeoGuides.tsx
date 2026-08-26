@@ -356,7 +356,7 @@ function GuideMetadata({ guide }: { guide: Guide }) {
             {
               "@type": "ListItem",
               position: 1,
-              name: "অভ্রজয় (AvroJoy)",
+              name: "অভ্রজয়",
               item: `${BASE_URL}/`,
             },
             {

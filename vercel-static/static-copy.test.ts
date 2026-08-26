@@ -22,7 +22,7 @@ describe("Vercel static copy boundaries", () => {
     expect(home).toContain("অভ্র/ইউনিকোড → বিজয়");
     expect(home).toContain("বিজয় → অভ্র/ইউনিকোড");
     expect(home).toContain("ইউনিকোড টু বিজয় ও অভ্র টু বিজয় কনভার্টার");
-    expect(homepage).toContain("ইউনিকোড টু বিজয় ও অভ্র টু বিজয় কনভার্টার | অভ্রজয়");
+    expect(homepage).toContain("অভ্রজয় (AvroJoy) | ইউনিকোড টু বিজয় ও অভ্র টু বিজয় কনভার্টার");
     expect(homepage).toContain('data-route="home"');
     expect(homepage).toContain("ইউনিকোড টু বিজয় গাইড");
   });
@@ -70,11 +70,11 @@ describe("Vercel static copy boundaries", () => {
     const homepage = fs.readFileSync(path.join(repositoryRoot, "client/index.html"), "utf8");
     const guides = fs.readFileSync(path.join(repositoryRoot, "client/src/pages/SeoGuides.tsx"), "utf8");
 
-    expect(homepage).toContain('"name": "অভ্রজয় (AvroJoy)"');
+    expect(homepage).toContain('"name": "অভ্রজয়"');
     expect(homepage).toContain('"@id": "https://avrojoy.vercel.app/#organization"');
-    expect(homepage).toContain('<meta property="og:site_name" content="অভ্রজয় (AvroJoy)" />');
+    expect(homepage).toContain('<meta property="og:site_name" content="অভ্রজয়" />');
     expect(guides).toContain('"@type": "BreadcrumbList"');
-    expect(guides).toContain('name: "অভ্রজয় (AvroJoy)"');
+    expect(guides).toContain('name: "অভ্রজয়"');
   });
 
   it("builds the Vercel static project from the shared root client and keeps the public asset proxy", () => {
