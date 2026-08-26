@@ -923,4 +923,5 @@
 - [x] Public routes-এর crawler-visible content, canonical/source consistency এবং generic-query relevance audit করা
 - [x] Concise primary site identity ও high-intent conversion pathways আরও পরিষ্কার করা
 - [x] Original authority asset ও ethical outreach package প্রস্তুত করা
-- [x] Regression validation সম্পন্ন করা; shared auto-deploy ও Search Console monitoring baseline বাকি
+- [x] Regression validation, shared auto-deploy ও Search Console monitoring baseline সম্পন্ন করা
+- [x] থিসিস, Word/DOCX ও প্রকাশনা-সংক্রান্ত প্রাসঙ্গিক public resource candidate যাচাই করা; কোনো outreach পাঠানো নয়
