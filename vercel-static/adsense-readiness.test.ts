@@ -52,6 +52,9 @@ describe("AdSense application readiness pages", () => {
     expect(guides).toContain("ইউনিকোড টু বিজয় কনভার্টার");
     expect(guides).toContain("ইউনিকোড টু বিজয় বলতে আধুনিক অভ্র/Unicode বাংলা লেখাকে");
     expect(guides).toContain("ইউনিকোড টু বিজয় করতে কী লাগবে?");
+    expect(guides).toContain("কোন কাজে Unicode টু বিজয় দরকার হয়?");
+    expect(guides).toContain("থিসিস ও গবেষণাপত্র");
+    expect(guides).toContain("বই, জার্নাল ও DTP handoff");
     expect(home).toContain("ইউনিকোড টু বিজয় গাইড");
     expect(home).toContain('href="/avro-to-bijoy"');
     expect(styles).toContain("html:not(.dark) .seo-guide-page .text-foreground");

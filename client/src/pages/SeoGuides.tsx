@@ -13,6 +13,7 @@ type Guide = {
   lead: string;
   steps: string[];
   notes: string[];
+  useCases?: Array<{ title: string; description: string }>;
   faqs: Array<{ question: string; answer: string }>;
 };
 
@@ -35,6 +36,23 @@ const GUIDES: Record<string, Guide> = {
       "যুক্তবর্ণ, কারচিহ্ন বা যতিচিহ্ন দেখার জন্য রূপান্তরের পর output preview-তে একবার চোখ বুলিয়ে নিন।",
       "একই document-এ বাংলা ও English থাকলে font family আলাদা রাখা স্বাভাবিক এবং পাঠযোগ্যতায় সহায়ক।",
       "সংবেদনশীল লেখা server-এ পাঠানো হয় না; public version-এ text conversion আপনার browser-এই চলে।",
+    ],
+    useCases: [
+      {
+        title: "থিসিস ও গবেষণাপত্র",
+        description:
+          "Google Docs বা অন্য Unicode editor-এর বাংলা লেখা Word-এ বিজয় policy মেনে প্রস্তুত করার আগে preview দেখে নিন। বাংলা বিজয় অংশে SutonnyMJ এবং English অংশে Times New Roman ব্যবহার করুন।",
+      },
+      {
+        title: "বই, জার্নাল ও DTP handoff",
+        description:
+          "সম্পাদনা বা প্রকাশনার কাজের জন্য Unicode manuscript বিজয় format-এ দিতে হলে আগে যুক্তবর্ণ, যতিচিহ্ন ও font rendering পরীক্ষা করে তারপর output কপি বা file download করুন।",
+      },
+      {
+        title: "বাংলা–English mixed document",
+        description:
+          "একই document-এ English নাম, title বা citation থাকলে বাংলা অংশের বিজয় font এবং English অংশের Times New Roman font আলাদা রাখলে Word-এ পড়া ও সম্পাদনা সহজ হয়।",
+      },
     ],
     faqs: [
       {
@@ -250,6 +268,21 @@ export function SeoGuidePage({ slug }: { slug: keyof typeof GUIDES }) {
               ))}
             </ul>
           </section>
+
+          {guide.useCases && (
+            <section className="mt-6 rounded-2xl border bg-card p-5 shadow-sm sm:p-7" aria-labelledby="use-cases-title">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary">কাজের ধরন</p>
+              <h2 id="use-cases-title" className="mt-1 text-xl font-extrabold text-foreground">কোন কাজে Unicode টু বিজয় দরকার হয়?</h2>
+              <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                {guide.useCases.map((useCase) => (
+                  <section key={useCase.title} className="rounded-xl border bg-muted/30 p-4">
+                    <h3 className="font-extrabold text-foreground">{useCase.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{useCase.description}</p>
+                  </section>
+                ))}
+              </div>
+            </section>
+          )}
 
           <section className="mt-6 rounded-2xl border bg-card p-5 shadow-sm sm:p-7" aria-labelledby="faq-title">
             <h2 id="faq-title" className="text-xl font-extrabold text-foreground">সাধারণ প্রশ্ন</h2>

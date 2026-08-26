@@ -890,4 +890,9 @@
 - [x] Search Console performance/query এবং index coverage baseline সংগ্রহ করা
 - [x] Highest-intent conversion searches, sitemap discovery ও landing-page gap নির্ধারণ করা
 - [x] People-first content ও internal discovery improvements প্রয়োগ করা
-- [x] Coverage validation সম্পন্ন করা; shared auto-deploy ও safe monitoring plan বাকি
+- [x] Coverage validation, shared auto-deploy ও safe monitoring plan সম্পন্ন করা
+
+# সক্রিয়: multi-competitor conversion SEO study
+- [x] “ইউনিকোড টু বিজয়” search result-এর একাধিক visible competitor-এর task relevance, page structure ও public technical signals তুলনা করা
+- [x] Competitor থেকে নকল ছাড়া AvroJoy-এর people-first conversion-intent content ও discovery gap নির্ধারণ করা
+- [x] Original landing-page/discovery improvement ও SEO regression সম্পন্ন করা; shared auto-deploy ও checkpoint বাকি
