@@ -868,15 +868,12 @@ html:not(.dark) .file-workspace button:disabled {
 }
 
 .site-footer__nav,
-.site-footer__nav a,
-.site-footer__link {
+.site-footer__nav a {
   color: oklch(0.96 0.015 200) !important;
 }
 
 .site-footer__nav a:hover,
-.site-footer__nav a:focus-visible,
-.site-footer__link:hover,
-.site-footer__link:focus-visible {
+.site-footer__nav a:focus-visible {
   color: oklch(1 0 0) !important;
 }
 

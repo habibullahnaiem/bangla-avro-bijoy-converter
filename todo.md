@@ -845,6 +845,6 @@
 - [x] live verification, tests, Vercel auto-deploy এবং checkpoint সম্পন্ন করা
 
 # সক্রিয়: footer visual regression restoration
-- [ ] শেষ footer contrast পরিবর্তনে হওয়া visual regression-এর কারণ শনাক্ত করা
-- [ ] Footer-কে পূর্বের স্থিতিশীল design hierarchy-তে ফিরিয়ে কেবল প্রয়োজনীয় readable fix রাখা
-- [ ] Footer visual, tests, shared auto-deploy ও checkpoint যাচাই করা
+- [x] শেষ footer contrast পরিবর্তনে হওয়া visual regression-এর কারণ শনাক্ত করা
+- [x] Footer-কে পূর্বের স্থিতিশীল design hierarchy-তে ফিরিয়ে কেবল প্রয়োজনীয় readable fix রাখা
+- [x] Footer visual, tests, shared auto-deploy ও checkpoint যাচাই করা
