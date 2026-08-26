@@ -943,4 +943,4 @@
 - [x] `/avro-to-bijoy` guide-এ concise, original conversion-review method section যোগ করা
 - [x] Prerendered route body ও static regression coverage-এ নতুন section প্রতিফলিত করা
 - [x] Root ও Vercel-static type check, test এবং production build চালানো
-- [ ] Shared publish-এর পরে live guide route verify করা
+- [x] Shared publish-এর পরে live guide route verify করা
