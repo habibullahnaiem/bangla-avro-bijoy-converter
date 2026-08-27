@@ -36,10 +36,22 @@ describe("Vercel static copy boundaries", () => {
     expect(homepage).toContain('href="/manus-storage/avrojoy-hero-v2-banner_32621bd4.webp"');
     expect(homepage).toContain('type="image/webp"');
     expect(homepage).toContain('as="font" href="/manus-storage/SutonnyMJ_danDi_v2_5618afeb.ttf"');
+    expect(homepage).toContain('content="width=device-width, initial-scale=1.0"');
+    expect(homepage).not.toContain("maximum-scale=1");
+    expect(homepage).toContain('property="og:image:alt"');
+    expect(homepage).toContain('name="twitter:image:alt"');
     expect(stylesheet).toContain("/manus-storage/avrojoy-hero-v2-banner_32621bd4.webp");
     expect(stylesheet).toContain("/manus-storage/bangla-converter-keyboard-background_6048064b.webp");
     expect(stylesheet).not.toContain("avrojoy-hero-v2-banner_b1dad7f4.png");
     expect(stylesheet).not.toContain("bangla-converter-keyboard-background_fad26d5c.png");
+  });
+
+  it("keeps document-only ZIP processing out of the initial converter dependency path", () => {
+    const converter = fs.readFileSync(path.join(repositoryRoot, "client/src/lib/converter.ts"), "utf8");
+
+    expect(converter).toContain('function loadJSZip()');
+    expect(converter).toContain('import("jszip")');
+    expect(converter).not.toContain('import JSZip from "jszip"');
   });
 
   it("keeps the primary conversion routes clearly discoverable in the current sitemap", () => {

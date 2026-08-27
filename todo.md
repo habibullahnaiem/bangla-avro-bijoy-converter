@@ -1026,3 +1026,9 @@
 - [x] Public route navigation, raw crawl-visible internal links এবং sitemap coverage audit করা
 - [x] Only justified remaining internal-discovery improvement নির্ধারণ করা
 - [x] Safe improvement build/static output/regression validation-সহ বাস্তবায়ন করা
+
+# সক্রিয়: mobile performance, accessibility/SEO এবং image-alt optimisation
+- [x] Production mobile performance, accessibility ও SEO baseline audit করা
+- [x] Client source-এ meaningful image alt text, decorative-image treatment ও mobile semantic signal audit করা
+- [x] Measured, low-risk loading/accessibility/SEO improvements বাস্তবায়ন করা
+- [x] Root/Vercel static build, tests, mobile/desktop visual check ও production recheck করা

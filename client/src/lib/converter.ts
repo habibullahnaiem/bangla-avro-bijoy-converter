@@ -392,7 +392,19 @@ export function convert(text: string, direction: ConvertDirection): string {
 }
 
 /* ── ফাইল কনভার্টার: TXT / DOCX ─────────────────────────────── */
-import JSZip from "jszip";
+
+// Text conversion starts immediately, while JSZip is only needed after a user
+// selects a DOCX workflow. Keep that document-only dependency out of the
+// initial mobile bundle without changing any DOCX parsing or writing logic.
+type JSZipConstructor = typeof import("jszip");
+let jsZipPromise: Promise<JSZipConstructor> | undefined;
+
+function loadJSZip(): Promise<JSZipConstructor> {
+  jsZipPromise ??= import("jszip").then(
+    (module) => (module as unknown as { default: JSZipConstructor }).default,
+  );
+  return jsZipPromise;
+}
 
 export type FileConvertResult =
   | { kind: "txt"; blob: Blob; name: string }
@@ -401,7 +413,7 @@ export type FileConvertResult =
 /** ফাইল (DOCX/TXT) থেকে ইউনিকোড টেক্সট তোলা — প্রিভিউর জন্য */
 export async function extractTextFrom(file: File): Promise<string> {
   if (file.name.toLowerCase().endsWith(".docx")) {
-    const buf = await file.arrayBuffer();
+    const [buf, JSZip] = await Promise.all([file.arrayBuffer(), loadJSZip()]);
     const zip = await JSZip.loadAsync(buf);
     const xml = await zip.file("word/document.xml")?.async("string");
     if (!xml) return "";
@@ -477,7 +489,8 @@ export async function repairBijoyFontFile(
   }
 
   const name = file.name.replace(/\.docx$/i, "");
-  const zip = await JSZip.loadAsync(await file.arrayBuffer());
+  const [JSZip, buffer] = await Promise.all([loadJSZip(), file.arrayBuffer()]);
+  const zip = await JSZip.loadAsync(buffer);
   const parts = [
     "word/document.xml",
     "word/header1.xml",
@@ -520,7 +533,7 @@ async function convertDocx(
   file: File,
   direction: ConvertDirection,
 ): Promise<Blob> {
-  const buffer = await file.arrayBuffer();
+  const [buffer, JSZip] = await Promise.all([file.arrayBuffer(), loadJSZip()]);
   const zip = await JSZip.loadAsync(buffer);
   const convertFn = (t: string) => convert(t, direction);
   const stylesEntry = zip.file("word/styles.xml");
