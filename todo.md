@@ -1070,3 +1070,9 @@
 - [x] একই controlled corpus-এ AvroJoy, Bangla.plus এবং নির্বাচিত public alternatives-এর text mapping/round-trip পরীক্ষা করা
 - [x] mixed-text, file/document workflow, font guidance, privacy ও usability evidence আলাদা করে তুলনা করা
 - [x] scorecard, evidence limits এবং Bengali no-change verdict report তৈরি করা
+
+# সক্রিয়: zero-regression normalization ও legacy-compatibility feasibility audit
+- [x] বর্তমান conversion/DOCX/TXT/preview invariants এবং mandatory no-regression corpus freeze করা
+- [x] ellipsis, `য়/য়`, straight quote ও `॥`-এর reversible option/profile design isolated harness-এ পরীক্ষা করা
+- [x] core mapping, complex conjunct, quote, DOCX/TXT, rich preview, mobile ও cross-converter compatibility regression চালানো
+- [x] কোনো risk-free change প্রমাণিত না হলে production অপরিবর্তিত রেখে Bengali decision report দেওয়া
