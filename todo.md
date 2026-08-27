@@ -1003,3 +1003,9 @@
 - [x] Same-origin ও mobile-safe font delivery নিশ্চিত করা, converter/DOCX/TXT না বদলে
 - [x] Mobile output preview-তে SutonnyMJ applied হওয়ার guard যোগ করা
 - [x] `আ`, mixed text, desktop/mobile ও copy regression যাচাই করা
+
+# সক্রিয়: metadata ও SEO tag quick audit
+- [x] Homepage ও priority guide route-এর current metadata/directive inventory করা
+- [x] Canonical, robots, sitemap এবং structured-data consistency যাচাই করা
+- [x] Justified missing metadata ও unsafe/redundant tag আলাদা করা
+- [x] Evidence-based audit result এবং safe next step জানানো
