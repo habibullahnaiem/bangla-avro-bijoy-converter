@@ -48,7 +48,7 @@ describe("Vercel static copy boundaries", () => {
     expect(sitemap).toContain("<lastmod>2026-08-26</lastmod>");
   });
 
-  it("builds crawl-visible static HTML for the high-intent guide routes", () => {
+  it("builds crawl-visible static HTML for the high-intent guide routes and existing thesis checklist", () => {
     const packageJson = fs.readFileSync(path.join(staticProjectRoot, "package.json"), "utf8");
     const prerenderer = fs.readFileSync(
       path.join(staticProjectRoot, "scripts/prerender-guides.mjs"),
@@ -65,6 +65,9 @@ describe("Vercel static copy boundaries", () => {
     expect(prerenderer).toContain("থিসিস বা Word file দেওয়ার আগে অভ্রজয়ের review method");
     expect(prerenderer).toContain('aria-labelledby="review-method-title"');
     expect(prerenderer).toContain('/<div id="root">[\\s\\S]*?<\\/div>/');
+    expect(prerenderer).toContain('slug: "thesis-bijoy-checklist"');
+    expect(prerenderer).toContain('data-route="${checklist.slug}"');
+    expect(prerenderer).toContain('avrojoy-thesis-checklist-structured-data');
   });
 
   it("states AvroJoy as the root site identity rather than its hosting provider", () => {

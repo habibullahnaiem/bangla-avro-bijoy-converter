@@ -7,6 +7,25 @@ const templatePath = path.join(publicDir, "index.html");
 const siteUrl = "https://avrojoy.vercel.app";
 const siteName = "অভ্রজয়";
 
+const thesisChecklist = {
+  slug: "thesis-bijoy-checklist",
+  eyebrow: "থিসিস জমার আগে যাচাই",
+  title: "থিসিসে অভ্র থেকে বিজয়: জমা দেওয়ার আগে ৭টি ব্যবহারিক যাচাই",
+  description:
+    "থিসিস বা গবেষণাপত্র Avro/Unicode থেকে Bijoy SutonnyMJ-তে নেওয়ার আগে font, mixed text, formatting ও PDF preview যাচাইয়ের বাংলা checklist।",
+  lead:
+    "থিসিসের মতো গুরুত্বপূর্ণ document-এ conversion শেষ ধাপ নয়। বিজয়/SutonnyMJ output ব্যবহার করার আগে নিচের ব্যবহারিক যাচাইগুলো করুন।",
+  sections: [
+    ["১. মূল document-এর একটি backup রাখুন", "Google Docs বা Word-এর original Unicode copy আলাদা রাখুন। Conversion output নিয়ে কাজ করার সময় মূল file overwrite করবেন না।"],
+    ["২. সঠিক দিক নির্বাচন করুন", "Unicode/অভ্র লেখা বিজয়ে নিতে “অভ্র → বিজয়” এবং পুরোনো SutonnyMJ-বিজয় লেখা আধুনিক Unicode-এ আনতে “বিজয় → অভ্র” নির্বাচন করুন।"],
+    ["৩. বাংলা ও English font আলাদা করে দেখুন", "Word-এ বিজয় বাংলা অংশ SutonnyMJ-তে এবং English অংশ Times New Roman-এ স্বাভাবিক দেখাচ্ছে কি না দেখুন। Mixed text-এ font family ভুল হলে লেখা অস্বাভাবিক লাগতে পারে।"],
+    ["৪. formatting-sensitive অংশ proofread করুন", "Heading, italic, bold, table, list, quotation, footnote/endnote, indent এবং hyperlink-এর আশপাশ একবার পরীক্ষা করুন।"],
+    ["৫. যুক্তবর্ণ ও যতিচিহ্ন দেখুন", "শুরু, মাঝ ও শেষের কারচিহ্ন, র-ফলা, যুক্তবর্ণ, দাঁড়ি, quote, বন্ধনী এবং বাংলা–English সংখ্যার আশপাশ আলাদা করে proofread করুন।"],
+    ["৬. Font size ও paragraph spacing মিলিয়ে নিন", "নির্দেশিত font size, line spacing, margin ও paragraph style প্রয়োগের পর কয়েকটি page দেখে নিন। কেবল একটি page ঠিক দেখালেই পুরো document ঠিক আছে ধরে নেবেন না।"],
+    ["৭. Print/PDF preview দেখুন", "জমা দেওয়ার আগে Word-এর print preview বা PDF export-এ কয়েকটি শুরু-মাঝ-শেষের page দেখুন। এতে page break, heading ও alignment সমস্যা সহজে ধরা পড়ে।"],
+  ],
+};
+
 const guides = [
   {
     slug: "avro-to-bijoy",
@@ -280,6 +299,55 @@ function structuredData(guide, url) {
   };
 }
 
+function thesisChecklistMarkup(checklist) {
+  const sections = checklist.sections
+    .map(
+      ([title, paragraph]) =>
+        `<section><h2>${escapeHtml(title)}</h2><p>${escapeHtml(paragraph)}</p></section>`,
+    )
+    .join("");
+
+  return `<main class="avrojoy-crawl-guide" data-route="${checklist.slug}">
+  <nav aria-label="Breadcrumb"><a href="/">অভ্রজয় (AvroJoy)</a> <span aria-hidden="true">›</span> <span>${escapeHtml(checklist.eyebrow)}</span></nav>
+  <article>
+    <p>${escapeHtml(checklist.eyebrow)}</p>
+    <h1>${escapeHtml(checklist.title)}</h1>
+    <p>${escapeHtml(checklist.lead)}</p>
+    <p><a href="/">অভ্রজয়ের মূল কনভার্টারে যান</a></p>
+    ${sections}
+    <p><a href="/avro-to-bijoy">ইউনিকোড টু বিজয় গাইড</a> · <a href="/docx-txt-bijoy-converter">DOCX ও TXT ফাইল গাইড</a></p>
+  </article>
+</main>`;
+}
+
+function thesisChecklistStructuredData(checklist, url) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "@id": `${url}#article`,
+        headline: checklist.title,
+        description: checklist.description,
+        inLanguage: "bn-BD",
+        mainEntityOfPage: url,
+        isPartOf: { "@id": `${siteUrl}/#website` },
+        author: { "@type": "Person", name: "মো. হাবিবুল্লাহ নাঈম" },
+        publisher: { "@id": `${siteUrl}/#organization` },
+        about: { "@id": `${siteUrl}/#webapplication` },
+        dateModified: "2026-08-25",
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: siteName, item: `${siteUrl}/` },
+          { "@type": "ListItem", position: 2, name: checklist.eyebrow, item: url },
+        ],
+      },
+    ],
+  };
+}
+
 if (!fs.existsSync(templatePath)) {
   throw new Error(`Expected Vite output was not found: ${templatePath}`);
 }
@@ -324,4 +392,44 @@ for (const guide of guides) {
   fs.mkdirSync(routeDirectory, { recursive: true });
   fs.writeFileSync(path.join(routeDirectory, "index.html"), html, "utf8");
   console.log(`Generated crawl-visible ${guide.slug}/index.html`);
+}
+
+{
+  const url = `${siteUrl}/${thesisChecklist.slug}`;
+  const title = `${thesisChecklist.title} | অভ্রজয়`;
+  const data = JSON.stringify(thesisChecklistStructuredData(thesisChecklist, url));
+  let html = baseTemplate;
+
+  html = replaceTag(html, /<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(title)}</title>`);
+  html = replaceTag(
+    html,
+    /<meta\s+name="description"\s+content="[\s\S]*?"\s*\/>/,
+    `<meta name="description" content="${escapeHtml(thesisChecklist.description)}" />`,
+  );
+  html = replaceTag(html, /<link\s+rel="canonical"\s+href="[\s\S]*?"\s*\/>/, `<link rel="canonical" href="${url}" />`);
+  html = replaceTag(html, /<meta\s+property="og:type"\s+content="[\s\S]*?"\s*\/>/, '<meta property="og:type" content="article" />');
+  html = replaceTag(html, /<meta\s+property="og:url"\s+content="[\s\S]*?"\s*\/>/, `<meta property="og:url" content="${url}" />`);
+  html = replaceTag(html, /<meta\s+property="og:title"\s+content="[\s\S]*?"\s*\/>/, `<meta property="og:title" content="${escapeHtml(thesisChecklist.title)}" />`);
+  html = replaceTag(
+    html,
+    /<meta\s+property="og:description"\s+content="[\s\S]*?"\s*\/>/,
+    `<meta property="og:description" content="${escapeHtml(thesisChecklist.description)}" />`,
+  );
+  html = replaceTag(html, /<meta\s+name="twitter:title"\s+content="[\s\S]*?"\s*\/>/, `<meta name="twitter:title" content="${escapeHtml(thesisChecklist.title)}" />`);
+  html = replaceTag(
+    html,
+    /<meta\s+name="twitter:description"\s+content="[\s\S]*?"\s*\/>/,
+    `<meta name="twitter:description" content="${escapeHtml(thesisChecklist.description)}" />`,
+  );
+  html = replaceTag(
+    html,
+    /<script id="avrojoy-home-faq-structured-data"[\s\S]*?<\/script>/,
+    `<script id="avrojoy-thesis-checklist-structured-data" type="application/ld+json">${data}</script>`,
+  );
+  html = replaceTag(html, /<div id="root">[\s\S]*?<\/div>/, `<div id="root">${thesisChecklistMarkup(thesisChecklist)}</div>`);
+
+  const routeDirectory = path.join(publicDir, thesisChecklist.slug);
+  fs.mkdirSync(routeDirectory, { recursive: true });
+  fs.writeFileSync(path.join(routeDirectory, "index.html"), html, "utf8");
+  console.log(`Generated crawl-visible ${thesisChecklist.slug}/index.html`);
 }

@@ -1015,3 +1015,9 @@
 - [x] Indexed URL, technical/content coverage এবং competitor discovery context তুলনা করা
 - [x] Ethical highest-impact discovery action এবং measurement timing নির্ধারণ করা
 - [x] Owner-কে বাস্তব অবস্থান, কারণ ও next step জানানো
+
+# সক্রিয়: self-contained organic discovery pass
+- [x] Crawl-visible public route, internal pathway ও mobile-discovery signals audit করা
+- [x] Duplicate-page ছাড়া সবচেয়ে high-impact on-site opportunity নির্ধারণ করা
+- [x] Only justified self-contained improvement shared source-এ বাস্তবায়ন করা
+- [x] Build, static prerender, mobile/desktop এবং SEO regression যাচাই করা
