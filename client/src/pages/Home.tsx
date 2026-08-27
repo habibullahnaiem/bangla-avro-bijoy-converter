@@ -69,7 +69,7 @@ const EXAMPLE_TEXT = `বিষয়: বাংলা নথির টাইপ
 
 const HISTORY_STORAGE_KEY = "abc-recent-conversions";
 const MAX_HISTORY_ITEMS = 6;
-const BRAND_LOGO_SRC = "/manus-storage/bangla-converter-exact-reference-logo_2f0bb0ec.png";
+const BRAND_LOGO_SRC = "/manus-storage/avrojoy-logo-192w_cf2f754c.webp";
 const INSTALL_PROMPT_DISMISSED_KEY = "avrojoy-install-prompt-dismissed";
 const DECORATIVE_GLYPHS = [
   "অ", "আ", "ই", "ঈ", "উ", "ক", "খ", "গ", "ঘ", "চ", "ছ", "ত",

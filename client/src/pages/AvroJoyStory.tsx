@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { ArrowLeft, ArrowRight, BookOpen, Moon, Quote, Sun } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 
-const BRAND_LOGO_SRC = "/manus-storage/bangla-converter-exact-reference-logo_2f0bb0ec.png";
+const BRAND_LOGO_SRC = "/manus-storage/avrojoy-logo-192w_cf2f754c.webp";
 const STORY_URL = "https://avrojoy.vercel.app/avrojoy-er-jonmokotha";
 const STORY_TITLE = "অভ্রজয়ের জন্মকথা: একটি থিসিস, শেষ মুহূর্তের হতাশা এবং নতুন এক শুরুর গল্প";
 const STORY_DESCRIPTION = "স্নাতকোত্তর থিসিসের শেষ মুহূর্তের formatting সমস্যা থেকে কীভাবে অভ্রজয়ের শুরু—মো. হাবিবুল্লাহ নাঈমের নিজের ভাষায় সেই গল্প।";

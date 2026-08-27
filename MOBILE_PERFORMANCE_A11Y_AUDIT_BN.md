@@ -27,3 +27,7 @@
 ## Validation
 
 Root TypeScript check, ৯টি root tests এবং production build পাস করেছে। Vercel static type check, ১৭টি tests এবং crawl-visible build পাস করেছে। Mobile (375×812) ও desktop (1280×720) visual checks-এ layout/theme change দেখা যায়নি। PageSpeed-এর live field data এখনও নেই এবং নতুন lab request rate-limited হওয়ায় এই pass-এর জন্য নতুন Lighthouse score দাবি করা হচ্ছে না।
+
+## DOCX loader release: PageSpeed recheck status
+
+২৭ আগস্ট ২০২৬-এ production URL দিয়ে PageSpeed Insights-এর mobile analysis দুবার শুরু করা হয়েছে। উভয় run-এ report UI **No Data** field-data status দেখিয়েছে, কিন্তু diagnostic scorecard শেষ হওয়ার আগেই `Enter a valid URL`/loading state-এ আটকে গেছে। একই সময়ে public PageSpeed API rate-limited (`429`) ছিল। ফলে PageSpeed থেকে unverified score বা opportunity লেখা হবে না। Alternate Lighthouse measurement দিয়ে mobile ও desktop lab audit সম্পন্ন করা হবে; এটি field data নয়—controlled synthetic test হবে।

@@ -34,6 +34,8 @@ describe("Vercel static copy boundaries", () => {
     const stylesheet = fs.readFileSync(path.join(repositoryRoot, "client/src/index.css"), "utf8");
 
     expect(homepage).toContain('href="/manus-storage/avrojoy-hero-v2-banner_32621bd4.webp"');
+    expect(homepage).toContain('href="/manus-storage/bangla-converter-keyboard-background_6048064b.webp"');
+    expect(homepage).toContain('href="https://d36hbw14aib5lz.cloudfront.net"');
     expect(homepage).toContain('type="image/webp"');
     expect(homepage).toContain('as="font" href="/manus-storage/SutonnyMJ_danDi_v2_5618afeb.ttf"');
     expect(homepage).toContain('content="width=device-width, initial-scale=1.0"');
@@ -44,6 +46,20 @@ describe("Vercel static copy boundaries", () => {
     expect(stylesheet).toContain("/manus-storage/bangla-converter-keyboard-background_6048064b.webp");
     expect(stylesheet).not.toContain("avrojoy-hero-v2-banner_b1dad7f4.png");
     expect(stylesheet).not.toContain("bangla-converter-keyboard-background_fad26d5c.png");
+  });
+
+  it("uses the compact managed WebP logo for visible public-page branding", () => {
+    const publicPageSources = [
+      "Home.tsx",
+      "AvroJoyStory.tsx",
+      "PublicInfoPages.tsx",
+      "SeoGuides.tsx",
+    ];
+
+    for (const source of publicPageSources) {
+      const content = fs.readFileSync(path.join(repositoryRoot, "client/src/pages", source), "utf8");
+      expect(content).toContain("/manus-storage/avrojoy-logo-192w_cf2f754c.webp");
+    }
   });
 
   it("keeps document-only ZIP processing out of the initial converter dependency path", () => {

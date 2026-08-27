@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { ArrowLeft, CheckCircle2, FileText, MessageCircle, Moon, ShieldCheck, Sun } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 
-const BRAND_LOGO_SRC = "/manus-storage/bangla-converter-exact-reference-logo_2f0bb0ec.png";
+const BRAND_LOGO_SRC = "/manus-storage/avrojoy-logo-192w_cf2f754c.webp";
 const BASE_URL = "https://avrojoy.vercel.app";
 
 type Section = {
