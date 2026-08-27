@@ -31,3 +31,35 @@ Root TypeScript check, ৯টি root tests এবং production build পাস
 ## DOCX loader release: PageSpeed recheck status
 
 ২৭ আগস্ট ২০২৬-এ production URL দিয়ে PageSpeed Insights-এর mobile analysis দুবার শুরু করা হয়েছে। উভয় run-এ report UI **No Data** field-data status দেখিয়েছে, কিন্তু diagnostic scorecard শেষ হওয়ার আগেই `Enter a valid URL`/loading state-এ আটকে গেছে। একই সময়ে public PageSpeed API rate-limited (`429`) ছিল। ফলে PageSpeed থেকে unverified score বা opportunity লেখা হবে না। Alternate Lighthouse measurement দিয়ে mobile ও desktop lab audit সম্পন্ন করা হবে; এটি field data নয়—controlled synthetic test হবে।
+
+## Final controlled Lighthouse results
+
+২৭ আগস্ট ২০২৬-এ published production homepage (`https://avrojoy.vercel.app/`) Lighthouse 12.8.2 এবং Chromium দিয়ে controlled navigation audit করা হয়েছে। Mobile run Android-emulation profile এবং desktop run desktop preset ব্যবহার করেছে। এগুলো **lab results**, real-user Core Web Vitals নয়। PageSpeed Insights-এর field-data panel এখনো `No Data`; Google বলেছে, CrUX দেখাতে যথেষ্ট real-user sample লাগে এবং lab/field data ভিন্ন হতে পারে। [1]
+
+| Category | Mobile lab | Desktop lab |
+|---|---:|---:|
+| Performance | 61 | 93 |
+| Accessibility | 99 | 99 |
+| Best Practices | 100 | 100 |
+| SEO | 100 | 100 |
+
+| Metric | Mobile lab | Desktop lab |
+|---|---:|---:|
+| First Contentful Paint | 5.8 s | 1.0 s |
+| Largest Contentful Paint | 7.7 s | 1.5 s |
+| Speed Index | 5.8 s | 1.0 s |
+| Total Blocking Time | 0 ms | 0 ms |
+| Cumulative Layout Shift | 0.007 | 0.016 |
+| Time to Interactive | 7.7 s | 1.5 s |
+
+### Measured effect of this pass
+
+Before the final hero preload/compact-logo change, the controlled mobile run measured LCP **9.7 s** and CLS **0.019**. In the otherwise equivalent post-release controlled run, LCP measured **7.7 s** and CLS **0.007**—an approximate **2.0 s lower LCP** in this diagnostic environment. The overall mobile Performance number remained 61 because Lighthouse weights several metrics and controlled scores can vary with test conditions. [2]
+
+The earlier run identified three clear delivery opportunities: the mobile hero’s keyboard-texture layer was not preloaded (estimated 5.7 s LCP opportunity), the managed asset origin lacked a preconnect (estimated 300 ms), and the 702×526 header logo transferred roughly 356 KB despite a small display size. The released changes address those three items. The final mobile report no longer lists LCP-image preload, preconnect or image-format opportunity; its only material remaining item is roughly **55 KiB unused JavaScript** (estimated 300 ms), while its reported render-blocking resource saving is 0 ms.
+
+## References
+
+[1] [Google PageSpeed Insights — About](https://developers.google.com/speed/docs/insights/v5/about)
+
+[2] [Chrome for Developers — How Lighthouse calculates Performance score](https://developer.chrome.com/docs/lighthouse/performance/performance-scoring)

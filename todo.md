@@ -1037,5 +1037,5 @@
 - [x] Current DOCX upload/process state এবং accessible status signalling audit করা
 - [x] Scoped Bengali loading animation ও progress feedback বাস্তবায়ন করা
 - [x] File conversion, mobile/desktop and reduced-motion regression পরীক্ষা করা
-- [ ] Production mobile/desktop Lighthouse or PageSpeed recheck করা
-- [ ] Detailed Bengali performance report তৈরি করা
+- [x] Production mobile/desktop Lighthouse or PageSpeed recheck করা
+- [x] Detailed Bengali performance report তৈরি করা
