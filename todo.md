@@ -997,3 +997,9 @@
 - [x] বিজয় preview-এর segment markup, mobile CSS ও Latin fallback rendering path নির্ণয় করা
 - [x] Converter mapping/DOCX/copy/desktop অক্ষুণ্ণ রেখে scoped preview fix করা
 - [x] Mixed output, mobile/desktop, light/dark, copy এবং regression পরীক্ষা করা
+
+# সক্রিয়: mobile SutonnyMJ font-load failure (`আ` → raw `Av`)
+- [x] User screenshot অনুযায়ী mobile-এ SutonnyMJ না লোড হয়ে raw Bijoy bytes দেখা যাওয়ার কারণ নির্ণয় করা
+- [x] Same-origin ও mobile-safe font delivery নিশ্চিত করা, converter/DOCX/TXT না বদলে
+- [x] Mobile output preview-তে SutonnyMJ applied হওয়ার guard যোগ করা
+- [x] `আ`, mixed text, desktop/mobile ও copy regression যাচাই করা

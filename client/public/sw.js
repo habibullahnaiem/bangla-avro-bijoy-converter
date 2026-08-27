@@ -25,10 +25,15 @@ const OFFLINE_ASSETS = [
 
 async function cacheAsset(cache, url) {
   try {
-    const request = new Request(url, { cache: "reload", mode: "no-cors" });
+    // The Bijoy preview font must be readable by CSS. A `no-cors` request can
+    // cache an opaque redirected response on mobile PWAs; serving that opaque
+    // response later makes the browser reject SutonnyMJ and reveal raw bytes
+    // such as `Av`. All current storage assets are CORS-readable, so cache the
+    // normal request/response pair instead.
+    const request = new Request(url, { cache: "reload" });
     const response = await fetch(request);
-    if (response.ok || response.type === "opaque") {
-      await cache.put(url, response);
+    if (response.ok) {
+      await cache.put(request, response);
     }
   } catch {
     // A single unavailable decorative asset must not block offline app setup.

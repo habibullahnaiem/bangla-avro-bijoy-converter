@@ -33,6 +33,7 @@ describe("Vercel static copy boundaries", () => {
 
     expect(homepage).toContain('href="/manus-storage/avrojoy-hero-v2-banner_32621bd4.webp"');
     expect(homepage).toContain('type="image/webp"');
+    expect(homepage).toContain('as="font" href="/manus-storage/SutonnyMJ_danDi_v2_5618afeb.ttf"');
     expect(stylesheet).toContain("/manus-storage/avrojoy-hero-v2-banner_32621bd4.webp");
     expect(stylesheet).toContain("/manus-storage/bangla-converter-keyboard-background_6048064b.webp");
     expect(stylesheet).not.toContain("avrojoy-hero-v2-banner_b1dad7f4.png");

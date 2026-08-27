@@ -22,4 +22,20 @@ describe("mixed Bangla-English Bijoy preview segmentation", () => {
     expect(home).toContain('fontFamily: previewFontFamily');
     expect(home).toContain('fontSynthesis: "none"');
   });
+
+  it("caches the mobile Bijoy font through a readable request rather than an opaque no-CORS response", () => {
+    const serviceWorker = fs.readFileSync(
+      path.resolve(import.meta.dirname, "../client/public/sw.js"),
+      "utf8",
+    );
+    const homepage = fs.readFileSync(
+      path.resolve(import.meta.dirname, "../client/index.html"),
+      "utf8",
+    );
+
+    expect(serviceWorker).toContain('new Request(url, { cache: "reload" })');
+    expect(serviceWorker).not.toContain('mode: "no-cors"');
+    expect(serviceWorker).toContain("await cache.put(request, response)");
+    expect(homepage).toContain('as="font" href="/manus-storage/SutonnyMJ_danDi_v2_5618afeb.ttf"');
+  });
 });
