@@ -1059,3 +1059,14 @@
 - [x] Preview font/mobile behavior, clipboard, document/file ও operational capabilities তুলনা করা
 - [x] Same/different mapping behaviour, practical impact ও untestable boundaries বিশ্লেষণ করা
 - [x] Comprehensive Bengali technical no-change report তৈরি করা
+
+# সক্রিয়: বিকল্প Bijoy conversion mechanism survey
+- [x] জনপ্রিয় public converter ও conversion library-এর প্রাসঙ্গিক candidates এবং primary sources সংগ্রহ করা
+- [x] complex conjunct alias, Unicode semantic round-trip এবং legacy-font interoperability-তে তাদের documented/observable আচরণ যাচাই করা
+- [x] বাস্তব সমাধান, আংশিক সমাধান ও অসমাধানযোগ্য legacy সীমা পৃথক করে Bengali evidence-based answer দেওয়া
+
+# সক্রিয়: AvroJoy-সহ public converter independent rating
+- [x] public candidate selection, transparent scoring criteria ও evaluation boundary নির্ধারণ করা
+- [x] একই controlled corpus-এ AvroJoy, Bangla.plus এবং নির্বাচিত public alternatives-এর text mapping/round-trip পরীক্ষা করা
+- [x] mixed-text, file/document workflow, font guidance, privacy ও usability evidence আলাদা করে তুলনা করা
+- [x] scorecard, evidence limits এবং Bengali no-change verdict report তৈরি করা
