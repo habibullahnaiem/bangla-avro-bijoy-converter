@@ -1051,3 +1051,11 @@
 - [x] দৃষ্টি, রেখে, অশ্রু, ঝুম, স্মৃতি, প্রথম, দ্রব্য, র‍্যাব-এর forward output/bytes সংগ্রহ করা
 - [x] দুই implementation-এর round-trip result ও visible rendering তুলনা করা
 - [x] Evidence-based Bengali verdict report তৈরি করা; converter source না বদলানো
+
+# সক্রিয়: AvroJoy বনাম Bangla.plus সম্পূর্ণ read-only conversion comparison
+- [x] Complete observable comparison scope, test matrix ও evidence limits নির্ধারণ করা
+- [x] Forward Unicode-to-Bijoy mapping, kar/fola/ref/hasanta positioning এবং punctuation matrix চালানো
+- [x] Reverse Bijoy-to-Unicode, Unicode normalization এবং cross-round-trip matrix চালানো
+- [x] Preview font/mobile behavior, clipboard, document/file ও operational capabilities তুলনা করা
+- [x] Same/different mapping behaviour, practical impact ও untestable boundaries বিশ্লেষণ করা
+- [x] Comprehensive Bengali technical no-change report তৈরি করা
