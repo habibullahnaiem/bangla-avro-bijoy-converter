@@ -1009,3 +1009,9 @@
 - [x] Canonical, robots, sitemap এবং structured-data consistency যাচাই করা
 - [x] Justified missing metadata ও unsafe/redundant tag আলাদা করা
 - [x] Evidence-based audit result এবং safe next step জানানো
+
+# সক্রিয়: generic-query discovery-gap recheck
+- [x] Priority generic conversion query-তে current organic visibility ও intent map করা
+- [x] Indexed URL, technical/content coverage এবং competitor discovery context তুলনা করা
+- [x] Ethical highest-impact discovery action এবং measurement timing নির্ধারণ করা
+- [x] Owner-কে বাস্তব অবস্থান, কারণ ও next step জানানো

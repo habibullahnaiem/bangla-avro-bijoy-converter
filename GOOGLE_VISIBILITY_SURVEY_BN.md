@@ -71,3 +71,17 @@ Search Console Performance, Pages ও Links report processing শেষ হল�
 [1] [Google Search Central — A guide to Google Search ranking systems](https://developers.google.com/search/docs/appearance/ranking-systems-guide)
 
 [2] [Google Search Central — Creating helpful, reliable, people-first content](https://developers.google.com/search/docs/fundamentals/creating-helpful-content)
+
+---
+
+## ১০. ২৭ আগস্টের generic-query recheck
+
+`ইউনিকোড টু বিজয় কনভার্টার` এবং কাছাকাছি Bengali/English variants-এর নতুন public-search snapshot-এ AvroJoy প্রথম visible organic set-এ দেখা যায়নি। একই search provider-এর `site:avrojoy.vercel.app`-সহ targeted lookup-এ homepage এবং তিনটি priority guide পাওয়া গেছে। অর্থাৎ **URL discovery/index association আছে, কিন্তু broad generic query visibility এখনও অপর্যাপ্ত**।
+
+তুলনায় Bangla.plus, BanglaConverter এবং ShumanBD-এর public pages-এ বহুদিনের exact conversion title, direct tool/workflow text এবং বৃহত্তর established site/tool context আছে। AvroJoy-এর conversion workflow, text/DOCX/TXT coverage, people-first guide content, canonical/sitemap, static HTML এবং mobile performance baseline ইতিমধ্যে comparable technical floor-এ আছে। বর্তমান gapটি নতুন/freshly-reprocessed site-এর broad discovery footprint, query history ও Google-এর page/site-level relevance evaluation-এর সঙ্গে বেশি সামঞ্জস্যপূর্ণ; নতুন meta tag অনুপস্থিত থাকার evidence নয়।
+
+Google-এর নিজের ব্যাখ্যা অনুযায়ী indexed page generic result-এ না-ও দেখা যেতে পারে যদি অন্য page-কে query-র জন্য বেশি relevant বা higher quality মনে হয়; ranking system বহু signal এবং user location/language/device বিবেচনা করে। [3] Exact public position তাই স্থায়ী metric নয়।
+
+**এখনের সিদ্ধান্ত:** নতুন duplicate conversion page, keyword stuffing, repeat indexing request, paid link, bulk directory submission, PBN বা copied content যোগ করা হবে না। সবচেয়ে তথ্যপূর্ণ পরের step হলো Search Console Performance report processing শেষ হলে query-level impressions, clicks, CTR এবং average position দেখা। ব্যবহারকারীর fresh approval ছাড়া কোনো external contact বা link/outreach করা হবে না।
+
+[3] [Google Search Central — In-depth guide to how Google Search works](https://developers.google.com/search/docs/fundamentals/how-search-works)
