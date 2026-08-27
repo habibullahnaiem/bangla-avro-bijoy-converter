@@ -1039,3 +1039,15 @@
 - [x] File conversion, mobile/desktop and reduced-motion regression পরীক্ষা করা
 - [x] Production mobile/desktop Lighthouse or PageSpeed recheck করা
 - [x] Detailed Bengali performance report তৈরি করা
+
+# সক্রিয়: AvroJoy বনাম Bangla.plus focused conversion survey
+- [x] দুই converter-এর current input/output method ও font-rendering context যাচাই করা
+- [x] দৃষ্টি, রেখে, অশ্রু, ঝুম, স্মৃতি, প্রথম, দ্রব্য, র‍্যাব-এর forward output/bytes সংগ্রহ করা
+- [x] ঋ-কার, র-ফলা ও শুরুর/মাঝের এ-কারের round-trip result ও visible rendering তুলনা করা
+- [x] Evidence-based Bengali verdict report তৈরি করা; converter source না বদলানো
+
+# সক্রিয়: AvroJoy বনাম Bangla.plus নির্দিষ্ট শব্দ conversion survey
+- [x] দুই converter-এর current input/output method ও direction control যাচাই করা
+- [x] দৃষ্টি, রেখে, অশ্রু, ঝুম, স্মৃতি, প্রথম, দ্রব্য, র‍্যাব-এর forward output/bytes সংগ্রহ করা
+- [x] দুই implementation-এর round-trip result ও visible rendering তুলনা করা
+- [x] Evidence-based Bengali verdict report তৈরি করা; converter source না বদলানো
