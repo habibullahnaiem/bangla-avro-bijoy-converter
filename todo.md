@@ -1021,3 +1021,8 @@
 - [x] Duplicate-page ছাড়া সবচেয়ে high-impact on-site opportunity নির্ধারণ করা
 - [x] Only justified self-contained improvement shared source-এ বাস্তবায়ন করা
 - [x] Build, static prerender, mobile/desktop এবং SEO regression যাচাই করা
+
+# সক্রিয়: remaining self-contained discovery audit
+- [x] Public route navigation, raw crawl-visible internal links এবং sitemap coverage audit করা
+- [x] Only justified remaining internal-discovery improvement নির্ধারণ করা
+- [x] Safe improvement build/static output/regression validation-সহ বাস্তবায়ন করা

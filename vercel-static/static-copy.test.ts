@@ -25,6 +25,8 @@ describe("Vercel static copy boundaries", () => {
     expect(homepage).toContain("অভ্রজয় (AvroJoy) | ইউনিকোড টু বিজয় ও অভ্র টু বিজয় কনভার্টার");
     expect(homepage).toContain('data-route="home"');
     expect(homepage).toContain("ইউনিকোড টু বিজয় গাইড");
+    expect(homepage).toContain('href="/thesis-bijoy-checklist"');
+    expect(homepage).toContain("থিসিসে অভ্র থেকে বিজয়: ৭টি ব্যবহারিক যাচাই");
   });
 
   it("preloads the active compact hero artwork and uses WebP for the shared hero surfaces", () => {
