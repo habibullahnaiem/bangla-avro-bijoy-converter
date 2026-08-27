@@ -44,7 +44,10 @@ import {
   extractTextFrom,
   repairBijoyFontFile,
 } from "@/lib/converter";
-import { buildRichBijoyClipboardHtml } from "@/lib/richClipboard";
+import {
+  buildRichBijoyClipboardHtml,
+  copyOfficeCompatibleRichHtml,
+} from "@/lib/richClipboard";
 import { Download, FileText, Upload, Loader2 } from "lucide-react";
 import { useRef as useFileRef } from "react";
 import {
@@ -378,13 +381,23 @@ export default function Home() {
         // রিচ-টেক্সট কপি: Word-এ পেস্ট করলে বাংলা SutonnyMJ (বড়) ও
         // ইংরেজি Times New Roman (এক ধাপ ছোট) সাইজ সহ বজায় থাকে
         const html = buildRichBijoyClipboardHtml(outSegments, bnPx, latPx);
-        const data = [
-          new ClipboardItem({
-            "text/html": new Blob([html], { type: "text/html" }),
-            "text/plain": new Blob([output], { type: "text/plain" }),
-          }),
-        ];
-        await navigator.clipboard.write(data);
+        // Word can ignore a ClipboardItem text/html Blob's nested font styling.
+        // Prefer the browser's native selected-DOM copy path, which writes the
+        // desktop HTML clipboard fragment Office expects. Retain ClipboardItem
+        // as the secure modern fallback for browsers where native copy is off.
+        const copiedAsOfficeHtml = copyOfficeCompatibleRichHtml(html, output);
+        if (!copiedAsOfficeHtml) {
+          if (!navigator.clipboard?.write || typeof ClipboardItem === "undefined") {
+            throw new Error("Rich clipboard write is unavailable");
+          }
+          const data = [
+            new ClipboardItem({
+              "text/html": new Blob([html], { type: "text/html" }),
+              "text/plain": new Blob([output], { type: "text/plain" }),
+            }),
+          ];
+          await navigator.clipboard.write(data);
+        }
       } else {
         await navigator.clipboard.writeText(output);
       }

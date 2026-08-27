@@ -1086,3 +1086,8 @@
 - [x] text-converter rich-copy HTML, preview segmentation ও Word paste failure path নির্ণয় করা
 - [x] বাংলা SutonnyMJ এবং English/number Times New Roman run-এর clipboard HTML isolation ঠিক করা
 - [x] mixed copy, converter mapping, preview, DOCX/TXT এবং production build regression যাচাই করা
+
+# সক্রিয়: Word paste-এ rich-copy English font failure পুনঃনির্ণয়
+- [x] previous rich-copy payload কেন Word/Office destination-এ English font ধরে রাখতে পারেনি তা নির্ণয় করা
+- [x] standard Office clipboard HTML envelope ও fallback format ব্যবহার করে compatible mixed-run copy নকশা করা
+- [ ] user-reported Word paste case, converter mapping, DOCX/TXT এবং rich-copy regression যাচাই করা

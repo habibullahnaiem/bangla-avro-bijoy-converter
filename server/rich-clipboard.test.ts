@@ -23,6 +23,7 @@ describe("Word-compatible mixed-language rich clipboard HTML", () => {
     expect(html).toContain("font-family:'Times New Roman'");
     expect(html).toContain("mso-ascii-font-family:'Times New Roman'");
     expect(html).toContain("mso-hansi-font-family:'Times New Roman'");
+    expect(html).toContain('<font face="\'Times New Roman\'">');
     expect(html).toContain("Bangla 42");
     expect(html).not.toContain('<div style="font-family:SutonnyMJ');
   });
@@ -34,5 +35,14 @@ describe("Word-compatible mixed-language rich clipboard HTML", () => {
       18,
     );
     expect(escaped).toContain("A &lt; B &amp; C");
+  });
+
+  it("keeps a browser-native Office HTML copy path ahead of the ClipboardItem fallback", async () => {
+    const source = await import("node:fs/promises").then((fs) =>
+      fs.readFile(new URL("../client/src/lib/richClipboard.ts", import.meta.url), "utf8"),
+    );
+    expect(source).toContain("document.execCommand(\"copy\")");
+    expect(source).toContain('event.clipboardData.setData("text/html", html)');
+    expect(source).toContain('event.clipboardData.setData("text/plain", plainText)');
   });
 });
