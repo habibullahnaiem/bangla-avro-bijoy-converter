@@ -991,3 +991,9 @@
 - [x] Verified property-তে Performance report-এর current availability যাচাই করা
 - [x] `অভ্রজয়` query-এর impression, click ও average-position evidence সংগ্রহ করা
 - [x] Available data অথবা processing limitation owner-কে জানানো
+
+# সক্রিয়: mobile বিজয় preview-তে English segment rendering
+- [x] Screenshot অনুযায়ী mobile preview-তে Bangla-English mixed output পুনরুৎপাদন করা
+- [x] বিজয় preview-এর segment markup, mobile CSS ও Latin fallback rendering path নির্ণয় করা
+- [x] Converter mapping/DOCX/copy/desktop অক্ষুণ্ণ রেখে scoped preview fix করা
+- [x] Mixed output, mobile/desktop, light/dark, copy এবং regression পরীক্ষা করা

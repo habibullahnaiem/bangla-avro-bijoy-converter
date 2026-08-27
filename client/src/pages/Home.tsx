@@ -693,6 +693,13 @@ export default function Home() {
     size: number,
     keyPrefix: string,
   ) => {
+    // The preview must apply the Latin font directly to each English run. This
+    // keeps mobile browsers from inheriting the surrounding SutonnyMJ face and
+    // showing raw Bijoy/ANSI bytes such as “Avgvi”. The converted text itself,
+    // clipboard data and DOCX pipeline remain unchanged.
+    const previewFontFamily = className.includes("seg-lat")
+      ? '"Times New Roman", Times, serif'
+      : '"SutonnyMJ", "Times New Roman", Times, serif';
     // U+00D5 একই সঙ্গে reference-এর closing quote এবং word-internal apostrophe
     // হতে পারে। শুধু U+00D4-র সঙ্গে জোড়া reference-closing quote চিহ্নিত করি;
     // apostrophe-এর appearance, copy ও raw code সম্পূর্ণ অপরিবর্তিত থাকে।
@@ -736,7 +743,11 @@ export default function Home() {
         <span
           key={`${keyPrefix}-${index}`}
           className={tokenClassName}
-          style={{ fontSize: `${size}px` }}>
+          style={{
+            fontFamily: previewFontFamily,
+            fontSize: `${size}px`,
+            fontSynthesis: "none",
+          }}>
           {part}
         </span>
       );
