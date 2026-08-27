@@ -44,6 +44,7 @@ import {
   extractTextFrom,
   repairBijoyFontFile,
 } from "@/lib/converter";
+import { buildRichBijoyClipboardHtml } from "@/lib/richClipboard";
 import { Download, FileText, Upload, Loader2 } from "lucide-react";
 import { useRef as useFileRef } from "react";
 import {
@@ -376,20 +377,7 @@ export default function Home() {
       if (direction === "u2b") {
         // রিচ-টেক্সট কপি: Word-এ পেস্ট করলে বাংলা SutonnyMJ (বড়) ও
         // ইংরেজি Times New Roman (এক ধাপ ছোট) সাইজ সহ বজায় থাকে
-        const parts = outSegments
-          .map((seg: { text: string; bangla: boolean }) => {
-            const ff = seg.bangla
-              ? "SutonnyMJ"
-              : '"Times New Roman", Times, serif';
-            const sz = seg.bangla ? `${bnPx}px` : `${latPx}px`;
-            const esc = seg.text
-              .replaceAll("&", "&amp;")
-              .replaceAll("<", "&lt;")
-              .replaceAll(">", "&gt;");
-            return `<span style="font-family:${ff};font-size:${sz}">${esc}</span>`;
-          })
-          .join("");
-        const html = `<div style="font-family:SutonnyMJ;font-size:${bnPx}px">${parts}</div>`;
+        const html = buildRichBijoyClipboardHtml(outSegments, bnPx, latPx);
         const data = [
           new ClipboardItem({
             "text/html": new Blob([html], { type: "text/html" }),

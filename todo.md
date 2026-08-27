@@ -1081,3 +1081,8 @@
 - [x] বর্তমান paste handler, browser permission context এবং clipboard-read failure path নির্ণয় করা
 - [x] শুধুমাত্র paste flow-তে safe fallback ও স্পষ্ট failure guidance যোগ করা
 - [x] clipboard, converter mapping, preview, DOCX/TXT এবং production build regression যাচাই করা
+
+# সক্রিয়: mixed English rich-copy font preservation fix
+- [x] text-converter rich-copy HTML, preview segmentation ও Word paste failure path নির্ণয় করা
+- [x] বাংলা SutonnyMJ এবং English/number Times New Roman run-এর clipboard HTML isolation ঠিক করা
+- [x] mixed copy, converter mapping, preview, DOCX/TXT এবং production build regression যাচাই করা
