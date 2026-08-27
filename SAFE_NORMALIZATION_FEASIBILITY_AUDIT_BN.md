@@ -76,3 +76,7 @@ Build-এ আগে থেকে থাকা managed `/manus-storage` asset-res
 **Production-এ কোনো mapping, normalization, DOCX/TXT, preview বা UI পরিবর্তন করা হবে না।** বর্তমান stable path সম্পূর্ণ regression pass করেছে। Ellipsis ও `য়/য়`-এর lossless recovery marker ছাড়া সম্ভব নয়; marker compatibility risk তৈরি করে। Double-dari profile এবং literal-quote mode কেবল future opt-in feature হিসেবে সম্ভব, কিন্তু default behaviour বদলানো ছাড়া এগুলো বর্তমান সমস্যাকে স্বয়ংক্রিয়ভাবে সমাধান করবে না।
 
 এই সিদ্ধান্তটি “কাজ করা যায় না” নয়; এটি ব্যবহারকারীর বাধ্যতামূলক no-break শর্ত মেনে **ঝুঁকিপূর্ণ কাজ প্রকাশ না করার** সিদ্ধান্ত।
+
+## User-supplied preview screenshot check
+
+The supplied 763×174 screenshot was inspected in two overlapping horizontal crops. The Unicode source reads `ক্ষ্ন/ক্ষ্ণ, ণ্ণ/ণ্ন, ত্রূ,` and the SutonnyMJ preview visibly retains the same three distinctions: the first two are not collapsed into one spelling and `ত্রূ` appears with its `ূ` vowel sign. No isolated misplaced e-kar, r-fola or visible broken conjunct is evident in this crop. This is a visual check of the displayed preview only; it does not replace raw-byte and DOCX validation.

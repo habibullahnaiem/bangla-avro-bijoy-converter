@@ -127,6 +127,7 @@ export default function Home() {
     return Number.isFinite(n) && n >= 12 && n <= 32 ? n : 20;
   });
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const inputEditorRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useFileRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [converting, setConverting] = useState(false);
@@ -415,13 +416,28 @@ export default function Home() {
     }
   };
 
+  const focusManualPasteTarget = () => {
+    const target = inputEditorRef.current;
+    if (!target) return;
+    target.focus();
+    const end = target.value.length;
+    target.setSelectionRange(end, end);
+  };
+
   const pasteInput = async () => {
     try {
-      const text = await navigator.clipboard.readText();
+      const text = await navigator.clipboard?.readText?.();
+      if (typeof text !== "string") throw new Error("Clipboard read is unavailable");
       setInput((prev) => prev + text);
       toast.success("পেস্ট করা হয়েছে");
     } catch {
-      toast.error("ক্লিপবোর্ড পড়া যায়নি — ব্রাউজারের অনুমতি যাচাই করুন");
+      // Browser/PWA privacy settings can deny programmatic clipboard reads. The
+      // editable surface is still the safe universal fallback: focus it and let
+      // the browser's native Ctrl/Cmd+V or long-press Paste path supply the data.
+      focusManualPasteTarget();
+      toast.info(
+        "ক্লিপবোর্ডে অনুমতি নেই। লেখার বক্সে Ctrl+V / ⌘V চাপুন, বা মোবাইলে চেপে ধরে Paste করুন।",
+      );
     }
   };
 
@@ -1345,6 +1361,7 @@ export default function Home() {
                   e.stopPropagation();
                 }}>
                 <Textarea
+                  ref={inputEditorRef}
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder={
@@ -1364,7 +1381,8 @@ export default function Home() {
                   variant="outline"
                   size="sm"
                   className="border-border bg-card text-muted-foreground hover:bg-accent"
-                  onClick={pasteInput}>
+                  onClick={pasteInput}
+                  title="ক্লিপবোর্ডের অনুমতি না থাকলে লেখার বক্সে Ctrl+V বা মোবাইলে চেপে ধরে Paste করুন">
                   <ClipboardPaste className="mr-1.5 h-3.5 w-3.5" />
                   পেস্ট
                 </Button>

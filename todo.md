@@ -1076,3 +1076,8 @@
 - [x] ellipsis, `য়/য়`, straight quote ও `॥`-এর reversible option/profile design isolated harness-এ পরীক্ষা করা
 - [x] core mapping, complex conjunct, quote, DOCX/TXT, rich preview, mobile ও cross-converter compatibility regression চালানো
 - [x] কোনো risk-free change প্রমাণিত না হলে production অপরিবর্তিত রেখে Bengali decision report দেওয়া
+
+# সক্রিয়: পেস্ট বোতামের clipboard-read failure fix
+- [x] বর্তমান paste handler, browser permission context এবং clipboard-read failure path নির্ণয় করা
+- [x] শুধুমাত্র paste flow-তে safe fallback ও স্পষ্ট failure guidance যোগ করা
+- [x] clipboard, converter mapping, preview, DOCX/TXT এবং production build regression যাচাই করা
