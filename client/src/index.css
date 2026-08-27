@@ -781,6 +781,60 @@ button:active {
   box-shadow: 0 0 0 4px oklch(0.72 0.12 195 / 0.14), 0 16px 34px oklch(0.25 0.05 210 / 0.1);
 }
 
+.file-processing-status {
+  position: relative;
+  display: grid;
+  width: min(100%, 32rem);
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.7rem;
+  overflow: hidden;
+  border: 1px solid oklch(0.62 0.1 195 / 0.46);
+  border-radius: 0.85rem;
+  background: linear-gradient(135deg, oklch(0.94 0.045 195 / 0.72), oklch(0.98 0.01 205 / 0.92));
+  padding: 0.8rem 0.9rem;
+  box-shadow: 0 10px 24px oklch(0.25 0.05 210 / 0.08);
+}
+
+.file-processing-status__icon {
+  display: inline-flex;
+  height: 2.2rem;
+  width: 2.2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.file-processing-status__track {
+  grid-column: 1 / -1;
+  height: 0.3rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: oklch(0.7 0.06 200 / 0.24);
+}
+
+.file-processing-status__track > span {
+  display: block;
+  height: 100%;
+  width: 48%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, transparent, var(--primary), oklch(0.78 0.14 190), transparent);
+  animation: file-processing-sweep 1.25s ease-in-out infinite;
+}
+
+@keyframes file-processing-sweep {
+  from { transform: translateX(-125%); }
+  to { transform: translateX(235%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .file-processing-status__track > span {
+    animation: none;
+    transform: translateX(54%);
+  }
+}
+
 /* ডিজাইন দিক: টিল ডেস্ক — light-mode file conversion uses the same readable
    pale-teal panels and dark text hierarchy as the surrounding workspace. */
 html:not(.dark) .file-workspace {

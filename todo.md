@@ -1032,3 +1032,10 @@
 - [x] Client source-এ meaningful image alt text, decorative-image treatment ও mobile semantic signal audit করা
 - [x] Measured, low-risk loading/accessibility/SEO improvements বাস্তবায়ন করা
 - [x] Root/Vercel static build, tests, mobile/desktop visual check ও production recheck করা
+
+# সক্রিয়: DOCX loading experience ও performance report
+- [x] Current DOCX upload/process state এবং accessible status signalling audit করা
+- [x] Scoped Bengali loading animation ও progress feedback বাস্তবায়ন করা
+- [x] File conversion, mobile/desktop and reduced-motion regression পরীক্ষা করা
+- [ ] Production mobile/desktop Lighthouse or PageSpeed recheck করা
+- [ ] Detailed Bengali performance report তৈরি করা

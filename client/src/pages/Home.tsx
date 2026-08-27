@@ -130,6 +130,7 @@ export default function Home() {
   const fileInputRef = useFileRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [converting, setConverting] = useState(false);
+  const [fileProcessStage, setFileProcessStage] = useState<"convert" | "preview" | "repair" | null>(null);
   const [filePreviewText, setFilePreviewText] = useState<string>("");
   const [filePreviewInput, setFilePreviewInput] = useState<string>("");
   const [history, setHistory] = useState<ConversionHistoryItem[]>(() => {
@@ -558,6 +559,7 @@ export default function Home() {
       return;
     }
     setConverting(true);
+    setFileProcessStage("convert");
     try {
       const result = await convertFile(selectedFile, direction);
       if (fileResult) URL.revokeObjectURL(fileResult.url);
@@ -567,6 +569,7 @@ export default function Home() {
       // ফাইলের এক্সট্র্যাক্টেড টেক্সটকে সোজা convert() দিয়ে বিজয়ে নিয়ে আসা হয়
       // (যে নিয়মে রান-ফন্ট সিদ্ধান্ত হয়, সেই একই নিয়মে প্রিভিউ দেখে)।
       try {
+        setFileProcessStage("preview");
         const extracted = await extractTextFrom(selectedFile);
         const convertedFull = extracted ? convert(extracted, direction) : "";
         setFilePrintInput(extracted);
@@ -601,6 +604,7 @@ export default function Home() {
       toast.error("ফাইল রূপান্তরে ত্রুটি — ফাইলটি ঠিকমতো .docx/.txt কিনা যাচাই করুন");
     } finally {
       setConverting(false);
+      setFileProcessStage(null);
     }
   };
 
@@ -614,6 +618,7 @@ export default function Home() {
       return;
     }
     setConverting(true);
+    setFileProcessStage("repair");
     try {
       const result = await repairBijoyFontFile(selectedFile);
       if (fileResult) URL.revokeObjectURL(fileResult.url);
@@ -629,6 +634,7 @@ export default function Home() {
       toast.error("ফন্ট মেরামত করা যায়নি — ফাইলটি বৈধ .docx কিনা যাচাই করুন");
     } finally {
       setConverting(false);
+      setFileProcessStage(null);
     }
   };
 
@@ -1649,6 +1655,7 @@ export default function Home() {
                       ? "border-primary bg-primary text-primary-foreground shadow-sm hover:bg-primary/90"
                       : "border-transparent bg-transparent text-muted-foreground shadow-none hover:bg-muted"
                   }
+                  disabled={converting}
                   onClick={() => setDirection("u2b")}>
                   অভ্র → বিজয়
                 </Button>
@@ -1660,6 +1667,7 @@ export default function Home() {
                       ? "border-primary bg-primary text-primary-foreground shadow-sm hover:bg-primary/90"
                       : "border-transparent bg-transparent text-muted-foreground shadow-none hover:bg-muted"
                   }
+                  disabled={converting}
                   onClick={() => setDirection("b2u")}>
                   বিজয় → অভ্র
                 </Button>
@@ -1671,6 +1679,7 @@ export default function Home() {
                 className={
                   "file-dropzone flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed px-6 py-10 text-center transition-colors " +
                   (isFileDragActive ? "file-dropzone--active " : "") +
+                  (converting ? "pointer-events-none opacity-70 " : "") +
                   (selectedFile
                     ? "border-primary/60 bg-primary/5"
                     : "border-border bg-muted/40 hover:border-primary/40 hover:bg-muted/70")
@@ -1716,6 +1725,7 @@ export default function Home() {
                     variant="outline"
                     size="sm"
                     className="border-destructive/25 text-destructive hover:bg-destructive/10"
+                    disabled={converting}
                     onClick={clearSelectedFile}>
                     <Trash2 className="mr-1.5 h-3.5 w-3.5" />
                     ফাইল সরান
@@ -1728,11 +1738,12 @@ export default function Home() {
                 type="file"
                 accept=".docx,.txt,text/plain,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 className="sr-only"
+                disabled={converting}
                 onChange={onFileSelected}
               />
 
               {/* রূপান্তর + ডাউনলোড */}
-              <div className="mt-5 flex flex-col items-center gap-3">
+              <div className="mt-5 flex flex-col items-center gap-3" aria-busy={converting}>
                 <Button
                   size="lg"
                   disabled={!selectedFile || converting}
@@ -1750,6 +1761,32 @@ export default function Home() {
                     </>
                   )}
                 </Button>
+                {converting && (
+                  <div
+                    className="file-processing-status"
+                    role="status"
+                    aria-live="polite"
+                    aria-atomic="true">
+                    <span className="file-processing-status__icon" aria-hidden="true">
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    </span>
+                    <span className="min-w-0 text-left">
+                      <span className="block text-sm font-bold text-foreground">
+                        {fileProcessStage === "repair"
+                          ? "বিজয় ফন্ট mapping মেরামত হচ্ছে"
+                          : fileProcessStage === "preview"
+                            ? "রূপান্তরিত নথির নমুনা প্রস্তুত হচ্ছে"
+                            : "নথি রূপান্তর হচ্ছে"}
+                      </span>
+                      <span className="mt-0.5 block text-xs leading-relaxed text-muted-foreground">
+                        ফাইলের আকার অনুযায়ী কিছুক্ষণ লাগতে পারে। এই সময় পেজ বন্ধ করবেন না।
+                      </span>
+                    </span>
+                    <span className="file-processing-status__track" aria-hidden="true">
+                      <span />
+                    </span>
+                  </div>
+                )}
                 <Button
                   type="button"
                   variant="outline"

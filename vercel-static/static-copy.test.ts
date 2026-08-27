@@ -54,6 +54,18 @@ describe("Vercel static copy boundaries", () => {
     expect(converter).not.toContain('import JSZip from "jszip"');
   });
 
+  it("keeps DOCX processing feedback accessible and respectful of reduced motion", () => {
+    const home = fs.readFileSync(path.join(repositoryRoot, "client/src/pages/Home.tsx"), "utf8");
+    const stylesheet = fs.readFileSync(path.join(repositoryRoot, "client/src/index.css"), "utf8");
+
+    expect(home).toContain('className="file-processing-status"');
+    expect(home).toContain('aria-live="polite"');
+    expect(home).toContain("setFileProcessStage(\"preview\")");
+    expect(stylesheet).toContain(".file-processing-status__track");
+    expect(stylesheet).toContain("@keyframes file-processing-sweep");
+    expect(stylesheet).toContain("@media (prefers-reduced-motion: reduce)");
+  });
+
   it("keeps the primary conversion routes clearly discoverable in the current sitemap", () => {
     const sitemap = fs.readFileSync(path.join(repositoryRoot, "client/public/sitemap.xml"), "utf8");
 
