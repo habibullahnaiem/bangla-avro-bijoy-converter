@@ -1689,6 +1689,9 @@ export default function Home() {
                   disabled={converting}
                   onClick={() => setDirection("b2u")}>
                   বিজয় → অভ্র
+                  <span className="ml-1.5 rounded-full bg-amber-400/20 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-600">
+                    বেটা
+                  </span>
                 </Button>
               </div>
 
