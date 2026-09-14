@@ -28,6 +28,9 @@ function Router() {
       <Route path={"/docx-txt-bijoy-converter"}>
         <SeoGuidePage slug="docx-txt-bijoy-converter" />
       </Route>
+      <Route path={"/sutonnymj-to-nikosh"}>
+        <SeoGuidePage slug="sutonnymj-to-nikosh" />
+      </Route>
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
