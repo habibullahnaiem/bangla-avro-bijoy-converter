@@ -2033,7 +2033,7 @@ export default function Home() {
             Word-এ ব্যবহার করার আগে আউটপুট দেখে নেওয়া এবং সঠিক ফন্ট নির্বাচন করা ভালো ফল দেয়।
           </p>
 
-          <div className="mt-5 grid gap-4 md:grid-cols-3">
+          <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <article className="rounded-xl border bg-muted/30 p-4">
               <h3 className="font-bold text-foreground">ইউনিকোড টু বিজয় (অভ্র থেকে বিজয়)</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
@@ -2061,6 +2061,15 @@ export default function Home() {
                 দিক ঠিক করুন এবং রূপান্তরিত file download করুন। এই প্রক্রিয়াটি আপনার ব্রাউজারেই সম্পন্ন হয়।
               </p>
               <a href="/docx-txt-bijoy-converter" className="mt-3 inline-flex items-center gap-1 text-sm font-bold text-primary hover:underline">
+                বিস্তারিত গাইড <ArrowRightLeft className="h-3.5 w-3.5" aria-hidden="true" />
+              </a>
+            </article>
+            <article className="rounded-xl border bg-muted/30 p-4">
+              <h3 className="font-bold text-foreground">SutonnyMJ থেকে Nikosh</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                পুরোনো <strong className="text-foreground">SutonnyMJ</strong>-ভিত্তিক বিজয় লেখা <strong className="text-foreground">বিজয় → অভ্র</strong> দিয়ে Unicode-এ নিন, তারপর সরকারি-মানের Nikosh ফন্টে ব্যবহার করুন।
+              </p>
+              <a href="/sutonnymj-to-nikosh" className="mt-3 inline-flex items-center gap-1 text-sm font-bold text-primary hover:underline">
                 বিস্তারিত গাইড <ArrowRightLeft className="h-3.5 w-3.5" aria-hidden="true" />
               </a>
             </article>
@@ -2201,6 +2210,8 @@ export default function Home() {
             <a href="/contact" className="underline-offset-4 transition hover:text-primary-foreground hover:underline">যোগাযোগ</a>
             <span aria-hidden="true" className="opacity-50">•</span>
             <a href="/thesis-bijoy-checklist" className="underline-offset-4 transition hover:text-primary-foreground hover:underline">থিসিস checklist</a>
+            <span aria-hidden="true" className="opacity-50">•</span>
+            <a href="/sutonnymj-to-nikosh" className="underline-offset-4 transition hover:text-primary-foreground hover:underline">SutonnyMJ থেকে Nikosh</a>
           </nav>
           <p className="text-xs opacity-75">
             © {currentCopyrightYear} মো. হাবিবুল্লাহ নাঈম • সর্বস্বত্ব সংরক্ষিত
