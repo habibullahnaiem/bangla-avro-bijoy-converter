@@ -164,6 +164,7 @@ export default function Home() {
   const [isStandalone, setIsStandalone] = useState(false);
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
+  const [historyOpen, setHistoryOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -1146,46 +1147,22 @@ export default function Home() {
       {showInstallPrompt && !isStandalone ? (
         <aside
           className="pwa-install-prompt"
-          role="dialog"
-          aria-modal="false"
-          aria-labelledby="pwa-install-prompt-title">
-          <div className="pwa-install-prompt__mark" aria-hidden="true">
-            <Download className="h-5 w-5" />
-          </div>
-          <div className="pwa-install-prompt__body">
-            <p className="pwa-install-prompt__eyebrow">অভ্রজয় অফলাইন অ্যাপ</p>
-            <h2 id="pwa-install-prompt-title" className="pwa-install-prompt__title">
-              একবার রেখে দিন, পরে অফলাইনেও ব্যবহার করুন
-            </h2>
-            <p className="pwa-install-prompt__copy">
-              {installPrompt
-                ? "ফোন বা কম্পিউটারের Home Screen-এ অভ্রজয় যোগ করলে দ্রুত খুলতে পারবেন। ভবিষ্যতে ব্যবহারের জন্য বুকমার্ক করে রাখুন।"
-                : "ব্রাউজারের Install icon বা menu থেকে Install অভ্রজয় নির্বাচন করুন। ভবিষ্যতে ব্যবহারের জন্য বুকমার্ক করে রাখুন।"}
-            </p>
-            {!installPrompt ? (
-              <p className="pwa-install-prompt__hint">
-                Chrome/Edge: <strong>Ctrl/Cmd + D</strong> · iPhone/iPad: Share → Add to Home Screen
-              </p>
-            ) : null}
-            <div className="pwa-install-prompt__actions">
-              {installPrompt ? (
-                <Button
-                  size="sm"
-                  className="pwa-install-prompt__install"
-                  onClick={installApp}>
-                  <Download className="mr-1.5 h-4 w-4" />
-                  অ্যাপ ইনস্টল করুন
-                </Button>
-              ) : null}
-              <Button
-                variant="ghost"
-                size="sm"
-                className="pwa-install-prompt__later"
-                onClick={dismissInstallPrompt}>
-                {installPrompt ? "এখন নয়" : "বুঝেছি"}
-              </Button>
-            </div>
-          </div>
+          role="status"
+          aria-label="অ্যাপ ইনস্টল বার্তা">
+          <span className="pwa-install-prompt__mark" aria-hidden="true">
+            <Download className="h-4 w-4" />
+          </span>
+          <p className="pwa-install-prompt__text">
+            অফলাইনে ব্যবহার করতে অভ্রজয় হোম স্ক্রিনে যোগ করুন
+          </p>
+          {installPrompt ? (
+            <Button
+              size="sm"
+              className="pwa-install-prompt__install"
+              onClick={installApp}>
+              ইনস্টল করুন
+            </Button>
+          ) : null}
           <button
             type="button"
             className="pwa-install-prompt__close"
@@ -1338,11 +1315,92 @@ export default function Home() {
           <div className="grid gap-0 md:grid-cols-2">
             <div className="editor-pane editor-pane--input flex flex-col border-b md:border-b-0 md:border-r">
               <div className="editor-pane__header flex items-center justify-between border-b border-border/70 bg-muted/50 px-4 py-2.5">
-                <span className="text-sm font-semibold text-foreground">
-                  {direction === "u2b"
-                    ? "অভ্র টেক্সট (ইউনিকোড)"
-                    : "বিজয় টেক্সট (সুতন্নী এমজে)"}
-                </span>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-sm font-semibold text-foreground">
+                    {direction === "u2b"
+                      ? "অভ্র টেক্সট (ইউনিকোড)"
+                      : "বিজয় টেক্সট (সুতন্নী এমজে)"}
+                  </span>
+                  <div className="relative">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 gap-1 px-2 text-[11px] text-muted-foreground hover:bg-accent hover:text-foreground"
+                      onClick={() => setHistoryOpen((v) => !v)}
+                      aria-expanded={historyOpen}
+                      aria-haspopup="menu"
+                      aria-label="সাম্প্রতিক রূপান্তরের ইতিহাস দেখুন">
+                      <HistoryIcon className="h-3.5 w-3.5" aria-hidden="true" />
+                      ইতিহাস
+                      {history.length > 0 ? (
+                        <span className="rounded-full bg-primary/15 px-1.5 py-px text-[10px] font-bold text-primary">
+                          {history.length}
+                        </span>
+                      ) : null}
+                    </Button>
+                    {historyOpen ? (
+                      <>
+                        <button
+                          type="button"
+                          aria-label="ইতিহাস মেনু বন্ধ করুন"
+                          className="fixed inset-0 z-40 cursor-default border-0 bg-transparent p-0"
+                          onClick={() => setHistoryOpen(false)}
+                        />
+                        <div
+                          role="menu"
+                          aria-label="সাম্প্রতিক রূপান্তর"
+                          className="absolute left-0 top-full z-50 mt-1.5 w-72 overflow-hidden rounded-xl border bg-card shadow-xl">
+                          <p className="border-b border-border/60 bg-muted/50 px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+                            সাম্প্রতিক রূপান্তর
+                          </p>
+                          {history.length === 0 ? (
+                            <p className="px-3 py-4 text-center text-xs text-muted-foreground">
+                              এখনো কোনো ইতিহাস নেই — একটি রূপান্তর করলেই
+                              এখানে দেখা যাবে।
+                            </p>
+                          ) : (
+                            <ul className="max-h-64 overflow-y-auto py-1">
+                              {history.map((item) => (
+                                <li key={item.id}>
+                                  <button
+                                    type="button"
+                                    role="menuitem"
+                                    className="flex w-full items-center gap-2.5 px-3 py-2 text-left transition-colors hover:bg-accent"
+                                    onClick={() => {
+                                      reuseHistoryItem(item);
+                                      setHistoryOpen(false);
+                                    }}>
+                                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                                      <ArrowRightLeft
+                                        className="h-3.5 w-3.5"
+                                        aria-hidden="true"
+                                      />
+                                    </span>
+                                    <span className="min-w-0 flex-1">
+                                      <span className="flex items-center gap-2">
+                                        <span className="text-xs font-bold text-foreground">
+                                          {item.direction === "u2b"
+                                            ? "অভ্র → বিজয়"
+                                            : "বিজয় → অভ্র"}
+                                        </span>
+                                        <span className="text-[10px] text-muted-foreground">
+                                          {formatHistoryTime(item.createdAt)}
+                                        </span>
+                                      </span>
+                                      <span className="mt-0.5 block truncate text-[11px] text-muted-foreground">
+                                        {compactHistoryText(item.input, 60)}
+                                      </span>
+                                    </span>
+                                  </button>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+                      </>
+                    ) : null}
+                  </div>
+                </div>
                 <div className="flex shrink-0 items-center gap-1.5 text-[11px] text-muted-foreground" aria-live="polite">
                   <span>{charCount} অক্ষর</span>
                   <span className="hidden text-border sm:inline">·</span>
@@ -1490,6 +1548,25 @@ export default function Home() {
                 <span className="text-xs text-muted-foreground">
                   এক ক্লিকে কপি করুন • Word-এ SutonnyMJ ফন্টে পেস্ট করুন
                 </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  asChild
+                  className="border-primary/30 bg-card text-primary hover:bg-accent"
+                  title="SutonnyMJ ফন্ট ডাউনলোড করে কম্পিউটারে ইনস্টল করুন">
+                  <a
+                    href="/manus-storage/SutonnyMJ_danDi_v2_5618afeb.ttf"
+                    download="SutonnyMJ.ttf">
+                    <Download className="mr-1.5 h-3.5 w-3.5" />
+                    SutonnyMJ ফন্ট ডাউনলোড করুন
+                  </a>
+                </Button>
+                {direction === "u2b" ? (
+                  <span className="text-xs text-muted-foreground">
+                    প্রিভিউ: বাংলা {bnPx}px SutonnyMJ + English {latPx}px Times
+                    New Roman
+                  </span>
+                ) : null}
               </div>
             </div>
           </div>
@@ -1814,13 +1891,19 @@ export default function Home() {
                   variant="outline"
                   disabled={!selectedFile || converting || !/\.docx$/i.test(selectedFile.name)}
                   className="border-primary/35 bg-card text-primary hover:bg-primary/5 disabled:opacity-50"
-                  onClick={runBijoyFontRepair}>
+                  onClick={runBijoyFontRepair}
+                  aria-describedby="file-repair-note">
                   <RotateCcw className="mr-2 h-4 w-4" />
                   ক্ষতিগ্রস্ত বিজয় ফন্ট মেরামত
                 </Button>
-                <p className="file-repair-note max-w-md text-center text-xs leading-relaxed text-muted-foreground">
-                  শুধু Word-এ Times New Roman হয়ে হিজিবিজি দেখা পুরোনো বিজয় DOCX-এর জন্য।
-                  এটি লেখা বদলায় না; উচ্চ-নিশ্চয়তার বিজয় run-এ SutonnyMJ font mapping ফিরিয়ে দেয়।
+                <p
+                  id="file-repair-note"
+                  className="file-repair-note max-w-md text-center text-xs leading-relaxed text-muted-foreground">
+                  <strong className="font-semibold text-foreground">
+                    টেক্সট হিজিবিজি বা এলোমেলো দেখালে এখানে মেরামত করুন।
+                  </strong>{" "}
+                  শুধু পুরোনো বিজয় DOCX-এর জন্য — লেখা বদলায় না, শুধু
+                  SutonnyMJ font mapping ফিরিয়ে দেয়।
                 </p>
                 <div className="flex flex-wrap items-center justify-center gap-2">
                   {filePrintText && (
