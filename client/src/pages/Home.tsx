@@ -15,6 +15,7 @@ import {
   ClipboardCopy,
   ClipboardPaste,
   Eraser,
+  Facebook,
   Sun,
   Check,
   ArrowDownUp,
@@ -2412,6 +2413,15 @@ export default function Home() {
             <span aria-hidden="true" className="opacity-50">•</span>
             <a href="/sutonnymj-to-nikosh" className="underline-offset-4 transition hover:text-primary-foreground hover:underline">SutonnyMJ থেকে Nikosh</a>
           </nav>
+          <a
+            href="https://www.facebook.com/1371542212705128"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="ফেসবুকে অভ্রজয় পেজ ফলো করুন"
+            className="mt-1 inline-flex items-center gap-2 rounded-full bg-primary-foreground/15 px-4 py-1.5 text-xs font-bold transition hover:bg-primary-foreground/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
+            <Facebook className="h-4 w-4" aria-hidden="true" />
+            ফেসবুকে ফলো করুন
+          </a>
           <p className="text-xs opacity-75">
             © {currentCopyrightYear} মো. হাবিবুল্লাহ নাঈম • সর্বস্বত্ব সংরক্ষিত
           </p>
