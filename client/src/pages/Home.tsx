@@ -112,6 +112,95 @@ const formatFileSize = (bytes: number) =>
     ? `${(bytes / 1024).toFixed(1)} KB`
     : `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 
+const HOME_SEO = {
+  title: "অভ্রজয় (AvroJoy) | ইউনিকোড টু বিজয় ও অভ্র টু বিজয় কনভার্টার",
+  description:
+    "অভ্রজয় (AvroJoy) হলো অভ্র/Unicode বাংলা ও SutonnyMJ-ভিত্তিক বিজয় লেখার ব্রাউজার-ভিত্তিক কনভার্টার। টেক্সট, DOCX ও TXT রূপান্তরের পরে যুক্তবর্ণ, কারচিহ্ন, যতিচিহ্ন এবং বাংলা–English মিশ্র লেখা প্রিভিউতে দেখে নিন। সম্পূর্ণ ফ্রি।",
+  url: "https://avrojoy.vercel.app/",
+};
+
+function HomeMetadata() {
+  useEffect(() => {
+    document.title = HOME_SEO.title;
+
+    const setMeta = (selector: string, attr: "name" | "property", value: string) => {
+      const el = document.querySelector<HTMLMetaElement>(selector);
+      if (el) el.content = value;
+      else {
+        const meta = document.createElement("meta");
+        meta.setAttribute(attr, selector.match(/\[.*?=['"](.*?)['"]/)?.[1] ?? "");
+        meta.content = value;
+        document.head.appendChild(meta);
+      }
+    };
+    setMeta('meta[name="description"]', "name", HOME_SEO.description);
+    setMeta('meta[property="og:title"]', "property", HOME_SEO.title);
+    setMeta('meta[property="og:description"]', "property", HOME_SEO.description);
+    setMeta('meta[property="og:url"]', "property", HOME_SEO.url);
+    setMeta('meta[property="og:type"]', "property", "website");
+
+    const structuredData = document.createElement("script");
+    structuredData.type = "application/ld+json";
+    structuredData.id = "avrojoy-home-structured-data";
+    structuredData.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          name: "অভ্রজয় (AvroJoy)",
+          alternateName: "AvroJoy",
+          url: HOME_SEO.url,
+          description: HOME_SEO.description,
+          inLanguage: "bn-BD",
+          applicationCategory: "UtilitiesApplication",
+          operatingSystem: "Web",
+          browserRequirements: "Requires JavaScript",
+          offers: { "@type": "Offer", price: "0", priceCurrency: "BDT" },
+          author: { "@type": "Person", name: "মো. হাবিবুল্লাহ নাঈম" },
+          speakable: {
+            "@type": "SpeakableSpecification",
+            cssSelector: [".story-page__lead", "main p"],
+          },
+        },
+        {
+          "@type": "FAQPage",
+          mainEntity: [
+            {
+              "@type": "Question",
+              name: "অভ্র থেকে বিজয় কীভাবে রূপান্তর করবেন?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "টেক্সট কনভার্টার থেকে অভ্র → বিজয় নির্বাচন করে ইউনিকোড বাংলা লিখুন বা পেস্ট করুন। লাইভ রূপান্তর চালু থাকলে আউটপুট সঙ্গে সঙ্গে দেখা যাবে; প্রয়োজনে রূপান্তর করুন চাপুন এবং ফলাফল কপি করুন।",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "বিজয় থেকে ইউনিকোড কীভাবে করবেন?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "বিজয় → অভ্র নির্বাচন করে SutonnyMJ-ভিত্তিক বিজয় টেক্সট ইনপুটে দিন। অভ্রজয় সেটি ইউনিকোড বাংলায় রূপান্তর করে।",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "DOCX বা TXT ফাইল রূপান্তর করা যায় কি?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "হ্যাঁ। ফাইল কনভার্টার ট্যাব থেকে DOCX বা TXT ফাইল নির্বাচন করে অভ্র → বিজয় অথবা বিজয় → অভ্র দিক বেছে রূপান্তর করুন। ফাইল প্রক্রিয়াকরণ আপনার ব্রাউজারেই হয়।",
+              },
+            },
+          ],
+        },
+      ],
+    });
+    document.head.appendChild(structuredData);
+
+    return () => structuredData.remove();
+  }, []);
+
+  return null;
+}
+
 export default function Home() {
   const { theme, toggleTheme } = useTheme();
   const currentCopyrightYear = new Intl.DateTimeFormat("bn-BD", {
@@ -1037,6 +1126,7 @@ export default function Home() {
 
   return (
     <div className="app-shell min-h-screen flex flex-col bg-background">
+      <HomeMetadata />
       {/* হেডার — গভীর টিল, low-opacity keyboard ও ডানদিকে ঘন Bengali glyph cluster */}
       <header className="site-header relative overflow-hidden bg-primary text-primary-foreground">
         {/* ডিজাইন দিক: টিল ডেস্ক — banner-এর alphabet/keyboard visual language header-এও চলবে */}
