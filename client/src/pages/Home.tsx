@@ -31,6 +31,7 @@ import {
   HeartHandshake,
   MessageCircle,
   Share2,
+  Keyboard,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -2294,8 +2295,8 @@ export default function Home() {
 
         {/* অভ্রজয় সম্পর্কে ও স্বেচ্ছাসেবী সহায়তা — page-end cards immediately before the footer. */}
         <section
-          className="support-section mt-8 grid gap-4 lg:grid-cols-[1.15fr_0.85fr]"
-          aria-label="অভ্রজয় সম্পর্কে ও সমর্থন">
+          className="support-section mt-8 grid gap-4 lg:grid-cols-3"
+          aria-label="অভ্রজয় সম্পর্কে, টাইপিং শিখুন ও সমর্থন">
           <article className="relative overflow-hidden rounded-2xl border border-primary/25 bg-card/90 p-5 shadow-sm sm:p-6">
             <div className="absolute right-0 top-0 h-24 w-24 -translate-y-8 translate-x-8 rounded-full bg-primary/10" aria-hidden="true" />
             <div className="relative flex items-start gap-3">
@@ -2354,6 +2355,30 @@ export default function Home() {
               className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-primary/30 bg-card px-3 py-2 text-sm font-bold text-primary transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
               <MessageCircle className="h-4 w-4" aria-hidden="true" />
               WhatsApp-এ যোগাযোগ করুন
+            </a>
+          </article>
+
+          <article className="relative overflow-hidden rounded-2xl border border-primary/25 bg-card/90 p-5 shadow-sm sm:p-6">
+            <div className="absolute right-0 top-0 h-24 w-24 -translate-y-8 translate-x-8 rounded-full bg-primary/10" aria-hidden="true" />
+            <div className="relative flex items-start gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <Keyboard className="h-5 w-5" aria-hidden="true" />
+              </span>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary">সহযোগী টুল</p>
+                <h2 className="mt-1 text-xl font-extrabold tracking-tight text-foreground">বাংলা টাইপিংয়ে দক্ষ হোন।</h2>
+              </div>
+            </div>
+            <p className="relative mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+              বিজয় ও অভ্র লেআউটে ধাপে ধাপে বাংলা টাইপিং শিখুন — ১০২টি পাঠ, অগ্রগতি ট্র্যাকিং ও সার্টিফিকেট। সম্পূর্ণ ফ্রি।
+            </p>
+            <a
+              href="https://typepath.lovable.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="relative mt-4 inline-flex items-center gap-2 rounded-xl border border-primary/30 bg-primary/5 px-3.5 py-2 text-sm font-bold text-primary transition hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              TypePath-এ টাইপিং শিখুন
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </a>
           </article>
         </section>
