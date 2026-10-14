@@ -1636,21 +1636,40 @@ export default function Home() {
                   Copy to Clipboard
                 </Button>
                 <span className="text-xs text-muted-foreground">
-                  এক ক্লিকে কপি করুন • Word-এ SutonnyMJ ফন্টে পেস্ট করুন
+                  {direction === "u2b"
+                    ? "এক ক্লিকে কপি করুন • Word-এ SutonnyMJ ফন্টে পেস্ট করুন"
+                    : "এক ক্লিকে কপি করুন • Word-এ Hind Siliguri বা যেকোনো Unicode বাংলা ফন্টে পেস্ট করুন"}
                 </span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  asChild
-                  className="border-primary/30 bg-card text-primary hover:bg-accent"
-                  title="SutonnyMJ ফন্ট ডাউনলোড করে কম্পিউটারে ইনস্টল করুন">
-                  <a
-                    href="/manus-storage/SutonnyMJ_danDi_v2_5618afeb.ttf"
-                    download="SutonnyMJ.ttf">
-                    <Download className="mr-1.5 h-3.5 w-3.5" />
-                    SutonnyMJ ফন্ট ডাউনলোড করুন
-                  </a>
-                </Button>
+                {direction === "u2b" ? (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    asChild
+                    className="border-primary/30 bg-card text-primary hover:bg-accent"
+                    title="SutonnyMJ ফন্ট ডাউনলোড করে কম্পিউটারে ইনস্টল করুন">
+                    <a
+                      href="/manus-storage/SutonnyMJ_danDi_v2_5618afeb.ttf"
+                      download="SutonnyMJ.ttf">
+                      <Download className="mr-1.5 h-3.5 w-3.5" />
+                      SutonnyMJ ফন্ট ডাউনলোড করুন
+                    </a>
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    asChild
+                    className="border-primary/30 bg-card text-primary hover:bg-accent"
+                    title="Hind Siliguri Unicode ফন্ট ডাউনলোড করুন (Google Fonts)">
+                    <a
+                      href="https://fonts.google.com/specimen/Hind+Siliguri"
+                      target="_blank"
+                      rel="noopener noreferrer">
+                      <Download className="mr-1.5 h-3.5 w-3.5" />
+                      Hind Siliguri ফন্ট ডাউনলোড করুন
+                    </a>
+                  </Button>
+                )}
                 {direction === "u2b" ? (
                   <span className="text-xs text-muted-foreground">
                     প্রিভিউ: বাংলা {bnPx}px SutonnyMJ + English {latPx}px Times
