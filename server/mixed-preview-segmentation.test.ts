@@ -36,6 +36,6 @@ describe("mixed Bangla-English Bijoy preview segmentation", () => {
     expect(serviceWorker).toContain('new Request(url, { cache: "reload" })');
     expect(serviceWorker).not.toContain('mode: "no-cors"');
     expect(serviceWorker).toContain("await cache.put(request, response)");
-    expect(homepage).toContain('as="font" href="/manus-storage/SutonnyMJ_danDi_v2_5618afeb.ttf"');
+    expect(homepage).toContain('as="font" href="/fonts/SutonnyMJ_danDi_v2_5618afeb.ttf"');
   });
 });

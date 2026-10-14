@@ -11,7 +11,7 @@
 /* ডিজাইন দিক: টিল ডেস্ক — ইম্বেডেড SutonnyMJ ফন্ট (প্রিভিউ সঠিক গ্লিফের জন্ে) */
 @font-face {
   font-family: "SutonnyMJ";
-  src: url("/manus-storage/SutonnyMJ_danDi_v2_5618afeb.ttf") format("truetype");
+  src: url("/fonts/SutonnyMJ_danDi_v2_5618afeb.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: block;
@@ -24,7 +24,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/manus-storage/hind-siliguri-400_9d724dcd.ttf") format("truetype");
+  src: url("/fonts/hind-siliguri-400_9d724dcd.ttf") format("truetype");
 }
 
 @font-face {
@@ -32,7 +32,7 @@
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url("/manus-storage/hind-siliguri-500_ba0a720c.ttf") format("truetype");
+  src: url("/fonts/hind-siliguri-500_ba0a720c.ttf") format("truetype");
 }
 
 @font-face {
@@ -40,7 +40,7 @@
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url("/manus-storage/hind-siliguri-600_b9cb6e1f.ttf") format("truetype");
+  src: url("/fonts/hind-siliguri-600_b9cb6e1f.ttf") format("truetype");
 }
 
 @font-face {
@@ -48,7 +48,7 @@
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url("/manus-storage/hind-siliguri-700_6c90ad0b.ttf") format("truetype");
+  src: url("/fonts/hind-siliguri-700_6c90ad0b.ttf") format("truetype");
 }
 
 @font-face {
@@ -56,7 +56,7 @@
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url("/manus-storage/noto-serif-bengali-700_c2fbc861.ttf") format("truetype");
+  src: url("/fonts/noto-serif-bengali-700_c2fbc861.ttf") format("truetype");
 }
 
 @font-face {
@@ -64,7 +64,7 @@
   font-style: normal;
   font-weight: 900;
   font-display: swap;
-  src: url("/manus-storage/noto-serif-bengali-900_1c3eac55.ttf") format("truetype");
+  src: url("/fonts/noto-serif-bengali-900_1c3eac55.ttf") format("truetype");
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -321,7 +321,7 @@ button:active {
   min-height: 100dvh;
   background:
     linear-gradient(180deg, oklch(0.99 0.008 205 / 0.5), oklch(0.972 0.006 220 / 0.8)),
-    url("/manus-storage/bangla-converter-keyboard-background_6048064b.webp") center top / cover fixed,
+    url("/images/bangla-converter-keyboard-background_6048064b.webp") center top / cover fixed,
     radial-gradient(circle at 8% 4%, oklch(0.99 0.012 190 / 0.9), transparent 27rem),
     radial-gradient(circle at 92% 20%, oklch(0.95 0.022 205 / 0.72), transparent 31rem),
     var(--background);
@@ -370,7 +370,7 @@ button:active {
   border-radius: 1.5rem;
   background:
     linear-gradient(90deg, oklch(0.99 0.008 205 / 0.98) 0%, oklch(0.99 0.008 205 / 0.9) 47%, oklch(0.99 0.008 205 / 0.28) 78%, transparent 100%),
-    url("/manus-storage/avrojoy-hero-shahid-minar-banner_32e8d869.png") right center / cover no-repeat;
+    url("/images/avrojoy-hero-shahid-minar-banner_32e8d869.png") right center / cover no-repeat;
   box-shadow: 0 18px 42px oklch(0.25 0.04 205 / 0.08);
 }
 
@@ -1112,7 +1112,7 @@ html:not(.dark) .file-workspace button:disabled {
   .app-shell {
     background:
       linear-gradient(180deg, oklch(0.95 0.012 220 / 0.9), oklch(0.925 0.018 215 / 0.86)),
-      url("/manus-storage/bangla-converter-keyboard-background_6048064b.webp") center top / 860px auto repeat,
+      url("/images/bangla-converter-keyboard-background_6048064b.webp") center top / 860px auto repeat,
       var(--background);
   }
 
@@ -1148,7 +1148,7 @@ html:not(.dark) .file-workspace button:disabled {
     border-radius: 1.1rem;
     background:
       linear-gradient(100deg, oklch(1 0 0 / 0.98) 0%, oklch(0.985 0.012 195 / 0.96) 56%, oklch(0.94 0.026 190 / 0.84) 100%),
-      url("/manus-storage/bangla-converter-hero-banner_6908bd7b.png") right 1.2rem center / 34% auto no-repeat;
+      url("/images/bangla-converter-hero-banner_6908bd7b.png") right 1.2rem center / 34% auto no-repeat;
     box-shadow: 0 14px 30px oklch(0.25 0.04 205 / 0.08);
   }
 
@@ -1287,7 +1287,7 @@ html:not(.dark) .file-workspace button:disabled {
   .app-shell {
     background:
       linear-gradient(180deg, oklch(0.95 0.012 220 / 0.9), oklch(0.925 0.018 215 / 0.86)),
-      url("/manus-storage/bangla-converter-keyboard-background_6048064b.webp") center top / 760px auto repeat,
+      url("/images/bangla-converter-keyboard-background_6048064b.webp") center top / 760px auto repeat,
       var(--background);
   }
 
@@ -1317,13 +1317,13 @@ html:not(.dark) .file-workspace button:disabled {
        keyboard texture remain present without sacrificing dark text contrast. */
     background:
       linear-gradient(100deg, oklch(0.95 0.018 195 / 0.96) 0%, oklch(0.92 0.035 195 / 0.9) 54%, oklch(0.86 0.07 190 / 0.72) 100%),
-      url("/manus-storage/bangla-converter-keyboard-background_6048064b.webp") right center / 64% auto repeat;
+      url("/images/bangla-converter-keyboard-background_6048064b.webp") right center / 64% auto repeat;
   }
 
   .glyph-strip {
     background:
       linear-gradient(90deg, oklch(0.98 0.02 195 / 0.94), oklch(1 0 0 / 0.9) 38%, oklch(0.96 0.03 205 / 0.88)),
-      url("/manus-storage/bangla-converter-keyboard-background_6048064b.webp") right center / 220px auto repeat;
+      url("/images/bangla-converter-keyboard-background_6048064b.webp") right center / 220px auto repeat;
   }
 }
 
@@ -1331,7 +1331,7 @@ html:not(.dark) .file-workspace button:disabled {
   .hero-panel {
     background:
       linear-gradient(135deg, oklch(0.95 0.018 195 / 0.96), oklch(0.91 0.035 195 / 0.86)),
-      url("/manus-storage/bangla-converter-keyboard-background_6048064b.webp") center / 170% auto repeat;
+      url("/images/bangla-converter-keyboard-background_6048064b.webp") center / 170% auto repeat;
   }
 }
 
@@ -1342,8 +1342,8 @@ html:not(.dark) .file-workspace button:disabled {
   .site-header {
     background:
       linear-gradient(90deg, oklch(0.42 0.09 200 / 0.98) 0%, oklch(0.42 0.09 200 / 0.94) 48%, oklch(0.39 0.09 195 / 0.78) 100%),
-      url("/manus-storage/avrojoy-bengali-glyph-ribbon_f006d975.png") right center / cover no-repeat,
-      url("/manus-storage/bangla-converter-keyboard-background_6048064b.webp") center top / 760px auto repeat;
+      url("/images/avrojoy-bengali-glyph-ribbon_f006d975.png") right center / cover no-repeat,
+      url("/images/bangla-converter-keyboard-background_6048064b.webp") center top / 760px auto repeat;
   }
 
   .site-header__inner,
@@ -1386,8 +1386,8 @@ html:not(.dark) .file-workspace button:disabled {
     min-height: clamp(13.5rem, 23vw, 18rem);
     background:
       linear-gradient(90deg, oklch(0.99 0.008 205 / 0.99) 0%, oklch(0.99 0.012 195 / 0.96) 42%, oklch(0.97 0.03 190 / 0.55) 73%, transparent 100%),
-      url("/manus-storage/avrojoy-hero-v2-banner_32621bd4.webp") right center / cover no-repeat,
-      url("/manus-storage/bangla-converter-keyboard-background_6048064b.webp") right center / 64% auto repeat;
+      url("/images/avrojoy-hero-v2-banner_32621bd4.webp") right center / cover no-repeat,
+      url("/images/bangla-converter-keyboard-background_6048064b.webp") right center / 64% auto repeat;
   }
 
   .hero-panel__copy,
@@ -1399,8 +1399,8 @@ html:not(.dark) .file-workspace button:disabled {
   .site-footer {
     background:
       linear-gradient(90deg, oklch(0.42 0.09 200 / 0.98) 0%, oklch(0.42 0.09 200 / 0.93) 48%, oklch(0.38 0.09 195 / 0.78) 100%),
-      url("/manus-storage/avrojoy-bengali-glyph-ribbon_f006d975.png") right center / cover no-repeat,
-      url("/manus-storage/bangla-converter-keyboard-background_6048064b.webp") center / 760px auto repeat;
+      url("/images/avrojoy-bengali-glyph-ribbon_f006d975.png") right center / cover no-repeat,
+      url("/images/bangla-converter-keyboard-background_6048064b.webp") center / 760px auto repeat;
   }
 
   .site-footer__motif {
@@ -1454,8 +1454,8 @@ html:not(.dark) .file-workspace button:disabled {
     padding: 3.35rem 1rem 1.15rem;
     background:
       linear-gradient(90deg, oklch(0.99 0.008 205 / 0.99) 0%, oklch(0.99 0.012 195 / 0.93) 58%, oklch(0.96 0.03 190 / 0.42) 100%),
-      url("/manus-storage/avrojoy-hero-v2-banner_32621bd4.webp") 82% center / auto 100% no-repeat,
-      url("/manus-storage/bangla-converter-keyboard-background_6048064b.webp") center / 190% auto repeat;
+      url("/images/avrojoy-hero-v2-banner_32621bd4.webp") 82% center / auto 100% no-repeat,
+      url("/images/bangla-converter-keyboard-background_6048064b.webp") center / 190% auto repeat;
   }
 
   .hero-panel__signature {
@@ -1530,7 +1530,7 @@ html:not(.dark) .file-workspace button:disabled {
   .dark .app-shell {
     background:
       linear-gradient(180deg, oklch(0.2 0.025 215 / 0.94), oklch(0.16 0.025 220 / 0.98)),
-      url("/manus-storage/bangla-converter-keyboard-background_6048064b.webp") center top / 760px auto repeat,
+      url("/images/bangla-converter-keyboard-background_6048064b.webp") center top / 760px auto repeat,
       radial-gradient(circle at 8% 4%, oklch(0.32 0.08 190 / 0.18), transparent 28rem),
       radial-gradient(circle at 92% 20%, oklch(0.3 0.06 205 / 0.16), transparent 31rem),
       var(--background);
@@ -1539,8 +1539,8 @@ html:not(.dark) .file-workspace button:disabled {
   .dark .site-header {
     background:
       linear-gradient(90deg, oklch(0.24 0.075 205 / 0.99) 0%, oklch(0.28 0.09 195 / 0.96) 48%, oklch(0.2 0.075 205 / 0.9) 100%),
-      url("/manus-storage/avrojoy-bengali-glyph-ribbon_f006d975.png") right center / cover no-repeat,
-      url("/manus-storage/bangla-converter-keyboard-background_6048064b.webp") center top / 760px auto repeat;
+      url("/images/avrojoy-bengali-glyph-ribbon_f006d975.png") right center / cover no-repeat,
+      url("/images/bangla-converter-keyboard-background_6048064b.webp") center top / 760px auto repeat;
     box-shadow: 0 14px 35px oklch(0.04 0.025 215 / 0.42);
     color: oklch(0.94 0.018 200);
   }
@@ -1566,8 +1566,8 @@ html:not(.dark) .file-workspace button:disabled {
     border-color: oklch(0.5 0.1 195 / 0.48);
     background:
       linear-gradient(90deg, oklch(0.23 0.035 215 / 0.98) 0%, oklch(0.23 0.045 205 / 0.94) 43%, oklch(0.21 0.055 195 / 0.58) 72%, transparent 100%),
-      url("/manus-storage/avrojoy-hero-v2-banner_32621bd4.webp") right center / cover no-repeat,
-      url("/manus-storage/bangla-converter-keyboard-background_6048064b.webp") right center / 64% auto repeat;
+      url("/images/avrojoy-hero-v2-banner_32621bd4.webp") right center / cover no-repeat,
+      url("/images/bangla-converter-keyboard-background_6048064b.webp") right center / 64% auto repeat;
     box-shadow: 0 16px 34px oklch(0.05 0.025 215 / 0.28);
   }
 
@@ -1657,7 +1657,7 @@ html:not(.dark) .file-workspace button:disabled {
     border-color: oklch(0.55 0.1 190 / 0.48);
     background:
       linear-gradient(90deg, oklch(0.25 0.06 190 / 0.92), oklch(0.22 0.035 212 / 0.94) 42%, oklch(0.2 0.05 205 / 0.9)),
-      url("/manus-storage/bangla-converter-keyboard-background_6048064b.webp") right center / 220px auto repeat;
+      url("/images/bangla-converter-keyboard-background_6048064b.webp") right center / 220px auto repeat;
   }
 
   .dark .type-legend {
@@ -1703,8 +1703,8 @@ html:not(.dark) .file-workspace button:disabled {
   .dark .site-footer {
     background:
       linear-gradient(90deg, oklch(0.22 0.075 205 / 0.99) 0%, oklch(0.27 0.09 195 / 0.96) 48%, oklch(0.18 0.075 205 / 0.92) 100%),
-      url("/manus-storage/avrojoy-bengali-glyph-ribbon_f006d975.png") right center / cover no-repeat,
-      url("/manus-storage/bangla-converter-keyboard-background_6048064b.webp") center / 760px auto repeat;
+      url("/images/avrojoy-bengali-glyph-ribbon_f006d975.png") right center / cover no-repeat,
+      url("/images/bangla-converter-keyboard-background_6048064b.webp") center / 760px auto repeat;
     box-shadow: 0 -10px 30px oklch(0.04 0.025 215 / 0.32);
   }
 
@@ -1929,7 +1929,7 @@ html:not(.dark) .file-workspace button:disabled {
   html:not(.dark) .app-shell {
     background:
       linear-gradient(180deg, oklch(0.955 0.012 220 / 0.94), oklch(0.915 0.022 215 / 0.97)),
-      url("/manus-storage/bangla-converter-keyboard-background_6048064b.webp") center top / 760px auto repeat,
+      url("/images/bangla-converter-keyboard-background_6048064b.webp") center top / 760px auto repeat,
       var(--background) !important;
   }
 
@@ -1937,8 +1937,8 @@ html:not(.dark) .file-workspace button:disabled {
     border-color: oklch(0.72 0.07 195 / 0.62) !important;
     background:
       linear-gradient(90deg, oklch(0.965 0.014 205 / 0.98) 0%, oklch(0.95 0.022 195 / 0.94) 54%, oklch(0.91 0.045 190 / 0.8) 100%),
-      url("/manus-storage/avrojoy-hero-v2-banner_32621bd4.webp") right center / cover no-repeat,
-      url("/manus-storage/bangla-converter-keyboard-background_6048064b.webp") right center / 64% auto repeat !important;
+      url("/images/avrojoy-hero-v2-banner_32621bd4.webp") right center / cover no-repeat,
+      url("/images/bangla-converter-keyboard-background_6048064b.webp") right center / 64% auto repeat !important;
     color: var(--foreground);
   }
 
@@ -1954,7 +1954,7 @@ html:not(.dark) .file-workspace button:disabled {
     border-color: oklch(0.7 0.06 195) !important;
     background:
       linear-gradient(90deg, oklch(0.985 0.018 195 / 0.98), oklch(1 0 0 / 0.97) 42%, oklch(0.965 0.025 205 / 0.96)),
-      url("/manus-storage/bangla-converter-keyboard-background_6048064b.webp") right center / 220px auto repeat !important;
+      url("/images/bangla-converter-keyboard-background_6048064b.webp") right center / 220px auto repeat !important;
     color: var(--foreground);
   }
 
@@ -2316,7 +2316,7 @@ html:not(.dark) .file-workspace button:disabled {
   .dark .app-shell {
     background:
       linear-gradient(180deg, oklch(0.18 0.02 215 / 0.98), oklch(0.145 0.018 220 / 0.99)),
-      url("/manus-storage/bangla-converter-keyboard-background_6048064b.webp") center top / 760px auto repeat,
+      url("/images/bangla-converter-keyboard-background_6048064b.webp") center top / 760px auto repeat,
       var(--background);
   }
 

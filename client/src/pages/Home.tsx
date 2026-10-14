@@ -74,7 +74,7 @@ const EXAMPLE_TEXT = `বিষয়: বাংলা নথির টাইপ
 
 const HISTORY_STORAGE_KEY = "abc-recent-conversions";
 const MAX_HISTORY_ITEMS = 6;
-const BRAND_LOGO_SRC = "/manus-storage/avrojoy-logo-192w_cf2f754c.webp";
+const BRAND_LOGO_SRC = "/images/avrojoy-logo-192w_cf2f754c.webp";
 const INSTALL_PROMPT_DISMISSED_KEY = "avrojoy-install-prompt-dismissed";
 const DECORATIVE_GLYPHS = [
   "অ", "আ", "ই", "ঈ", "উ", "ক", "খ", "গ", "ঘ", "চ", "ছ", "ত",
@@ -1649,7 +1649,7 @@ export default function Home() {
                     className="border-primary/30 bg-card text-primary hover:bg-accent"
                     title="SutonnyMJ ফন্ট ডাউনলোড করে কম্পিউটারে ইনস্টল করুন">
                     <a
-                      href="/manus-storage/SutonnyMJ_danDi_v2_5618afeb.ttf"
+                      href="/fonts/SutonnyMJ_danDi_v2_5618afeb.ttf"
                       download="SutonnyMJ.ttf">
                       <Download className="mr-1.5 h-3.5 w-3.5" />
                       SutonnyMJ ফন্ট ডাউনলোড করুন

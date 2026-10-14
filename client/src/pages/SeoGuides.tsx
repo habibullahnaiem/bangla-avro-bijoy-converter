@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { ArrowLeft, ArrowRight, CheckCircle2, FileText, Moon, Sun } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 
-const BRAND_LOGO_SRC = "/manus-storage/avrojoy-logo-192w_cf2f754c.webp";
+const BRAND_LOGO_SRC = "/images/avrojoy-logo-192w_cf2f754c.webp";
 const BASE_URL = "https://avrojoy.vercel.app";
 
 type Guide = {
