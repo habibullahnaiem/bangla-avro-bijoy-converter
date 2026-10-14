@@ -1996,25 +1996,6 @@ export default function Home() {
                     </span>
                   </div>
                 )}
-                <Button
-                  type="button"
-                  variant="outline"
-                  disabled={!selectedFile || converting || !/\.docx$/i.test(selectedFile.name)}
-                  className="border-primary/35 bg-card text-primary hover:bg-primary/5 disabled:opacity-50"
-                  onClick={runBijoyFontRepair}
-                  aria-describedby="file-repair-note">
-                  <RotateCcw className="mr-2 h-4 w-4" />
-                  ক্ষতিগ্রস্ত বিজয় ফন্ট মেরামত
-                </Button>
-                <p
-                  id="file-repair-note"
-                  className="file-repair-note max-w-md text-center text-xs leading-relaxed text-muted-foreground">
-                  <strong className="font-semibold text-foreground">
-                    টেক্সট হিজিবিজি বা এলোমেলো দেখালে এখানে মেরামত করুন।
-                  </strong>{" "}
-                  শুধু পুরোনো বিজয় DOCX-এর জন্য — লেখা বদলায় না, শুধু
-                  SutonnyMJ font mapping ফিরিয়ে দেয়।
-                </p>
                 <div className="flex flex-wrap items-center justify-center gap-2">
                   {filePrintText && (
                     <Button
