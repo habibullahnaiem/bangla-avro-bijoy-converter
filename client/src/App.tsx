@@ -52,6 +52,15 @@ function Router() {
         <Route path={"/sutonnymj-to-nikosh"}>
           <SeoGuidePage slug="sutonnymj-to-nikosh" />
         </Route>
+        <Route path={"/bijoy-font-somosha"}>
+          <SeoGuidePage slug="bijoy-font-somosha" />
+        </Route>
+        <Route path={"/unicode-vs-bijoy"}>
+          <SeoGuidePage slug="unicode-vs-bijoy" />
+        </Route>
+        <Route path={"/avro-bangla-typing"}>
+          <SeoGuidePage slug="avro-bangla-typing" />
+        </Route>
         <Route path={"/404"} component={NotFound} />
         {/* Final fallback route */}
         <Route component={NotFound} />

@@ -10,13 +10,16 @@ describe("public SEO guide routes", () => {
     expect(guides).toContain('"avro-to-bijoy"');
     expect(guides).toContain('"bijoy-to-unicode"');
     expect(guides).toContain('"docx-txt-bijoy-converter"');
+    expect(guides).toContain('"bijoy-font-somosha"');
+    expect(guides).toContain('"unicode-vs-bijoy"');
+    expect(guides).toContain('"avro-bangla-typing"');
     expect(guides).toContain('"@type": "Article"');
     expect(guides).toContain("SutonnyMJ");
   });
 
   it("keeps every published guide URL discoverable in the sitemap", () => {
     const sitemap = readProjectFile("client/public/sitemap.xml");
-    for (const slug of ["avro-to-bijoy", "bijoy-to-unicode", "docx-txt-bijoy-converter"]) {
+    for (const slug of ["avro-to-bijoy", "bijoy-to-unicode", "docx-txt-bijoy-converter", "bijoy-font-somosha", "unicode-vs-bijoy", "avro-bangla-typing"]) {
       expect(sitemap).toContain(`https://avrojoy.vercel.app/${slug}`);
     }
   });
