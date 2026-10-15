@@ -1,0 +1,7 @@
+# AvroJoy ads.txt — authorized digital sellers
+#
+# Google AdSense approval পাওয়ার পর নিচের লাইনের কমেন্ট (#) সরিয়ে
+# নিজের Publisher ID বসান। Publisher ID পাবেন AdSense অ্যাকাউন্টে
+# (সাধারণত ca-pub-XXXXXXXXXXXXXXXX ফরম্যাটে)।
+#
+# google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0

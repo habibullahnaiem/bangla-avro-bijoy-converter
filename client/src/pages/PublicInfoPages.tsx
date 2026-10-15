@@ -44,9 +44,10 @@ const PAGES: Record<PublicPage["slug"], PublicPage> = {
         ],
       },
       {
-        title: "যোগাযোগ ও ভবিষ্যৎ বিজ্ঞাপন",
+        title: "যোগাযোগ ও বিজ্ঞাপন",
         paragraphs: [
-          "আপনি WhatsApp-এ যোগাযোগ করলে আপনার পাঠানো বার্তা সেই platform-এর নিজস্ব নীতিমালার অধীনে থাকে। বর্তমানে AvroJoy-এ Google AdSense বিজ্ঞাপন চালু নেই। ভবিষ্যতে বিজ্ঞাপন চালু হলে cookie, consent ও বিজ্ঞাপন-সংক্রান্ত disclosure এই নীতিতে হালনাগাদ করা হবে।",
+          "আপনি WhatsApp-এ যোগাযোগ করলে আপনার পাঠানো বার্তা সেই platform-এর নিজস্ব নীতিমালার অধীনে থাকে।",
+          "সাইটে Google AdSense বিজ্ঞাপন চালু হলে Google ও third-party বিজ্ঞাপনদাতারা আপনার আগ্রহভিত্তিক বিজ্ঞাপন দেখাতে cookies ব্যবহার করতে পারে, যার মধ্যে Google-এর advertising cookie-ও রয়েছে। Google-এর Ads Settings (https://www.google.com/settings/ads) থেকে personalized বিজ্ঞাপন নিয়ন্ত্রণ করা যায়। Google partner সাইটে কীভাবে তথ্য ব্যবহার করে: https://policies.google.com/technologies/partner-sites",
         ],
       },
       {

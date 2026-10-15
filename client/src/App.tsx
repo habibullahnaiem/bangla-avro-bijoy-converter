@@ -3,6 +3,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
+import CookieNotice from "./components/CookieNotice";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 
@@ -74,6 +75,7 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <Router />
+          <CookieNotice />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
